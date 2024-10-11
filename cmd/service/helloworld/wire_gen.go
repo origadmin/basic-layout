@@ -7,6 +7,7 @@
 package main
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/biz"
@@ -23,7 +24,7 @@ import (
 // Injectors from wire.go:
 
 // buildApp init kratos application.
-func buildApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func buildApp(contextContext context.Context, confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	database, cleanup, err := dal.NewDB(data, logger)
 	if err != nil {
 		return nil, nil, err
@@ -33,7 +34,7 @@ func buildApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kra
 	greeterService := service.NewGreeterService(greeterBiz)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
 	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	app := NewApp(logger, grpcServer, httpServer)
+	app := NewApp(contextContext, confServer, logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

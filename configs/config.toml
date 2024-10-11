@@ -1,16 +1,23 @@
+service_name = "helloworld_service_name"
+version = "version_1.0.0"
+
 [server.http]
-  addr = "0.0.0.0:8000"
-  timeout = "1s"
+addr = "0.0.0.0:8000"
+timeout = "1s"
 
-  [server.grpc]
-  addr = "0.0.0.0:9000"
-  timeout = "1s"
+[server.grpc]
+addr = "0.0.0.0:9000"
+timeout = "1s"
 
-  [data.database]
-  driver = "mysql"
-  source = "root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local"
+[data.database]
+driver = "mysql"
+source = "root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local"
 
-  [data.redis]
-  addr = "127.0.0.1:6379"
-  read_timeout = "0.2s"
-  write_timeout = "0.2s"
+[data.redis]
+addr = "127.0.0.1:6379"
+read_timeout = "0.2s"
+write_timeout = "0.2s"
+
+[server.middleware.metrics]
+enabled = true
+name = "promtheus_metrics"

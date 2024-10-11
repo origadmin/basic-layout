@@ -42,6 +42,7 @@ message Server {
   }
   HTTP http = 1;
   GRPC grpc = 2;
+  Middleware middleware = 3;
 }
 
 message Settings {

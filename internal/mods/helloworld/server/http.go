@@ -11,7 +11,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -26,6 +26,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
+
 	srv := http.NewServer(opts...)
 	helloworld.RegisterGreeterServiceHTTPServer(srv, greeter)
 	return srv

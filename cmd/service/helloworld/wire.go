@@ -5,6 +5,8 @@
 package main
 
 import (
+	"context"
+
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/biz"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/dal"
@@ -19,6 +21,6 @@ import (
 //go:generate go run -mod=mod --tags wireinject github.com/google/wire/cmd/wire
 
 // buildApp init kratos application.
-func buildApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
+func buildApp(context.Context, *conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
 }
