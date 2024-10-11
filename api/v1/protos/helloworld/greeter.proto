@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package api.v1.services.helloworld;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "errors/rpcerr/rpcerr.proto";
+import "google/protobuf/descriptor.proto";
+
+option go_package = "v1/services/helloworld;helloworld";
+option java_multiple_files = true;
+option java_package = "com.origadmin.api.v1.services.helloworld";
+option java_outer_classname = "APIV1ServicesHelloworldProto";
+
+extend google.protobuf.MessageOptions {
+  optional Greeter data = 1000;
+}
+
+// The greeting service definition.
+service GreeterService {
+  // Sends a greeting
+  rpc SayHello (GreeterRequest) returns (GreeterReply) {
+    option (google.api.http) = {
+      get: "/greeter/{id}/hello",
+    };
+  }
+  rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
+    option (google.api.http) = {
+      post: "/greeter",
+      body: "data",
+    };
+  }
+  rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterReply){
+    option (google.api.http) = {
+      put: "/greeter/{id}",
+      body: "data",
+    };
+  }
+  rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterReply){
+    option (google.api.http) = {
+      delete: "/greeter/{id}",
+    };
+  }
+  rpc GetGreeter (GetGreeterRequest) returns (GetGreeterReply){
+    option (google.api.http) = {
+      get: "/greeter/{id}",
+    };
+  }
+  rpc ListGreeter (ListGreeterRequest) returns (ListGreeterReply){
+    option (google.api.http) = {
+      get: "/greeter",
+    };
+  }
+}
+
+message Greeter {
+  string id = 1;
+  string name = 2;
+}
+
+// The request message containing the user's name.
+message GreeterRequest {
+  string id = 1;
+  string name = 2;
+}
+
+// The response message containing the greetings
+message GreeterReply {
+  Greeter data = 1;
+}
+
+
+message CreateGreeterRequest {
+  Greeter data = 1;
+}
+message CreateGreeterReply {}
+
+message UpdateGreeterRequest {
+  string id = 1;
+  Greeter data = 3;
+}
+message UpdateGreeterReply {
+  bool success = 1;
+  repeated Greeter data = 3;
+}
+
+message DeleteGreeterRequest {
+  string id = 1;
+}
+message DeleteGreeterReply {}
+
+message GetGreeterRequest {
+  string id = 1;
+}
+message GetGreeterReply {}
+
+message ListGreeterRequest {
+  // Current page
+  optional int32 current = 1;
+
+  // The number of lines per page
+  optional int32 page_size = 2;
+
+  // Whether not paging
+  optional bool no_paging = 5;
+}
+message ListGreeterReply {
+  bool success = 1;
+  int32 total = 2;
+  repeated Greeter data = 3;
+  errors.rpcerr.Error error = 4;
+  google.protobuf.Any extra = 5;
+
+}
