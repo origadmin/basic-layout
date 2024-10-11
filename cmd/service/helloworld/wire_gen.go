@@ -11,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/biz"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/dao"
+	"github.com/origadmin/basic-layout/internal/mods/helloworld/dal"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/server"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/service"
 )
@@ -22,18 +22,18 @@ import (
 
 // Injectors from wire.go:
 
-// wireApp init kratos application.
-func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+// buildApp init kratos application.
+func buildApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	database, cleanup, err := dal.NewDB(data, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterDao := dal.NewGreeterDao(database, logger)
+	greeterDao := dal.NewGreeterDal(database, logger)
 	greeterBiz := biz.NewGreeterBiz(greeterDao, logger)
 	greeterService := service.NewGreeterService(greeterBiz)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
 	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	app := buildApp(logger, grpcServer, httpServer)
+	app := NewApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

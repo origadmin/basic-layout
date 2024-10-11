@@ -8,35 +8,40 @@ import (
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/dto"
 )
 
-type greeterDao struct {
+type greeterDal struct {
 	db  *Database
 	log *log.Helper
 }
 
-// NewGreeterDao .
-func NewGreeterDao(db *Database, logger log.Logger) dto.GreeterDao {
-	return &greeterDao{
+func (g greeterDal) Save(ctx context.Context, greeter *dto.Greeter) (*dto.Greeter, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g greeterDal) Update(ctx context.Context, greeter *dto.Greeter) (*dto.Greeter, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g greeterDal) FindByID(ctx context.Context, s string, param *dto.GreeterQueryParam) (*dto.Greeter, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g greeterDal) ListByHello(ctx context.Context, s string, param *dto.GreeterQueryParam) ([]*dto.Greeter, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g greeterDal) ListAll(ctx context.Context, param *dto.GreeterQueryParam) ([]*dto.Greeter, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+// NewGreeterDal .
+func NewGreeterDal(db *Database, logger log.Logger) dto.GreeterDao {
+	return &greeterDal{
 		db:  db,
 		log: log.NewHelper(logger),
 	}
-}
-
-func (r *greeterDao) Save(ctx context.Context, g *dto.Greeter) (*dto.Greeter, error) {
-	return g, nil
-}
-
-func (r *greeterDao) Update(ctx context.Context, g *dto.Greeter) (*dto.Greeter, error) {
-	return g, nil
-}
-
-func (r *greeterDao) FindByID(context.Context, int64) (*dto.Greeter, error) {
-	return nil, nil
-}
-
-func (r *greeterDao) ListByHello(context.Context, string) ([]*dto.Greeter, error) {
-	return nil, nil
-}
-
-func (r *greeterDao) ListAll(context.Context) ([]*dto.Greeter, error) {
-	return nil, nil
 }

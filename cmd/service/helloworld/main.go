@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -30,10 +32,10 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "configs", "config path, eg: -conf config.yaml")
 }
 
-func buildApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func NewApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -58,6 +60,8 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	flagconf, _ = filepath.Abs(flagconf)
+	fmt.Println("load config at:", flagconf)
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),
@@ -73,8 +77,9 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+	fmt.Println("show bootstrap config:", bc)
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := buildApp(bc.Server, bc.Data, logger)
 	if err != nil {
 		panic(err)
 	}

@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/origadmin/toolkits/third_party/pagination"
 
 	"github.com/origadmin/basic-layout/api/v1/services/helloworld"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/dto"
@@ -33,7 +32,7 @@ func (uc *GreeterBiz) CreateGreeter(ctx context.Context, g *dto.Greeter) (*dto.G
 	return uc.repo.Save(ctx, g)
 }
 
-func (uc *GreeterBiz) ListGreeter(ctx context.Context, g *dto.Greeter, params *pagination.PagingRequest) ([]*dto.Greeter, error) {
+func (uc *GreeterBiz) ListGreeter(ctx context.Context, g *dto.Greeter) ([]*dto.Greeter, error) {
 	uc.log.WithContext(ctx).Infof("ListGreeter: %v", g.Hello)
-	return uc.repo.ListByHello(ctx, g.Hello, &dto.GreeterQueryParam{PagingRequest: *params})
+	return uc.repo.ListByHello(ctx, g.Hello, &dto.GreeterQueryParam{})
 }
