@@ -39,14 +39,14 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "resources/configs", "config path, eg: -conf config.yaml")
 }
 
 func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	var r registry.Registrar
 	// example one: consul
 	switch config.Discovery.GetType() {
-	case conf.DiscoveryType_CONSUL:
+	case "consul":
 		cfg := config.Discovery.GetConsul()
 		if cfg == nil {
 			break
