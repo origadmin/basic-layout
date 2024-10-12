@@ -3,12 +3,14 @@ module github.com/origadmin/basic-layout
 go 1.23.1
 
 require (
+	github.com/envoyproxy/protoc-gen-validate v1.1.0
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241011140022-7cd86eb077dc
+	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20240918015945-e1f5dc42b1e5
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.29.4
 	github.com/origadmin/slog-kratos v1.0.2
-	github.com/origadmin/toolkits v0.0.47
+	github.com/origadmin/toolkits v0.0.48
 	github.com/origadmin/toolkits/codec v0.0.12
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9

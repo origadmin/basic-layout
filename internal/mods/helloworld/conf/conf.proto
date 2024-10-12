@@ -4,22 +4,39 @@ package kratos.api;
 option go_package = "internal/mods/helloworld/conf;conf";
 
 import "google/protobuf/duration.proto";
+import "validate/validate.proto";
 
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
   string crypto_type = 3 [json_name = "crypto_type"];
-
   Server server = 4;
   Data data = 5;
   Settings settings = 6;
+  string id = 99 ;
+}
+
+message Consul {
+  string address = 1;
+  string scheme = 2;
+  string token = 3;
+  string datacenter = 4;
+  string tag = 5;
+  string health_check_interval = 6 [json_name = "health_check_interval"];
+  string health_check_timeout = 7 [json_name = "health_check_timeout"];
+}
+
+message Etcd {
+  string endpoints = 1;
+  string username = 2;
+  string password = 3;
 }
 
 message Server {
   message HTTP {
     string network = 1;
     string addr = 2;
-    string use_tls = 3 [json_name = "use_tls"];
+    bool use_tls = 3 [json_name = "use_tls"];
     string cert_file = 4 [json_name = "cert_file"];
     string key_file = 5 [json_name = "key_file"];
     google.protobuf.Duration timeout = 6 [json_name = "timeout"];
@@ -31,18 +48,26 @@ message Server {
   message GRPC {
     string network = 1;
     string addr = 2;
-    string use_tls = 3 [json_name = "use_tls"];
+    bool use_tls = 3 [json_name = "use_tls"];
     string cert_file = 4 [json_name = "cert_file"];
     string key_file = 5 [json_name = "key_file"];
-    google.protobuf.Duration timeout = 6 [json_name = "timeout"];
-    google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
-    google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
-    google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
-    google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+    optional google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+    optional google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
+    optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
+    optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
+    optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
   }
+
+  message Discovery {
+    string type = 1 [(validate.rules).string = {in: ["consul", "etcd"]}];
+    optional Consul consul = 2;
+    optional Etcd etcd = 3;
+  }
+
   HTTP http = 1;
   GRPC grpc = 2;
   Middleware middleware = 3;
+  Discovery discovery = 4;
 }
 
 message Settings {
@@ -57,8 +82,8 @@ message Data {
   message Redis {
     string network = 1;
     string addr = 2;
-    google.protobuf.Duration read_timeout = 3;
-    google.protobuf.Duration write_timeout = 4;
+    google.protobuf.Duration read_timeout = 3 [json_name = "read_timeout"];
+    google.protobuf.Duration write_timeout = 4 [json_name = "write_timeout"];
   }
   Database database = 1;
   Redis redis = 2;
@@ -83,9 +108,9 @@ message Middleware {
   message Cors {
     bool enabled = 1;
     bool allow_all_origins = 2;
-    repeated string allow_origins = 3;
-    repeated string allow_methods = 4;
-    repeated string allow_headers = 5;
+    repeated string allow_origins = 3 [json_name = "allow_origins"];
+    repeated string allow_methods = 4 [json_name = "allow_methods"];
+    repeated string allow_headers = 5 [json_name = "allow_headers"];
     bool allow_credentials = 6;
     repeated string expose_headers = 7;
     int32 max_age = 8;

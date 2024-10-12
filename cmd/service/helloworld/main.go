@@ -9,11 +9,13 @@ import (
 	"syscall"
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
+	registryconsul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
@@ -41,7 +43,24 @@ func init() {
 }
 
 func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
-	return kratos.New(
+	var r registry.Registrar
+	// example one: consul
+	switch config.Discovery.GetType() {
+	case conf.DiscoveryType_CONSUL:
+		cfg := config.Discovery.GetConsul()
+		if cfg == nil {
+			break
+		}
+		client, err := api.NewClient(&api.Config{
+			Address: cfg.Address,
+		})
+		if err != nil {
+			break
+		}
+		r = registryconsul.New(client)
+	}
+
+	opts := []kratos.Option{
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
@@ -53,7 +72,12 @@ func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grp
 			gs,
 			hs,
 		),
-	)
+	}
+	if r != nil {
+		opts = append(opts, kratos.Registrar(r))
+	}
+
+	return kratos.New(opts...)
 }
 
 func main() {

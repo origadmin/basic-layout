@@ -56,6 +56,8 @@ github.com/go-kratos/aegis v0.2.0 h1:dObzCDWn3XVjUkgxyBp6ZeWtx/do0DPZ7LY3yNSJLUQ
 github.com/go-kratos/aegis v0.2.0/go.mod h1:v0R2m73WgEEYB3XYu6aE2WcMwsZkJ/Rzuf5eVccm7bI=
 github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241011140022-7cd86eb077dc h1:PVmfELe+DQzXySlfwQbI/wJJBqNiyDx3zNZGn19buZc=
 github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241011140022-7cd86eb077dc/go.mod h1:LCTNyWhzdTSf3B5UDjqJAb1t5fiM5OjoV6hVoOHN7ZY=
+github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20240918015945-e1f5dc42b1e5 h1:GXbiFiVZE3Wkaz/nlcpeliCgO9pnZgBwt37W62o2/Zc=
+github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20240918015945-e1f5dc42b1e5/go.mod h1:BZo2KqTvrK8qGEmGV4gWeAb+1Hb7M+HBnTMb8Yfz32I=
 github.com/go-kratos/kratos/v2 v2.8.0 h1:qr27WRTRrI3o4jzJzNKf4XVVoMYIqnQD+4ws1C46yhM=
 github.com/go-kratos/kratos/v2 v2.8.0/go.mod h1:+Vfe3FzF0d+BfMdajA11jT0rAyJWublRE/seZQNZVxE=
 github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9GBnD5lWE=
@@ -190,8 +192,8 @@ github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjY
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/origadmin/slog-kratos v1.0.2 h1:gJFauDMyymtIknK7hsYizklOWVsPbg/WFwO1GIy6Gpc=
 github.com/origadmin/slog-kratos v1.0.2/go.mod h1:tQEcPAk1KlLBZSF3Jc75eQ9zLXiU8gcSizkGzFSnGdQ=
-github.com/origadmin/toolkits v0.0.47 h1:W1joXnSTv5CtPH9LYg8YE9vaC+E0psP00k1Detcjb3A=
-github.com/origadmin/toolkits v0.0.47/go.mod h1:as9s7/GxQ0e98k79y8LliW9+18B6D2u7WnnfYJdJeQI=
+github.com/origadmin/toolkits v0.0.48 h1:tTz+gM8ljI+l8GN8KoWOZe3LqAdDtH2GpH3hnW8w17Y=
+github.com/origadmin/toolkits v0.0.48/go.mod h1:eDaq9QBowRTTmE9YMkuwpKKmZZ6lWZqXzLGc5NPhcKQ=
 github.com/origadmin/toolkits/codec v0.0.12 h1:PNxJ6gdqwxZ2IttNPRb76BY9DwGuD53EDXjdFxrMUBk=
 github.com/origadmin/toolkits/codec v0.0.12/go.mod h1:W82agfqswhECGwMWjYjK6XLsv0106AFmB4nySe/aeUo=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
