@@ -68,10 +68,7 @@ func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grp
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 		kratos.Logger(logger),
-		kratos.Server(
-			gs,
-			hs,
-		),
+		kratos.Server(gs, hs),
 	}
 	if r != nil {
 		opts = append(opts, kratos.Registrar(r))
@@ -87,7 +84,7 @@ func main() {
 	fmt.Println("load config at:", flagconf)
 
 	client, err := api.NewClient(&api.Config{
-		Address: "192.168.28.42:8500",
+		Address: "host:8500",
 	})
 	if err != nil {
 		panic(err)
@@ -99,7 +96,7 @@ func main() {
 	}
 
 	for _, kv := range kvs {
-		fmt.Println("key:", kv.Key, "value:", string(kv.Value))
+		fmt.Println("key:", kv.Key)
 		_, err := client.KV().Put(&api.KVPair{Key: "configs/" + kv.Key, Value: kv.Value}, nil)
 		if err != nil {
 			panic(err)
@@ -107,13 +104,14 @@ func main() {
 	}
 
 	//consul.WithPath(testPath)
-	source, err := consul.New(client, consul.WithPath("configs/config.toml"))
+	source, err := consul.New(client, consul.WithPath("configs/bootstrap.toml"))
 	if err != nil {
 		panic(err)
 	}
 	c := config.New(
 		//config.WithSource(file.NewSource(flagconf), source),
 		config.WithSource(source),
+		//config.WithResolveActualTypes(true),
 		config.WithDecoder(codec.SourceDecoder),
 	)
 	defer c.Close()
@@ -125,6 +123,35 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+	//v := c.Value("configs/bootstrap.toml")
+	//vs, err := v.String()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//typo := codec.SupportTypeFromExt(filepath.Ext("configs/bootstrap.toml"))
+	//if typo == codec.UNKNOWN {
+	//	panic("unknown file type")
+	//}
+	//if err := typo.Unmarshal([]byte(vs), &bc); err != nil {
+	//	panic(err)
+	//}
+	//wg := sync.WaitGroup{}
+	//wg.Add(1)
+	//c.Watch("configs/bootstrap.toml", func(key string, value config.Value) {
+	//	defer wg.Done()
+	//	vs, err := value.String()
+	//	if err != nil {
+	//		return
+	//	}
+	//	typo := codec.SupportTypeFromExt(filepath.Ext(key))
+	//	if typo == codec.UNKNOWN {
+	//		return
+	//	}
+	//	if err := typo.Unmarshal([]byte(vs), &bc); err != nil {
+	//		return
+	//	}
+	//})
+	//wg.Wait()
 	logger := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
@@ -135,7 +162,7 @@ func main() {
 		"span.id", tracing.SpanID(),
 	)
 
-	fmt.Println("show bootstrap config:", bc)
+	fmt.Printf("show bootstrap config: %+v\n", bc)
 	ctx := context.Background()
 	app, cleanup, err := buildApp(ctx, bc.Server, bc.Data, logger)
 	if err != nil {

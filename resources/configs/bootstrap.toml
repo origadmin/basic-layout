@@ -1,0 +1,98 @@
+ServiceName = "helloworld"
+Version = "v1.0.0"
+CryptoType = "argon2"
+Id = ""
+
+[Server]
+[Server.Http]
+Network = "0.0.0.0"
+Addr = "8000"
+UseTls = false
+CertFile = ""
+KeyFile = ""
+[Server.Http.Timeout]
+Seconds = 180
+Nanos = 0
+[Server.Http.ShutdownTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Http.ReadTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Http.WriteTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Http.IdleTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Grpc]
+Network = "0.0.0.0"
+Addr = "9000"
+UseTls = false
+CertFile = ""
+KeyFile = ""
+[Server.Grpc.Timeout]
+Seconds = 180
+Nanos = 0
+[Server.Grpc.ShutdownTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Grpc.ReadTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Grpc.WriteTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Grpc.IdleTimeout]
+Seconds = 180
+Nanos = 0
+[Server.Middleware]
+[Server.Middleware.Cors]
+Enabled = false
+AllowAllOrigins = false
+AllowCredentials = false
+MaxAge = 0
+AllowWildcard = false
+AllowBrowserExtensions = false
+AllowWebSockets = false
+AllowFiles = false
+[Server.Middleware.Metrics]
+Enabled = false
+Name = "metrics"
+[Server.Middleware.Traces]
+Enabled = false
+Name = "traces"
+[Server.Middleware.Logger]
+Enabled = false
+Name = "logger"
+[Server.Discovery]
+Type = "consul"
+[Server.Discovery.Consul]
+Address = "127.0.0.1:8500"
+Scheme = ""
+Token = ""
+Datacenter = ""
+Tag = ""
+HealthCheckInterval = ""
+HealthCheckTimeout = ""
+[Server.Discovery.Etcd]
+Endpoints = "127.0.0.1:2379"
+Username = ""
+Password = ""
+
+[Data]
+[Data.Database]
+Driver = "mysql"
+Source = "dsn"
+[Data.Redis]
+Network = "127.0.0.1"
+Addr = "6379"
+[Data.Redis.ReadTimeout]
+Seconds = 180
+Nanos = 0
+[Data.Redis.WriteTimeout]
+Seconds = 180
+Nanos = 0
+
+[Settings]
+CryptoType = "argon2"
