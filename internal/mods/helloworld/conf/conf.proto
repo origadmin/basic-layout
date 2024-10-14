@@ -64,6 +64,44 @@ message Server {
     optional Etcd etcd = 3;
   }
 
+
+  message Middleware {
+    message Metrics {
+      bool enabled = 1;
+      string name = 2;
+    }
+
+    message Traces {
+      bool enabled = 1;
+      string name = 2;
+    }
+
+    message Logger {
+      bool enabled = 1;
+      string name = 2;
+    }
+
+    message Cors {
+      bool enabled = 1;
+      bool allow_all_origins = 2;
+      repeated string allow_origins = 3 [json_name = "allow_origins"];
+      repeated string allow_methods = 4 [json_name = "allow_methods"];
+      repeated string allow_headers = 5 [json_name = "allow_headers"];
+      bool allow_credentials = 6;
+      repeated string expose_headers = 7;
+      int32 max_age = 8;
+      bool allow_wildcard = 9;
+      bool allow_browser_extensions = 10;
+      bool allow_web_sockets = 11;
+      bool allow_files = 12;
+    }
+
+    Cors cors = 1;
+    Metrics metrics = 2;
+    Traces traces = 3;
+    Logger logger = 4;
+  }
+
   HTTP http = 1;
   GRPC grpc = 2;
   Middleware middleware = 3;
@@ -87,41 +125,4 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
-}
-
-message Middleware {
-  message Metrics {
-    bool enabled = 1;
-    string name = 2;
-  }
-
-  message Traces {
-    bool enabled = 1;
-    string name = 2;
-  }
-
-  message Logger {
-    bool enabled = 1;
-    string name = 2;
-  }
-
-  message Cors {
-    bool enabled = 1;
-    bool allow_all_origins = 2;
-    repeated string allow_origins = 3 [json_name = "allow_origins"];
-    repeated string allow_methods = 4 [json_name = "allow_methods"];
-    repeated string allow_headers = 5 [json_name = "allow_headers"];
-    bool allow_credentials = 6;
-    repeated string expose_headers = 7;
-    int32 max_age = 8;
-    bool allow_wildcard = 9;
-    bool allow_browser_extensions = 10;
-    bool allow_web_sockets = 11;
-    bool allow_files = 12;
-  }
-
-  Cors cors = 1;
-  Metrics metrics = 2;
-  Traces traces = 3;
-  Logger logger = 4;
 }

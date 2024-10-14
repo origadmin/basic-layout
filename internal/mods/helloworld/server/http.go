@@ -30,7 +30,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, l log.Logger
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
-		c.Middleware = new(conf.Middleware)
+		c.Middleware = new(conf.Server_Middleware)
 	}
 	//var middlewares []middleware.Middleware
 	//middlewares = append(middlewares, validate.Validator())

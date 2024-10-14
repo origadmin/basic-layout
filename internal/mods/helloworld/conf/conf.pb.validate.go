@@ -916,221 +916,6 @@ var _ interface {
 	ErrorName() string
 } = DataValidationError{}
 
-// Validate checks the field values on Middleware with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Middleware) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in MiddlewareMultiError, or
-// nil if none found.
-func (m *Middleware) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetCors()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Cors",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Cors",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCors()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MiddlewareValidationError{
-				field:  "Cors",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetMetrics()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Metrics",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Metrics",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetMetrics()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MiddlewareValidationError{
-				field:  "Metrics",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetTraces()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Traces",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Traces",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetTraces()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MiddlewareValidationError{
-				field:  "Traces",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetLogger()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Logger",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Logger",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetLogger()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MiddlewareValidationError{
-				field:  "Logger",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return MiddlewareMultiError(errors)
-	}
-
-	return nil
-}
-
-// MiddlewareMultiError is an error wrapping multiple validation errors
-// returned by Middleware.ValidateAll() if the designated constraints aren't met.
-type MiddlewareMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m MiddlewareMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m MiddlewareMultiError) AllErrors() []error { return m }
-
-// MiddlewareValidationError is the validation error returned by
-// Middleware.Validate if the designated constraints aren't met.
-type MiddlewareValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e MiddlewareValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e MiddlewareValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e MiddlewareValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e MiddlewareValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e MiddlewareValidationError) ErrorName() string { return "MiddlewareValidationError" }
-
-// Error satisfies the builtin error interface
-func (e MiddlewareValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = MiddlewareValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = MiddlewareValidationError{}
-
 // Validate checks the field values on Server_HTTP with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1841,6 +1626,660 @@ var _Server_Discovery_Type_InLookup = map[string]struct{}{
 	"etcd":   {},
 }
 
+// Validate checks the field values on Server_Middleware with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *Server_Middleware) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_Middleware with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Server_MiddlewareMultiError, or nil if none found.
+func (m *Server_Middleware) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_Middleware) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetCors()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Cors",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Cors",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCors()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_MiddlewareValidationError{
+				field:  "Cors",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetMetrics()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Metrics",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Metrics",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetrics()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_MiddlewareValidationError{
+				field:  "Metrics",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetTraces()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Traces",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Traces",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTraces()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_MiddlewareValidationError{
+				field:  "Traces",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetLogger()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Logger",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_MiddlewareValidationError{
+					field:  "Logger",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLogger()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_MiddlewareValidationError{
+				field:  "Logger",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Server_MiddlewareMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_MiddlewareMultiError is an error wrapping multiple validation errors
+// returned by Server_Middleware.ValidateAll() if the designated constraints
+// aren't met.
+type Server_MiddlewareMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_MiddlewareMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_MiddlewareMultiError) AllErrors() []error { return m }
+
+// Server_MiddlewareValidationError is the validation error returned by
+// Server_Middleware.Validate if the designated constraints aren't met.
+type Server_MiddlewareValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_MiddlewareValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_MiddlewareValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_MiddlewareValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_MiddlewareValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_MiddlewareValidationError) ErrorName() string {
+	return "Server_MiddlewareValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Server_MiddlewareValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_Middleware.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_MiddlewareValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_MiddlewareValidationError{}
+
+// Validate checks the field values on Server_Middleware_Metrics with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Server_Middleware_Metrics) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_Middleware_Metrics with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Server_Middleware_MetricsMultiError, or nil if none found.
+func (m *Server_Middleware_Metrics) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_Middleware_Metrics) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Enabled
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return Server_Middleware_MetricsMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_Middleware_MetricsMultiError is an error wrapping multiple validation
+// errors returned by Server_Middleware_Metrics.ValidateAll() if the
+// designated constraints aren't met.
+type Server_Middleware_MetricsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_Middleware_MetricsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_Middleware_MetricsMultiError) AllErrors() []error { return m }
+
+// Server_Middleware_MetricsValidationError is the validation error returned by
+// Server_Middleware_Metrics.Validate if the designated constraints aren't met.
+type Server_Middleware_MetricsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_Middleware_MetricsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_Middleware_MetricsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_Middleware_MetricsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_Middleware_MetricsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_Middleware_MetricsValidationError) ErrorName() string {
+	return "Server_Middleware_MetricsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Server_Middleware_MetricsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_Middleware_Metrics.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_Middleware_MetricsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_Middleware_MetricsValidationError{}
+
+// Validate checks the field values on Server_Middleware_Traces with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Server_Middleware_Traces) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_Middleware_Traces with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Server_Middleware_TracesMultiError, or nil if none found.
+func (m *Server_Middleware_Traces) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_Middleware_Traces) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Enabled
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return Server_Middleware_TracesMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_Middleware_TracesMultiError is an error wrapping multiple validation
+// errors returned by Server_Middleware_Traces.ValidateAll() if the designated
+// constraints aren't met.
+type Server_Middleware_TracesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_Middleware_TracesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_Middleware_TracesMultiError) AllErrors() []error { return m }
+
+// Server_Middleware_TracesValidationError is the validation error returned by
+// Server_Middleware_Traces.Validate if the designated constraints aren't met.
+type Server_Middleware_TracesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_Middleware_TracesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_Middleware_TracesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_Middleware_TracesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_Middleware_TracesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_Middleware_TracesValidationError) ErrorName() string {
+	return "Server_Middleware_TracesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Server_Middleware_TracesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_Middleware_Traces.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_Middleware_TracesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_Middleware_TracesValidationError{}
+
+// Validate checks the field values on Server_Middleware_Logger with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Server_Middleware_Logger) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_Middleware_Logger with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Server_Middleware_LoggerMultiError, or nil if none found.
+func (m *Server_Middleware_Logger) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_Middleware_Logger) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Enabled
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return Server_Middleware_LoggerMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_Middleware_LoggerMultiError is an error wrapping multiple validation
+// errors returned by Server_Middleware_Logger.ValidateAll() if the designated
+// constraints aren't met.
+type Server_Middleware_LoggerMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_Middleware_LoggerMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_Middleware_LoggerMultiError) AllErrors() []error { return m }
+
+// Server_Middleware_LoggerValidationError is the validation error returned by
+// Server_Middleware_Logger.Validate if the designated constraints aren't met.
+type Server_Middleware_LoggerValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_Middleware_LoggerValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_Middleware_LoggerValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_Middleware_LoggerValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_Middleware_LoggerValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_Middleware_LoggerValidationError) ErrorName() string {
+	return "Server_Middleware_LoggerValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Server_Middleware_LoggerValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_Middleware_Logger.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_Middleware_LoggerValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_Middleware_LoggerValidationError{}
+
+// Validate checks the field values on Server_Middleware_Cors with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Server_Middleware_Cors) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_Middleware_Cors with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Server_Middleware_CorsMultiError, or nil if none found.
+func (m *Server_Middleware_Cors) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_Middleware_Cors) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Enabled
+
+	// no validation rules for AllowAllOrigins
+
+	// no validation rules for AllowCredentials
+
+	// no validation rules for MaxAge
+
+	// no validation rules for AllowWildcard
+
+	// no validation rules for AllowBrowserExtensions
+
+	// no validation rules for AllowWebSockets
+
+	// no validation rules for AllowFiles
+
+	if len(errors) > 0 {
+		return Server_Middleware_CorsMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_Middleware_CorsMultiError is an error wrapping multiple validation
+// errors returned by Server_Middleware_Cors.ValidateAll() if the designated
+// constraints aren't met.
+type Server_Middleware_CorsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_Middleware_CorsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_Middleware_CorsMultiError) AllErrors() []error { return m }
+
+// Server_Middleware_CorsValidationError is the validation error returned by
+// Server_Middleware_Cors.Validate if the designated constraints aren't met.
+type Server_Middleware_CorsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_Middleware_CorsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_Middleware_CorsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_Middleware_CorsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_Middleware_CorsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_Middleware_CorsValidationError) ErrorName() string {
+	return "Server_Middleware_CorsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Server_Middleware_CorsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_Middleware_Cors.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_Middleware_CorsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_Middleware_CorsValidationError{}
+
 // Validate checks the field values on Data_Database with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -2105,437 +2544,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Data_RedisValidationError{}
-
-// Validate checks the field values on Middleware_Metrics with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Metrics) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware_Metrics with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_MetricsMultiError, or nil if none found.
-func (m *Middleware_Metrics) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware_Metrics) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Enabled
-
-	// no validation rules for Name
-
-	if len(errors) > 0 {
-		return Middleware_MetricsMultiError(errors)
-	}
-
-	return nil
-}
-
-// Middleware_MetricsMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Metrics.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_MetricsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_MetricsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Middleware_MetricsMultiError) AllErrors() []error { return m }
-
-// Middleware_MetricsValidationError is the validation error returned by
-// Middleware_Metrics.Validate if the designated constraints aren't met.
-type Middleware_MetricsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Middleware_MetricsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Middleware_MetricsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Middleware_MetricsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Middleware_MetricsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Middleware_MetricsValidationError) ErrorName() string {
-	return "Middleware_MetricsValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e Middleware_MetricsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware_Metrics.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Middleware_MetricsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Middleware_MetricsValidationError{}
-
-// Validate checks the field values on Middleware_Traces with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Traces) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware_Traces with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_TracesMultiError, or nil if none found.
-func (m *Middleware_Traces) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware_Traces) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Enabled
-
-	// no validation rules for Name
-
-	if len(errors) > 0 {
-		return Middleware_TracesMultiError(errors)
-	}
-
-	return nil
-}
-
-// Middleware_TracesMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Traces.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_TracesMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_TracesMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Middleware_TracesMultiError) AllErrors() []error { return m }
-
-// Middleware_TracesValidationError is the validation error returned by
-// Middleware_Traces.Validate if the designated constraints aren't met.
-type Middleware_TracesValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Middleware_TracesValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Middleware_TracesValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Middleware_TracesValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Middleware_TracesValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Middleware_TracesValidationError) ErrorName() string {
-	return "Middleware_TracesValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e Middleware_TracesValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware_Traces.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Middleware_TracesValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Middleware_TracesValidationError{}
-
-// Validate checks the field values on Middleware_Logger with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Logger) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware_Logger with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_LoggerMultiError, or nil if none found.
-func (m *Middleware_Logger) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware_Logger) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Enabled
-
-	// no validation rules for Name
-
-	if len(errors) > 0 {
-		return Middleware_LoggerMultiError(errors)
-	}
-
-	return nil
-}
-
-// Middleware_LoggerMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Logger.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_LoggerMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_LoggerMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Middleware_LoggerMultiError) AllErrors() []error { return m }
-
-// Middleware_LoggerValidationError is the validation error returned by
-// Middleware_Logger.Validate if the designated constraints aren't met.
-type Middleware_LoggerValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Middleware_LoggerValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Middleware_LoggerValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Middleware_LoggerValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Middleware_LoggerValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Middleware_LoggerValidationError) ErrorName() string {
-	return "Middleware_LoggerValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e Middleware_LoggerValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware_Logger.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Middleware_LoggerValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Middleware_LoggerValidationError{}
-
-// Validate checks the field values on Middleware_Cors with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Cors) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware_Cors with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_CorsMultiError, or nil if none found.
-func (m *Middleware_Cors) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware_Cors) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Enabled
-
-	// no validation rules for AllowAllOrigins
-
-	// no validation rules for AllowCredentials
-
-	// no validation rules for MaxAge
-
-	// no validation rules for AllowWildcard
-
-	// no validation rules for AllowBrowserExtensions
-
-	// no validation rules for AllowWebSockets
-
-	// no validation rules for AllowFiles
-
-	if len(errors) > 0 {
-		return Middleware_CorsMultiError(errors)
-	}
-
-	return nil
-}
-
-// Middleware_CorsMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Cors.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_CorsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_CorsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Middleware_CorsMultiError) AllErrors() []error { return m }
-
-// Middleware_CorsValidationError is the validation error returned by
-// Middleware_Cors.Validate if the designated constraints aren't met.
-type Middleware_CorsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Middleware_CorsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Middleware_CorsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Middleware_CorsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Middleware_CorsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Middleware_CorsValidationError) ErrorName() string { return "Middleware_CorsValidationError" }
-
-// Error satisfies the builtin error interface
-func (e Middleware_CorsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware_Cors.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Middleware_CorsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Middleware_CorsValidationError{}

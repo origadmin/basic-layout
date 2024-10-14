@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -43,6 +44,17 @@ func init() {
 }
 
 func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+	opts := []kratos.Option{
+		kratos.ID(id),
+		kratos.Name("helloworld"),
+		kratos.Version(Version),
+		kratos.Metadata(map[string]string{}),
+		kratos.Context(ctx),
+		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
+		kratos.Logger(logger),
+		kratos.Server(gs, hs),
+	}
+
 	var r registry.Registrar
 	// example one: consul
 	switch config.Discovery.GetType() {
@@ -57,20 +69,20 @@ func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grp
 		if err != nil {
 			break
 		}
-		r = registryconsul.New(client)
+		endpoint, err := url.Parse(cfg.Address)
+		if err != nil {
+			break
+		}
+		opts = append(opts, kratos.Endpoint(endpoint))
+		r = registryconsul.New(
+			client,
+			registryconsul.WithHealthCheck(true),
+		)
+
 	}
 
-	opts := []kratos.Option{
-		kratos.ID(id),
-		kratos.Name(Name),
-		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
-		kratos.Context(ctx),
-		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
-		kratos.Logger(logger),
-		kratos.Server(gs, hs),
-	}
 	if r != nil {
+
 		opts = append(opts, kratos.Registrar(r))
 	}
 
@@ -84,7 +96,7 @@ func main() {
 	fmt.Println("load config at:", flagconf)
 
 	client, err := api.NewClient(&api.Config{
-		Address: "host:8500",
+		Address: "192.168.28.42:8500",
 	})
 	if err != nil {
 		panic(err)
@@ -97,6 +109,10 @@ func main() {
 
 	for _, kv := range kvs {
 		fmt.Println("key:", kv.Key)
+		typo := codec.SupportTypeFromExt(filepath.Ext(kv.Key))
+		if typo == codec.UNKNOWN {
+			continue
+		}
 		_, err := client.KV().Put(&api.KVPair{Key: "configs/" + kv.Key, Value: kv.Value}, nil)
 		if err != nil {
 			panic(err)
@@ -104,7 +120,7 @@ func main() {
 	}
 
 	//consul.WithPath(testPath)
-	source, err := consul.New(client, consul.WithPath("configs/bootstrap.toml"))
+	source, err := consul.New(client, consul.WithPath("configs/bootstrap.json"))
 	if err != nil {
 		panic(err)
 	}
@@ -112,7 +128,7 @@ func main() {
 		//config.WithSource(file.NewSource(flagconf), source),
 		config.WithSource(source),
 		//config.WithResolveActualTypes(true),
-		config.WithDecoder(codec.SourceDecoder),
+		//config.WithDecoder(codec.SourceDecoder),
 	)
 	defer c.Close()
 	if err := c.Load(); err != nil {
@@ -123,35 +139,7 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
-	//v := c.Value("configs/bootstrap.toml")
-	//vs, err := v.String()
-	//if err != nil {
-	//	panic(err)
-	//}
-	//typo := codec.SupportTypeFromExt(filepath.Ext("configs/bootstrap.toml"))
-	//if typo == codec.UNKNOWN {
-	//	panic("unknown file type")
-	//}
-	//if err := typo.Unmarshal([]byte(vs), &bc); err != nil {
-	//	panic(err)
-	//}
-	//wg := sync.WaitGroup{}
-	//wg.Add(1)
-	//c.Watch("configs/bootstrap.toml", func(key string, value config.Value) {
-	//	defer wg.Done()
-	//	vs, err := value.String()
-	//	if err != nil {
-	//		return
-	//	}
-	//	typo := codec.SupportTypeFromExt(filepath.Ext(key))
-	//	if typo == codec.UNKNOWN {
-	//		return
-	//	}
-	//	if err := typo.Unmarshal([]byte(vs), &bc); err != nil {
-	//		return
-	//	}
-	//})
-	//wg.Wait()
+
 	logger := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,

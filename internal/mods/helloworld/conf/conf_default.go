@@ -2,10 +2,12 @@ package conf
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/origadmin/toolkits/codec"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -16,8 +18,8 @@ func DefaultConf() *Bootstrap {
 		CryptoType:  "argon2",
 		Server: &Server{
 			Http: &Server_HTTP{
-				Network:         "0.0.0.0",
-				Addr:            "8000",
+				Network:         "tcp",
+				Addr:            "0.0.0.0:8000",
 				UseTls:          false,
 				CertFile:        "",
 				KeyFile:         "",
@@ -28,8 +30,8 @@ func DefaultConf() *Bootstrap {
 				IdleTimeout:     durationpb.New(3 * time.Minute),
 			},
 			Grpc: &Server_GRPC{
-				Network:         "0.0.0.0",
-				Addr:            "9000",
+				Network:         "tcp",
+				Addr:            "0.0.0.0:9000",
 				UseTls:          false,
 				CertFile:        "",
 				KeyFile:         "",
@@ -39,8 +41,8 @@ func DefaultConf() *Bootstrap {
 				WriteTimeout:    durationpb.New(3 * time.Minute),
 				IdleTimeout:     durationpb.New(3 * time.Minute),
 			},
-			Middleware: &Middleware{
-				Cors: &Middleware_Cors{
+			Middleware: &Server_Middleware{
+				Cors: &Server_Middleware_Cors{
 					Enabled:                false,
 					AllowAllOrigins:        false,
 					AllowOrigins:           nil,
@@ -54,15 +56,15 @@ func DefaultConf() *Bootstrap {
 					AllowWebSockets:        false,
 					AllowFiles:             false,
 				},
-				Metrics: &Middleware_Metrics{
+				Metrics: &Server_Middleware_Metrics{
 					Enabled: false,
 					Name:    "metrics",
 				},
-				Traces: &Middleware_Traces{
+				Traces: &Server_Middleware_Traces{
 					Enabled: false,
 					Name:    "traces",
 				},
-				Logger: &Middleware_Logger{
+				Logger: &Server_Middleware_Logger{
 					Enabled: false,
 					Name:    "logger",
 				},
@@ -89,8 +91,8 @@ func DefaultConf() *Bootstrap {
 				Source: "dsn",
 			},
 			Redis: &Data_Redis{
-				Network:      "127.0.0.1",
-				Addr:         "6379",
+				Network:      "tcp",
+				Addr:         "127.0.0.1:6379",
 				ReadTimeout:  durationpb.New(3 * time.Minute),
 				WriteTimeout: durationpb.New(3 * time.Minute),
 			},
@@ -106,7 +108,11 @@ func SaveConf(path string, conf *Bootstrap) error {
 	if typo == codec.UNKNOWN {
 		return fmt.Errorf("unknown file type: %s", path)
 	}
-	return codec.EncodeFile(path, conf)
+	marshal, err := protojson.Marshal(conf)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, marshal, os.ModePerm)
 }
 
 func LoadConf(path string) (*Bootstrap, error) {

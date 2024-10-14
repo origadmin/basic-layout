@@ -1,0 +1,61 @@
+{
+  "service_name": "helloworld",
+  "version": "v1.0.0",
+  "crypto_type": "argon2",
+  "server": {
+    "http": {
+      "network": "tcp",
+      "addr": "0.0.0.0:8000",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
+    },
+    "grpc": {
+      "network": "tcp",
+      "addr": "0.0.0.0:9000",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
+    },
+    "middleware": {
+      "cors": {},
+      "metrics": {
+        "name": "metrics"
+      },
+      "traces": {
+        "name": "traces"
+      },
+      "logger": {
+        "name": "logger"
+      }
+    },
+    "discovery": {
+      "type": "consul",
+      "consul": {
+        "address": "192.168.28.42:8500"
+      },
+      "etcd": {
+        "endpoints": "192.168.28.42:2379"
+      }
+    }
+  },
+  "data": {
+    "database": {
+      "driver": "mysql",
+      "source": "dsn"
+    },
+    "redis": {
+      "network": "tcp",
+      "addr": "192.168.28.42:6379",
+      "read_timeout": "180s",
+      "write_timeout": "180s"
+    }
+  },
+  "settings": {
+    "crypto_type": "argon2"
+  }
+}
