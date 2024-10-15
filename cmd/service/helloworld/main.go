@@ -24,6 +24,7 @@ import (
 	"github.com/origadmin/toolkits/codec"
 	_ "go.uber.org/automaxprocs"
 
+	"github.com/origadmin/basic-layout/internal/bootstrap"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
@@ -43,7 +44,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "resources/configs", "config path, eg: -conf config.yaml")
 }
 
-func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func NewApp(ctx context.Context, cfg *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(id),
 		kratos.Name("helloworld"),
@@ -57,9 +58,9 @@ func NewApp(ctx context.Context, config *conf.Server, logger log.Logger, gs *grp
 
 	var r registry.Registrar
 	// example one: consul
-	switch config.Discovery.GetType() {
+	switch cfg.Discovery.GetType() {
 	case "consul":
-		cfg := config.Discovery.GetConsul()
+		cfg := cfg.Discovery.GetConsul()
 		if cfg == nil {
 			break
 		}
@@ -94,10 +95,19 @@ func main() {
 
 	flagconf, _ = filepath.Abs(flagconf)
 	fmt.Println("load config at:", flagconf)
-
-	client, err := api.NewClient(&api.Config{
-		Address: "192.168.28.42:8500",
+	var boot bootstrap.Config
+	err := bootstrap.LoadWithEnv(&boot, flagconf, map[string]string{
+		"TEST_HOST": "192.168.28.42",
 	})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("load config: %s\n", boot)
+	client, err := api.NewClient(&api.Config{
+		Address: boot.Consul.Address,
+	})
+
 	if err != nil {
 		panic(err)
 	}
@@ -109,7 +119,7 @@ func main() {
 
 	for _, kv := range kvs {
 		fmt.Println("key:", kv.Key)
-		typo := codec.SupportTypeFromExt(filepath.Ext(kv.Key))
+		typo := codec.TypeFromExt(filepath.Ext(kv.Key))
 		if typo == codec.UNKNOWN {
 			continue
 		}
@@ -120,7 +130,9 @@ func main() {
 	}
 
 	//consul.WithPath(testPath)
-	source, err := consul.New(client, consul.WithPath("configs/bootstrap.json"))
+	source, err := consul.New(client,
+		consul.WithPath("configs/bootstrap.json"),
+	)
 	if err != nil {
 		panic(err)
 	}

@@ -104,7 +104,7 @@ func DefaultConf() *Bootstrap {
 }
 
 func SaveConf(path string, conf *Bootstrap) error {
-	typo := codec.SupportTypeFromExt(filepath.Ext(path))
+	typo := codec.TypeFromExt(filepath.Ext(path))
 	if typo == codec.UNKNOWN {
 		return fmt.Errorf("unknown file type: %s", path)
 	}
@@ -116,12 +116,12 @@ func SaveConf(path string, conf *Bootstrap) error {
 }
 
 func LoadConf(path string) (*Bootstrap, error) {
-	typo := codec.SupportTypeFromExt(filepath.Ext(path))
+	typo := codec.TypeFromExt(filepath.Ext(path))
 	if typo == codec.UNKNOWN {
 		return nil, fmt.Errorf("unknown file type: %s", path)
 	}
 	var b Bootstrap
-	err := codec.DecodeFile(path, &b)
+	err := codec.DecodeFromFile(path, &b)
 	if err != nil {
 		return nil, err
 	}
