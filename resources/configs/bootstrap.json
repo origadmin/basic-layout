@@ -22,7 +22,27 @@
       "idle_timeout": "180s"
     },
     "middleware": {
-      "cors": {},
+      "cors": {
+        "allow_all_origins": true,
+        "allow_origins": [
+          "*"
+        ],
+        "allow_methods": [
+          "POST",
+          "GET",
+          "OPTIONS",
+          "PUT",
+          "DELETE"
+        ],
+        "allow_headers": [
+          "Accept",
+          "Content-Type",
+          "Content-Length",
+          "Accept-Encoding",
+          "X-CSRF-Token",
+          "Authorization"
+        ]
+      },
       "metrics": {
         "name": "metrics"
       },

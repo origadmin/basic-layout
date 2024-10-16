@@ -84,10 +84,7 @@ func LoadWithEnv(c *Config, path string, envs map[string]string) error {
 		if err := typo.Unmarshal(file, c); err != nil {
 			return errors.Wrapf(err, "failed to parse config file %s", fullname)
 		}
-		if err := replacer.ObjectReplacer(c, envs); err != nil {
-			return errors.Wrap(err, "failed to parse config objects")
-		}
-		return nil
+
 	}
 	if err := filepath.WalkDir(fullname, func(path string, d os.DirEntry, err error) error {
 		typo := codec.TypeFromExt(filepath.Ext(path))
@@ -102,14 +99,13 @@ func LoadWithEnv(c *Config, path string, envs map[string]string) error {
 		if err := typo.Unmarshal(file, c); err != nil {
 			return errors.Wrapf(err, "failed to parse config file %s", path)
 		}
-		if err := replacer.ObjectReplacer(c, envs); err != nil {
-			return errors.Wrap(err, "failed to parse config objects")
-		}
 		return nil
 	}); err != nil {
 		return errors.Wrapf(err, "failed to walk config path %s", fullname)
 	}
-
+	if err := replacer.ObjectReplacer(c, envs); err != nil {
+		return errors.Wrap(err, "failed to parse config objects")
+	}
 	return nil
 }
 

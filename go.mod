@@ -14,6 +14,7 @@ require (
 	github.com/origadmin/slog-kratos v1.0.2
 	github.com/origadmin/toolkits v0.0.56
 	github.com/origadmin/toolkits/codec v0.0.13
+	github.com/origadmin/toolkits/idgen v0.0.7
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9
 	google.golang.org/grpc v1.67.1
@@ -31,9 +32,11 @@ require (
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
+	github.com/go-kratos/kratos/contrib/registry/discovery/v2 v2.0.0-20241014124617-8b8dc4b0f8be // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/form/v4 v4.2.1 // indirect
+	github.com/go-resty/resty/v2 v2.11.0 // indirect
 	github.com/goexts/ggb v0.0.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect

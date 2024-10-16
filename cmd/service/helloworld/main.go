@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"net/url"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -22,7 +21,9 @@ import (
 	"github.com/hashicorp/consul/api"
 	logger "github.com/origadmin/slog-kratos"
 	"github.com/origadmin/toolkits/codec"
+	"github.com/origadmin/toolkits/idgen"
 	_ "go.uber.org/automaxprocs"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/origadmin/basic-layout/internal/bootstrap"
 	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
@@ -36,12 +37,13 @@ var (
 	Version string
 	// flagconf is the config flag.
 	flagconf string
-
-	id, _ = os.Hostname()
+	flagenv  string
+	id, _    = os.Hostname()
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "resources/configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "resources/configs", "config path, eg: -conf config.toml")
+	flag.StringVar(&flagenv, "env", "resources/env", "env path, eg: -env env.toml")
 }
 
 func NewApp(ctx context.Context, cfg *conf.Server, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
@@ -56,7 +58,12 @@ func NewApp(ctx context.Context, cfg *conf.Server, logger log.Logger, gs *grpc.S
 		kratos.Server(gs, hs),
 	}
 
-	var r registry.Registrar
+	// endpoint1, _ := url.Parse("http://192.168.28.81:8000")
+	// endpoint2, _ := url.Parse("grpc://192.168.28.81:9000")
+	// kratos.Endpoint(endpoint1, endpoint2)
+
+	var reg registry.Registrar
+
 	// example one: consul
 	switch cfg.Discovery.GetType() {
 	case "consul":
@@ -70,21 +77,19 @@ func NewApp(ctx context.Context, cfg *conf.Server, logger log.Logger, gs *grpc.S
 		if err != nil {
 			break
 		}
-		endpoint, err := url.Parse(cfg.Address)
-		if err != nil {
-			break
-		}
-		opts = append(opts, kratos.Endpoint(endpoint))
-		r = registryconsul.New(
+		//endpoint, err := url.Parse(cfg.Address)
+		//if err != nil {
+		//	break
+		//}
+		//opts = append(opts, kratos.Endpoint(endpoint))
+		reg = registryconsul.New(
 			client,
 			registryconsul.WithHealthCheck(true),
 		)
-
 	}
 
-	if r != nil {
-
-		opts = append(opts, kratos.Registrar(r))
+	if reg != nil {
+		opts = append(opts, kratos.Registrar(reg))
 	}
 
 	return kratos.New(opts...)
@@ -93,24 +98,27 @@ func NewApp(ctx context.Context, cfg *conf.Server, logger log.Logger, gs *grpc.S
 func main() {
 	flag.Parse()
 
+	var env map[string]string
+	if err := codec.DecodeTOMLFile(filepath.Join(flagenv, "env.toml"), &env); err != nil {
+		panic(err)
+	}
+	fmt.Printf("load env: %s\n", env)
+
 	flagconf, _ = filepath.Abs(flagconf)
 	fmt.Println("load config at:", flagconf)
+
 	var boot bootstrap.Config
-	err := bootstrap.LoadWithEnv(&boot, flagconf, map[string]string{
-		"TEST_HOST": "192.168.28.42",
-	})
+	err := bootstrap.LoadWithEnv(&boot, flagconf, env)
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Printf("load config: %s\n", boot)
 	client, err := api.NewClient(&api.Config{
 		Address: boot.Consul.Address,
 	})
-
 	if err != nil {
 		panic(err)
 	}
+
 	fs := file.NewSource(flagconf)
 	kvs, err := fs.Load()
 	if err != nil {
@@ -129,7 +137,6 @@ func main() {
 		}
 	}
 
-	//consul.WithPath(testPath)
 	source, err := consul.New(client,
 		consul.WithPath("configs/bootstrap.json"),
 	)
@@ -137,10 +144,7 @@ func main() {
 		panic(err)
 	}
 	c := config.New(
-		//config.WithSource(file.NewSource(flagconf), source),
 		config.WithSource(source),
-		//config.WithResolveActualTypes(true),
-		//config.WithDecoder(codec.SourceDecoder),
 	)
 	defer c.Close()
 	if err := c.Load(); err != nil {
@@ -158,12 +162,19 @@ func main() {
 		"service.id", id,
 		"service.name", bc.ServiceName,
 		"service.version", bc.Version,
-		"trace.id", tracing.TraceID(),
+		"trace.id", idgen.GenID(),
 		"span.id", tracing.SpanID(),
 	)
 
-	fmt.Printf("show bootstrap config: %+v\n", bc)
+	err = bc.ValidateAll()
+	if err != nil {
+		panic(err)
+	}
+	v, _ := protojson.Marshal(&bc)
+
+	fmt.Printf("show bootstrap config: %+v\n", string(v))
 	ctx := context.Background()
+
 	app, cleanup, err := buildApp(ctx, bc.Server, bc.Data, logger)
 	if err != nil {
 		panic(err)
