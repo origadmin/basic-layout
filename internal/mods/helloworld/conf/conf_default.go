@@ -17,6 +17,18 @@ func DefaultConf() *Bootstrap {
 		Version:     "v1.0.0",
 		CryptoType:  "argon2",
 		Server: &Server{
+			Gins: &Server_GINS{
+				Network:         "tcp",
+				Addr:            "0.0.0.0:7000",
+				UseTls:          false,
+				CertFile:        "",
+				KeyFile:         "",
+				Timeout:         durationpb.New(3 * time.Minute),
+				ShutdownTimeout: durationpb.New(3 * time.Minute),
+				ReadTimeout:     durationpb.New(3 * time.Minute),
+				WriteTimeout:    durationpb.New(3 * time.Minute),
+				IdleTimeout:     durationpb.New(3 * time.Minute),
+			},
 			Http: &Server_HTTP{
 				Network:         "tcp",
 				Addr:            "0.0.0.0:8000",

@@ -26,6 +26,7 @@ import (
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/idgen"
+	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
 
@@ -150,7 +151,7 @@ func main() {
 	}
 }
 
-func NewApp(ctx context.Context, bootstrap *conf.Bootstrap, logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func NewApp(ctx context.Context, bootstrap *conf.Bootstrap, logger log.Logger, gs *grpc.Server, hs *http.Server, gss *gins.Server) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(id),
 		kratos.Name("helloworld"),
@@ -159,14 +160,17 @@ func NewApp(ctx context.Context, bootstrap *conf.Bootstrap, logger log.Logger, g
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 		kratos.Logger(logger),
-		kratos.Server(hs, gs),
+		//kratos.Server(hs, gs, gss),
+		kratos.Server(gs, gss),
 	}
 
 	httpap, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)
 	endpoint1, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", httpap.Port()))
 	grpcap, _ := netip.ParseAddrPort(bootstrap.Server.Grpc.Addr)
 	endpoint2, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", grpcap.Port()))
-	opts = append(opts, kratos.Endpoint(endpoint1, endpoint2))
+	ginsap, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
+	endpoint3, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", ginsap.Port()))
+	opts = append(opts, kratos.Endpoint(endpoint1, endpoint2, endpoint3))
 
 	var reg registry.Registrar
 

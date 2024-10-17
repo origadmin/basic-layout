@@ -21,6 +21,15 @@
       "write_timeout": "180s",
       "idle_timeout": "180s"
     },
+    "gins": {
+      "network": "tcp",
+      "addr": "${gins_address}",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
+    },
     "middleware": {
       "cors": {
         "allow_all_origins": true,

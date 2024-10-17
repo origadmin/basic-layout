@@ -467,6 +467,35 @@ func (m *Server) validate(all bool) error {
 	var errors []error
 
 	if all {
+		switch v := interface{}(m.GetGins()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ServerValidationError{
+					field:  "Gins",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ServerValidationError{
+					field:  "Gins",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetGins()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ServerValidationError{
+				field:  "Gins",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
 		switch v := interface{}(m.GetHttp()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
@@ -915,6 +944,280 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DataValidationError{}
+
+// Validate checks the field values on Server_GINS with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Server_GINS) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Server_GINS with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in Server_GINSMultiError, or
+// nil if none found.
+func (m *Server_GINS) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Server_GINS) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Network
+
+	// no validation rules for Addr
+
+	// no validation rules for UseTls
+
+	// no validation rules for CertFile
+
+	// no validation rules for KeyFile
+
+	if m.Timeout != nil {
+
+		if all {
+			switch v := interface{}(m.GetTimeout()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "Timeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "Timeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetTimeout()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Server_GINSValidationError{
+					field:  "Timeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.ShutdownTimeout != nil {
+
+		if all {
+			switch v := interface{}(m.GetShutdownTimeout()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "ShutdownTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "ShutdownTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetShutdownTimeout()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Server_GINSValidationError{
+					field:  "ShutdownTimeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.ReadTimeout != nil {
+
+		if all {
+			switch v := interface{}(m.GetReadTimeout()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "ReadTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "ReadTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetReadTimeout()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Server_GINSValidationError{
+					field:  "ReadTimeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.WriteTimeout != nil {
+
+		if all {
+			switch v := interface{}(m.GetWriteTimeout()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "WriteTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "WriteTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetWriteTimeout()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Server_GINSValidationError{
+					field:  "WriteTimeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.IdleTimeout != nil {
+
+		if all {
+			switch v := interface{}(m.GetIdleTimeout()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "IdleTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Server_GINSValidationError{
+						field:  "IdleTimeout",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIdleTimeout()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Server_GINSValidationError{
+					field:  "IdleTimeout",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return Server_GINSMultiError(errors)
+	}
+
+	return nil
+}
+
+// Server_GINSMultiError is an error wrapping multiple validation errors
+// returned by Server_GINS.ValidateAll() if the designated constraints aren't met.
+type Server_GINSMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Server_GINSMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Server_GINSMultiError) AllErrors() []error { return m }
+
+// Server_GINSValidationError is the validation error returned by
+// Server_GINS.Validate if the designated constraints aren't met.
+type Server_GINSValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Server_GINSValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Server_GINSValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Server_GINSValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Server_GINSValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Server_GINSValidationError) ErrorName() string { return "Server_GINSValidationError" }
+
+// Error satisfies the builtin error interface
+func (e Server_GINSValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServer_GINS.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Server_GINSValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Server_GINSValidationError{}
 
 // Validate checks the field values on Server_HTTP with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

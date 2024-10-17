@@ -34,7 +34,8 @@ func buildInjectors(contextContext context.Context, bootstrap *conf.Bootstrap, l
 	greeterServiceServer := service.NewGreeterServer(greeterServiceClient)
 	grpcServer := server.NewGRPCServer(bootstrap, greeterServiceServer, logger)
 	httpServer := server.NewHTTPServer(bootstrap, greeterServiceServer, logger)
-	app := NewApp(contextContext, bootstrap, logger, grpcServer, httpServer)
+	ginsServer := server.NewGINServer(bootstrap, greeterServiceServer, logger)
+	app := NewApp(contextContext, bootstrap, logger, grpcServer, httpServer, ginsServer)
 	return app, func() {
 		cleanup()
 	}, nil

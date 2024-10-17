@@ -33,6 +33,19 @@ message Etcd {
 }
 
 message Server {
+  message GINS {
+    string network = 1;
+    string addr = 2;
+    bool use_tls = 3 [json_name = "use_tls"];
+    string cert_file = 4 [json_name = "cert_file"];
+    string key_file = 5 [json_name = "key_file"];
+    optional google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+    optional google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
+    optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
+    optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
+    optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+  }
+
   message HTTP {
     string network = 1;
     string addr = 2;
@@ -45,6 +58,7 @@ message Server {
     google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
     google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
   }
+
   message GRPC {
     string network = 1;
     string addr = 2;
@@ -96,16 +110,17 @@ message Server {
       bool allow_files = 12 [json_name = "allow_files"];
     }
 
-    Cors cors = 1;
-    Metrics metrics = 2;
-    Traces traces = 3;
-    Logger logger = 4;
+    Cors cors = 1 [json_name = "cors"];
+    Metrics metrics = 2 [json_name = "metrics"];
+    Traces traces = 3 [json_name = "traces"];
+    Logger logger = 4 [json_name = "logger"];
   }
 
-  HTTP http = 1 [json_name = "http"];
-  GRPC grpc = 2;
-  Middleware middleware = 3;
-  Discovery discovery = 4;
+  GINS gins = 1 [json_name = "gins"];
+  HTTP http = 2 [json_name = "http"];
+  GRPC grpc = 3 [json_name = "grpc"];
+  Middleware middleware = 4 [json_name = "middleware"];
+  Discovery discovery = 5 [json_name = "discovery"];
 }
 
 message Settings {
