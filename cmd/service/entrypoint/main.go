@@ -67,6 +67,10 @@ func callGRPC(client helloworld.GreeterServiceClient) {
 		Name: "kratos",
 	}}
 	err := req.ValidateAll()
+	if err != nil {
+		log.Print("[grpc] SayHello validate ", err)
+		return
+	}
 	reply, err := client.PostHello(context.Background(), req)
 	if err != nil {
 		log.Print("[grpc] SayHello ", err)
