@@ -10,11 +10,11 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/biz"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/dal"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/server"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/service"
+	"origadmin/basic-layout/internal/mods/helloworld/biz"
+	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/mods/helloworld/dal"
+	"origadmin/basic-layout/internal/mods/helloworld/server"
+	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
 import (
@@ -23,18 +23,18 @@ import (
 
 // Injectors from wire.go:
 
-// buildApp init kratos application.
-func buildApp(contextContext context.Context, confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	database, cleanup, err := dal.NewDB(data, logger)
+// buildInjectors init kratos application.
+func buildInjectors(contextContext context.Context, bootstrap *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
+	database, cleanup, err := dal.NewDB(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}
 	greeterDao := dal.NewGreeterDal(database, logger)
-	greeterBiz := biz.NewGreeterBiz(greeterDao, logger)
-	greeterService := service.NewGreeterService(greeterBiz)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	app := NewApp(contextContext, confServer, logger, grpcServer, httpServer)
+	greeterServiceClient := biz.NewGreeterClient(greeterDao, logger)
+	greeterServiceServer := service.NewGreeterServer(greeterServiceClient)
+	grpcServer := server.NewGRPCServer(bootstrap, greeterServiceServer, logger)
+	httpServer := server.NewHTTPServer(bootstrap, greeterServiceServer, logger)
+	app := NewApp(contextContext, bootstrap, logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

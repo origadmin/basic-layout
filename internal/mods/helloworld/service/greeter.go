@@ -2,26 +2,33 @@ package service
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/origadmin/basic-layout/api/v1/services/helloworld"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/biz"
+	"origadmin/basic-layout/api/v1/services/helloworld"
 )
 
 // GreeterService is a greeter service.
 type GreeterService struct {
 	helloworld.UnimplementedGreeterServiceServer
 
-	uc *biz.GreeterBiz
+	//uc     *biz.GreeterBiz
+	client helloworld.GreeterServiceClient
 }
 
 // NewGreeterService new a greeter service.
-func NewGreeterService(uc *biz.GreeterBiz) *GreeterService {
-	return &GreeterService{uc: uc}
+func NewGreeterService(client helloworld.GreeterServiceClient) *GreeterService {
+	return &GreeterService{client: client}
+}
+
+// NewGreeterServer new a greeter service.
+func NewGreeterServer(client helloworld.GreeterServiceClient) helloworld.GreeterServiceServer {
+	return &GreeterService{client: client}
 }
 
 // SayHello implements helloworld.GreeterServer.
 func (s *GreeterService) SayHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	return &helloworld.GreeterReply{Data: &helloworld.Greeter{
-		Name: "hello " + in.Name,
-	}}, nil
+	fmt.Println("SayHello", in.Name)
+	return s.client.SayHello(ctx, in)
 }
+
+var _ helloworld.GreeterServiceServer = (*GreeterService)(nil)

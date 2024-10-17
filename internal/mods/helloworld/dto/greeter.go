@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/api/v1/services/helloworld"
 )
 
 var (
@@ -13,9 +13,7 @@ var (
 )
 
 // Greeter is a Greeter model.
-type Greeter struct {
-	Hello string
-}
+type Greeter = helloworld.Greeter
 
 // GreeterQueryParam defines the query parameters for the `Menu` struct.
 type GreeterQueryParam struct {

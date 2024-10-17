@@ -4,7 +4,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
 // ProviderSet is data providers.
@@ -16,7 +16,7 @@ type Database struct {
 }
 
 // NewDB .
-func NewDB(c *conf.Data, logger log.Logger) (*Database, func(), error) {
+func NewDB(bootstrap *conf.Bootstrap, logger log.Logger) (*Database, func(), error) {
 	cleanup := func() {
 		log.NewHelper(logger).Info("closing the data resources")
 	}

@@ -5,20 +5,20 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
-	"github.com/origadmin/basic-layout/api/v1/services/helloworld"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/conf"
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/service"
+	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, logger log.Logger) *grpc.Server {
+	c := bootstrap.Server
+	if c.Grpc == nil {
+		c.Grpc = new(conf.Server_GRPC)
+	}
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
 		),
-	}
-	if c.Grpc == nil {
-		c.Grpc = new(conf.Server_GRPC)
 	}
 
 	if c.Grpc.Network != "" {

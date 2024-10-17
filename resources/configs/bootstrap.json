@@ -5,7 +5,7 @@
   "server": {
     "http": {
       "network": "tcp",
-      "addr": "0.0.0.0:8000",
+      "addr": "${http_address}",
       "timeout": "180s",
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
@@ -14,7 +14,7 @@
     },
     "grpc": {
       "network": "tcp",
-      "addr": "0.0.0.0:9000",
+      "addr": "${grpc_address}",
       "timeout": "180s",
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
@@ -56,7 +56,7 @@
     "discovery": {
       "type": "consul",
       "consul": {
-        "address": "192.168.28.42:8500"
+        "address": "${consul_address}"
       },
       "etcd": {
         "endpoints": "192.168.28.42:2379"

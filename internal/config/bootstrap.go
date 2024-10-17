@@ -1,4 +1,4 @@
-package bootstrap
+package config
 
 import (
 	"os"
@@ -19,20 +19,20 @@ type Consul struct {
 	Address string `yaml:"address" toml:"address" json:"address"`
 }
 
-type Config struct {
+type Bootstrap struct {
 	Name      string    `yaml:"name" toml:"name" json:"name"`
 	Type      string    `yaml:"type" toml:"type" json:"type"`
 	Consul    Consul    `yaml:"consul" toml:"consul" json:"consul"`
 	Discovery Discovery `yaml:"discovery" toml:"discovery" json:"discovery"`
 }
 
-func (c *Config) Setup() {
+func (c *Bootstrap) Setup() {
 	return
 }
 
 // Load Loads configuration files in various formats from a directory,
 // and parses them into a struct.
-func Load(c *Config, path string) error {
+func Load(c *Bootstrap, path string) error {
 	*c = DefaultBootstrap
 
 	fullname, _ := filepath.Abs(path)
@@ -63,7 +63,7 @@ func Load(c *Config, path string) error {
 	return nil
 }
 
-func LoadWithEnv(c *Config, path string, envs map[string]string) error {
+func LoadWithEnv(c *Bootstrap, path string, envs map[string]string) error {
 	*c = DefaultBootstrap
 	fullname, _ := filepath.Abs(path)
 	info, err := os.Stat(fullname)
@@ -113,7 +113,7 @@ const (
 	extNames = `.json,.toml,.yaml",.yml`
 )
 
-func parseConfigFile(c *Config, path string) error {
+func parseConfigFile(c *Bootstrap, path string) error {
 	ext := filepath.Ext(path)
 	if ext == "" || !strings.Contains(extNames, ext) {
 		return nil
@@ -126,14 +126,14 @@ func parseConfigFile(c *Config, path string) error {
 	return nil
 }
 
-var DefaultBootstrap = Config{
+var DefaultBootstrap = Bootstrap{
 	Name: "helloworld",
 	Type: "consul",
 	Consul: Consul{
-		Address: "${TEST_HOST}:8500",
+		Address: "${consul_address}",
 	},
 	Discovery: Discovery{
 		Name:    "helloworld",
-		Address: "",
+		Address: "${discovery_address}",
 	},
 }

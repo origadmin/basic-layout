@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 
-	"github.com/origadmin/basic-layout/internal/mods/helloworld/dto"
+	"origadmin/basic-layout/internal/mods/helloworld/dto"
 )
 
 type greeterDal struct {
