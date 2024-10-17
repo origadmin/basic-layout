@@ -61,15 +61,6 @@
       "logger": {
         "name": "logger"
       }
-    },
-    "discovery": {
-      "type": "consul",
-      "consul": {
-        "address": "${consul_address}"
-      },
-      "etcd": {
-        "endpoints": "192.168.28.42:2379"
-      }
     }
   },
   "data": {
@@ -82,6 +73,15 @@
       "addr": "192.168.28.42:6379",
       "read_timeout": "180s",
       "write_timeout": "180s"
+    }
+  },
+  "discovery": {
+    "type": "consul",
+    "consul": {
+      "address": "${consul_address}"
+    },
+    "etcd": {
+      "endpoints": "192.168.28.42:2379"
     }
   },
   "settings": {

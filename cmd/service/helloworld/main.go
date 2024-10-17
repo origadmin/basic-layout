@@ -11,26 +11,22 @@ import (
 	"syscall"
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
-	registryconsul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/registry"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
 	logger "github.com/origadmin/slog-kratos"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/idgen"
-	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	bootstrap "origadmin/basic-layout/internal/config"
+	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
@@ -151,7 +147,7 @@ func main() {
 	}
 }
 
-func NewApp(ctx context.Context, bootstrap *conf.Bootstrap, logger log.Logger, gs *grpc.Server, hs *http.Server, gss *gins.Server) *kratos.App {
+func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(id),
 		kratos.Name("helloworld"),
@@ -159,45 +155,21 @@ func NewApp(ctx context.Context, bootstrap *conf.Bootstrap, logger log.Logger, g
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
-		kratos.Logger(logger),
+		kratos.Logger(injector.Logger),
 		//kratos.Server(hs, gs, gss),
-		kratos.Server(gs, gss),
+		kratos.Server(injector.ServerGINS, injector.ServerGRPC, injector.ServerHTTP),
 	}
 
-	httpap, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)
+	httpap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Http.Addr)
 	endpoint1, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", httpap.Port()))
-	grpcap, _ := netip.ParseAddrPort(bootstrap.Server.Grpc.Addr)
+	grpcap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Grpc.Addr)
 	endpoint2, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", grpcap.Port()))
-	ginsap, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
+	ginsap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Gins.Addr)
 	endpoint3, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", ginsap.Port()))
 	opts = append(opts, kratos.Endpoint(endpoint1, endpoint2, endpoint3))
 
-	var reg registry.Registrar
-
-	cfg := bootstrap.Server
-	// example one: consul
-	switch cfg.Discovery.GetType() {
-	case "consul":
-		cfg := cfg.Discovery.GetConsul()
-		if cfg == nil {
-			break
-		}
-		client, err := api.NewClient(&api.Config{
-			Address: cfg.Address,
-		})
-		if err != nil {
-			break
-		}
-		reg = registryconsul.New(
-			client,
-			registryconsul.WithHeartbeat(true),
-			registryconsul.WithHealthCheck(true),
-		)
-		log.Infof("consul: %s", cfg.Address)
-	}
-
-	if reg != nil {
-		opts = append(opts, kratos.Registrar(reg))
+	if injector.Registry != nil {
+		opts = append(opts, kratos.Registrar(injector.Registry))
 	}
 
 	return kratos.New(opts...)

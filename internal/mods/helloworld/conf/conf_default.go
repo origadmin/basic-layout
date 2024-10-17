@@ -2,12 +2,10 @@ package conf
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/origadmin/toolkits/codec"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -81,21 +79,6 @@ func DefaultConf() *Bootstrap {
 					Name:    "logger",
 				},
 			},
-			Discovery: &Server_Discovery{
-				Type: "consul",
-				Consul: &Consul{
-					Address: "127.0.0.1:8500",
-					//Scheme:              "",
-					//Token:               "",
-					//Datacenter:          "",
-					//Tag:                 "",
-					//HealthCheckInterval: "",
-					//HealthCheckTimeout:  "",
-				},
-				Etcd: &Etcd{
-					Endpoints: "127.0.0.1:2379",
-				},
-			},
 		},
 		Data: &Data{
 			Database: &Data_Database{
@@ -109,6 +92,21 @@ func DefaultConf() *Bootstrap {
 				WriteTimeout: durationpb.New(3 * time.Minute),
 			},
 		},
+		Discovery: &Discovery{
+			Type: "consul",
+			Consul: &Consul{
+				Address: "127.0.0.1:8500",
+				//Scheme:              "",
+				//Token:               "",
+				//Datacenter:          "",
+				//Tag:                 "",
+				//HealthCheckInterval: "",
+				//HealthCheckTimeout:  "",
+			},
+			Etcd: &Etcd{
+				Endpoints: "127.0.0.1:2379",
+			},
+		},
 		Settings: &Settings{
 			CryptoType: "argon2",
 		},
@@ -120,11 +118,12 @@ func SaveConf(path string, conf *Bootstrap) error {
 	if typo == codec.UNKNOWN {
 		return fmt.Errorf("unknown file type: %s", path)
 	}
-	marshal, err := protojson.Marshal(conf)
+	err := codec.EncodeToFile(path, conf)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, marshal, os.ModePerm)
+	return nil
+	//return os.WriteFile(path, marshal, os.ModePerm)
 }
 
 func LoadConf(path string) (*Bootstrap, error) {

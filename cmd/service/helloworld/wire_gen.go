@@ -10,6 +10,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
@@ -25,6 +26,7 @@ import (
 
 // buildInjectors init kratos application.
 func buildInjectors(contextContext context.Context, bootstrap *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
+	registrar := server.NewRegistrar(bootstrap, logger)
 	database, cleanup, err := dal.NewDB(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
@@ -34,8 +36,16 @@ func buildInjectors(contextContext context.Context, bootstrap *conf.Bootstrap, l
 	greeterServiceServer := service.NewGreeterServer(greeterServiceClient)
 	grpcServer := server.NewGRPCServer(bootstrap, greeterServiceServer, logger)
 	httpServer := server.NewHTTPServer(bootstrap, greeterServiceServer, logger)
-	ginsServer := server.NewGINServer(bootstrap, greeterServiceServer, logger)
-	app := NewApp(contextContext, bootstrap, logger, grpcServer, httpServer, ginsServer)
+	ginsServer := server.NewGINSServer(bootstrap, greeterServiceServer, logger)
+	injector := &mods.Injector{
+		Logger:     logger,
+		Registry:   registrar,
+		Bootstrap:  bootstrap,
+		ServerGRPC: grpcServer,
+		ServerHTTP: httpServer,
+		ServerGINS: ginsServer,
+	}
+	app := NewApp(contextContext, injector)
 	return app, func() {
 		cleanup()
 	}, nil

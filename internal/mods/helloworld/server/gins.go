@@ -9,8 +9,8 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
-// NewGINServer new a gin server.
-func NewGINServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, l log.Logger) *gins.Server {
+// NewGINSServer new a gin server.
+func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
@@ -31,6 +31,9 @@ func NewGINServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceSe
 	}
 	if c.Middleware == nil {
 		c.Middleware = new(conf.Server_Middleware)
+	}
+	if l != nil {
+		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
 
 	opts = append(opts)

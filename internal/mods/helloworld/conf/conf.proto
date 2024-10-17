@@ -6,30 +6,41 @@ option go_package = "internal/mods/helloworld/conf;conf";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 
+
+
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
   string crypto_type = 3 [json_name = "crypto_type"];
-  Server server = 4;
-  Data data = 5;
-  Settings settings = 6;
+  Server server = 4 [json_name = "server"];
+  Data data = 5 [json_name = "data"];
+  Settings settings = 6 [json_name = "settings"];
+  Discovery discovery = 8 [json_name = "discovery"];
   string id = 99 ;
 }
 
+message Discovery {
+  string type = 1 [(validate.rules).string = {in: ["none", "consul", "etcd"]}];
+  optional Consul consul = 2;
+  optional Etcd etcd = 3;
+}
+
 message Consul {
-  string address = 1;
-  string scheme = 2;
-  string token = 3;
-  string datacenter = 4;
-  string tag = 5;
-  string health_check_interval = 6 [json_name = "health_check_interval"];
-  string health_check_timeout = 7 [json_name = "health_check_timeout"];
+  string address = 1 [json_name = "address"];
+  string scheme = 2 [json_name = "scheme"];
+  string token = 3 [json_name = "token"];
+  bool heart_beat = 4 [json_name = "heart_beat"];
+  bool health_check = 5 [json_name = "health_check"];
+  string datacenter = 6 [json_name = "datacenter"];
+  string tag = 7 [json_name = "tag"];
+  string health_check_interval = 8 [json_name = "health_check_interval"];
+  string health_check_timeout = 9[json_name = "health_check_timeout"];
 }
 
 message Etcd {
-  string endpoints = 1;
-  string username = 2;
-  string password = 3;
+  string endpoints = 1 [json_name = "endpoints"];
+  string username = 2 [json_name = "username"];
+  string password = 3 [json_name = "password"];
 }
 
 message Server {
@@ -72,11 +83,6 @@ message Server {
     optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
   }
 
-  message Discovery {
-    string type = 1 [(validate.rules).string = {in: ["consul", "etcd"]}];
-    optional Consul consul = 2;
-    optional Etcd etcd = 3;
-  }
 
 
   message Middleware {
@@ -120,7 +126,7 @@ message Server {
   HTTP http = 2 [json_name = "http"];
   GRPC grpc = 3 [json_name = "grpc"];
   Middleware middleware = 4 [json_name = "middleware"];
-  Discovery discovery = 5 [json_name = "discovery"];
+
 }
 
 message Settings {

@@ -25,6 +25,13 @@ func TestSaveConf(t *testing.T) {
 		{
 			name: "test",
 			args: args{
+				path: "test.yml",
+				conf: DefaultConf(),
+			},
+		},
+		{
+			name: "test",
+			args: args{
 				path: "test.json",
 				conf: DefaultConf(),
 			},

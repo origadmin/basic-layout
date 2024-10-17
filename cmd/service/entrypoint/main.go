@@ -56,16 +56,20 @@ func main() {
 	fmt.Println("start")
 	for {
 		time.Sleep(time.Second)
-		callGRPC(gClient)
+		//callGRPC(gClient)
+		_ = gClient
 		callHTTP(hClient)
 	}
 }
 
 func callGRPC(client helloworld.GreeterServiceClient) {
-	req := &helloworld.GreeterRequest{Id: "kratos", Name: "kratos", Data: &helloworld.Greeter{
+	req := &helloworld.GreeterRequest{
 		Id:   "kratos",
 		Name: "kratos",
-	}}
+		Data: &helloworld.Greeter{
+			Id:   "kratos",
+			Name: "kratos",
+		}}
 	err := req.ValidateAll()
 	if err != nil {
 		log.Print("[grpc] SayHello validate ", err)
@@ -80,10 +84,13 @@ func callGRPC(client helloworld.GreeterServiceClient) {
 }
 
 func callHTTP(client helloworld.GreeterServiceHTTPClient) {
-	req := &helloworld.GreeterRequest{Id: "kratos", Name: "kratos", Data: &helloworld.Greeter{
+	req := &helloworld.GreeterRequest{
 		Id:   "kratos",
 		Name: "kratos",
-	}}
+		Data: &helloworld.Greeter{
+			Id:   "kratos",
+			Name: "kratos",
+		}}
 	err := req.ValidateAll()
 	if err != nil {
 		log.Print("[http] SayHello validate ", err)

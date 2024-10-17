@@ -33,8 +33,6 @@ func NewHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 		c.Middleware = new(conf.Server_Middleware)
 	}
 
-	opts = append(opts)
-
 	srv := http.NewServer(opts...)
 	helloworld.RegisterGreeterServiceHTTPServer(srv, greeter)
 	return srv
