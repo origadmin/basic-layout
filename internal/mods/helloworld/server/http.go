@@ -1,6 +1,10 @@
 package server
 
 import (
+	"fmt"
+	"net/netip"
+	"net/url"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -33,6 +37,9 @@ func NewHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 		c.Middleware = new(conf.Server_Middleware)
 	}
 
+	naip, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)
+	endpoint, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", naip.Port()))
+	opts = append(opts, http.Endpoint(endpoint))
 	srv := http.NewServer(opts...)
 	helloworld.RegisterGreeterServiceHTTPServer(srv, greeter)
 	return srv

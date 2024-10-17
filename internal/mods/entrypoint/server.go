@@ -1,20 +1,18 @@
-package server
+package entrypoint
 
 import (
-	"fmt"
-	"net/netip"
-	"net/url"
-
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
-// NewGINSServer new a gin server.
-func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, l log.Logger) *gins.Server {
+// ProviderSet is server providers.
+var ProviderSet = wire.NewSet(NewServer)
+
+func NewServer(bootstrap *conf.Bootstrap, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
@@ -39,12 +37,10 @@ func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
-	naip, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
-	endpoint, _ := url.Parse(fmt.Sprintf("http://192.168.28.60:%d", naip.Port()))
-	opts = append(opts, gins.Endpoint(endpoint))
 
 	opts = append(opts)
 	srv := gins.NewServer(opts...)
-	helloworld.RegisterGreeterServiceGINServer(srv, greeter)
+	//helloworld.RegisterGreeterServiceGINServer(srv, greeter)
+	//todo
 	return srv
 }

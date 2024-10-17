@@ -8,6 +8,9 @@ import (
 
 	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/selector"
+	"github.com/go-kratos/kratos/v2/selector/filter"
+	"github.com/go-kratos/kratos/v2/selector/random"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
@@ -36,6 +39,11 @@ func main() {
 	defer conn.Close()
 	gClient := helloworld.NewGreeterServiceClient(conn)
 
+	// 创建路由 Filter：筛选版本号为"2.0.0"的实例
+	filter := filter.Version("v1.0.0")
+	// 创建 P2C 负载均衡算法 Selector，并将路由 Filter 注入
+	selector.SetGlobalSelector(random.NewBuilder())
+	//selector.SetGlobalSelector(wrr.NewBuilder())
 	// new http client
 	hConn, err := http.NewClient(
 		context.Background(),
@@ -45,6 +53,7 @@ func main() {
 		http.WithEndpoint("discovery:///helloworld"),
 		//http.WithEndpoint("127.0.0.1:8000"),
 		http.WithDiscovery(r),
+		http.WithNodeFilter(filter),
 		//http.WithBlock(),
 		//http.WithTimeout(time.Second*5),
 	)

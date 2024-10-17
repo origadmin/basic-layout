@@ -78,7 +78,9 @@
   "discovery": {
     "type": "consul",
     "consul": {
-      "address": "${consul_address}"
+      "address": "${consul_address}",
+      "heart_beat": true,
+      "health_check": true
     },
     "etcd": {
       "endpoints": "192.168.28.42:2379"

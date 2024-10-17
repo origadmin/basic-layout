@@ -4,8 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"net/netip"
-	"net/url"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -129,12 +127,6 @@ func main() {
 
 	fmt.Printf("show bootstrap config: %+v\n", string(v))
 	ctx := context.Background()
-	//bc.Server.Http.Addr = "0.0.0.0:" + flagport
-	//port, _ := strconv.ParseInt(flagport, 10, 64)
-	//port += 100
-	//flagport = strconv.FormatInt(port, 10)
-	//bc.Server.Grpc.Addr = "0.0.0.0:" + flagport
-
 	app, cleanup, err := buildInjectors(ctx, &bc, logger)
 	if err != nil {
 		panic(errors.WithStack(err))
@@ -150,23 +142,28 @@ func main() {
 func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(id),
-		kratos.Name("helloworld"),
-		kratos.Version(Version),
+		kratos.Name(injector.Bootstrap.ServiceName),
+		kratos.Version(injector.Bootstrap.Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 		kratos.Logger(injector.Logger),
 		//kratos.Server(hs, gs, gss),
-		kratos.Server(injector.ServerGINS, injector.ServerGRPC, injector.ServerHTTP),
+		kratos.Server(injector.ServerGINS, injector.ServerHTTP, injector.ServerGRPC),
 	}
+	ep1, _ := injector.ServerGINS.Endpoint()
+	ep2, _ := injector.ServerHTTP.Endpoint()
+	ep3, _ := injector.ServerGRPC.Endpoint()
+	fmt.Println("endpoint:", ep1, ep2, ep3)
 
-	httpap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Http.Addr)
-	endpoint1, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", httpap.Port()))
-	grpcap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Grpc.Addr)
-	endpoint2, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", grpcap.Port()))
-	ginsap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Gins.Addr)
-	endpoint3, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", ginsap.Port()))
-	opts = append(opts, kratos.Endpoint(endpoint1, endpoint2, endpoint3))
+	//httpap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Http.Addr)
+	//endpoint1, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", httpap.Port()))
+	//grpcap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Grpc.Addr)
+	//endpoint2, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", grpcap.Port()))
+	//ginsap, _ := netip.ParseAddrPort(injector.Bootstrap.Server.Gins.Addr)
+	//endpoint3, _ := url.Parse(fmt.Sprintf("gins://192.168.28.81:%d", ginsap.Port()))
+	//opts = append(opts, kratos.Endpoint(endpoint1, endpoint2, endpoint3))
+	//opts = append(opts, kratos.Endpoint(endpoint1, endpoint2))
 
 	if injector.Registry != nil {
 		opts = append(opts, kratos.Registrar(injector.Registry))
