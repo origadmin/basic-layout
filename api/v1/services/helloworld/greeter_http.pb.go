@@ -23,6 +23,7 @@ const OperationGreeterServiceCreateGreeter = "/api.v1.services.helloworld.Greete
 const OperationGreeterServiceDeleteGreeter = "/api.v1.services.helloworld.GreeterService/DeleteGreeter"
 const OperationGreeterServiceGetGreeter = "/api.v1.services.helloworld.GreeterService/GetGreeter"
 const OperationGreeterServiceListGreeter = "/api.v1.services.helloworld.GreeterService/ListGreeter"
+const OperationGreeterServicePostHello = "/api.v1.services.helloworld.GreeterService/PostHello"
 const OperationGreeterServiceSayHello = "/api.v1.services.helloworld.GreeterService/SayHello"
 const OperationGreeterServiceUpdateGreeter = "/api.v1.services.helloworld.GreeterService/UpdateGreeter"
 
@@ -31,6 +32,8 @@ type GreeterServiceHTTPServer interface {
 	DeleteGreeter(context.Context, *DeleteGreeterRequest) (*DeleteGreeterReply, error)
 	GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterReply, error)
 	ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterReply, error)
+	// PostHello Sends a greeting
+	PostHello(context.Context, *GreeterRequest) (*GreeterReply, error)
 	// SayHello Sends a greeting
 	SayHello(context.Context, *GreeterRequest) (*GreeterReply, error)
 	UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterReply, error)
@@ -39,6 +42,7 @@ type GreeterServiceHTTPServer interface {
 func RegisterGreeterServiceHTTPServer(s *http.Server, srv GreeterServiceHTTPServer) {
 	r := s.Route("/")
 	r.GET("/greeter/{id}/hello", _GreeterService_SayHello0_HTTP_Handler(srv))
+	r.POST("/greeter/{id}/hello", _GreeterService_PostHello0_HTTP_Handler(srv))
 	r.POST("/greeter", _GreeterService_CreateGreeter0_HTTP_Handler(srv))
 	r.PUT("/greeter/{id}", _GreeterService_UpdateGreeter0_HTTP_Handler(srv))
 	r.DELETE("/greeter/{id}", _GreeterService_DeleteGreeter0_HTTP_Handler(srv))
@@ -65,6 +69,31 @@ func _GreeterService_SayHello0_HTTP_Handler(srv GreeterServiceHTTPServer) func(c
 		}
 		reply := out.(*GreeterReply)
 		return ctx.Result(200, reply)
+	}
+}
+
+func _GreeterService_PostHello0_HTTP_Handler(srv GreeterServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GreeterRequest
+		if err := ctx.Bind(&in.Data); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationGreeterServicePostHello)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.PostHello(ctx, req.(*GreeterRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GreeterReply)
+		return ctx.Result(200, reply.Data)
 	}
 }
 
@@ -183,6 +212,7 @@ type GreeterServiceHTTPClient interface {
 	DeleteGreeter(ctx context.Context, req *DeleteGreeterRequest, opts ...http.CallOption) (rsp *DeleteGreeterReply, err error)
 	GetGreeter(ctx context.Context, req *GetGreeterRequest, opts ...http.CallOption) (rsp *GetGreeterReply, err error)
 	ListGreeter(ctx context.Context, req *ListGreeterRequest, opts ...http.CallOption) (rsp *ListGreeterReply, err error)
+	PostHello(ctx context.Context, req *GreeterRequest, opts ...http.CallOption) (rsp *GreeterReply, err error)
 	SayHello(ctx context.Context, req *GreeterRequest, opts ...http.CallOption) (rsp *GreeterReply, err error)
 	UpdateGreeter(ctx context.Context, req *UpdateGreeterRequest, opts ...http.CallOption) (rsp *UpdateGreeterReply, err error)
 }
@@ -241,6 +271,19 @@ func (c *GreeterServiceHTTPClientImpl) ListGreeter(ctx context.Context, in *List
 	opts = append(opts, http.Operation(OperationGreeterServiceListGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *GreeterServiceHTTPClientImpl) PostHello(ctx context.Context, in *GreeterRequest, opts ...http.CallOption) (*GreeterReply, error) {
+	var out GreeterReply
+	pattern := "/greeter/{id}/hello"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationGreeterServicePostHello))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in.Data, &out.Data, opts...)
 	if err != nil {
 		return nil, err
 	}

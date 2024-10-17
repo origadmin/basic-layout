@@ -9,10 +9,35 @@ import (
 
 // GreeterService is a greeter service.
 type GreeterService struct {
-	helloworld.UnimplementedGreeterServiceServer
+	helloworld.GreeterServiceServer
 
 	//uc     *biz.GreeterBiz
 	client helloworld.GreeterServiceClient
+}
+
+func (s *GreeterService) CreateGreeter(ctx context.Context, request *helloworld.CreateGreeterRequest) (*helloworld.CreateGreeterReply, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *GreeterService) UpdateGreeter(ctx context.Context, request *helloworld.UpdateGreeterRequest) (*helloworld.UpdateGreeterReply, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *GreeterService) DeleteGreeter(ctx context.Context, request *helloworld.DeleteGreeterRequest) (*helloworld.DeleteGreeterReply, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *GreeterService) GetGreeter(ctx context.Context, request *helloworld.GetGreeterRequest) (*helloworld.GetGreeterReply, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *GreeterService) ListGreeter(ctx context.Context, request *helloworld.ListGreeterRequest) (*helloworld.ListGreeterReply, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 // NewGreeterService new a greeter service.
@@ -25,10 +50,16 @@ func NewGreeterServer(client helloworld.GreeterServiceClient) helloworld.Greeter
 	return &GreeterService{client: client}
 }
 
-// SayHello implements helloworld.GreeterServer.
+// SayHello implements helloworld.SayHello.
 func (s *GreeterService) SayHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
 	fmt.Println("SayHello", in.Name)
 	return s.client.SayHello(ctx, in)
+}
+
+// PostHello implements helloworld.PostHello.
+func (s *GreeterService) PostHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
+	fmt.Println("PostHello", in.Name)
+	return s.client.PostHello(ctx, in)
 }
 
 var _ helloworld.GreeterServiceServer = (*GreeterService)(nil)

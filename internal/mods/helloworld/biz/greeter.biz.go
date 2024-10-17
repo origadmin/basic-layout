@@ -22,16 +22,25 @@ type GreeterBiz struct {
 	log  *log.Helper
 }
 
+func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
+	uc.log.WithContext(ctx).Infof("SayHello: %v", in.Data.Name)
+	return &helloworld.GreeterReply{
+		Data: &helloworld.Greeter{
+			Name: "hello " + in.Name,
+		}}, nil
+}
+
+func (uc *GreeterBiz) PostHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
+	uc.log.WithContext(ctx).Infof("PostHello: %v", in.Data.Name)
+	return &helloworld.GreeterReply{
+		Data: &helloworld.Greeter{
+			Name: "hello " + in.Data.Name,
+		}}, nil
+}
+
 func (uc *GreeterBiz) ListGreeter(ctx context.Context, in *helloworld.ListGreeterRequest, opts ...grpc.CallOption) (*helloworld.ListGreeterReply, error) {
 	uc.log.WithContext(ctx).Infof("ListGreeter")
 	return &helloworld.ListGreeterReply{}, nil
-}
-
-func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
-	uc.log.WithContext(ctx).Infof("SayHello: %v", in.Name)
-	return &helloworld.GreeterReply{Data: &helloworld.Greeter{
-		Name: "hello " + in.Name,
-	}}, nil
 }
 
 func (uc *GreeterBiz) CreateGreeter(ctx context.Context, in *helloworld.CreateGreeterRequest, opts ...grpc.CallOption) (*helloworld.CreateGreeterReply, error) {

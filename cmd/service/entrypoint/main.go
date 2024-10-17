@@ -62,7 +62,12 @@ func main() {
 }
 
 func callGRPC(client helloworld.GreeterServiceClient) {
-	reply, err := client.SayHello(context.Background(), &helloworld.GreeterRequest{Id: "kratos", Name: "kratos"})
+	req := &helloworld.GreeterRequest{Id: "kratos", Name: "kratos", Data: &helloworld.Greeter{
+		Id:   "kratos",
+		Name: "kratos",
+	}}
+	err := req.ValidateAll()
+	reply, err := client.PostHello(context.Background(), req)
 	if err != nil {
 		log.Print("[grpc] SayHello ", err)
 		return
@@ -71,10 +76,19 @@ func callGRPC(client helloworld.GreeterServiceClient) {
 }
 
 func callHTTP(client helloworld.GreeterServiceHTTPClient) {
-	reply, err := client.SayHello(context.Background(), &helloworld.GreeterRequest{Id: "kratos", Name: "kratos"})
+	req := &helloworld.GreeterRequest{Id: "kratos", Name: "kratos", Data: &helloworld.Greeter{
+		Id:   "kratos",
+		Name: "kratos",
+	}}
+	err := req.ValidateAll()
+	if err != nil {
+		log.Print("[http] SayHello validate ", err)
+		return
+	}
+	reply, err := client.PostHello(context.Background(), req)
 	if err != nil {
 		log.Print("[http] SayHello ", err)
 		return
 	}
-	log.Printf("[http] SayHello %s\n", reply.Data)
+	log.Printf("[http] SayHello %v\n", reply.Data)
 }

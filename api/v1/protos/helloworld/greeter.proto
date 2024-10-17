@@ -12,6 +12,8 @@ option java_multiple_files = true;
 option java_package = "com.origadmin.api.v1.services.helloworld";
 option java_outer_classname = "APIV1ServicesHelloworldProto";
 
+import "validate/validate.proto";
+
 extend google.protobuf.MessageOptions {
   optional Greeter data = 1000;
 }
@@ -24,6 +26,16 @@ service GreeterService {
       get: "/greeter/{id}/hello",
     };
   }
+
+  // Sends a greeting
+  rpc PostHello (GreeterRequest) returns (GreeterReply) {
+    option (google.api.http) = {
+      post: "/greeter/{id}/hello",
+      body: "data",
+      response_body: "data",
+    };
+  }
+
   rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
     option (google.api.http) = {
       post: "/greeter",
@@ -60,8 +72,9 @@ message Greeter {
 
 // The request message containing the user's name.
 message GreeterRequest {
-  string id = 1;
+  string id = 1 [(validate.rules).string.min_len = 1];
   string name = 2;
+  Greeter data = 3;
 }
 
 // The response message containing the greetings
