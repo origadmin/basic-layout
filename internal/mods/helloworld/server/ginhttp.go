@@ -15,11 +15,6 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
 
-type ginHTTP struct {
-	greeter helloworld.GreeterServiceServer
-	engine  *gin.Engine
-}
-
 func NewGinHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
