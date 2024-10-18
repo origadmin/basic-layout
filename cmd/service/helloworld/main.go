@@ -27,7 +27,7 @@ var (
 	//// 配置，启动链路追踪
 	//url := "http://192.168.0.103:14268/api/traces"
 	//Name = "kratos.service.student"
-	//id = "kratos.id.student.1"
+	id = "origadmin.id.helloworld"
 )
 
 func init() {
