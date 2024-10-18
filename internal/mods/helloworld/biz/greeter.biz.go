@@ -31,7 +31,7 @@ func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterReques
 }
 
 func (uc *GreeterBiz) PostHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
-	uc.log.WithContext(ctx).Infof("PostHello: %v", in.Data.Name)
+	uc.log.WithContext(ctx).Infof("GreeterBiz.PostHello: %v", in.Data.Name)
 	return &helloworld.GreeterReply{
 		Data: &helloworld.Greeter{
 			Name: "hello " + in.Data.Name,

@@ -14,17 +14,30 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
+	"github.com/origadmin/toolkits/utils/replacer"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 )
 
 func main() {
+	address := "${CONSUL_ADDRESS=127.0.0.1:8500}"
+	m, err := replacer.NewMatchFile(
+		"resources/env/env.toml",
+		replacer.WithMatchFold(true),
+		replacer.WithMatchSta("${"),
+		replacer.WithMatchEnd("}"))
+	if err != nil {
+		panic(err)
+	}
+	address = m.Replace(address)
 	cfg := api.DefaultConfig()
-	cfg.Address = "192.168.28.42:8500"
+	cfg.Address = address
+	fmt.Println("consul address:", address)
 	consulCli, err := api.NewClient(cfg)
 	if err != nil {
 		panic(err)
 	}
+
 	r := consul.New(consulCli)
 
 	// new grpc client
@@ -65,7 +78,7 @@ func main() {
 	fmt.Println("start")
 	for {
 		time.Sleep(time.Second)
-		//callGRPC(gClient)
+		callGRPC(gClient)
 		_ = gClient
 		callHTTP(hClient)
 	}

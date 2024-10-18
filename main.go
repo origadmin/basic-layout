@@ -43,7 +43,7 @@ func init() {
 	rootCmd.SilenceErrors = true
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	rootCmd.CompletionOptions.DisableNoDescFlag = true
-	rootCmd.AddCommand(cmd.StartCmd())
+	rootCmd.AddCommand(cmd.Commands()...)
 	rootCmd.Version = goinfo.String()
 }
 

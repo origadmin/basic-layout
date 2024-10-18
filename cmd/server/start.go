@@ -1,10 +1,10 @@
 // Copyright (c) 2024 KasaAdmin. All rights reserved.
 
-// Package cmd defines a CLI command to start a server with various flags and options, including the
+// Package server defines a CLI command to start a server with various flags and options, including the
 // ability to run as a daemon.
 // It includes functions to create and manage the command, as well as the logic to run the server.
 // It also includes a function to create a new server instance and start it.
-package cmd
+package server
 
 import (
 	"fmt"
@@ -69,10 +69,6 @@ func StartCmd() *cobra.Command {
 				fmt.Sprintf("%s.lock", strings.ToLower(cmd.Root().Name())),
 				[]byte(fmt.Sprintf("%d", os.Getpid())),
 				0o600)
-			//err := bootstrap.Run(cmd.Context(), config.Bootstrap{
-			//	WorkDir: workdir,
-			//	Random:  random,
-			//})
 			return nil
 		},
 	}

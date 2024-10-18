@@ -52,13 +52,13 @@ func NewGreeterServer(client helloworld.GreeterServiceClient) helloworld.Greeter
 
 // SayHello implements helloworld.SayHello.
 func (s *GreeterService) SayHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	fmt.Println("SayHello", in.Name)
+	fmt.Println("GreeterService.SayHello", in.Name)
 	return s.client.SayHello(ctx, in)
 }
 
 // PostHello implements helloworld.PostHello.
 func (s *GreeterService) PostHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	fmt.Println("PostHello", in.Name)
+	fmt.Println("GreeterService.PostHello", in.Data.Name)
 	return s.client.PostHello(ctx, in)
 }
 

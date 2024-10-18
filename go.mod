@@ -12,10 +12,10 @@ require (
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20241014124617-8b8dc4b0f8be
 	github.com/go-kratos/kratos/v2 v2.8.1
 	github.com/google/wire v0.6.0
-	github.com/hashicorp/consul/api v1.29.5
+	github.com/hashicorp/consul/api v1.30.0
 	github.com/origadmin/slog-kratos v1.0.2
-	github.com/origadmin/toolkits v0.0.60
-	github.com/origadmin/toolkits/codec v0.0.14
+	github.com/origadmin/toolkits v0.0.68
+	github.com/origadmin/toolkits/codec v0.0.15
 	github.com/origadmin/toolkits/contrib/config v0.0.5
 	github.com/origadmin/toolkits/idgen v0.0.8
 	github.com/origadmin/toolkits/runtime/kratos v0.0.8
