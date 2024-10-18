@@ -28,14 +28,19 @@ const OperationGreeterServiceSayHello = "/api.v1.services.helloworld.GreeterServ
 const OperationGreeterServiceUpdateGreeter = "/api.v1.services.helloworld.GreeterService/UpdateGreeter"
 
 type GreeterServiceHTTPServer interface {
+	// CreateGreeter CreateGreeter creates a new Greeter
 	CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterReply, error)
+	// DeleteGreeter DeleteGreeter deletes a Greeter
 	DeleteGreeter(context.Context, *DeleteGreeterRequest) (*DeleteGreeterReply, error)
+	// GetGreeter GetGreeter gets a Greeter
 	GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterReply, error)
+	// ListGreeter ListGreeter lists Greeters
 	ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterReply, error)
-	// PostHello Sends a greeting
+	// PostHello PostHello is a post method
 	PostHello(context.Context, *GreeterRequest) (*GreeterReply, error)
-	// SayHello Sends a greeting
+	// SayHello SayHello is a get method
 	SayHello(context.Context, *GreeterRequest) (*GreeterReply, error)
+	// UpdateGreeter UpdateGreeter updates a Greeter
 	UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterReply, error)
 }
 

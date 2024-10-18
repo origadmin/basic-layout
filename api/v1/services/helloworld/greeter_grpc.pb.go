@@ -34,14 +34,19 @@ const (
 //
 // The greeting service definition.
 type GreeterServiceClient interface {
-	// Sends a greeting
+	// SayHello is a get method
 	SayHello(ctx context.Context, in *GreeterRequest, opts ...grpc.CallOption) (*GreeterReply, error)
-	// Sends a greeting
+	// PostHello is a post method
 	PostHello(ctx context.Context, in *GreeterRequest, opts ...grpc.CallOption) (*GreeterReply, error)
+	// CreateGreeter creates a new Greeter
 	CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...grpc.CallOption) (*CreateGreeterReply, error)
+	// UpdateGreeter updates a Greeter
 	UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...grpc.CallOption) (*UpdateGreeterReply, error)
+	// DeleteGreeter deletes a Greeter
 	DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...grpc.CallOption) (*DeleteGreeterReply, error)
+	// GetGreeter gets a Greeter
 	GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...grpc.CallOption) (*GetGreeterReply, error)
+	// ListGreeter lists Greeters
 	ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...grpc.CallOption) (*ListGreeterReply, error)
 }
 
@@ -129,14 +134,19 @@ func (c *greeterServiceClient) ListGreeter(ctx context.Context, in *ListGreeterR
 //
 // The greeting service definition.
 type GreeterServiceServer interface {
-	// Sends a greeting
+	// SayHello is a get method
 	SayHello(context.Context, *GreeterRequest) (*GreeterReply, error)
-	// Sends a greeting
+	// PostHello is a post method
 	PostHello(context.Context, *GreeterRequest) (*GreeterReply, error)
+	// CreateGreeter creates a new Greeter
 	CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterReply, error)
+	// UpdateGreeter updates a Greeter
 	UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterReply, error)
+	// DeleteGreeter deletes a Greeter
 	DeleteGreeter(context.Context, *DeleteGreeterRequest) (*DeleteGreeterReply, error)
+	// GetGreeter gets a Greeter
 	GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterReply, error)
+	// ListGreeter lists Greeters
 	ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterReply, error)
 	mustEmbedUnimplementedGreeterServiceServer()
 }

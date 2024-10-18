@@ -20,14 +20,13 @@ extend google.protobuf.MessageOptions {
 
 // The greeting service definition.
 service GreeterService {
-  // Sends a greeting
+  // SayHello is a get method
   rpc SayHello (GreeterRequest) returns (GreeterReply) {
     option (google.api.http) = {
       get: "/greeter/{id}/hello",
     };
   }
-
-  // Sends a greeting
+  // PostHello is a post method
   rpc PostHello (GreeterRequest) returns (GreeterReply) {
     option (google.api.http) = {
       post: "/greeter/{id}/hello",
@@ -35,29 +34,33 @@ service GreeterService {
       response_body: "data",
     };
   }
-
+  // CreateGreeter creates a new Greeter
   rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
     option (google.api.http) = {
       post: "/greeter",
       body: "data",
     };
   }
+  // UpdateGreeter updates a Greeter
   rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterReply){
     option (google.api.http) = {
       put: "/greeter/{id}",
       body: "data",
     };
   }
+  // DeleteGreeter deletes a Greeter
   rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterReply){
     option (google.api.http) = {
       delete: "/greeter/{id}",
     };
   }
+  // GetGreeter gets a Greeter
   rpc GetGreeter (GetGreeterRequest) returns (GetGreeterReply){
     option (google.api.http) = {
       get: "/greeter/{id}",
     };
   }
+  // ListGreeter lists Greeters
   rpc ListGreeter (ListGreeterRequest) returns (ListGreeterReply){
     option (google.api.http) = {
       get: "/greeter",
@@ -121,7 +124,7 @@ message ListGreeterReply {
   bool success = 1;
   int32 total = 2;
   repeated Greeter data = 3;
-  errors.rpcerr.Error error = 4;
-  google.protobuf.Any extra = 5;
+  optional errors.rpcerr.Error error = 4;
+  optional google.protobuf.Any extra = 5;
 
 }
