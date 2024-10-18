@@ -6,7 +6,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/internal/mods/helloworld/conf"
 )
@@ -21,7 +20,7 @@ type Injector struct {
 	Bootstrap  *conf.Bootstrap
 	ServerGRPC *grpc.Server
 	ServerHTTP *http.Server
-	ServerGINS *gins.Server
+	//ServerGINS *gins.Server
 }
 
 //func NewInjector(bootstrap *conf.Bootstrap, logger log.Logger) *Injector {

@@ -1,4 +1,4 @@
-package config
+package bootstrap
 
 type Type string
 
@@ -12,3 +12,7 @@ const (
 	Kubernetes Type = "kubernetes"
 	Polaris    Type = "polaris"
 )
+
+func (t Type) String() string {
+	return string(t)
+}

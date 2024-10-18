@@ -36,14 +36,13 @@ func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 	if c.Middleware == nil {
 		c.Middleware = new(conf.Server_Middleware)
 	}
+
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
 	endpoint, _ := url.Parse(fmt.Sprintf("http://192.168.28.60:%d", naip.Port()))
 	opts = append(opts, gins.Endpoint(endpoint))
-
-	opts = append(opts)
 	srv := gins.NewServer(opts...)
 	helloworld.RegisterGreeterServiceGINServer(srv, greeter)
 	return srv

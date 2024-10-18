@@ -56,7 +56,7 @@ func (m *Greeter) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for ID
 
 	// no validation rules for Name
 
@@ -161,7 +161,7 @@ func (m *GreeterRequest) validate(all bool) error {
 
 	if utf8.RuneCountInString(m.GetId()) < 1 {
 		err := GreeterRequestValidationError{
-			field:  "Id",
+			field:  "ID",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -662,7 +662,7 @@ func (m *UpdateGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for ID
 
 	if all {
 		switch v := interface{}(m.GetData()).(type) {
@@ -933,7 +933,7 @@ func (m *DeleteGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for ID
 
 	if len(errors) > 0 {
 		return DeleteGreeterRequestMultiError(errors)
@@ -1139,7 +1139,7 @@ func (m *GetGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for ID
 
 	if len(errors) > 0 {
 		return GetGreeterRequestMultiError(errors)

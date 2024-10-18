@@ -11,9 +11,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
+	"origadmin/basic-layout/internal/mods/helloworld/conf"
+
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
 	"origadmin/basic-layout/internal/mods/helloworld/server"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
@@ -23,5 +24,5 @@ import (
 
 // buildInjectors init kratos application.
 func buildInjectors(context.Context, *conf.Bootstrap, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(mods.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
+	panic(wire.Build(mods.ProviderSet, bootstrap.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
 }

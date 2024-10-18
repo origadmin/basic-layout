@@ -1,4 +1,4 @@
-package config
+package bootstrap
 
 import (
 	registryconsul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
@@ -7,12 +7,11 @@ import (
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
 
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/config"
 )
 
 // NewRegistrar creates a new registrar.
-func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
-	c := api.DefaultConfig()
+func NewRegistrar(bootstrap *config.Bootstrap, l log.Logger) registry.Registrar {
 	d := bootstrap.Discovery
 	var reg registry.Registrar
 	switch Type(d.Type) {
@@ -20,6 +19,7 @@ func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
 		return nil
 	case Consul:
 		cfg := d.GetConsul()
+		c := api.DefaultConfig()
 		c.Address = cfg.Address
 		c.Scheme = cfg.Scheme
 		c.Token = cfg.Token
@@ -29,7 +29,7 @@ func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
 		//c.HealthCheckTimeout = d.Consul.HealthCheckTimeout
 		cli, err := api.NewClient(c)
 		if err != nil {
-			panic(errors.Wrap(err, "consul client"))
+			log.Fatalf("consul client %+v", err)
 		}
 		reg = registryconsul.New(
 			cli,

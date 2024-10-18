@@ -34,6 +34,10 @@ func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 	if c.Grpc.Timeout != nil {
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
+	if c.Middleware == nil {
+		c.Middleware = new(conf.Server_Middleware)
+	}
+
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Grpc.Addr)
 	endpoint, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", naip.Port()))
 	opts = append(opts, grpc.Endpoint(endpoint))

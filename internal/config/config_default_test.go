@@ -1,4 +1,4 @@
-package conf
+package config
 
 import (
 	"reflect"
@@ -19,21 +19,21 @@ func TestSaveConf(t *testing.T) {
 			name: "test",
 			args: args{
 				path: "test.toml",
-				conf: DefaultConf(),
+				conf: DefaultBootstrap,
 			},
 		},
 		{
 			name: "test",
 			args: args{
 				path: "test.yml",
-				conf: DefaultConf(),
+				conf: DefaultBootstrap,
 			},
 		},
 		{
 			name: "test",
 			args: args{
 				path: "test.json",
-				conf: DefaultConf(),
+				conf: DefaultBootstrap,
 			},
 		},
 	}
@@ -61,7 +61,7 @@ func TestLoadConf(t *testing.T) {
 			args: args{
 				path: "test.toml",
 			},
-			want:    DefaultConf(),
+			want:    DefaultBootstrap,
 			wantErr: false,
 		},
 		{
@@ -69,7 +69,7 @@ func TestLoadConf(t *testing.T) {
 			args: args{
 				path: "test.json",
 			},
-			want:    DefaultConf(),
+			want:    DefaultBootstrap,
 			wantErr: false,
 		},
 	}

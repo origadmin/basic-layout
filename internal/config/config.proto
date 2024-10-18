@@ -1,7 +1,7 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "internal/mods/helloworld/conf;conf";
+option go_package = "internal/config;config";
 
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
@@ -10,12 +10,13 @@ message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
   string crypto_type = 3 [json_name = "crypto_type"];
-  Server server = 4 [json_name = "server"];
-  Data data = 5 [json_name = "data"];
-  Settings settings = 6 [json_name = "settings"];
+  Server server = 5 [json_name = "server"];
+  Data data = 6 [json_name = "data"];
+  Settings settings = 7 [json_name = "settings"];
   Discovery discovery = 8 [json_name = "discovery"];
   string id = 99 ;
 }
+
 
 message Discovery {
   string type = 1 [(validate.rules).string = {in: ["none", "consul", "etcd"]}];

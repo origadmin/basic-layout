@@ -67,7 +67,7 @@ func (uc *GreeterBiz) UpdateGreeter(ctx context.Context, in *helloworld.UpdateGr
 
 func (uc *GreeterBiz) DeleteGreeter(ctx context.Context, in *helloworld.DeleteGreeterRequest, opts ...grpc.CallOption) (*helloworld.DeleteGreeterReply, error) {
 	uc.log.WithContext(ctx).Infof("DeleteGreeter: %v", in.Id)
-	//err := uc.repo.Delete(ctx, in.Id)
+	//err := uc.repo.Delete(ctx, in.ID)
 	//if err != nil {
 	//	return nil, err
 	//}
