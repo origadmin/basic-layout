@@ -15,15 +15,15 @@ type Discovery struct {
 	Address string `yaml:"address" toml:"address" json:"address"`
 }
 
-type Consul struct {
+type ConsulConfig struct {
 	Address string `yaml:"address" toml:"address" json:"address"`
 }
 
 type Bootstrap struct {
-	Name      string    `yaml:"name" toml:"name" json:"name"`
-	Type      string    `yaml:"type" toml:"type" json:"type"`
-	Consul    Consul    `yaml:"consul" toml:"consul" json:"consul"`
-	Discovery Discovery `yaml:"discovery" toml:"discovery" json:"discovery"`
+	Name      string       `yaml:"name" toml:"name" json:"name"`
+	Type      string       `yaml:"type" toml:"type" json:"type"`
+	Consul    ConsulConfig `yaml:"consul" toml:"consul" json:"consul"`
+	Discovery Discovery    `yaml:"discovery" toml:"discovery" json:"discovery"`
 }
 
 func (c *Bootstrap) Setup() {
@@ -129,7 +129,7 @@ func parseConfigFile(c *Bootstrap, path string) error {
 var DefaultBootstrap = Bootstrap{
 	Name: "helloworld",
 	Type: "consul",
-	Consul: Consul{
+	Consul: ConsulConfig{
 		Address: "${consul_address}",
 	},
 	Discovery: Discovery{

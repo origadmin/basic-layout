@@ -1,4 +1,4 @@
-package entrypoint
+package server
 
 import (
 	"github.com/go-kratos/kratos/v2/log"

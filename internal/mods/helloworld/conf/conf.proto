@@ -6,8 +6,6 @@ option go_package = "internal/mods/helloworld/conf;conf";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 
-
-
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
@@ -83,8 +81,6 @@ message Server {
     optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
   }
 
-
-
   message Middleware {
     message Metrics {
       bool enabled = 1;
@@ -135,15 +131,15 @@ message Settings {
 
 message Data {
   message Database {
-    string driver = 1;
-    string source = 2;
+    string driver = 1 [json_name = "driver"];
+    string source = 2 [json_name = "source"];
   }
   message Redis {
-    string network = 1;
-    string addr = 2;
+    string network = 1 [json_name = "network"];
+    string addr = 2 [json_name = "addr"];
     google.protobuf.Duration read_timeout = 3 [json_name = "read_timeout"];
     google.protobuf.Duration write_timeout = 4 [json_name = "write_timeout"];
   }
-  Database database = 1;
-  Redis redis = 2;
+  Database database = 1 [json_name = "database"];
+  Redis redis = 2 [json_name = "redis"];
 }

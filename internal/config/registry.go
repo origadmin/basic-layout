@@ -1,4 +1,4 @@
-package server
+package config
 
 import (
 	registryconsul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
@@ -15,10 +15,10 @@ func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
 	c := api.DefaultConfig()
 	d := bootstrap.Discovery
 	var reg registry.Registrar
-	switch d.Type {
-	case "none":
+	switch Type(d.Type) {
+	case Default:
 		return nil
-	case "consul":
+	case Consul:
 		cfg := d.GetConsul()
 		c.Address = cfg.Address
 		c.Scheme = cfg.Scheme
