@@ -17,6 +17,7 @@ import (
 	"github.com/origadmin/toolkits/utils/replacer"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/mods/helloworld/dto"
 )
 
 func main() {
@@ -43,14 +44,14 @@ func main() {
 	// new grpc client
 	conn, err := grpc.DialInsecure(
 		context.Background(),
-		grpc.WithEndpoint("discovery:///helloworld"),
+		grpc.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
 		grpc.WithDiscovery(r),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	gClient := helloworld.NewGreeterServiceClient(conn)
+	gClient := helloworld.NewGreeterClient(conn)
 
 	// 创建路由 Filter：筛选版本号为"2.0.0"的实例
 	filter := filter.Version("v1.0.0")
@@ -63,7 +64,7 @@ func main() {
 		http.WithMiddleware(
 			recovery.Recovery(),
 		),
-		http.WithEndpoint("discovery:///helloworld"),
+		http.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
 		//http.WithEndpoint("127.0.0.1:8000"),
 		http.WithDiscovery(r),
 		http.WithNodeFilter(filter),
@@ -74,7 +75,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer hConn.Close()
-	hClient := helloworld.NewGreeterServiceHTTPClient(hConn)
+	hClient := helloworld.NewGreeterHTTPClient(hConn)
 	fmt.Println("start")
 	for {
 		time.Sleep(time.Second)
@@ -84,11 +85,11 @@ func main() {
 	}
 }
 
-func callGRPC(client helloworld.GreeterServiceClient) {
+func callGRPC(client helloworld.GreeterClient) {
 	req := &helloworld.GreeterRequest{
 		Id:   "kratos",
 		Name: "kratos",
-		Data: &helloworld.Greeter{
+		Data: &dto.Greeter{
 			Id:   "kratos",
 			Name: "kratos",
 		}}
@@ -105,11 +106,11 @@ func callGRPC(client helloworld.GreeterServiceClient) {
 	log.Printf("[grpc] SayHello %+v\n", reply.Data)
 }
 
-func callHTTP(client helloworld.GreeterServiceHTTPClient) {
+func callHTTP(client helloworld.GreeterHTTPClient) {
 	req := &helloworld.GreeterRequest{
 		Id:   "kratos",
 		Name: "kratos",
-		Data: &helloworld.Greeter{
+		Data: &dto.Greeter{
 			Id:   "kratos",
 			Name: "kratos",
 		}}

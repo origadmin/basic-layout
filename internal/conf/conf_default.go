@@ -127,6 +127,8 @@ var DefaultBootstrap = &Bootstrap{
 			//Tag:                 "",
 			//HealthCheckInterval: "",
 			//HealthCheckTimeout:  "",
+			HealthCheck: true,
+			HeartBeat:   true,
 		},
 		Etcd: &Discovery_Etcd{
 			Endpoints: "${etcd_address=127.0.0.1:2379}",

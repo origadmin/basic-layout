@@ -95,7 +95,9 @@
   "discovery": {
     "type": "${discovery_type:consul}",
     "consul": {
-      "address": "${consul_address:127.0.0.1:8500}"
+      "address": "${consul_address:127.0.0.1:8500}",
+      "health_check": true,
+      "heart_beat": true
     },
     "etcd": {
       "endpoints": "${etcd_address:127.0.0.1:2379}"
