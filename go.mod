@@ -7,6 +7,7 @@ replace github.com/armon/go-metrics v0.4.1 => github.com/hashicorp/go-metrics v0
 require (
 	github.com/caarlos0/go-version v0.1.1
 	github.com/envoyproxy/protoc-gen-validate v1.1.0
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241014124617-8b8dc4b0f8be
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20241014124617-8b8dc4b0f8be
@@ -17,9 +18,10 @@ require (
 	github.com/origadmin/toolkits v0.0.68
 	github.com/origadmin/toolkits/codec v0.0.15
 	github.com/origadmin/toolkits/contrib/config v0.0.5
-	github.com/origadmin/toolkits/idgen v0.0.8
 	github.com/origadmin/toolkits/runtime/kratos v0.0.8
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.1
+	go.opentelemetry.io/otel v1.31.0
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241015192408-796eee8c2d53
 	google.golang.org/grpc v1.67.1
@@ -68,12 +70,12 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	go.opentelemetry.io/otel v1.31.0 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.24.0 // indirect
+	go.opentelemetry.io/otel/sdk/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.31.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.28.0 // indirect

@@ -5,6 +5,10 @@ option go_package = "internal/config;config";
 
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
+import "middlewares/logger/logger.proto";
+import "middlewares/metrics/metrics.proto";
+import "middlewares/cors/cors.proto";
+import "middlewares/traces/traces.proto";
 
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
@@ -14,8 +18,18 @@ message Bootstrap {
   Data data = 6 [json_name = "data"];
   Settings settings = 7 [json_name = "settings"];
   Discovery discovery = 8 [json_name = "discovery"];
+  Middlewares middlewares = 9 [json_name = "middlewares"];
   string id = 99 ;
 }
+
+message Middlewares {
+  bool RegisterAsGlobal = 1 [json_name = "register_as_global"];
+  middleware.logger.v1.LoggerConfig logger = 2 [json_name = "logger"];
+  middleware.cors.v1.CorsConfig cors = 3 [json_name = "cors"];
+  middleware.metrics.v1.MetricConfig metrics = 4 [json_name = "metrics"];
+  middleware.traces.v1.TracesConfig traces = 5 [json_name = "traces"];
+}
+
 
 
 message Discovery {

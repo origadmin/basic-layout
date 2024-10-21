@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package middleware.logger.v1;
+
+option go_package = "origadmin/basic-layout/toolkits/middlewares/logger;logger";
+
+//import "google/protobuf/duration.proto";
+
+// Logger middleware config.
+message LoggerConfig {
+  bool enabled = 1;
+
+  string name = 2;
+}
