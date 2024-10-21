@@ -9,6 +9,7 @@ option go_package = "origadmin/basic-layout/toolkits/middlewares/metrics;metrics
 // Metric middleware config.
 message MetricConfig {
   bool enabled = 1;
+  repeated string includes = 2 [json_name = "includes"];
 
-  string name = 2;
+  string name = 3;
 }

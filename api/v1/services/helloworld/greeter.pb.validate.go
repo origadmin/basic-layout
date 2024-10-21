@@ -35,44 +35,45 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Greeter with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on GreeterData with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Greeter) Validate() error {
+func (m *GreeterData) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Greeter with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in GreeterMultiError, or nil if none found.
-func (m *Greeter) ValidateAll() error {
+// ValidateAll checks the field values on GreeterData with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GreeterDataMultiError, or
+// nil if none found.
+func (m *GreeterData) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Greeter) validate(all bool) error {
+func (m *GreeterData) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for ID
+	// no validation rules for Id
 
 	// no validation rules for Name
 
 	if len(errors) > 0 {
-		return GreeterMultiError(errors)
+		return GreeterDataMultiError(errors)
 	}
 
 	return nil
 }
 
-// GreeterMultiError is an error wrapping multiple validation errors returned
-// by Greeter.ValidateAll() if the designated constraints aren't met.
-type GreeterMultiError []error
+// GreeterDataMultiError is an error wrapping multiple validation errors
+// returned by GreeterData.ValidateAll() if the designated constraints aren't met.
+type GreeterDataMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GreeterMultiError) Error() string {
+func (m GreeterDataMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -81,11 +82,11 @@ func (m GreeterMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GreeterMultiError) AllErrors() []error { return m }
+func (m GreeterDataMultiError) AllErrors() []error { return m }
 
-// GreeterValidationError is the validation error returned by Greeter.Validate
-// if the designated constraints aren't met.
-type GreeterValidationError struct {
+// GreeterDataValidationError is the validation error returned by
+// GreeterData.Validate if the designated constraints aren't met.
+type GreeterDataValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -93,22 +94,22 @@ type GreeterValidationError struct {
 }
 
 // Field function returns field value.
-func (e GreeterValidationError) Field() string { return e.field }
+func (e GreeterDataValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GreeterValidationError) Reason() string { return e.reason }
+func (e GreeterDataValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GreeterValidationError) Cause() error { return e.cause }
+func (e GreeterDataValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GreeterValidationError) Key() bool { return e.key }
+func (e GreeterDataValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GreeterValidationError) ErrorName() string { return "GreeterValidationError" }
+func (e GreeterDataValidationError) ErrorName() string { return "GreeterDataValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GreeterValidationError) Error() string {
+func (e GreeterDataValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -120,14 +121,14 @@ func (e GreeterValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGreeter.%s: %s%s",
+		"invalid %sGreeterData.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GreeterValidationError{}
+var _ error = GreeterDataValidationError{}
 
 var _ interface {
 	Field() string
@@ -135,7 +136,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GreeterValidationError{}
+} = GreeterDataValidationError{}
 
 // Validate checks the field values on GreeterRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -161,7 +162,7 @@ func (m *GreeterRequest) validate(all bool) error {
 
 	if utf8.RuneCountInString(m.GetId()) < 1 {
 		err := GreeterRequestValidationError{
-			field:  "ID",
+			field:  "Id",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -662,7 +663,7 @@ func (m *UpdateGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ID
+	// no validation rules for Id
 
 	if all {
 		switch v := interface{}(m.GetData()).(type) {
@@ -933,7 +934,7 @@ func (m *DeleteGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ID
+	// no validation rules for Id
 
 	if len(errors) > 0 {
 		return DeleteGreeterRequestMultiError(errors)
@@ -1139,7 +1140,7 @@ func (m *GetGreeterRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ID
+	// no validation rules for Id
 
 	if len(errors) > 0 {
 		return GetGreeterRequestMultiError(errors)

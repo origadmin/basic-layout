@@ -1,0 +1,8 @@
+Type = "file"
+
+[File]
+  Path = "resources/configs"
+
+[Consul]
+  Address = "127.0.0.1:8500"
+  Scheme = "http"

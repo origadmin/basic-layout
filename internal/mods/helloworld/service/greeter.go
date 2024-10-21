@@ -9,10 +9,10 @@ import (
 
 // GreeterService is a greeter service.
 type GreeterService struct {
-	helloworld.GreeterServiceServer
+	helloworld.GreeterServer
 
 	//uc     *biz.GreeterBiz
-	client helloworld.GreeterServiceClient
+	client helloworld.GreeterClient
 }
 
 func (s *GreeterService) CreateGreeter(ctx context.Context, request *helloworld.CreateGreeterRequest) (*helloworld.CreateGreeterReply, error) {
@@ -41,12 +41,12 @@ func (s *GreeterService) ListGreeter(ctx context.Context, request *helloworld.Li
 }
 
 // NewGreeterService new a greeter service.
-func NewGreeterService(client helloworld.GreeterServiceClient) *GreeterService {
+func NewGreeterService(client helloworld.GreeterClient) *GreeterService {
 	return &GreeterService{client: client}
 }
 
 // NewGreeterServer new a greeter service.
-func NewGreeterServer(client helloworld.GreeterServiceClient) helloworld.GreeterServiceServer {
+func NewGreeterServer(client helloworld.GreeterClient) helloworld.GreeterServer {
 	return &GreeterService{client: client}
 }
 
@@ -62,4 +62,4 @@ func (s *GreeterService) PostHello(ctx context.Context, in *helloworld.GreeterRe
 	return s.client.PostHello(ctx, in)
 }
 
-var _ helloworld.GreeterServiceServer = (*GreeterService)(nil)
+var _ helloworld.GreeterServer = (*GreeterService)(nil)

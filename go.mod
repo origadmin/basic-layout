@@ -15,7 +15,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.30.0
 	github.com/origadmin/slog-kratos v1.0.2
-	github.com/origadmin/toolkits v0.0.68
+	github.com/origadmin/toolkits v0.0.69
 	github.com/origadmin/toolkits/codec v0.0.15
 	github.com/origadmin/toolkits/contrib/config v0.0.5
 	github.com/origadmin/toolkits/runtime/kratos v0.0.8
@@ -74,8 +74,8 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.24.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.24.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.31.0 // indirect
+	go.opentelemetry.io/otel/sdk/metric v1.31.0 // indirect
 	go.opentelemetry.io/otel/trace v1.31.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.28.0 // indirect

@@ -10,11 +10,11 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/conf"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, logger log.Logger) *grpc.Server {
+func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, logger log.Logger) *grpc.Server {
 	c := bootstrap.Server
 	if c.Grpc == nil {
 		c.Grpc = new(conf.Server_GRPC)
@@ -42,6 +42,6 @@ func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceS
 	endpoint, _ := url.Parse(fmt.Sprintf("grpc://192.168.28.81:%d", naip.Port()))
 	opts = append(opts, grpc.Endpoint(endpoint))
 	srv := grpc.NewServer(opts...)
-	helloworld.RegisterGreeterServiceServer(srv, greeter)
+	helloworld.RegisterGreeterServer(srv, greeter)
 	return srv
 }

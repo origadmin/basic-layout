@@ -15,6 +15,8 @@ import (
 
 	"github.com/origadmin/toolkits/errors"
 	"github.com/spf13/cobra"
+
+	"origadmin/basic-layout/internal/conf"
 )
 
 const (
@@ -61,7 +63,9 @@ func StartCmd() *cobra.Command {
 				if err != nil {
 					//_, _ = ppfmt.Printf("failed to write pid file: %s \n", err.Error())
 				}
-				//_, _ = ppfmt.Printf("service %s daemon thread started with pid %d \n", config.C.General.ServiceName, pid)
+				_, _ = fmt.Printf("service %s daemon thread started with pid %d \n", conf.Application, pid)
+				//conf.LoadBootstrap()
+
 				return nil
 			}
 

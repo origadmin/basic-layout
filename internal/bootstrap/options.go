@@ -4,7 +4,7 @@ type Type string
 
 const (
 	Default    Type = "none"
-	LocalFile  Type = "file"
+	File       Type = "file"
 	Nacos      Type = "nacos"
 	Consul     Type = "consul"
 	Etcd       Type = "etcd"

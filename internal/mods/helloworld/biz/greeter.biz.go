@@ -25,7 +25,7 @@ type GreeterBiz struct {
 func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
 	uc.log.WithContext(ctx).Infof("SayHello: %v", in.Data.Name)
 	return &helloworld.GreeterReply{
-		Data: &helloworld.Greeter{
+		Data: &dto.Greeter{
 			Name: "hello " + in.Name,
 		}}, nil
 }
@@ -33,7 +33,7 @@ func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterReques
 func (uc *GreeterBiz) PostHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
 	uc.log.WithContext(ctx).Infof("GreeterBiz.PostHello: %v", in.Data.Name)
 	return &helloworld.GreeterReply{
-		Data: &helloworld.Greeter{
+		Data: &dto.Greeter{
 			Name: "hello " + in.Data.Name,
 		}}, nil
 }
@@ -85,8 +85,8 @@ func NewGreeterBiz(repo dto.GreeterDao, logger log.Logger) *GreeterBiz {
 }
 
 // NewGreeterClient new a Greeter use case.
-func NewGreeterClient(repo dto.GreeterDao, logger log.Logger) helloworld.GreeterServiceClient {
+func NewGreeterClient(repo dto.GreeterDao, logger log.Logger) helloworld.GreeterClient {
 	return &GreeterBiz{repo: repo, log: log.NewHelper(logger)}
 }
 
-var _ helloworld.GreeterServiceClient = (*GreeterBiz)(nil)
+var _ helloworld.GreeterClient = (*GreeterBiz)(nil)

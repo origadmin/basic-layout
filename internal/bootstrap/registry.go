@@ -7,11 +7,11 @@ import (
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
 
-	"origadmin/basic-layout/internal/config"
+	"origadmin/basic-layout/internal/conf"
 )
 
 // NewRegistrar creates a new registrar.
-func NewRegistrar(bootstrap *config.Bootstrap, l log.Logger) registry.Registrar {
+func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
 	d := bootstrap.Discovery
 	var reg registry.Registrar
 	switch Type(d.Type) {
@@ -19,6 +19,9 @@ func NewRegistrar(bootstrap *config.Bootstrap, l log.Logger) registry.Registrar 
 		return nil
 	case Consul:
 		cfg := d.GetConsul()
+		if cfg == nil {
+			return nil
+		}
 		c := api.DefaultConfig()
 		c.Address = cfg.Address
 		c.Scheme = cfg.Scheme
@@ -36,7 +39,7 @@ func NewRegistrar(bootstrap *config.Bootstrap, l log.Logger) registry.Registrar 
 			registryconsul.WithHeartbeat(cfg.HeartBeat),
 			registryconsul.WithHealthCheck(cfg.HealthCheck),
 		)
-		log.Infof("consul: %s", bootstrap.Discovery.Consul.Address)
+		log.Infof("consul: %s", cfg.Address)
 	default:
 		panic(errors.Errorf("unknown discovery type: %s", d.Type))
 	}

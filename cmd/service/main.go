@@ -14,41 +14,48 @@ import (
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"origadmin/basic-layout/internal/config"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/mods"
-	"origadmin/basic-layout/toolkits/service"
 )
 
-// go build -ldflags "-X main.Version=x.y.z"
+// go build -ldflags "-X main.Version=vx.y.z"
 var (
-	Name    string = "origadmin.service.v1.helloworld"
-	Version string = "v1.0.0"
-	cfg     string
-	//// 配置，启动链路追踪
-	//url := "http://192.168.0.103:14268/api/traces"
-	//Name = "kratos.service.student"
-	id = "origadmin.id.helloworld"
+	// Name is the name of the compiled software.
+	Name = "origadmin.service.v1.helloworld"
+	// Version is the version of the compiled software.
+	Version = "v1.0.0"
+	// flags are the bootstrap flags.
+	flags = bootstrap.DefaultFlags()
 )
 
 func init() {
-	flag.StringVar(&cfg, "config", "resources/config", "config path, eg: -c config.toml")
+	flag.StringVar(&flags.ConfigPath, "config", "resources/local", "config path, eg: -c config.toml")
+	flag.StringVar(&flags.EnvPath, "env", "resources/env", "env path, eg: -e env.toml")
 }
 
 func main() {
 	flag.Parse()
-	inf := service.NewAppInfo("", Name, Version).SetMetadata(map[string]string{})
+	flags.Name = Name
+	flags.Version = Version
+	flags.MetaData = make(map[string]string)
 	logger := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		"service.id", inf.InstanceID(),
-		"service.name", inf.Name(),
-		"service.version", inf.Version(),
+		"service.id", flags.IID(),
+		"service.name", flags.Name,
+		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
-	bs, err := config.LoadBootstrap(&config.Config{}, logger)
+
+	env, err := bootstrap.LoadEnv(flags.EnvPath)
 	if err != nil {
-		return
+		panic(errors.WithStack(err))
+	}
+
+	bs, err := bootstrap.FromLocal(flags.ConfigPath, env, logger)
+	if err != nil {
+		panic(errors.WithStack(err))
 	}
 
 	v, _ := protojson.Marshal(bs)
@@ -77,11 +84,10 @@ func main() {
 }
 
 func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
-	info := service.NewAppInfo(id, Name, Version).SetMetadata(map[string]string{})
 	opts := []kratos.Option{
-		kratos.ID(info.InstanceID()),
-		kratos.Name(info.Name()),
-		kratos.Version(info.Version()),
+		kratos.ID(flags.IID()),
+		kratos.Name(flags.Name),
+		kratos.Version(flags.Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),

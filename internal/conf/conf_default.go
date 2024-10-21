@@ -1,4 +1,4 @@
-package config
+package conf
 
 import (
 	"fmt"
@@ -119,7 +119,7 @@ var DefaultBootstrap = &Bootstrap{
 	},
 	Discovery: &Discovery{
 		Type: "${discovery_type:consul}",
-		Consul: &Consul{
+		Consul: &Discovery_Consul{
 			Address: "${consul_address=127.0.0.1:8500}",
 			//Scheme:              "",
 			//Token:               "",
@@ -128,7 +128,7 @@ var DefaultBootstrap = &Bootstrap{
 			//HealthCheckInterval: "",
 			//HealthCheckTimeout:  "",
 		},
-		Etcd: &Etcd{
+		Etcd: &Discovery_Etcd{
 			Endpoints: "${etcd_address=127.0.0.1:2379}",
 		},
 	},

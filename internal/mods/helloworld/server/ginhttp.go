@@ -12,10 +12,10 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/conf"
 )
 
-func NewGinHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServiceServer, l log.Logger) *http.Server {
+func NewGinHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -51,6 +51,6 @@ func NewGinHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServi
 		WriteTimeout: bootstrap.Server.Gins.WriteTimeout.AsDuration(),
 		IdleTimeout:  bootstrap.Server.Gins.IdleTimeout.AsDuration(),
 	}
-	helloworld.RegisterGreeterServiceGINServer(engine, greeter)
+	helloworld.RegisterGreeterGINServer(engine, greeter)
 	return srv
 }

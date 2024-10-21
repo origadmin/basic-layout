@@ -8,11 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 )
 
-type Config struct {
-	Name string
-}
-
-func Middleware(config Config, logger log.Logger) (middleware.Middleware, error) {
+func Middleware(config *LoggerConfig, logger log.Logger) (middleware.Middleware, error) {
 	if logger == nil {
 		// todo: init logger from config
 		logger = log.NewStdLogger(os.Stdout)
@@ -32,6 +28,6 @@ func Middleware(config Config, logger log.Logger) (middleware.Middleware, error)
 	return logging.Server(logger), nil
 }
 
-func NewLogger(config Config) log.Logger {
+func NewLogger(config *LoggerConfig) log.Logger {
 	return log.NewStdLogger(os.Stdout)
 }

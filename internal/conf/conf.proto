@@ -1,14 +1,14 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "internal/config;config";
+option go_package = "internal/conf;conf";
 
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 import "middlewares/logger/logger.proto";
 import "middlewares/metrics/metrics.proto";
 import "middlewares/cors/cors.proto";
-import "middlewares/traces/traces.proto";
+import "middlewares/security/security.proto";
 
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
@@ -27,33 +27,31 @@ message Middlewares {
   middleware.logger.v1.LoggerConfig logger = 2 [json_name = "logger"];
   middleware.cors.v1.CorsConfig cors = 3 [json_name = "cors"];
   middleware.metrics.v1.MetricConfig metrics = 4 [json_name = "metrics"];
-  middleware.traces.v1.TracesConfig traces = 5 [json_name = "traces"];
+  middleware.traces.v1.SecurityConfig security = 5 [json_name = "security"];
 }
 
-
-
 message Discovery {
+  message Consul {
+    string address = 1 [json_name = "address"];
+    string scheme = 2 [json_name = "scheme"];
+    string token = 3 [json_name = "token"];
+    bool heart_beat = 4 [json_name = "heart_beat"];
+    bool health_check = 5 [json_name = "health_check"];
+    string datacenter = 6 [json_name = "datacenter"];
+    string tag = 7 [json_name = "tag"];
+    string health_check_interval = 8 [json_name = "health_check_interval"];
+    string health_check_timeout = 9[json_name = "health_check_timeout"];
+  }
+
+  message Etcd {
+    string endpoints = 1 [json_name = "endpoints"];
+    string username = 2 [json_name = "username"];
+    string password = 3 [json_name = "password"];
+  }
+
   string type = 1 [(validate.rules).string = {in: ["none", "consul", "etcd"]}];
   optional Consul consul = 2;
   optional Etcd etcd = 3;
-}
-
-message Consul {
-  string address = 1 [json_name = "address"];
-  string scheme = 2 [json_name = "scheme"];
-  string token = 3 [json_name = "token"];
-  bool heart_beat = 4 [json_name = "heart_beat"];
-  bool health_check = 5 [json_name = "health_check"];
-  string datacenter = 6 [json_name = "datacenter"];
-  string tag = 7 [json_name = "tag"];
-  string health_check_interval = 8 [json_name = "health_check_interval"];
-  string health_check_timeout = 9[json_name = "health_check_timeout"];
-}
-
-message Etcd {
-  string endpoints = 1 [json_name = "endpoints"];
-  string username = 2 [json_name = "username"];
-  string password = 3 [json_name = "password"];
 }
 
 message Server {

@@ -6,7 +6,7 @@ import (
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/conf"
 )
 
 // ProviderSet is server providers.

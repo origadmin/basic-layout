@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/origadmin/toolkits/errors"
@@ -18,22 +19,16 @@ const (
 	SideServer = "server"
 )
 
-type Config struct {
-	Name    string
-	Side    string
-	Metrics []string
-}
-
-func Middleware(config Config) (middleware.Middleware, error) {
+func Middleware(side string, config *MetricConfig, logger log.Logger) (middleware.Middleware, error) {
 	var (
 		m   middleware.Middleware
 		err error
 	)
-	switch config.Side {
+	switch side {
 	case SideServer:
-		m, err = ServerMiddleware(config)
+		m, err = ServerMiddleware(config, logger)
 	case SideClient:
-		m, err = ClientMiddleware(config)
+		m, err = ClientMiddleware(config, logger)
 	default:
 		return nil, errors.New("unknown metrics side")
 	}
@@ -43,17 +38,17 @@ func Middleware(config Config) (middleware.Middleware, error) {
 	return m, nil
 }
 
-func ServerMiddleware(config Config) (middleware.Middleware, error) {
+func ServerMiddleware(config *MetricConfig, logger log.Logger) (middleware.Middleware, error) {
 	meter := otel.Meter(config.Name)
-	opts := make([]metrics.Option, 0, len(config.Metrics))
-	if slices.Contains(config.Metrics, "requests") {
+	opts := make([]metrics.Option, 0, len(config.Includes))
+	if slices.Contains(config.Includes, "requests") {
 		metricRequests, err := metrics.DefaultRequestsCounter(meter, metrics.DefaultServerRequestsCounterName)
 		if err != nil {
 			return nil, err
 		}
 		opts = append(opts, metrics.WithRequests(metricRequests))
 	}
-	if slices.Contains(config.Metrics, "seconds") {
+	if slices.Contains(config.Includes, "seconds") {
 		metricSeconds, err := metrics.DefaultSecondsHistogram(meter, metrics.DefaultServerSecondsHistogramName)
 		if err != nil {
 			return nil, err
@@ -63,17 +58,17 @@ func ServerMiddleware(config Config) (middleware.Middleware, error) {
 	return metrics.Server(opts...), nil
 }
 
-func ClientMiddleware(config Config) (middleware.Middleware, error) {
+func ClientMiddleware(config *MetricConfig, logger log.Logger) (middleware.Middleware, error) {
 	meter := otel.Meter(config.Name)
-	opts := make([]metrics.Option, 0, len(config.Metrics))
-	if slices.Contains(config.Metrics, "requests") {
+	opts := make([]metrics.Option, 0, len(config.Includes))
+	if slices.Contains(config.Includes, "requests") {
 		metricRequests, err := metrics.DefaultRequestsCounter(meter, metrics.DefaultClientRequestsCounterName)
 		if err != nil {
 			return nil, err
 		}
 		opts = append(opts, metrics.WithRequests(metricRequests))
 	}
-	if slices.Contains(config.Metrics, "seconds") {
+	if slices.Contains(config.Includes, "seconds") {
 		metricSeconds, err := metrics.DefaultSecondsHistogram(meter, metrics.DefaultClientSecondsHistogramName)
 		if err != nil {
 			return nil, err

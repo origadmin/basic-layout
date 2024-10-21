@@ -13,7 +13,7 @@ var (
 )
 
 // Greeter is a Greeter model.
-type Greeter = helloworld.Greeter
+type Greeter = helloworld.GreeterData
 
 // GreeterQueryParam defines the query parameters for the `Menu` struct.
 type GreeterQueryParam struct {

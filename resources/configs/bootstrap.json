@@ -3,55 +3,65 @@
   "version": "v1.0.0",
   "crypto_type": "argon2",
   "server": {
+    "gins": {
+      "network": "tcp",
+      "addr": "${gins_address:0.0.0.0:7000}",
+      "timeout": {
+        "seconds": 180
+      },
+      "shutdown_timeout": {
+        "seconds": 180
+      },
+      "read_timeout": {
+        "seconds": 180
+      },
+      "write_timeout": {
+        "seconds": 180
+      },
+      "idle_timeout": {
+        "seconds": 180
+      }
+    },
     "http": {
       "network": "tcp",
-      "addr": "${http_address}",
-      "timeout": "180s",
-      "shutdown_timeout": "180s",
-      "read_timeout": "180s",
-      "write_timeout": "180s",
-      "idle_timeout": "180s"
+      "addr": "${http_address:0.0.0.0:8000}",
+      "timeout": {
+        "seconds": 180
+      },
+      "shutdown_timeout": {
+        "seconds": 180
+      },
+      "read_timeout": {
+        "seconds": 180
+      },
+      "write_timeout": {
+        "seconds": 180
+      },
+      "idle_timeout": {
+        "seconds": 180
+      }
     },
     "grpc": {
       "network": "tcp",
-      "addr": "${grpc_address}",
-      "timeout": "180s",
-      "shutdown_timeout": "180s",
-      "read_timeout": "180s",
-      "write_timeout": "180s",
-      "idle_timeout": "180s"
-    },
-    "gins": {
-      "network": "tcp",
-      "addr": "${gins_address}",
-      "timeout": "180s",
-      "shutdown_timeout": "180s",
-      "read_timeout": "180s",
-      "write_timeout": "180s",
-      "idle_timeout": "180s"
+      "addr": "${grpc_address:0.0.0.0:9000}",
+      "timeout": {
+        "seconds": 180
+      },
+      "shutdown_timeout": {
+        "seconds": 180
+      },
+      "read_timeout": {
+        "seconds": 180
+      },
+      "write_timeout": {
+        "seconds": 180
+      },
+      "idle_timeout": {
+        "seconds": 180
+      }
     },
     "middleware": {
-      "cors": {
-        "allow_all_origins": true,
-        "allow_origins": [
-          "*"
-        ],
-        "allow_methods": [
-          "POST",
-          "GET",
-          "OPTIONS",
-          "PUT",
-          "DELETE"
-        ],
-        "allow_headers": [
-          "Accept",
-          "Content-Type",
-          "Content-Length",
-          "Accept-Encoding",
-          "X-CSRF-Token",
-          "Authorization"
-        ]
-      },
+      "cors": {},
       "metrics": {
         "name": "metrics"
       },
@@ -70,23 +80,25 @@
     },
     "redis": {
       "network": "tcp",
-      "addr": "192.168.28.42:6379",
-      "read_timeout": "180s",
-      "write_timeout": "180s"
-    }
-  },
-  "discovery": {
-    "type": "consul",
-    "consul": {
-      "address": "${consul_address}",
-      "heart_beat": true,
-      "health_check": true
-    },
-    "etcd": {
-      "endpoints": "192.168.28.42:2379"
+      "addr": "${redis_address:127.0.0.1:6379}",
+      "read_timeout": {
+        "seconds": 180
+      },
+      "write_timeout": {
+        "seconds": 180
+      }
     }
   },
   "settings": {
     "crypto_type": "argon2"
+  },
+  "discovery": {
+    "type": "${discovery_type:consul}",
+    "consul": {
+      "address": "${consul_address:127.0.0.1:8500}"
+    },
+    "etcd": {
+      "endpoints": "${etcd_address:127.0.0.1:2379}"
+    }
   }
 }

@@ -6,30 +6,29 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "errors/rpcerr/rpcerr.proto";
 import "google/protobuf/descriptor.proto";
+import "validate/validate.proto";
 
 option go_package = "v1/services/helloworld;helloworld";
 option java_multiple_files = true;
 option java_package = "com.origadmin.api.v1.services.helloworld";
 option java_outer_classname = "APIV1ServicesHelloworldProto";
 
-import "validate/validate.proto";
-
 extend google.protobuf.MessageOptions {
-  optional Greeter data = 1000;
+  optional GreeterData data = 1000;
 }
 
 // The greeting service definition.
-service GreeterService {
+service Greeter {
   // SayHello is a get method
   rpc SayHello (GreeterRequest) returns (GreeterReply) {
     option (google.api.http) = {
-      get: "/greeter/{id}/hello",
+      get: "/api/v1/greeter/{id}/hello",
     };
   }
   // PostHello is a post method
   rpc PostHello (GreeterRequest) returns (GreeterReply) {
     option (google.api.http) = {
-      post: "/greeter/{id}/hello",
+      post: "/api/v1/greeter/{id}/hello",
       body: "data",
       response_body: "data",
     };
@@ -37,38 +36,38 @@ service GreeterService {
   // CreateGreeter creates a new Greeter
   rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
     option (google.api.http) = {
-      post: "/greeter",
+      post: "/api/v1/greeter",
       body: "data",
     };
   }
   // UpdateGreeter updates a Greeter
   rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterReply){
     option (google.api.http) = {
-      put: "/greeter/{id}",
+      put: "/api/v1/greeter/{id}",
       body: "data",
     };
   }
   // DeleteGreeter deletes a Greeter
   rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterReply){
     option (google.api.http) = {
-      delete: "/greeter/{id}",
+      delete: "/api/v1/greeter/{id}",
     };
   }
   // GetGreeter gets a Greeter
   rpc GetGreeter (GetGreeterRequest) returns (GetGreeterReply){
     option (google.api.http) = {
-      get: "/greeter/{id}",
+      get: "/api/v1/greeter/{id}",
     };
   }
   // ListGreeter lists Greeters
   rpc ListGreeter (ListGreeterRequest) returns (ListGreeterReply){
     option (google.api.http) = {
-      get: "/greeter",
+      get: "/api/v1/greeter",
     };
   }
 }
 
-message Greeter {
+message GreeterData {
   string id = 1;
   string name = 2;
 }
@@ -77,27 +76,27 @@ message Greeter {
 message GreeterRequest {
   string id = 1 [(validate.rules).string.min_len = 1];
   string name = 2;
-  Greeter data = 3;
+  GreeterData data = 3;
 }
 
 // The response message containing the greetings
 message GreeterReply {
-  Greeter data = 1;
+  GreeterData data = 1;
 }
 
 
 message CreateGreeterRequest {
-  Greeter data = 1;
+  GreeterData data = 1;
 }
 message CreateGreeterReply {}
 
 message UpdateGreeterRequest {
   string id = 1;
-  Greeter data = 3;
+  GreeterData data = 3;
 }
 message UpdateGreeterReply {
   bool success = 1;
-  repeated Greeter data = 3;
+  repeated GreeterData data = 3;
 }
 
 message DeleteGreeterRequest {
@@ -123,7 +122,7 @@ message ListGreeterRequest {
 message ListGreeterReply {
   bool success = 1;
   int32 total = 2;
-  repeated Greeter data = 3;
+  repeated GreeterData data = 3;
   optional errors.rpcerr.Error error = 4;
   optional google.protobuf.Any extra = 5;
 

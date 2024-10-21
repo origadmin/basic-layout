@@ -4,7 +4,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
+	"origadmin/basic-layout/internal/conf"
 )
 
 // ProviderSet is data providers.

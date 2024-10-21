@@ -11,8 +11,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/mods/helloworld/conf"
-
+	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/internal/conf"
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
