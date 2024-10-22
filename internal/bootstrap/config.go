@@ -1,7 +1,6 @@
 package bootstrap
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -229,7 +228,6 @@ func LoadBootstrap(name string, cfg *SourceConfig, l log.Logger) (*configs.Boots
 	if err := source.Scan(bs); err != nil {
 		return nil, errors.Wrap(err, "scan config error")
 	}
-	fmt.Printf("bootstrap: %+v\n", bs)
 	if err := bs.ValidateAll(); err != nil {
 		return nil, errors.Wrap(err, "validate config error")
 	}
