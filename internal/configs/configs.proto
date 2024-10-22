@@ -79,6 +79,7 @@ message Server {
     optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
     optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
     optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+    string endpoint = 11 [json_name = "endpoint"];
   }
 
   message HTTP {
@@ -92,6 +93,7 @@ message Server {
     google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
     google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
     google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+    string endpoint = 11 [json_name = "endpoint"];
   }
 
   message GRPC {
@@ -105,6 +107,7 @@ message Server {
     optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
     optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
     optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+    string endpoint = 11 [json_name = "endpoint"];
   }
 
   message Middleware {

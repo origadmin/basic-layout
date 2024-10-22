@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/netip"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -38,8 +40,25 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 	}
 
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)
-	endpoint, _ := url.Parse(fmt.Sprintf("http://192.168.28.81:%d", naip.Port()))
-	opts = append(opts, http.Endpoint(endpoint))
+	prefix, suffix, ok := strings.Cut(bootstrap.Server.Http.Endpoint, "://")
+	if !ok {
+		bootstrap.Server.Http.Endpoint = "http://" + prefix
+	} else {
+		args := strings.SplitN(suffix, ":", 2)
+		if len(args) == 2 {
+			args[1] = strconv.Itoa(int(naip.Port()))
+		} else if len(args) == 1 {
+			args = append(args, strconv.Itoa(int(naip.Port())))
+		} else {
+			// unknown
+			log.NewHelper(l).Info("unknown http endpoint", bootstrap.Server.Http.Endpoint)
+		}
+		bootstrap.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
+	}
+
+	fmt.Println("bootstrap.Server.Http.Endpoint", bootstrap.Server.Http.Endpoint)
+	ep, _ := url.Parse(bootstrap.Server.Http.Endpoint)
+	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)
 	helloworld.RegisterGreeterHTTPServer(srv, greeter)
 	return srv

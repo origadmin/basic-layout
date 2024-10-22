@@ -1754,6 +1754,8 @@ func (m *Server_GINS) validate(all bool) error {
 
 	// no validation rules for KeyFile
 
+	// no validation rules for Endpoint
+
 	if m.Timeout != nil {
 
 		if all {
@@ -2173,6 +2175,8 @@ func (m *Server_HTTP) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for Endpoint
+
 	if len(errors) > 0 {
 		return Server_HTTPMultiError(errors)
 	}
@@ -2281,6 +2285,8 @@ func (m *Server_GRPC) validate(all bool) error {
 	// no validation rules for CertFile
 
 	// no validation rules for KeyFile
+
+	// no validation rules for Endpoint
 
 	if m.Timeout != nil {
 

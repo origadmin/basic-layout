@@ -12,9 +12,9 @@ import (
 	"origadmin/basic-layout/internal/configs"
 )
 
-func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, example string) error {
+func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, remote string) error {
 	cfg := bs.Config
-	if cfg != nil && example != "" {
+	if cfg != nil && remote != "" {
 		var src SourceConfig
 		src.Type = cfg.Type
 		if cfg.File != nil {
@@ -29,13 +29,13 @@ func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, exam
 				Scheme:  cfg.Consul.Scheme,
 			}
 		}
-		typo := codec.TypeFromExt(filepath.Ext(example))
+		typo := codec.TypeFromExt(filepath.Ext(remote))
 		marshal, err := typo.Marshal(src)
 		if err != nil {
 			return errors.Wrap(err, "marshal config error")
 		}
 		marshal = ApplyEnv(marshal, envs)
-		if err := os.WriteFile(example+".example", marshal, os.ModePerm); err != nil {
+		if err := os.WriteFile(remote+".example", marshal, os.ModePerm); err != nil {
 			return err
 		}
 	}
