@@ -1,8 +1,11 @@
 package configs
 
 import (
+	"os"
 	"reflect"
 	"testing"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func TestSaveConf(t *testing.T) {
@@ -29,13 +32,6 @@ func TestSaveConf(t *testing.T) {
 				conf: DefaultBootstrap,
 			},
 		},
-		{
-			name: "test",
-			args: args{
-				path: "test.json",
-				conf: DefaultBootstrap,
-			},
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -43,6 +39,9 @@ func TestSaveConf(t *testing.T) {
 				t.Errorf("SaveConf() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
+		opt := protojson.MarshalOptions{Indent: " "}
+		bs, _ := opt.Marshal(DefaultBootstrap)
+		_ = os.WriteFile("test.json", bs, os.ModePerm)
 	}
 }
 

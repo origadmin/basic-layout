@@ -20,10 +20,14 @@ var (
 	version = "v1.0.0"
 	// flags are the bootstrap flags.
 	flags = bootstrap.DefaultFlags()
+	// example is the example of bootstrap flags.
+	example = "resources/local/remote.toml.example"
 )
 
 func init() {
 	flag.StringVar(&flags.ConfigPath, "config", "resources/local", "config path, eg: -c config.toml")
+	flag.StringVar(&flags.EnvPath, "env", "resources/env", "env path, eg: -e env.toml")
+	flag.StringVar(&example, "example", "remote.toml", "example of bootstrap flags")
 }
 
 func main() {
@@ -41,8 +45,16 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	env, err := bootstrap.LoadEnv(flags.EnvPath)
+	if err != nil {
+		panic(errors.WithStack(err))
+	}
+	bs, err := bootstrap.FromLocal("", flags.ConfigPath, env, l)
+	if err != nil {
+		panic(errors.WithStack(err))
+	}
 
-	bs, err := bootstrap.FromLocal(flags.ConfigPath, nil, l)
+	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, env, example)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

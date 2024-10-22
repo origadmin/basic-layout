@@ -35,6 +35,328 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on File with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *File) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on File with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FileMultiError, or nil if none found.
+func (m *File) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *File) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Path
+
+	// no validation rules for Format
+
+	if len(errors) > 0 {
+		return FileMultiError(errors)
+	}
+
+	return nil
+}
+
+// FileMultiError is an error wrapping multiple validation errors returned by
+// File.ValidateAll() if the designated constraints aren't met.
+type FileMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FileMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FileMultiError) AllErrors() []error { return m }
+
+// FileValidationError is the validation error returned by File.Validate if the
+// designated constraints aren't met.
+type FileValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FileValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FileValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FileValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FileValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FileValidationError) ErrorName() string { return "FileValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FileValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFile.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FileValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FileValidationError{}
+
+// Validate checks the field values on Consul with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Consul) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Consul with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConsulMultiError, or nil if none found.
+func (m *Consul) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Consul) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Address
+
+	// no validation rules for Scheme
+
+	// no validation rules for Token
+
+	// no validation rules for HeartBeat
+
+	// no validation rules for HealthCheck
+
+	// no validation rules for Datacenter
+
+	// no validation rules for Tag
+
+	// no validation rules for HealthCheckInterval
+
+	// no validation rules for HealthCheckTimeout
+
+	if len(errors) > 0 {
+		return ConsulMultiError(errors)
+	}
+
+	return nil
+}
+
+// ConsulMultiError is an error wrapping multiple validation errors returned by
+// Consul.ValidateAll() if the designated constraints aren't met.
+type ConsulMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConsulMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConsulMultiError) AllErrors() []error { return m }
+
+// ConsulValidationError is the validation error returned by Consul.Validate if
+// the designated constraints aren't met.
+type ConsulValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConsulValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConsulValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConsulValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConsulValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConsulValidationError) ErrorName() string { return "ConsulValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConsulValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConsul.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConsulValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConsulValidationError{}
+
+// Validate checks the field values on Etcd with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Etcd) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Etcd with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in EtcdMultiError, or nil if none found.
+func (m *Etcd) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Etcd) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Endpoints
+
+	// no validation rules for Username
+
+	// no validation rules for Password
+
+	if len(errors) > 0 {
+		return EtcdMultiError(errors)
+	}
+
+	return nil
+}
+
+// EtcdMultiError is an error wrapping multiple validation errors returned by
+// Etcd.ValidateAll() if the designated constraints aren't met.
+type EtcdMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EtcdMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EtcdMultiError) AllErrors() []error { return m }
+
+// EtcdValidationError is the validation error returned by Etcd.Validate if the
+// designated constraints aren't met.
+type EtcdValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EtcdValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EtcdValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EtcdValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EtcdValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EtcdValidationError) ErrorName() string { return "EtcdValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EtcdValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEtcd.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EtcdValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EtcdValidationError{}
+
 // Validate checks the field values on Bootstrap with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -62,6 +384,35 @@ func (m *Bootstrap) validate(all bool) error {
 	// no validation rules for Version
 
 	// no validation rules for CryptoType
+
+	if all {
+		switch v := interface{}(m.GetConfig()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BootstrapValidationError{
+					field:  "Config",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BootstrapValidationError{
+					field:  "Config",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BootstrapValidationError{
+				field:  "Config",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if all {
 		switch v := interface{}(m.GetServer()).(type) {
@@ -286,6 +637,220 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = BootstrapValidationError{}
+
+// Validate checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if _, ok := _Config_Type_InLookup[m.GetType()]; !ok {
+		err := ConfigValidationError{
+			field:  "Type",
+			reason: "value must be in list [file consul etcd]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.File != nil {
+
+		if all {
+			switch v := interface{}(m.GetFile()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "File",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "File",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFile()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "File",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.Consul != nil {
+
+		if all {
+			switch v := interface{}(m.GetConsul()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Consul",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Consul",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetConsul()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "Consul",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.Etcd != nil {
+
+		if all {
+			switch v := interface{}(m.GetEtcd()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Etcd",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Etcd",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetEtcd()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "Etcd",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
+
+	return nil
+}
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
+
+// ConfigValidationError is the validation error returned by Config.Validate if
+// the designated constraints aren't met.
+type ConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConfigValidationError{}
+
+var _Config_Type_InLookup = map[string]struct{}{
+	"file":   {},
+	"consul": {},
+	"etcd":   {},
+}
 
 // Validate checks the field values on Middlewares with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -1156,230 +1721,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DataValidationError{}
-
-// Validate checks the field values on Discovery_Consul with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *Discovery_Consul) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Discovery_Consul with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Discovery_ConsulMultiError, or nil if none found.
-func (m *Discovery_Consul) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Discovery_Consul) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Address
-
-	// no validation rules for Scheme
-
-	// no validation rules for Token
-
-	// no validation rules for HeartBeat
-
-	// no validation rules for HealthCheck
-
-	// no validation rules for Datacenter
-
-	// no validation rules for Tag
-
-	// no validation rules for HealthCheckInterval
-
-	// no validation rules for HealthCheckTimeout
-
-	if len(errors) > 0 {
-		return Discovery_ConsulMultiError(errors)
-	}
-
-	return nil
-}
-
-// Discovery_ConsulMultiError is an error wrapping multiple validation errors
-// returned by Discovery_Consul.ValidateAll() if the designated constraints
-// aren't met.
-type Discovery_ConsulMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Discovery_ConsulMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Discovery_ConsulMultiError) AllErrors() []error { return m }
-
-// Discovery_ConsulValidationError is the validation error returned by
-// Discovery_Consul.Validate if the designated constraints aren't met.
-type Discovery_ConsulValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Discovery_ConsulValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Discovery_ConsulValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Discovery_ConsulValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Discovery_ConsulValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Discovery_ConsulValidationError) ErrorName() string { return "Discovery_ConsulValidationError" }
-
-// Error satisfies the builtin error interface
-func (e Discovery_ConsulValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDiscovery_Consul.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Discovery_ConsulValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Discovery_ConsulValidationError{}
-
-// Validate checks the field values on Discovery_Etcd with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Discovery_Etcd) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Discovery_Etcd with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in Discovery_EtcdMultiError,
-// or nil if none found.
-func (m *Discovery_Etcd) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Discovery_Etcd) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Endpoints
-
-	// no validation rules for Username
-
-	// no validation rules for Password
-
-	if len(errors) > 0 {
-		return Discovery_EtcdMultiError(errors)
-	}
-
-	return nil
-}
-
-// Discovery_EtcdMultiError is an error wrapping multiple validation errors
-// returned by Discovery_Etcd.ValidateAll() if the designated constraints
-// aren't met.
-type Discovery_EtcdMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Discovery_EtcdMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Discovery_EtcdMultiError) AllErrors() []error { return m }
-
-// Discovery_EtcdValidationError is the validation error returned by
-// Discovery_Etcd.Validate if the designated constraints aren't met.
-type Discovery_EtcdValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Discovery_EtcdValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Discovery_EtcdValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Discovery_EtcdValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Discovery_EtcdValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Discovery_EtcdValidationError) ErrorName() string { return "Discovery_EtcdValidationError" }
-
-// Error satisfies the builtin error interface
-func (e Discovery_EtcdValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDiscovery_Etcd.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Discovery_EtcdValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Discovery_EtcdValidationError{}
 
 // Validate checks the field values on Server_GINS with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

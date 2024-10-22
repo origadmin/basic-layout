@@ -1,64 +1,41 @@
 {
-  "service_name": "helloworld",
+  "service_name": "origadmin.service.v1.helloworld",
   "version": "v1.0.0",
   "crypto_type": "argon2",
+  "config": {
+    "type": "consul",
+    "consul": {
+      "address": "${consul_address:127.0.0.1:8500}",
+      "scheme": "http"
+    }
+  },
   "server": {
     "gins": {
       "network": "tcp",
       "addr": "${gins_address:0.0.0.0:7000}",
-      "timeout": {
-        "seconds": 180
-      },
-      "shutdown_timeout": {
-        "seconds": 180
-      },
-      "read_timeout": {
-        "seconds": 180
-      },
-      "write_timeout": {
-        "seconds": 180
-      },
-      "idle_timeout": {
-        "seconds": 180
-      }
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
     },
     "http": {
       "network": "tcp",
       "addr": "${http_address:0.0.0.0:8000}",
-      "timeout": {
-        "seconds": 180
-      },
-      "shutdown_timeout": {
-        "seconds": 180
-      },
-      "read_timeout": {
-        "seconds": 180
-      },
-      "write_timeout": {
-        "seconds": 180
-      },
-      "idle_timeout": {
-        "seconds": 180
-      }
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
     },
     "grpc": {
       "network": "tcp",
       "addr": "${grpc_address:0.0.0.0:9000}",
-      "timeout": {
-        "seconds": 180
-      },
-      "shutdown_timeout": {
-        "seconds": 180
-      },
-      "read_timeout": {
-        "seconds": 180
-      },
-      "write_timeout": {
-        "seconds": 180
-      },
-      "idle_timeout": {
-        "seconds": 180
-      }
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s"
     },
     "middleware": {
       "cors": {},
@@ -81,12 +58,8 @@
     "redis": {
       "network": "tcp",
       "addr": "${redis_address:127.0.0.1:6379}",
-      "read_timeout": {
-        "seconds": 180
-      },
-      "write_timeout": {
-        "seconds": 180
-      }
+      "read_timeout": "180s",
+      "write_timeout": "180s"
     }
   },
   "settings": {

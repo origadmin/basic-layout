@@ -36,7 +36,7 @@ func LoadConf(path string) (*Bootstrap, error) {
 }
 
 var DefaultBootstrap = &Bootstrap{
-	ServiceName: "helloworld",
+	ServiceName: "origadmin.service.v1.demo",
 	Version:     "v1.0.0",
 	CryptoType:  "argon2",
 	Server: &Server{
@@ -117,9 +117,16 @@ var DefaultBootstrap = &Bootstrap{
 			WriteTimeout: durationpb.New(3 * time.Minute),
 		},
 	},
+	Config: &Config{
+		Type: "file",
+		Consul: &Consul{
+			Address: "${consul_address=127.0.0.1:8500}",
+			Scheme:  "http",
+		},
+	},
 	Discovery: &Discovery{
 		Type: "${discovery_type:consul}",
-		Consul: &Discovery_Consul{
+		Consul: &Consul{
 			Address: "${consul_address=127.0.0.1:8500}",
 			//Scheme:              "",
 			//Token:               "",
@@ -130,7 +137,7 @@ var DefaultBootstrap = &Bootstrap{
 			HealthCheck: true,
 			HeartBeat:   true,
 		},
-		Etcd: &Discovery_Etcd{
+		Etcd: &Etcd{
 			Endpoints: "${etcd_address=127.0.0.1:2379}",
 		},
 	},

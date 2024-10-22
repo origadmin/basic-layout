@@ -1,7 +1,7 @@
 Type = "file"
 
 [File]
-  Path = "resources/configs"
+  Path = "resources/configs/helloworld"
 
 [Consul]
   Address = "127.0.0.1:8500"

@@ -27,7 +27,7 @@ func NewRegistrar(bootstrap *configs.Bootstrap, l log.Logger) registry.Registrar
 		c.Scheme = cfg.Scheme
 		c.Token = cfg.Token
 		c.Datacenter = cfg.Datacenter
-		//c.Tag = d.Consul.Tag
+		//c.Tag = cfg.Consul.Tag
 		//c.HealthCheckInterval = d.Consul.HealthCheckInterval
 		//c.HealthCheckTimeout = d.Consul.HealthCheckTimeout
 		cli, err := api.NewClient(c)

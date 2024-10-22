@@ -53,7 +53,7 @@ func main() {
 		panic(errors.WithStack(err))
 	}
 
-	bs, err := bootstrap.FromLocal(flags.ConfigPath, env, l)
+	bs, err := bootstrap.FromLocal(name, flags.ConfigPath, env, l)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
@@ -95,7 +95,6 @@ func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
 		//kratos.Server(hs, gs, gss),
 		kratos.Server(injector.ServerHTTP, injector.ServerGRPC),
 	}
-	//ep1, _ := injector.ServerGINS.Endpoint()
 	ep2, _ := injector.ServerHTTP.Endpoint()
 	ep3, _ := injector.ServerGRPC.Endpoint()
 	fmt.Println("endpoint:", ep2, ep3)
