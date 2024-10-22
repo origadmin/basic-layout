@@ -21,9 +21,9 @@ import (
 // go build -ldflags "-X main.Version=vx.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name = "origadmin.service.v1.helloworld"
+	name = "origadmin.service.v1.helloworld"
 	// Version is the version of the compiled software.
-	Version = "v1.0.0"
+	version = "v1.0.0"
 	// flags are the bootstrap flags.
 	flags = bootstrap.DefaultFlags()
 )
@@ -35,8 +35,8 @@ func init() {
 
 func main() {
 	flag.Parse()
-	flags.Name = Name
-	flags.Version = Version
+	flags.Name = name
+	flags.Version = version
 	flags.MetaData = make(map[string]string)
 	logger := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,

@@ -9,9 +9,11 @@ ifeq ($(GOHOSTOS), windows)
 	#Git_Bash= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
 	Git_Bash=$(subst \,/,$(subst cmd\,bin\bash.exe,$(dir $(shell where git))))
 	INTERNAL_PROTO_FILES=$(shell $(Git_Bash) -c "find internal -name *.proto")
+	TOOLKITS_PROTO_FILES=$(shell $(Git_Bash) -c "find toolkits -name *.proto")
 	API_PROTO_FILES=$(shell $(Git_Bash) -c "find api -name *.proto")
 else
 	INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
+	TOOLKITS_PROTO_FILES=$(shell find toolkits -name *.proto)
 	API_PROTO_FILES=$(shell find api -name *.proto)
 endif
 
@@ -26,29 +28,71 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
 
-.PHONY: config
-# generate internal proto
-config:
+
+.PHONY: tools
+# generate tools proto or use ./toolkits/generate.go
+tools:
 	protoc --proto_path=./internal \
-	       --proto_path=./third_party \
- 	       --go_out=paths=source_relative:./internal \
-	       $(INTERNAL_PROTO_FILES)
+		--proto_path=./third_party \
+		--proto_path=./toolkits \
+		--go_out=paths=source_relative:./toolkits \
+		--validate_out=lang=go,paths=source_relative:./toolkits \
+		$(TOOLKITS_PROTO_FILES)
+
+.PHONY: config
+# generate internal proto or use ./internal/generate.go
+config: 
+	protoc --proto_path=./internal \
+		--proto_path=./third_party \
+		--proto_path=./toolkits \
+		--go_out=paths=source_relative:./internal \
+		--validate_out=lang=go:. \
+		$(INTERNAL_PROTO_FILES)
 
 .PHONY: api
-# generate api proto
+# generate api proto or use ./api/generate.go
 api:
+#	protoc --proto_path=./api \
+#	       --proto_path=./third_party \
+# 	       --go_out=paths=source_relative:./api \
+# 	       --go-http_out=paths=source_relative:./api \
+# 	       --go-grpc_out=paths=source_relative:./api \
+#	       --openapi_out=fq_schema_naming=true,default_response=false:. \
+#	       $(API_PROTO_FILES)
 	protoc --proto_path=./api \
-	       --proto_path=./third_party \
- 	       --go_out=paths=source_relative:./api \
- 	       --go-http_out=paths=source_relative:./api \
- 	       --go-grpc_out=paths=source_relative:./api \
-	       --openapi_out=fq_schema_naming=true,default_response=false:. \
-	       $(API_PROTO_FILES)
+		--proto_path=./third_party \
+		--proto_path=./toolkits \
+		--go_out=./api \
+		--go-http_out=./api \
+		--go-grpc_out=./api \
+		--validate_out=lang=go:./api \
+		--openapi_out=fq_schema_naming=true,default_response=false:. \
+		$(API_PROTO_FILES)
+
+.PHONY: pre
+# pre
+pre:
+	goreleaser build --single-target --clean --snapshot
 
 .PHONY: build
 # build
 build:
-	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
+	mkdir -p dist/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./dist/ ./...
+
+.PHONY: release
+# release
+release:
+	goreleaser release --clean
+
+#.PHONY: server
+## server used generate a service at first
+#server:
+#	kratos proto server -t ./internal/mods/helloworld/service ./api/v1/protos/helloworld/greeter.proto
+#
+#.PHONY: client
+## client used when proto file is in the same directory
+#client:
+#	kratos proto client ./api
 
 .PHONY: generate
 # generate
@@ -59,6 +103,7 @@ generate:
 .PHONY: all
 # generate all
 all:
+	make tools;
 	make api;
 	make config;
 	make generate;
