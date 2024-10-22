@@ -41,7 +41,7 @@ func main() {
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		"service.id", flags.IID(),
+		"service.id", flags.ID,
 		"service.name", flags.Name,
 		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
@@ -85,7 +85,7 @@ func main() {
 
 func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
 	opts := []kratos.Option{
-		kratos.ID(flags.IID()),
+		kratos.ID(flags.ID),
 		kratos.Name(flags.Name),
 		kratos.Version(flags.Version),
 		kratos.Metadata(map[string]string{}),

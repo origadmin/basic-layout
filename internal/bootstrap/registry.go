@@ -39,7 +39,7 @@ func NewRegistrar(bootstrap *configs.Bootstrap, l log.Logger) registry.Registrar
 			registryconsul.WithHeartbeat(cfg.HeartBeat),
 			registryconsul.WithHealthCheck(cfg.HealthCheck),
 		)
-		log.Infof("consul: %s", cfg.Address)
+		log.Infof("discovery with consul: %s", cfg.Address)
 	default:
 		panic(errors.Errorf("unknown discovery type: %s", d.Type))
 	}
