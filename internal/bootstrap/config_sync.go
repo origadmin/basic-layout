@@ -52,7 +52,8 @@ func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, exam
 				return errors.Wrap(err, "consul client error")
 			}
 			opt := protojson.MarshalOptions{
-				Indent: " ",
+				EmitUnpopulated: true,
+				Indent:          " ",
 			}
 			marshal, err := opt.Marshal(bs)
 			if err != nil {

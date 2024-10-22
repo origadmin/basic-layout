@@ -39,7 +39,10 @@ func TestSaveConf(t *testing.T) {
 				t.Errorf("SaveConf() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
-		opt := protojson.MarshalOptions{Indent: " "}
+		opt := protojson.MarshalOptions{
+			EmitUnpopulated: true,
+			Indent:          " ",
+		}
 		bs, _ := opt.Marshal(DefaultBootstrap)
 		_ = os.WriteFile("test.json", bs, os.ModePerm)
 	}
