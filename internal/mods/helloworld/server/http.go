@@ -10,11 +10,11 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
+func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -22,7 +22,7 @@ func NewHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, 
 	}
 	c := bootstrap.Server
 	if c.Http == nil {
-		c.Http = new(conf.Server_HTTP)
+		c.Http = new(configs.Server_HTTP)
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))
@@ -34,7 +34,7 @@ func NewHTTPServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, 
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
-		c.Middleware = new(conf.Server_Middleware)
+		c.Middleware = new(configs.Server_Middleware)
 	}
 
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)

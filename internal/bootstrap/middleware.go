@@ -5,13 +5,13 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/toolkits/middlewares/logger"
 	"origadmin/basic-layout/toolkits/middlewares/metrics"
 	"origadmin/basic-layout/toolkits/middlewares/security"
 )
 
-func LoadMiddlewares(name string, bootstrap *conf.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
+func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
 	var middlewares []middleware.Middleware
 	middlewares = append(middlewares, validate.Validator())
 	mc := bootstrap.Middlewares
@@ -50,7 +50,7 @@ func LoadMiddlewares(name string, bootstrap *conf.Bootstrap, l log.Logger) ([]mi
 }
 
 // LoadGlobalMiddlewares Loading global middleware
-func LoadGlobalMiddlewares(name string, conf *conf.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
+func LoadGlobalMiddlewares(name string, conf *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
 	if !conf.Middlewares.RegisterAsGlobal {
 		return nil, nil
 	}

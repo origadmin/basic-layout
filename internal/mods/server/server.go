@@ -5,14 +5,12 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
-
-	"origadmin/basic-layout/internal/conf"
 )
 
 // ProviderSet is server providers.
 var ProviderSet = wire.NewSet(NewServer)
 
-func NewServer(bootstrap *conf.Bootstrap, l log.Logger) *gins.Server {
+func NewServer(bootstrap *configs.Bootstrap, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
@@ -20,7 +18,7 @@ func NewServer(bootstrap *conf.Bootstrap, l log.Logger) *gins.Server {
 	}
 	c := bootstrap.Server
 	if c.Gins == nil {
-		c.Gins = new(conf.Server_GINS)
+		c.Gins = new(configs.Server_GINS)
 	}
 	if c.Gins.Network != "" {
 		opts = append(opts, gins.Network(c.Gins.Network))
@@ -32,7 +30,7 @@ func NewServer(bootstrap *conf.Bootstrap, l log.Logger) *gins.Server {
 		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
-		c.Middleware = new(conf.Server_Middleware)
+		c.Middleware = new(configs.Server_Middleware)
 	}
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))

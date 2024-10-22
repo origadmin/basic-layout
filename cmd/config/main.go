@@ -32,7 +32,7 @@ func main() {
 	flags.Name = name
 	flags.Version = version
 	flags.MetaData = make(map[string]string)
-	logger := log.With(logger.NewLogger(),
+	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.IID(),
@@ -42,7 +42,7 @@ func main() {
 		"span.id", tracing.SpanID(),
 	)
 
-	bs, err := bootstrap.FromLocal(flags.ConfigPath, nil, logger)
+	bs, err := bootstrap.FromLocal(flags.ConfigPath, nil, l)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

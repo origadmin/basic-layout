@@ -7,7 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 var ProviderSet = wire.NewSet(
@@ -17,7 +17,7 @@ var ProviderSet = wire.NewSet(
 type Injector struct {
 	Logger     log.Logger
 	Registry   registry.Registrar
-	Bootstrap  *conf.Bootstrap
+	Bootstrap  *configs.Bootstrap
 	ServerGRPC *grpc.Server
 	ServerHTTP *http.Server
 	//ServerGINS *gins.Server

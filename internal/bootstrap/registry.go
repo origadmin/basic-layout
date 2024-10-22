@@ -7,11 +7,11 @@ import (
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
 
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 // NewRegistrar creates a new registrar.
-func NewRegistrar(bootstrap *conf.Bootstrap, l log.Logger) registry.Registrar {
+func NewRegistrar(bootstrap *configs.Bootstrap, l log.Logger) registry.Registrar {
 	d := bootstrap.Discovery
 	var reg registry.Registrar
 	switch Type(d.Type) {

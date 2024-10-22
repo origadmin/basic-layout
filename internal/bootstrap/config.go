@@ -13,7 +13,7 @@ import (
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
 
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 type FileSource struct {
@@ -116,6 +116,16 @@ func NewFileSourceConfig(path string) *SourceConfig {
 	}
 }
 
+// LocalSourceConfig Loads configuration files in various formats from a directory,
+// and parses them into a config.
+func LocalSourceConfig(path string) *SourceConfig {
+	var cfg SourceConfig
+	if err := codec.DecodeFromFile(path, &cfg); err != nil {
+		return NewFileSourceConfig(path)
+	}
+	return &cfg
+}
+
 // LoadEnv Loads configuration files in various formats from a directory,
 func LoadEnv(path string) (map[string]string, error) {
 	envs := make(map[string]string)
@@ -135,7 +145,7 @@ func LoadEnv(path string) (map[string]string, error) {
 	return envs, nil
 }
 
-func FromLocal(path string, envs map[string]string, l log.Logger) (*conf.Bootstrap, error) {
+func FromLocal(path string, envs map[string]string, l log.Logger) (*configs.Bootstrap, error) {
 	path, _ = filepath.Abs(path)
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -175,7 +185,7 @@ func FromLocal(path string, envs map[string]string, l log.Logger) (*conf.Bootstr
 
 // LoadBootstrap Loads configuration files in various formats from a directory,
 // and parses them into a struct.
-func LoadBootstrap(cfg *SourceConfig, envs map[string]string, l log.Logger) (*conf.Bootstrap, error) {
+func LoadBootstrap(cfg *SourceConfig, envs map[string]string, l log.Logger) (*configs.Bootstrap, error) {
 	var source config.Config
 	var err error
 	if len(envs) == 0 {
@@ -187,7 +197,7 @@ func LoadBootstrap(cfg *SourceConfig, envs map[string]string, l log.Logger) (*co
 		return nil, err
 	}
 
-	bs := conf.DefaultBootstrap
+	bs := configs.DefaultBootstrap
 	if err := source.Load(); err != nil {
 		return nil, errors.Wrap(err, "load config error")
 	}

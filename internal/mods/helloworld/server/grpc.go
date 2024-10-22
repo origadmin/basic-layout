@@ -10,14 +10,14 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, logger log.Logger) *grpc.Server {
+func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, logger log.Logger) *grpc.Server {
 	c := bootstrap.Server
 	if c.Grpc == nil {
-		c.Grpc = new(conf.Server_GRPC)
+		c.Grpc = new(configs.Server_GRPC)
 	}
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
@@ -35,7 +35,7 @@ func NewGRPCServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, 
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
-		c.Middleware = new(conf.Server_Middleware)
+		c.Middleware = new(configs.Server_Middleware)
 	}
 
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Grpc.Addr)

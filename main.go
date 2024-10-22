@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"origadmin/basic-layout/cmd"
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 // build tool goreleaser tags
@@ -80,9 +80,9 @@ func Execute() {
 
 func buildVersion(version, commit, date, builtBy, treeState string) goversion.Info {
 	return goversion.GetVersionInfo(
-		goversion.WithAppDetails(conf.Application, conf.Description, conf.WebSite),
+		goversion.WithAppDetails(configs.Application, configs.Description, configs.WebSite),
 		func(i *goversion.Info) {
-			i.ASCIIName = conf.UI
+			i.ASCIIName = configs.UI
 			if commit != "" {
 				i.GitCommit = commit
 			}

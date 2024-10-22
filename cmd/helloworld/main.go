@@ -38,7 +38,7 @@ func main() {
 	flags.Name = name
 	flags.Version = version
 	flags.MetaData = make(map[string]string)
-	logger := log.With(logger.NewLogger(),
+	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.IID(),
@@ -53,7 +53,7 @@ func main() {
 		panic(errors.WithStack(err))
 	}
 
-	bs, err := bootstrap.FromLocal(flags.ConfigPath, env, logger)
+	bs, err := bootstrap.FromLocal(flags.ConfigPath, env, l)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
@@ -62,7 +62,7 @@ func main() {
 	fmt.Printf("show bootstrap config: %+v\n", string(v))
 	ctx := context.Background()
 	//info to ctx
-	app, cleanup, err := buildInjectors(ctx, bs, logger)
+	app, cleanup, err := buildInjectors(ctx, bs, l)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

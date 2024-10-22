@@ -1,4 +1,4 @@
-package conf
+package configs
 
 const (
 	Application = `OrigAdmin`

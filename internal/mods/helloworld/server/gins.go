@@ -10,11 +10,11 @@ import (
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 )
 
 // NewGINSServer new a gin server.
-func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *gins.Server {
+func NewGINSServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
@@ -22,7 +22,7 @@ func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, 
 	}
 	c := bootstrap.Server
 	if c.Gins == nil {
-		c.Gins = new(conf.Server_GINS)
+		c.Gins = new(configs.Server_GINS)
 	}
 	if c.Gins.Network != "" {
 		opts = append(opts, gins.Network(c.Gins.Network))
@@ -34,7 +34,7 @@ func NewGINSServer(bootstrap *conf.Bootstrap, greeter helloworld.GreeterServer, 
 		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
-		c.Middleware = new(conf.Server_Middleware)
+		c.Middleware = new(configs.Server_Middleware)
 	}
 
 	if l != nil {

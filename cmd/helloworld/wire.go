@@ -12,7 +12,6 @@ import (
 	"github.com/google/wire"
 
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/internal/conf"
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
@@ -20,9 +19,7 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
-//go:generate go run -mod=mod github.com/google/wire/cmd/wire
-
 // buildInjectors init kratos application.
-func buildInjectors(context.Context, *conf.Bootstrap, log.Logger) (*kratos.App, func(), error) {
+func buildInjectors(context.Context, *configs.Bootstrap, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(mods.ProviderSet, bootstrap.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
 }

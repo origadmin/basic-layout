@@ -8,10 +8,13 @@ package main
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	_ "go.uber.org/automaxprocs"
+
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/internal/conf"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
@@ -19,14 +22,10 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
-import (
-	_ "go.uber.org/automaxprocs"
-)
-
 // Injectors from wire.go:
 
 // buildInjectors init kratos application.
-func buildInjectors(contextContext context.Context, confBootstrap *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
+func buildInjectors(contextContext context.Context, confBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
 	registrar := bootstrap.NewRegistrar(confBootstrap, logger)
 	database, cleanup, err := dal.NewDB(confBootstrap, logger)
 	if err != nil {

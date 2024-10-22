@@ -8,6 +8,6 @@ import (
 
 func Commands() []*cobra.Command {
 	return []*cobra.Command{
-		start.StartCmd(),
+		start.Cmd(),
 	}
 }
