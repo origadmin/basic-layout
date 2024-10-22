@@ -5,6 +5,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
+
+	"origadmin/basic-layout/internal/configs"
 )
 
 // ProviderSet is server providers.
