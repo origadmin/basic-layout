@@ -19,7 +19,7 @@ var ProviderSet = wire.NewSet(
 
 type InjectorClient struct {
 	Logger        log.Logger
-	Registry      registry.Registrar
+	Discovery     registry.Discovery
 	Bootstrap     *configs.Bootstrap
 	ServerGINS    *gins.Server
 	GreeterServer helloworld.GreeterServer
@@ -27,7 +27,7 @@ type InjectorClient struct {
 
 type InjectorServer struct {
 	Logger     log.Logger
-	Registry   registry.Registrar
+	Registrar  registry.Registrar
 	Bootstrap  *configs.Bootstrap
 	ServerGRPC *grpc.Server
 	ServerHTTP *http.Server

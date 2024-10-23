@@ -95,8 +95,8 @@ func NewApp(ctx context.Context, injector *mods.InjectorServer) *kratos.App {
 		//kratos.Server(hs, gs, gss),
 		kratos.Server(injector.ServerHTTP, injector.ServerGRPC),
 	}
-	if injector.Registry != nil {
-		opts = append(opts, kratos.Registrar(injector.Registry))
+	if injector.Registrar != nil {
+		opts = append(opts, kratos.Registrar(injector.Registrar))
 	}
 
 	return kratos.New(opts...)

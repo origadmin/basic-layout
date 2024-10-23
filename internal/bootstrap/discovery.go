@@ -46,3 +46,39 @@ func NewRegistrar(bootstrap *configs.Bootstrap, l log.Logger) registry.Registrar
 
 	return reg
 }
+
+func NewDiscovery(bootstrap *configs.Bootstrap, l log.Logger) registry.Discovery {
+	d := bootstrap.Discovery
+	var dis registry.Discovery
+	switch Type(d.Type) {
+	case Default:
+		return nil
+	case Consul:
+		cfg := d.GetConsul()
+		if cfg == nil {
+			return nil
+		}
+		c := api.DefaultConfig()
+		c.Address = cfg.Address
+		c.Scheme = cfg.Scheme
+		c.Token = cfg.Token
+		c.Datacenter = cfg.Datacenter
+		//c.Tag = cfg.Consul.Tag
+		//c.HealthCheckInterval = d.Consul.HealthCheckInterval
+		//c.HealthCheckTimeout = d.Consul.HealthCheckTimeout
+		cli, err := api.NewClient(c)
+		if err != nil {
+			log.Fatalf("consul client %+v", err)
+		}
+		dis = registryconsul.New(
+			cli,
+			registryconsul.WithHeartbeat(cfg.HeartBeat),
+			registryconsul.WithHealthCheck(cfg.HealthCheck),
+		)
+		log.Infof("discovery with consul: %s", cfg.Address)
+	default:
+		panic(errors.Errorf("unknown discovery type: %s", d.Type))
+	}
+
+	return dis
+}

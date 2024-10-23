@@ -39,7 +39,7 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	httpServer := server.NewHTTPServer(configsBootstrap, greeterServer, logger)
 	injectorServer := &mods.InjectorServer{
 		Logger:     logger,
-		Registry:   registrar,
+		Registrar:  registrar,
 		Bootstrap:  configsBootstrap,
 		ServerGRPC: grpcServer,
 		ServerHTTP: httpServer,

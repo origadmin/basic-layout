@@ -10,7 +10,6 @@ import (
 type GreeterService struct {
 	helloworld.GreeterServer
 
-	//uc     *biz.GreeterBiz
 	client helloworld.GreeterClient
 }
 
