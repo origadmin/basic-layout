@@ -83,7 +83,7 @@ func main() {
 	//})
 }
 
-func NewApp(ctx context.Context, injector *mods.Injector) *kratos.App {
+func NewApp(ctx context.Context, injector *mods.InjectorServer) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
 		kratos.Name(flags.Name),

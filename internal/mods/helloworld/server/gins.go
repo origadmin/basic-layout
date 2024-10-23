@@ -11,17 +11,18 @@ import (
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
 // NewGINSServer new a gin server.
-func NewGINSServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *gins.Server {
+func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	c := bootstrap.Server
+	c := bs.Server
 	if c.Gins == nil {
 		c.Gins = new(configs.Server_GINS)
 	}
@@ -37,15 +38,19 @@ func NewGINSServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
+	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	if err == nil && len(middlewares) > 0 {
+		opts = append(opts, gins.Middleware(middlewares...))
+	}
 
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
 
-	naip, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
-	prefix, suffix, ok := strings.Cut(bootstrap.Server.Gins.Endpoint, "://")
+	naip, _ := netip.ParseAddrPort(bs.Server.Gins.Addr)
+	prefix, suffix, ok := strings.Cut(bs.Server.Gins.Endpoint, "://")
 	if !ok {
-		bootstrap.Server.Gins.Endpoint = "http://" + prefix
+		bs.Server.Gins.Endpoint = "http://" + prefix
 	} else {
 		args := strings.SplitN(suffix, ":", 2)
 		if len(args) == 2 {
@@ -54,13 +59,13 @@ func NewGINSServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 			args = append(args, strconv.Itoa(int(naip.Port())))
 		} else {
 			// unknown
-			log.NewHelper(l).Info("unknown http endpoint", bootstrap.Server.Gins.Endpoint)
+			log.Infow("unknown http endpoint", bs.Server.Gins.Endpoint)
 		}
-		bootstrap.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
+		bs.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	log.NewHelper(l).Infof("bootstrap.Server.Gins.Endpoint: %v", bootstrap.Server.Gins.Endpoint)
-	ep, _ := url.Parse(bootstrap.Server.Gins.Endpoint)
+	log.Infof("bs.Server.Gins.Endpoint: %v", bs.Server.Gins.Endpoint)
+	ep, _ := url.Parse(bs.Server.Gins.Endpoint)
 	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)
 	helloworld.RegisterGreeterGINServer(srv, greeter)

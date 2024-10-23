@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package start
 
 import (
 	"context"
@@ -15,12 +15,8 @@ import (
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
-	"origadmin/basic-layout/internal/mods/helloworld/server"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
-)
-
-import (
-	_ "go.uber.org/automaxprocs"
+	"origadmin/basic-layout/internal/mods/server"
 )
 
 // Injectors from wire.go:
@@ -28,6 +24,7 @@ import (
 // buildInjectors init kratos application.
 func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
 	registrar := bootstrap.NewRegistrar(configsBootstrap, logger)
+	ginsServer := server.NewGINSServer(configsBootstrap, logger)
 	database, cleanup, err := dal.NewDB(configsBootstrap, logger)
 	if err != nil {
 		return nil, nil, err
@@ -35,16 +32,14 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	greeterDao := dal.NewGreeterDal(database, logger)
 	greeterClient := biz.NewGreeterClient(greeterDao, logger)
 	greeterServer := service.NewGreeterServer(greeterClient)
-	grpcServer := server.NewGRPCServer(configsBootstrap, greeterServer, logger)
-	httpServer := server.NewHTTPServer(configsBootstrap, greeterServer, logger)
-	injectorServer := &mods.InjectorServer{
-		Logger:     logger,
-		Registry:   registrar,
-		Bootstrap:  configsBootstrap,
-		ServerGRPC: grpcServer,
-		ServerHTTP: httpServer,
+	injectorClient := &mods.InjectorClient{
+		Logger:        logger,
+		Registry:      registrar,
+		Bootstrap:     configsBootstrap,
+		ServerGINS:    ginsServer,
+		GreeterServer: greeterServer,
 	}
-	app := NewApp(contextContext, injectorServer)
+	app := NewApp(contextContext, injectorClient)
 	return app, func() {
 		cleanup()
 	}, nil

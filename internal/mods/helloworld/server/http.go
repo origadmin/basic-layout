@@ -11,17 +11,18 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
+func NewHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	c := bootstrap.Server
+	c := bs.Server
 	if c.Http == nil {
 		c.Http = new(configs.Server_HTTP)
 	}
@@ -37,11 +38,15 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
+	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	if err == nil && len(middlewares) > 0 {
+		opts = append(opts, http.Middleware(middlewares...))
+	}
 
-	naip, _ := netip.ParseAddrPort(bootstrap.Server.Http.Addr)
-	prefix, suffix, ok := strings.Cut(bootstrap.Server.Http.Endpoint, "://")
+	naip, _ := netip.ParseAddrPort(bs.Server.Http.Addr)
+	prefix, suffix, ok := strings.Cut(bs.Server.Http.Endpoint, "://")
 	if !ok {
-		bootstrap.Server.Http.Endpoint = "http://" + prefix
+		bs.Server.Http.Endpoint = "http://" + prefix
 	} else {
 		args := strings.SplitN(suffix, ":", 2)
 		if len(args) == 2 {
@@ -50,13 +55,13 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 			args = append(args, strconv.Itoa(int(naip.Port())))
 		} else {
 			// unknown
-			log.NewHelper(l).Info("unknown http endpoint", bootstrap.Server.Http.Endpoint)
+			log.Infow("unknown http endpoint", bs.Server.Http.Endpoint)
 		}
-		bootstrap.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
+		bs.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	log.NewHelper(l).Infof("bootstrap.Server.Http.Endpoint: %v", bootstrap.Server.Http.Endpoint)
-	ep, _ := url.Parse(bootstrap.Server.Http.Endpoint)
+	log.Infof("bs.Server.Http.Endpoint: %v", bs.Server.Http.Endpoint)
+	ep, _ := url.Parse(bs.Server.Http.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)
 	helloworld.RegisterGreeterHTTPServer(srv, greeter)

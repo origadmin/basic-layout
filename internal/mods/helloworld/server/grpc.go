@@ -11,21 +11,21 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *grpc.Server {
-	c := bootstrap.Server
-	if c.Grpc == nil {
-		c.Grpc = new(configs.Server_GRPC)
-	}
+func NewGRPCServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
 		),
 	}
-
+	c := bs.Server
+	if c.Grpc == nil {
+		c.Grpc = new(configs.Server_GRPC)
+	}
 	if c.Grpc.Network != "" {
 		opts = append(opts, grpc.Network(c.Grpc.Network))
 	}
@@ -39,10 +39,15 @@ func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 		c.Middleware = new(configs.Server_Middleware)
 	}
 
-	naip, _ := netip.ParseAddrPort(bootstrap.Server.Grpc.Addr)
-	prefix, suffix, ok := strings.Cut(bootstrap.Server.Grpc.Endpoint, "://")
+	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	if err == nil && len(middlewares) > 0 {
+		opts = append(opts, grpc.Middleware(middlewares...))
+	}
+
+	naip, _ := netip.ParseAddrPort(bs.Server.Grpc.Addr)
+	prefix, suffix, ok := strings.Cut(bs.Server.Grpc.Endpoint, "://")
 	if !ok {
-		bootstrap.Server.Grpc.Endpoint = "grpc://" + prefix
+		bs.Server.Grpc.Endpoint = "grpc://" + prefix
 	} else {
 		args := strings.SplitN(suffix, ":", 2)
 		if len(args) == 2 {
@@ -51,12 +56,12 @@ func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 			args = append(args, strconv.Itoa(int(naip.Port())))
 		} else {
 			// unknown
-			log.NewHelper(l).Info("unknown grpc endpoint", bootstrap.Server.Grpc.Endpoint)
+			log.Infow("unknown grpc endpoint", bs.Server.Grpc.Endpoint)
 		}
-		bootstrap.Server.Grpc.Endpoint = prefix + "://" + strings.Join(args, ":")
+		bs.Server.Grpc.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
-	log.NewHelper(l).Infof("bootstrap.Server.Grpc.Endpoint: %v", bootstrap.Server.Grpc.Endpoint)
-	ep, _ := url.Parse(bootstrap.Server.Grpc.Endpoint)
+	log.Infof("bs.Server.Grpc.Endpoint: %v", bs.Server.Grpc.Endpoint)
+	ep, _ := url.Parse(bs.Server.Grpc.Endpoint)
 	opts = append(opts, grpc.Endpoint(ep))
 	srv := grpc.NewServer(opts...)
 	helloworld.RegisterGreeterServer(srv, greeter)

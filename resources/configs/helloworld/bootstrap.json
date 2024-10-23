@@ -17,7 +17,8 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s"
+      "idle_timeout": "180s",
+      "endpoint": "http://${host_ip}:7000"
     },
     "http": {
       "network": "tcp",
@@ -26,7 +27,8 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s"
+      "idle_timeout": "180s",
+      "endpoint": "http://${host_ip}:8000"
     },
     "grpc": {
       "network": "tcp",
@@ -35,7 +37,8 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s"
+      "idle_timeout": "180s",
+      "endpoint": "grpc://${host_ip}:9000"
     },
     "middleware": {
       "cors": {},

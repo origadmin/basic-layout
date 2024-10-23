@@ -2,7 +2,7 @@
 // +build wireinject
 
 // The build tag makes sure the stub is not built in the final build.
-package main
+package start
 
 import (
 	"context"
@@ -16,9 +16,11 @@ import (
 	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
-	"origadmin/basic-layout/internal/mods/helloworld/server"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
+	"origadmin/basic-layout/internal/mods/server"
 )
+
+//go:generate go run -mod=mod github.com/google/wire/cmd/wire
 
 // buildInjectors init kratos application.
 func buildInjectors(context.Context, *configs.Bootstrap, log.Logger) (*kratos.App, func(), error) {

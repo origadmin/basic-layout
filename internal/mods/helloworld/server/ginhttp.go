@@ -13,16 +13,17 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
-func NewGinHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
+func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	c := bootstrap.Server
+	c := bs.Server
 	if c.Http == nil {
 		c.Http = new(configs.Server_HTTP)
 	}
@@ -38,11 +39,15 @@ func NewGinHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterSe
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
+	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	if err == nil && len(middlewares) > 0 {
+		opts = append(opts, http.Middleware(middlewares...))
+	}
 
-	naip, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
-	prefix, suffix, ok := strings.Cut(bootstrap.Server.Gins.Endpoint, "://")
+	naip, _ := netip.ParseAddrPort(bs.Server.Gins.Addr)
+	prefix, suffix, ok := strings.Cut(bs.Server.Gins.Endpoint, "://")
 	if !ok {
-		bootstrap.Server.Gins.Endpoint = "http://" + prefix
+		bs.Server.Gins.Endpoint = "http://" + prefix
 	} else {
 		args := strings.SplitN(suffix, ":", 2)
 		if len(args) == 2 {
@@ -51,23 +56,23 @@ func NewGinHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterSe
 			args = append(args, strconv.Itoa(int(naip.Port())))
 		} else {
 			// unknown
-			log.NewHelper(l).Info("unknown http endpoint", bootstrap.Server.Gins.Endpoint)
+			log.Infow("unknown http endpoint", bs.Server.Gins.Endpoint)
 		}
-		bootstrap.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
+		bs.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	log.NewHelper(l).Infof("bootstrap.Server.Gins.Endpoint: %v", bootstrap.Server.Gins.Endpoint)
-	ep, _ := url.Parse(bootstrap.Server.Gins.Endpoint)
+	log.Infof("bs.Server.Gins.Endpoint: %v", bs.Server.Gins.Endpoint)
+	ep, _ := url.Parse(bs.Server.Gins.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)
 	engine := gin.New()
 
 	srv.Server = &stdhttp.Server{
-		Addr:         bootstrap.Server.Gins.Addr,
+		Addr:         bs.Server.Gins.Addr,
 		Handler:      engine.Handler(),
-		ReadTimeout:  bootstrap.Server.Gins.ReadTimeout.AsDuration(),
-		WriteTimeout: bootstrap.Server.Gins.WriteTimeout.AsDuration(),
-		IdleTimeout:  bootstrap.Server.Gins.IdleTimeout.AsDuration(),
+		ReadTimeout:  bs.Server.Gins.ReadTimeout.AsDuration(),
+		WriteTimeout: bs.Server.Gins.WriteTimeout.AsDuration(),
+		IdleTimeout:  bs.Server.Gins.IdleTimeout.AsDuration(),
 	}
 	helloworld.RegisterGreeterGINServer(engine, greeter)
 	return srv

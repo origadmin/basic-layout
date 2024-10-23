@@ -6,19 +6,20 @@ import (
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
 // ProviderSet is server providers.
-var ProviderSet = wire.NewSet(NewServer)
+var ProviderSet = wire.NewSet(NewGINSServer)
 
-func NewServer(bootstrap *configs.Bootstrap, l log.Logger) *gins.Server {
+func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	c := bootstrap.Server
+	c := bs.Server
 	if c.Gins == nil {
 		c.Gins = new(configs.Server_GINS)
 	}
@@ -34,13 +35,17 @@ func NewServer(bootstrap *configs.Bootstrap, l log.Logger) *gins.Server {
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
+
+	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	if err == nil && len(middlewares) > 0 {
+		opts = append(opts, gins.Middleware(middlewares...))
+	}
+
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
 
-	opts = append(opts)
 	srv := gins.NewServer(opts...)
-	//helloworld.RegisterGreeterServiceGINServer(srv, greeter)
-	//todo
+	//helloworld.RegisterGreeterGINServer(srv, greeter)
 	return srv
 }
