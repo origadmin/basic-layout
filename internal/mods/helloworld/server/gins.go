@@ -1,9 +1,10 @@
 package server
 
 import (
-	"fmt"
 	"net/netip"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -40,9 +41,27 @@ func NewGINSServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
+
 	naip, _ := netip.ParseAddrPort(bootstrap.Server.Gins.Addr)
-	endpoint, _ := url.Parse(fmt.Sprintf("http://192.168.28.60:%d", naip.Port()))
-	opts = append(opts, gins.Endpoint(endpoint))
+	prefix, suffix, ok := strings.Cut(bootstrap.Server.Gins.Endpoint, "://")
+	if !ok {
+		bootstrap.Server.Gins.Endpoint = "http://" + prefix
+	} else {
+		args := strings.SplitN(suffix, ":", 2)
+		if len(args) == 2 {
+			args[1] = strconv.Itoa(int(naip.Port()))
+		} else if len(args) == 1 {
+			args = append(args, strconv.Itoa(int(naip.Port())))
+		} else {
+			// unknown
+			log.NewHelper(l).Info("unknown http endpoint", bootstrap.Server.Gins.Endpoint)
+		}
+		bootstrap.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
+	}
+
+	log.NewHelper(l).Infof("bootstrap.Server.Gins.Endpoint: %v", bootstrap.Server.Gins.Endpoint)
+	ep, _ := url.Parse(bootstrap.Server.Gins.Endpoint)
+	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)
 	helloworld.RegisterGreeterGINServer(srv, greeter)
 	return srv

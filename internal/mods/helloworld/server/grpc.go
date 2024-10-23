@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/netip"
 	"net/url"
 	"strconv"
@@ -56,7 +55,7 @@ func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 		}
 		bootstrap.Server.Grpc.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
-	fmt.Println("bootstrap.Server.Grpc.Endpoint", bootstrap.Server.Grpc.Endpoint)
+	log.NewHelper(l).Infof("bootstrap.Server.Grpc.Endpoint: %v", bootstrap.Server.Grpc.Endpoint)
 	ep, _ := url.Parse(bootstrap.Server.Grpc.Endpoint)
 	opts = append(opts, grpc.Endpoint(ep))
 	srv := grpc.NewServer(opts...)

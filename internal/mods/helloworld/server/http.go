@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/netip"
 	"net/url"
 	"strconv"
@@ -56,7 +55,7 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.GreeterServe
 		bootstrap.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	fmt.Println("bootstrap.Server.Http.Endpoint", bootstrap.Server.Http.Endpoint)
+	log.NewHelper(l).Infof("bootstrap.Server.Http.Endpoint: %v", bootstrap.Server.Http.Endpoint)
 	ep, _ := url.Parse(bootstrap.Server.Http.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)
