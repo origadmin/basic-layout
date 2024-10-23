@@ -1,0 +1,82 @@
+{
+  "service_name": "origadmin.server.v1",
+  "version": "v1.0.0",
+  "crypto_type": "argon2",
+  "config": {
+    "type": "consul",
+    "consul": {
+      "address": "${consul_address:127.0.0.1:8500}",
+      "scheme": "http"
+    }
+  },
+  "server": {
+    "gins": {
+      "network": "tcp",
+      "addr": "${gins_address:0.0.0.0:7000}",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s",
+      "endpoint": "http://${host_ip}:7000"
+    },
+    "http": {
+      "network": "tcp",
+      "addr": "${http_address:0.0.0.0:8000}",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s",
+      "endpoint": "http://${host_ip}:8000"
+    },
+    "grpc": {
+      "network": "tcp",
+      "addr": "${grpc_address:0.0.0.0:9000}",
+      "timeout": "180s",
+      "shutdown_timeout": "180s",
+      "read_timeout": "180s",
+      "write_timeout": "180s",
+      "idle_timeout": "180s",
+      "endpoint": "grpc://${host_ip}:9000"
+    },
+    "middleware": {
+      "cors": {},
+      "metrics": {
+        "name": "metrics"
+      },
+      "traces": {
+        "name": "traces"
+      },
+      "logger": {
+        "name": "logger"
+      }
+    }
+  },
+  "data": {
+    "database": {
+      "driver": "mysql",
+      "source": "dsn"
+    },
+    "redis": {
+      "network": "tcp",
+      "addr": "${redis_address:127.0.0.1:6379}",
+      "read_timeout": "180s",
+      "write_timeout": "180s"
+    }
+  },
+  "settings": {
+    "crypto_type": "argon2"
+  },
+  "discovery": {
+    "type": "${discovery_type:consul}",
+    "consul": {
+      "address": "${consul_address:127.0.0.1:8500}",
+      "health_check": true,
+      "heart_beat": true
+    },
+    "etcd": {
+      "endpoints": "${etcd_address:127.0.0.1:2379}"
+    }
+  }
+}

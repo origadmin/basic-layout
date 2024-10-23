@@ -15,7 +15,11 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 	var middlewares []middleware.Middleware
 	middlewares = append(middlewares, validate.Validator())
 	mc := bootstrap.Middlewares
-	if mc.Logger.Enabled {
+	if mc == nil {
+		return nil, nil
+	}
+
+	if mc.Logger != nil && mc.Logger.Enabled {
 		m, err := logger.Middleware(&logger.LoggerConfig{
 			Name: mc.Logger.Name,
 		}, l)
@@ -36,7 +40,7 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 		middlewares = append(middlewares, m)
 	}
 
-	if mc.Metrics.Enabled {
+	if mc.Metrics != nil && mc.Metrics.Enabled {
 		m, err := metrics.Middleware(metrics.SideServer, &metrics.MetricConfig{
 			Name: mc.Metrics.Name,
 		}, l)
@@ -51,6 +55,9 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 
 // LoadGlobalMiddlewares Loading global middleware
 func LoadGlobalMiddlewares(name string, conf *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
+	if conf.Middlewares == nil {
+		conf.Middlewares = new(configs.Middlewares)
+	}
 	if !conf.Middlewares.RegisterAsGlobal {
 		return nil, nil
 	}

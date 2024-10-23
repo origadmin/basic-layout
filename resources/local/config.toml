@@ -1,8 +1,0 @@
-Type = "file"
-
-[File]
-Path = "resources/configs/helloworld"
-
-[Consul]
-Address = "192.168.28.42:8500"
-Scheme = "http"

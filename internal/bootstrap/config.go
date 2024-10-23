@@ -135,18 +135,18 @@ func LocalSourceConfig(path string) *SourceConfig {
 // LoadEnv Loads configuration files in various formats from a directory,
 func LoadEnv(path string) (map[string]string, error) {
 	envs := make(map[string]string)
-	if err := filepath.WalkDir(path, func(path string, d os.DirEntry, err error) error {
+	if err := filepath.WalkDir(path, func(walkpath string, d os.DirEntry, err error) error {
 		if err != nil {
-			return errors.Wrapf(err, "failed to get config file %s", path)
+			return errors.Wrapf(err, "failed to get config file %s", walkpath)
 		} else if d.IsDir() {
 			return nil
 		}
-		typo := codec.TypeFromExt(filepath.Ext(path))
+		typo := codec.TypeFromExt(filepath.Ext(walkpath))
 		if typo == codec.UNKNOWN {
 			return nil
 		}
-		if err := codec.DecodeFromFile(path, &envs); err != nil {
-			return errors.Wrapf(err, "failed to parse config file %s", path)
+		if err := codec.DecodeFromFile(walkpath, &envs); err != nil {
+			return errors.Wrapf(err, "failed to parse config file %s", walkpath)
 		}
 		return nil
 	}); err != nil {
@@ -169,6 +169,9 @@ func FromLocal(name, path string, envs map[string]string, l log.Logger) (*config
 	} else {
 		cfg = loadConfigFromFile(path)
 	}
+	if cfg == nil {
+		cfg = NewFileSourceConfig(path)
+	}
 
 	if envs != nil {
 		cfg.Env = &EnvSource{
@@ -182,19 +185,19 @@ func FromLocal(name, path string, envs map[string]string, l log.Logger) (*config
 // loadConfigFromDir loads configuration from a directory.
 func loadConfigFromDir(path string) *SourceConfig {
 	var cfg SourceConfig
-	err := filepath.WalkDir(path, func(path string, d os.DirEntry, err error) error {
+	err := filepath.WalkDir(path, func(walkpath string, d os.DirEntry, err error) error {
 		if err != nil {
-			return errors.Wrapf(err, "failed to get config file %s", path)
+			return errors.Wrapf(err, "failed to get config file %s", walkpath)
 		} else if d.IsDir() {
 			return nil
 		}
-		typo := codec.TypeFromExt(filepath.Ext(path))
+		typo := codec.TypeFromExt(filepath.Ext(walkpath))
 		if typo == codec.UNKNOWN {
 			return nil
 		}
 
-		if err := codec.DecodeFromFile(path, &cfg); err != nil {
-			return errors.Wrapf(err, "failed to parse config file %s", path)
+		if err := codec.DecodeFromFile(walkpath, &cfg); err != nil {
+			return errors.Wrapf(err, "failed to parse config file %s", walkpath)
 		}
 		return nil
 	})

@@ -44,7 +44,7 @@ func main() {
 	// new grpc client
 	conn, err := grpc.DialInsecure(
 		context.Background(),
-		grpc.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
+		grpc.WithEndpoint("discovery:///origadmin.service.v1"),
 		grpc.WithDiscovery(r),
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func main() {
 		http.WithMiddleware(
 			recovery.Recovery(),
 		),
-		http.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
+		http.WithEndpoint("discovery:///origadmin.service.v1"),
 		//http.WithEndpoint("127.0.0.1:8000"),
 		http.WithDiscovery(r),
 		http.WithNodeFilter(filter),

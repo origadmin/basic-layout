@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 )
@@ -52,13 +51,11 @@ func NewGreeterServer(client helloworld.GreeterClient) helloworld.GreeterServer 
 
 // SayHello implements helloworld.SayHello.
 func (s *GreeterService) SayHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	fmt.Println("GreeterService.SayHello", in.Name)
 	return s.client.SayHello(ctx, in)
 }
 
 // PostHello implements helloworld.PostHello.
 func (s *GreeterService) PostHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	fmt.Println("GreeterService.PostHello", in.Data.Name)
 	return s.client.PostHello(ctx, in)
 }
 

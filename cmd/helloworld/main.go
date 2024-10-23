@@ -29,7 +29,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flags.ConfigPath, "config", "resources/local", "config path, eg: -c config.toml")
+	flag.StringVar(&flags.ConfigPath, "config", "resources", "config path, eg: -c config.toml")
 	flag.StringVar(&flags.EnvPath, "env", "resources/env", "env path, eg: -e env.toml")
 }
 

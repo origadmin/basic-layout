@@ -21,11 +21,11 @@ var (
 	// flags are the bootstrap flags.
 	flags = bootstrap.DefaultFlags()
 	// remote is the remote of bootstrap flags.
-	remote = "resources/local/remote.toml.remote"
+	remote = "resources/remote.toml"
 )
 
 func init() {
-	flag.StringVar(&flags.ConfigPath, "c", "resources/local", "config path, eg: -c config.toml")
+	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 	flag.StringVar(&flags.EnvPath, "e", "resources/env", "env path, eg: -e env.toml")
 	flag.StringVar(&remote, "r", "remote.toml", "export remote config, eg: -r remote.toml.")
 }
@@ -45,10 +45,7 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
-	env, err := bootstrap.LoadEnv(flags.EnvPath)
-	if err != nil {
-		panic(errors.WithStack(err))
-	}
+	env, _ := bootstrap.LoadEnv(flags.EnvPath)
 	bs, err := bootstrap.FromLocal("", flags.ConfigPath, env, l)
 	if err != nil {
 		panic(errors.WithStack(err))
@@ -59,65 +56,5 @@ func main() {
 		panic(errors.WithStack(err))
 	}
 
-	_ = bs
-	//todo
-	//marshal, err := protojson.Marshal(bs)
-	//if err != nil {
-	//	panic(errors.WithStack(err))
-	//}
-	//
-	//client, err := api.NewClient(&api.Config{
-	//	Address: cfg.Consul.Address,
-	//	Scheme:  cfg.Consul.Scheme,
-	//})
-	//if err != nil {
-	//	return nil, errors.Wrap(err, "consul client error")
-	//}
-	//source, err = consul.New(client,
-	//	consul.WithPath("configs/bootstrap.json"),
-	//)
-	//if err != nil {
-	//	return nil, errors.Wrap(err, "consul source error")
-	//}
-
-	//for _, kv := range kvs {
-	//	fmt.Println("key:", kv.Key)
-	//	typo := codec.TypeFromExt(filepath.Ext(kv.Key))
-	//	if typo == codec.UNKNOWN {
-	//		continue
-	//	}
-	//	fmt.Println("put key:", kv.Key)
-	//	_, err := client.KV().Put(&api.KVPair{Key: "configs/" + "bootstrap.json", Value: marshal}, nil)
-	//	if err != nil {
-	//		panic(errors.WithStack(err))
-	//	}
-	//}
-	//
-	//source, err := consul.New(client,
-	//	consul.WithPath("configs/bootstrap.json"),
-	//)
-	//if err != nil {
-	//	panic(errors.WithStack(err))
-	//}
-	//c := config.New(
-	//	config.WithSource(source, envf.WithEnv(env)),
-	//)
-	//defer c.Close()
-	//if err := c.Load(); err != nil {
-	//	panic(errors.WithStack(err))
-	//}
-	//
-	//var bc conf.Bootstrap
-	//if err := c.Scan(&bc); err != nil {
-	//	panic(errors.WithStack(err))
-	//}
-	//
-	//err = bc.ValidateAll()
-	//if err != nil {
-	//	panic(errors.WithStack(err))
-	//}
-	//
-	//v, _ := protojson.Marshal(&bc)
-
-	//fmt.Printf("bootstrap config: %s\n", v)
+	return
 }

@@ -23,10 +23,10 @@ type GreeterBiz struct {
 }
 
 func (uc *GreeterBiz) SayHello(ctx context.Context, in *helloworld.GreeterRequest, opts ...grpc.CallOption) (*helloworld.GreeterReply, error) {
-	uc.log.WithContext(ctx).Infof("SayHello: %v", in.Data.Name)
+	uc.log.WithContext(ctx).Infof("SayHello: %v data: %v", in.Id, in.Data.Name)
 	return &helloworld.GreeterReply{
 		Data: &dto.Greeter{
-			Name: "hello " + in.Name,
+			Name: "hello " + in.Id,
 		}}, nil
 }
 

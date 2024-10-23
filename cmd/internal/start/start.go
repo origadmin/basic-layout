@@ -40,93 +40,105 @@ var (
 	flags = bootstrap.DefaultFlags()
 )
 
+var cmd = &cobra.Command{
+	Use:   "start",
+	Short: "start the server",
+	RunE:  startRun,
+}
+
 func init() {
 	flags.Name = name
 	flags.Version = version
+
 }
 
 // Cmd The function defines a CLI command to start a server with various flags and options, including the
 // ability to run as a daemon.
 func Cmd() *cobra.Command {
-
-	cmd := &cobra.Command{
-		Use:   "start",
-		Short: "start the server",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			workDir, _ := cmd.Flags().GetString(startWorkDir)
-			staticDir, _ := cmd.Flags().GetString(startStatic)
-			configs, _ := cmd.Flags().GetString(startConfig)
-			//random, _ := cmd.Flags().GetBool(startRandom)
-
-			flags.MetaData = make(map[string]string)
-			l := log.With(logger.NewLogger(),
-				"ts", log.DefaultTimestamp,
-				"caller", log.DefaultCaller,
-				"service.id", flags.ID,
-				"service.name", flags.Name,
-				"service.version", flags.Version,
-				"trace.id", tracing.TraceID(),
-				"span.id", tracing.SpanID(),
-			)
-			log.SetLogger(l)
-
-			env, err := bootstrap.LoadEnv(flags.EnvPath)
-			if err != nil {
-				return err
-			}
-			bs, err := bootstrap.FromLocal(name, flags.ConfigPath, env, l)
-			if err != nil {
-				return err
-			}
-
-			if daemon, _ := cmd.Flags().GetBool("daemon"); daemon {
-				bin, err := filepath.Abs(os.Args[0])
-				if err != nil {
-					log.Errorf("failed to get absolute path for command: %s \n", err.Error())
-					return err
-				}
-
-				cmdArgs := []string{"start"}
-				cmdArgs = append(cmdArgs, "-d", strings.TrimSpace(workDir))
-				cmdArgs = append(cmdArgs, "-c", strings.TrimSpace(configs))
-				cmdArgs = append(cmdArgs, "-s", strings.TrimSpace(staticDir))
-				_, _ = fmt.Printf("execute command: %s %s \n", bin, strings.Join(cmdArgs, " "))
-				command := exec.Command(bin, cmdArgs...)
-				err = command.Start()
-				if err != nil {
-					_, _ = fmt.Printf("failed to start daemon thread: %s \n", err.Error())
-					return err
-				}
-
-				pid := command.Process.Pid
-				//err = os.WriteFile(
-				//	fmt.Sprintf("%s.lock", utils.ToLower(cmd)),
-				//	[]byte(fmt.Sprintf("%d", pid)),
-				//	0o600)
-				//if err != nil {
-				//	log.Errorf("failed to write pid file: %s \n", err.Error())
-				//}
-				log.Errorf("service %s daemon thread started with pid %d \n", bs.ServiceName, pid)
-				return nil
-			}
-			_ = os.WriteFile(
-				fmt.Sprintf("%s.lock", utils.ToLower(cmd)),
-				[]byte(fmt.Sprintf("%d", os.Getpid())),
-				0o600)
-			//info to ctx
-			app, cleanup, err := buildInjectors(cmd.Context(), bs, l)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-			// start and wait for stop signal
-			if err := app.Run(); err != nil {
-				return err
-			}
-			return nil
-		},
-	}
+	cmd.Flags().BoolP(startRandom, "r", false, "start with random password")
+	cmd.Flags().StringP(startWorkDir, "d", ".", "working directory")
+	cmd.Flags().StringP(startConfig, "c", "resources",
+		"runtime configuration files or directory (relative to workdir, multiple separated by commas)")
+	cmd.Flags().StringP(startStatic, "s", "", "static files directory")
+	cmd.Flags().Bool(startDaemon, false, "run as a daemon")
 	return cmd
+}
+
+func startRun(cmd *cobra.Command, args []string) error {
+	flags.WorkDir, _ = cmd.Flags().GetString(startWorkDir)
+	staticDir, _ := cmd.Flags().GetString(startStatic)
+	flags.ConfigPath, _ = cmd.Flags().GetString(startConfig)
+	//random, _ := cmd.Flags().GetBool(startRandom)
+
+	flags.MetaData = make(map[string]string)
+	l := log.With(logger.NewLogger(),
+		"ts", log.DefaultTimestamp,
+		"caller", log.DefaultCaller,
+		"service.id", flags.ID,
+		"service.name", flags.Name,
+		"service.version", flags.Version,
+		"trace.id", tracing.TraceID(),
+		"span.id", tracing.SpanID(),
+	)
+	log.SetLogger(l)
+	path := filepath.Join(flags.WorkDir, flags.ConfigPath)
+	//envpath := filepath.Join(flags.WorkDir, flags.EnvPath)
+	log.Infow(startWorkDir, flags.WorkDir, startStatic, staticDir, startConfig, path)
+	//env, _ := bootstrap.LoadEnv(envpath)
+	bs, err := bootstrap.FromLocal(name, path, nil, l)
+	if err != nil {
+		return err
+	}
+
+	if daemon, _ := cmd.Flags().GetBool("daemon"); daemon {
+		bin, err := filepath.Abs(os.Args[0])
+		if err != nil {
+			log.Errorf("failed to get absolute path for command: %s \n", err.Error())
+			return err
+		}
+
+		cmdArgs := []string{"start"}
+		cmdArgs = append(cmdArgs, "-d", strings.TrimSpace(flags.WorkDir))
+		cmdArgs = append(cmdArgs, "-c", strings.TrimSpace(flags.ConfigPath))
+		cmdArgs = append(cmdArgs, "-s", strings.TrimSpace(staticDir))
+		_, _ = fmt.Printf("execute command: %s %s \n", bin, strings.Join(cmdArgs, " "))
+		command := exec.Command(bin, cmdArgs...)
+		err = command.Start()
+		if err != nil {
+			_, _ = fmt.Printf("failed to start daemon thread: %s \n", err.Error())
+			return err
+		}
+
+		pid := command.Process.Pid
+		//err = os.WriteFile(
+		//	fmt.Sprintf("%s.lock", utils.ToLower(cmd)),
+		//	[]byte(fmt.Sprintf("%d", pid)),
+		//	0o600)
+		//if err != nil {
+		//	log.Errorf("failed to write pid file: %s \n", err.Error())
+		//}
+		log.Errorf("service %s daemon thread started with pid %d \n", bs.ServiceName, pid)
+		return nil
+	}
+	lockfile := fmt.Sprintf("%s.lock", utils.ToLower(cmd))
+	err = os.WriteFile(
+		lockfile,
+		[]byte(fmt.Sprintf("%d", os.Getpid())),
+		0o600)
+	if err == nil {
+		defer os.Remove(lockfile)
+	}
+	//info to ctx
+	app, cleanup, err := buildInjectors(cmd.Context(), bs, l)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+	// start and wait for stop signal
+	if err := app.Run(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func NewApp(ctx context.Context, injector *mods.InjectorClient) *kratos.App {

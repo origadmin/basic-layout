@@ -8,6 +8,7 @@ type Flags struct {
 	ID         string
 	Name       string
 	Version    string
+	WorkDir    string
 	EnvPath    string
 	ConfigPath string
 	MetaData   map[string]string
