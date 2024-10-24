@@ -19,7 +19,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/toolkits/utils"
 )
 
@@ -141,7 +140,7 @@ func startRun(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func NewApp(ctx context.Context, injector *mods.InjectorClient) *kratos.App {
+func NewApp(ctx context.Context, injector *bootstrap.InjectorClient) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
 		kratos.Name(flags.Name),
