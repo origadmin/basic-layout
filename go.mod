@@ -18,7 +18,7 @@ require (
 	github.com/origadmin/toolkits v0.0.69
 	github.com/origadmin/toolkits/codec v0.0.15
 	github.com/origadmin/toolkits/contrib/config v0.0.5
-	github.com/origadmin/toolkits/runtime/kratos v0.0.8
+	github.com/origadmin/toolkits/runtime/kratos v0.0.9
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.1
 	go.opentelemetry.io/otel v1.31.0

@@ -7,6 +7,8 @@ import (
 	"github.com/origadmin/toolkits/errors/rpcerr"
 )
 
+// ErrorHTTP returns an error with the given reason, code, and message.
+// It is also used id for display the error message at the client with i18n support.
 func ErrorHTTP(reason HelloWorldErrorReason, code int32, msg string) *httperr.Error {
 	id := "http.response.status." + strings.ToLower(reason.String())
 	return &httperr.Error{

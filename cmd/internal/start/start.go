@@ -154,9 +154,15 @@ func NewApp(ctx context.Context, injector *mods.InjectorClient) *kratos.App {
 		//kratos.Server(injector.ServerGINS),
 	}
 
-	bootstrap.InjectorGinServer(injector)
-	if injector.ServerGINS != nil {
-		opts = append(opts, kratos.Server(injector.ServerGINS))
+	err := bootstrap.InjectorGinServer(injector)
+	if err != nil {
+		panic(err)
+	}
+	//if injector.ServerGINS != nil {
+	//	opts = append(opts, kratos.Server(injector.ServerGINS))
+	//}
+	if injector.ServerHTTP != nil {
+		opts = append(opts, kratos.Server(injector.ServerHTTP))
 	}
 
 	return kratos.New(opts...)

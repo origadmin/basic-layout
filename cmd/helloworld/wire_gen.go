@@ -12,7 +12,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
 	"origadmin/basic-layout/internal/mods/helloworld/server"
@@ -37,7 +36,7 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	greeterServer := service.NewGreeterServer(greeterClient)
 	grpcServer := server.NewGRPCServer(configsBootstrap, greeterServer, logger)
 	httpServer := server.NewHTTPServer(configsBootstrap, greeterServer, logger)
-	injectorServer := &mods.InjectorServer{
+	injectorServer := &bootstrap.InjectorServer{
 		Logger:     logger,
 		Registrar:  registrar,
 		Bootstrap:  configsBootstrap,

@@ -25,6 +25,7 @@ import (
 func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
 	discovery := bootstrap.NewDiscovery(configsBootstrap, logger)
 	ginsServer := server.NewGINSServer(configsBootstrap, logger)
+	httpServer := server.NewHTTPServer(configsBootstrap, logger)
 	database, cleanup, err := dal.NewDB(configsBootstrap, logger)
 	if err != nil {
 		return nil, nil, err
@@ -37,6 +38,7 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 		Discovery:     discovery,
 		Bootstrap:     configsBootstrap,
 		ServerGINS:    ginsServer,
+		ServerHTTP:    httpServer,
 		GreeterServer: greeterServer,
 	}
 	app := NewApp(contextContext, injectorClient)

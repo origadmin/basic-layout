@@ -10,12 +10,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
-	"github.com/origadmin/toolkits/errors"
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/internal/mods"
 )
 
 // go build -ldflags "-X main.Version=vx.y.z"
@@ -50,12 +48,14 @@ func main() {
 
 	env, err := bootstrap.LoadEnv(flags.EnvPath)
 	if err != nil {
-		panic(errors.WithStack(err))
+		//log.Errorf("failed to load env: %s", err.Error())
+		//os.Exit(1)
+		log.Fatalf("failed to load env: %s", err.Error())
 	}
 
 	bs, err := bootstrap.FromLocal(name, flags.ConfigPath, env, l)
 	if err != nil {
-		panic(errors.WithStack(err))
+		log.Fatalf("failed to load config: %s", err.Error())
 	}
 
 	v, _ := protojson.Marshal(bs)
@@ -64,26 +64,16 @@ func main() {
 	//info to ctx
 	app, cleanup, err := buildInjectors(ctx, bs, l)
 	if err != nil {
-		panic(errors.WithStack(err))
+		log.Fatalf("failed to build injector: %s", err.Error())
 	}
 	defer cleanup()
 	// start and wait for stop signal
 	if err := app.Run(); err != nil {
-		panic(errors.WithStack(err))
+		log.Fatalf("app stopped with error: %s", err.Error())
 	}
-	//c.Watch("configs/bootstrap.json", func(key string, value config.Value) {
-	//	if key != "configs/bootstrap.json" {
-	//		return
-	//	}
-	//	err := value.Scan(&bc)
-	//	if err != nil {
-	//		logger.Log(log.LevelError, "error", err)
-	//		return
-	//	}
-	//})
 }
 
-func NewApp(ctx context.Context, injector *mods.InjectorServer) *kratos.App {
+func NewApp(ctx context.Context, injector *bootstrap.InjectorServer) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
 		kratos.Name(flags.Name),
@@ -92,7 +82,6 @@ func NewApp(ctx context.Context, injector *mods.InjectorServer) *kratos.App {
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 		kratos.Logger(injector.Logger),
-		//kratos.Server(hs, gs, gss),
 		kratos.Server(injector.ServerHTTP, injector.ServerGRPC),
 	}
 	if injector.Registrar != nil {

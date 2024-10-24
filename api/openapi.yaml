@@ -20,13 +20,13 @@ paths:
                   schema:
                     type: integer
                     format: int32
-                - name: pageSize
+                - name: page_size
                   in: query
                   description: The number of lines per page
                   schema:
                     type: integer
                     format: int32
-                - name: noPaging
+                - name: no_paging
                   in: query
                   description: Whether not paging
                   schema:
