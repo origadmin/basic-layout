@@ -45,22 +45,27 @@ func NewGRPCServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l lo
 	}
 
 	naip, _ := netip.ParseAddrPort(bs.Server.Grpc.Addr)
-	prefix, suffix, ok := strings.Cut(bs.Server.Grpc.Endpoint, "://")
-	if !ok {
-		bs.Server.Grpc.Endpoint = "grpc://" + prefix
+	if bs.Server.Grpc.Endpoint == "" {
+		bs.Server.Grpc.Endpoint = "grpc://" + bs.Server.Host + ":" + strconv.Itoa(int(naip.Port()))
 	} else {
-		args := strings.SplitN(suffix, ":", 2)
-		if len(args) == 2 {
-			args[1] = strconv.Itoa(int(naip.Port()))
-		} else if len(args) == 1 {
-			args = append(args, strconv.Itoa(int(naip.Port())))
+		prefix, suffix, ok := strings.Cut(bs.Server.Grpc.Endpoint, "://")
+		if !ok {
+			bs.Server.Grpc.Endpoint = "grpc://" + prefix
 		} else {
-			// unknown
-			log.Infow("unknown grpc endpoint", bs.Server.Grpc.Endpoint)
+			args := strings.SplitN(suffix, ":", 2)
+			if len(args) == 2 {
+				args[1] = strconv.Itoa(int(naip.Port()))
+			} else if len(args) == 1 {
+				args = append(args, strconv.Itoa(int(naip.Port())))
+			} else {
+				// unknown
+				log.Infow("unknown http endpoint", bs.Server.Grpc.Endpoint)
+			}
+			bs.Server.Grpc.Endpoint = prefix + "://" + strings.Join(args, ":")
 		}
-		bs.Server.Grpc.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
-	log.Infof("bs.Server.Grpc.Endpoint: %v", bs.Server.Grpc.Endpoint)
+
+	log.Infof("Server.Grpc.Endpoint: %v", bs.Server.Grpc.Endpoint)
 	ep, _ := url.Parse(bs.Server.Grpc.Endpoint)
 	opts = append(opts, grpc.Endpoint(ep))
 	srv := grpc.NewServer(opts...)

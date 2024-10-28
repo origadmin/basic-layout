@@ -82,3 +82,7 @@ func NewDiscovery(bootstrap *configs.Bootstrap, l log.Logger) registry.Discovery
 
 	return dis
 }
+
+func NewDiscoveries(bootstrap *configs.Bootstrap, l log.Logger) map[string]registry.Discovery {
+	return nil
+}

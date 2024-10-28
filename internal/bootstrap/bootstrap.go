@@ -12,11 +12,21 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
+	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
+)
+
+var (
+	ProviderSet = wire.NewSet(
+		NewRegistrar,
+		NewDiscovery,
+		wire.Struct(new(InjectorServer), "*"),
+		wire.Struct(new(InjectorClient), "*"),
+	)
 )
 
 type InjectorClient struct {
@@ -36,15 +46,6 @@ type InjectorServer struct {
 	ServerHTTP *http.Server
 }
 
-var (
-	ProviderSet = wire.NewSet(
-		NewRegistrar,
-		NewDiscovery,
-		wire.Struct(new(InjectorServer), "*"),
-		wire.Struct(new(InjectorClient), "*"),
-	)
-)
-
 func InjectorGinServer(injector *InjectorClient) error {
 	// Create route Filter: Filter instances whose version number is "2.0.0"
 	filter := filter.Version("v1.0.0")
@@ -52,29 +53,33 @@ func InjectorGinServer(injector *InjectorClient) error {
 	selector.SetGlobalSelector(random.NewBuilder())
 	//selector.SetGlobalSelector(wrr.NewBuilder())
 
-	// new grpc client
+	serviceName := "origadmin.service.v1.helloworld"
+	discovery := injector.Discovery
+	if discovery == nil {
+		return errors.New("discovery is nil")
+	}
+	//if discovery, ok := injector.Discoveries[serviceName]; ok {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
 		grpc.WithMiddleware(
 			recovery.Recovery(),
 		),
-		grpc.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
-		grpc.WithDiscovery(injector.Discovery),
+		grpc.WithEndpoint("discovery:///"+serviceName),
+		grpc.WithDiscovery(discovery),
 		grpc.WithNodeFilter(filter),
 	)
 	if err != nil {
 		return err
 	}
 	gClient := helloworld.NewGreeterClient(conn)
-
 	// new http client
 	hConn, err := http.NewClient(
 		context.Background(),
 		http.WithMiddleware(
 			recovery.Recovery(),
 		),
-		http.WithEndpoint("discovery:///origadmin.service.v1.helloworld"),
-		http.WithDiscovery(injector.Discovery),
+		http.WithEndpoint("discovery:///"+serviceName),
+		http.WithDiscovery(discovery),
 		http.WithNodeFilter(filter),
 	)
 	if err != nil {
@@ -88,5 +93,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 	_ = httpClient
 	helloworld.RegisterGreeterGINServer(injector.ServerGINS, httpClient)
 	helloworld.RegisterGreeterHTTPServer(injector.ServerHTTP, httpClient)
+	//}
+
 	return nil
 }

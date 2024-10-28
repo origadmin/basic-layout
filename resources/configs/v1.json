@@ -10,6 +10,7 @@
     }
   },
   "server": {
+    "host": "${host:127.0.0.1}",
     "gins": {
       "network": "tcp",
       "addr": "${gins_address:0.0.0.0:7000}",
@@ -17,8 +18,7 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s",
-      "endpoint": "http://${host_ip}:7000"
+      "idle_timeout": "180s"
     },
     "http": {
       "network": "tcp",
@@ -27,8 +27,7 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s",
-      "endpoint": "http://${host_ip}:8000"
+      "idle_timeout": "180s"
     },
     "grpc": {
       "network": "tcp",
@@ -37,8 +36,7 @@
       "shutdown_timeout": "180s",
       "read_timeout": "180s",
       "write_timeout": "180s",
-      "idle_timeout": "180s",
-      "endpoint": "grpc://${host_ip}:9000"
+      "idle_timeout": "180s"
     },
     "middleware": {
       "cors": {},

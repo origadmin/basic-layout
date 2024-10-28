@@ -44,23 +44,27 @@ func NewHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l lo
 	}
 
 	naip, _ := netip.ParseAddrPort(bs.Server.Http.Addr)
-	prefix, suffix, ok := strings.Cut(bs.Server.Http.Endpoint, "://")
-	if !ok {
-		bs.Server.Http.Endpoint = "http://" + prefix
+	if bs.Server.Http.Endpoint == "" {
+		bs.Server.Http.Endpoint = "http://" + bs.Server.Host + ":" + strconv.Itoa(int(naip.Port()))
 	} else {
-		args := strings.SplitN(suffix, ":", 2)
-		if len(args) == 2 {
-			args[1] = strconv.Itoa(int(naip.Port()))
-		} else if len(args) == 1 {
-			args = append(args, strconv.Itoa(int(naip.Port())))
+		prefix, suffix, ok := strings.Cut(bs.Server.Http.Endpoint, "://")
+		if !ok {
+			bs.Server.Http.Endpoint = "http://" + prefix
 		} else {
-			// unknown
-			log.Infow("unknown http endpoint", bs.Server.Http.Endpoint)
+			args := strings.SplitN(suffix, ":", 2)
+			if len(args) == 2 {
+				args[1] = strconv.Itoa(int(naip.Port()))
+			} else if len(args) == 1 {
+				args = append(args, strconv.Itoa(int(naip.Port())))
+			} else {
+				// unknown
+				log.Infow("unknown http endpoint", bs.Server.Http.Endpoint)
+			}
+			bs.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
 		}
-		bs.Server.Http.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	log.Infof("bs.Server.Http.Endpoint: %v", bs.Server.Http.Endpoint)
+	log.Infof("Server.Http.Endpoint: %v", bs.Server.Http.Endpoint)
 	ep, _ := url.Parse(bs.Server.Http.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)

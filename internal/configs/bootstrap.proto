@@ -131,6 +131,7 @@ message Server {
   GRPC grpc = 4 [json_name = "grpc"];
   Middleware middleware = 5 [json_name = "middleware"];
 
+  string host = 99 [json_name = "host"];
 }
 
 message Settings {

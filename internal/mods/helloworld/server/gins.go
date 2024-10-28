@@ -48,23 +48,27 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l lo
 	}
 
 	naip, _ := netip.ParseAddrPort(bs.Server.Gins.Addr)
-	prefix, suffix, ok := strings.Cut(bs.Server.Gins.Endpoint, "://")
-	if !ok {
-		bs.Server.Gins.Endpoint = "http://" + prefix
+	if bs.Server.Gins.Endpoint == "" {
+		bs.Server.Gins.Endpoint = "http://" + bs.Server.Host + ":" + strconv.Itoa(int(naip.Port()))
 	} else {
-		args := strings.SplitN(suffix, ":", 2)
-		if len(args) == 2 {
-			args[1] = strconv.Itoa(int(naip.Port()))
-		} else if len(args) == 1 {
-			args = append(args, strconv.Itoa(int(naip.Port())))
+		prefix, suffix, ok := strings.Cut(bs.Server.Gins.Endpoint, "://")
+		if !ok {
+			bs.Server.Gins.Endpoint = "http://" + prefix
 		} else {
-			// unknown
-			log.Infow("unknown http endpoint", bs.Server.Gins.Endpoint)
+			args := strings.SplitN(suffix, ":", 2)
+			if len(args) == 2 {
+				args[1] = strconv.Itoa(int(naip.Port()))
+			} else if len(args) == 1 {
+				args = append(args, strconv.Itoa(int(naip.Port())))
+			} else {
+				// unknown
+				log.Infow("unknown http endpoint", bs.Server.Gins.Endpoint)
+			}
+			bs.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
 		}
-		bs.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
 	}
 
-	log.Infof("bs.Server.Gins.Endpoint: %v", bs.Server.Gins.Endpoint)
+	log.Infof("Server.Gins.Endpoint: %v", bs.Server.Gins.Endpoint)
 	ep, _ := url.Parse(bs.Server.Gins.Endpoint)
 	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)

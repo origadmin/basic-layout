@@ -13,7 +13,6 @@ import (
 
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
@@ -24,5 +23,5 @@ import (
 
 // buildInjectors init kratos application.
 func buildInjectors(context.Context, *configs.Bootstrap, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(mods.ProviderSet, bootstrap.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
+	panic(wire.Build(bootstrap.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
 }

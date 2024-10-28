@@ -16,24 +16,24 @@ import (
 	"origadmin/basic-layout/internal/bootstrap"
 )
 
-// go build -ldflags "-X main.Version=vx.y.z"
+// go build -ldflags "-X main.Version=vx.y.z -X main.Name=origadmin.service.v1.helloworld"
 var (
-	// Name is the name of the compiled software.
-	name = "origadmin.service.v1.helloworld"
-	// Version is the version of the compiled software.
-	version = "v1.0.0"
+	// Name is the Name of the compiled software.
+	Name = "origadmin.service.v1.helloworld"
+	// Version is the Version of the compiled software.
+	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootstrap.DefaultFlags()
+	flags = bootstrap.Flags{}
 )
 
 func init() {
-	flag.StringVar(&flags.ConfigPath, "config", "resources", "config path, eg: -c config.toml")
+	flags = bootstrap.NewFlags(Name, Version)
+	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 }
 
 func main() {
 	flag.Parse()
-	flags.Name = name
-	flags.Version = version
+
 	flags.MetaData = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,

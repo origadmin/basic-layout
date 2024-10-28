@@ -109,6 +109,7 @@ var DefaultBootstrap = &Bootstrap{
 				Name:    "logger",
 			},
 		},
+		Host: "${host=127.0.0.1}",
 	},
 	Data: &Data{
 		Database: &Data_Database{

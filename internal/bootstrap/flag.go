@@ -28,3 +28,10 @@ func DefaultFlags() Flags {
 		ID: id,
 	}
 }
+
+func NewFlags(name string, version string) Flags {
+	f := DefaultFlags()
+	f.Name = name
+	f.Version = version
+	return f
+}
