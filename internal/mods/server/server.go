@@ -21,17 +21,17 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 		),
 	}
 	c := bs.Server
-	if c.Gins == nil {
-		c.Gins = new(configs.Server_GINS)
+	if c.Entry == nil {
+		c.Entry = new(configs.Server_Entry)
 	}
-	if c.Gins.Network != "" {
-		opts = append(opts, gins.Network(c.Gins.Network))
+	if c.Entry.Network != "" {
+		opts = append(opts, gins.Network(c.Entry.Network))
 	}
-	if c.Gins.Addr != "" {
-		opts = append(opts, gins.Address(c.Gins.Addr))
+	if c.Entry.Addr != "" {
+		opts = append(opts, gins.Address(c.Entry.Addr))
 	}
-	if c.Gins.Timeout != nil {
-		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
+	if c.Entry.Timeout != nil {
+		opts = append(opts, gins.Timeout(c.Entry.Timeout.AsDuration()))
 	}
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
@@ -47,7 +47,6 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 	}
 
 	srv := gins.NewServer(opts...)
-	//helloworld.RegisterGreeterGINServer(srv, greeter)
 	return srv
 }
 

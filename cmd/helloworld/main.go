@@ -28,7 +28,6 @@ var (
 
 func init() {
 	flag.StringVar(&flags.ConfigPath, "config", "resources", "config path, eg: -c config.toml")
-	flag.StringVar(&flags.EnvPath, "env", "resources/env", "env path, eg: -e env.toml")
 }
 
 func main() {
@@ -46,14 +45,7 @@ func main() {
 		"span.id", tracing.SpanID(),
 	)
 
-	env, err := bootstrap.LoadEnv(flags.EnvPath)
-	if err != nil {
-		//log.Errorf("failed to load env: %s", err.Error())
-		//os.Exit(1)
-		log.Fatalf("failed to load env: %s", err.Error())
-	}
-
-	bs, err := bootstrap.FromLocal(name, flags.ConfigPath, env, l)
+	bs, err := bootstrap.Load(flags.ConfigPath, flags.Name)
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}

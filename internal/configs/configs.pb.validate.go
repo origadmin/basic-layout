@@ -381,7 +381,7 @@ func (m *Config) validate(all bool) error {
 	if _, ok := _Config_Type_InLookup[m.GetType()]; !ok {
 		err := ConfigValidationError{
 			field:  "Type",
-			reason: "value must be in list [file consul etcd]",
+			reason: "value must be in list [none file consul etcd]",
 		}
 		if !all {
 			return err
@@ -389,15 +389,16 @@ func (m *Config) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	for idx, item := range m.GetFiles() {
-		_, _ = idx, item
+	// no validation rules for Name
+
+	if m.File != nil {
 
 		if all {
-			switch v := interface{}(item).(type) {
+			switch v := interface{}(m.GetFile()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, ConfigValidationError{
-						field:  fmt.Sprintf("Files[%v]", idx),
+						field:  "File",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -405,16 +406,16 @@ func (m *Config) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, ConfigValidationError{
-						field:  fmt.Sprintf("Files[%v]", idx),
+						field:  "File",
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		} else if v, ok := interface{}(m.GetFile()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ConfigValidationError{
-					field:  fmt.Sprintf("Files[%v]", idx),
+					field:  "File",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -567,6 +568,7 @@ var _ interface {
 } = ConfigValidationError{}
 
 var _Config_Type_InLookup = map[string]struct{}{
+	"none":   {},
 	"file":   {},
 	"consul": {},
 	"etcd":   {},

@@ -21,13 +21,12 @@ var (
 	// flags are the bootstrap flags.
 	flags = bootstrap.DefaultFlags()
 	// remote is the remote of bootstrap flags.
-	remote = "resources/remote.toml"
+	output = "resources"
 )
 
 func init() {
 	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
-	flag.StringVar(&flags.EnvPath, "e", "resources/env", "env path, eg: -e env.toml")
-	flag.StringVar(&remote, "r", "remote.toml", "export remote config, eg: -r remote.toml.")
+	flag.StringVar(&output, "o", "", "output a bootstrap config from local config, eg: -o bootstrap.toml")
 }
 
 func main() {
@@ -36,7 +35,7 @@ func main() {
 	flags.Name = name
 	flags.Version = version
 	flags.MetaData = make(map[string]string)
-	l := log.With(logger.NewLogger(),
+	_ = log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.IID(),
@@ -45,13 +44,13 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
-	env, _ := bootstrap.LoadEnv(flags.EnvPath)
-	bs, err := bootstrap.FromLocal("", flags.ConfigPath, env, l)
+	//env, _ := bootstrap.LoadEnv(flags.EnvPath)
+	bs, err := bootstrap.Load(flags.ConfigPath, flags.Name)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
 
-	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, env, remote)
+	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, output)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

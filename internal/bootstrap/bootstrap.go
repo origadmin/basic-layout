@@ -19,6 +19,23 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
+type InjectorClient struct {
+	Logger        log.Logger
+	Discovery     registry.Discovery
+	Bootstrap     *configs.Bootstrap
+	ServerGINS    *gins.Server
+	ServerHTTP    *http.Server
+	GreeterServer helloworld.GreeterServer
+}
+
+type InjectorServer struct {
+	Logger     log.Logger
+	Registrar  registry.Registrar
+	Bootstrap  *configs.Bootstrap
+	ServerGRPC *grpc.Server
+	ServerHTTP *http.Server
+}
+
 var (
 	ProviderSet = wire.NewSet(
 		NewRegistrar,
@@ -72,21 +89,4 @@ func InjectorGinServer(injector *InjectorClient) error {
 	helloworld.RegisterGreeterGINServer(injector.ServerGINS, httpClient)
 	helloworld.RegisterGreeterHTTPServer(injector.ServerHTTP, httpClient)
 	return nil
-}
-
-type InjectorClient struct {
-	Logger        log.Logger
-	Discovery     registry.Discovery
-	Bootstrap     *configs.Bootstrap
-	ServerGINS    *gins.Server
-	ServerHTTP    *http.Server
-	GreeterServer helloworld.GreeterServer
-}
-
-type InjectorServer struct {
-	Logger     log.Logger
-	Registrar  registry.Registrar
-	Bootstrap  *configs.Bootstrap
-	ServerGRPC *grpc.Server
-	ServerHTTP *http.Server
 }

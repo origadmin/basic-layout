@@ -1,41 +1,19 @@
 package bootstrap
 
 import (
-	"os"
-	"path/filepath"
-
 	"github.com/hashicorp/consul/api"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/errors"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"origadmin/basic-layout/internal/configs"
+	"origadmin/basic-layout/toolkits/oneof/source"
 )
 
-func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, remote string) error {
-	cfg := bs.Config
-	if cfg != nil && remote != "" {
-		var src SourceConfig
-		src.Type = cfg.Type
-		if cfg.File != nil {
-			src.File = &FileSource{
-				Path:   cfg.File.Path,
-				Format: cfg.File.Format,
-			}
-		}
-		if cfg.Consul != nil {
-			src.Consul = &ConsulSource{
-				Address: cfg.Consul.Address,
-				Scheme:  cfg.Consul.Scheme,
-			}
-		}
-		typo := codec.TypeFromExt(filepath.Ext(remote))
-		marshal, err := typo.Marshal(src)
+func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error {
+	if output != "" {
+		err := GenerateRemoteConfig(serviceName, bs, output)
 		if err != nil {
-			return errors.Wrap(err, "marshal config error")
-		}
-		marshal = ApplyEnv(marshal, envs)
-		if err := os.WriteFile(remote+".example", marshal, os.ModePerm); err != nil {
 			return err
 		}
 	}
@@ -60,7 +38,7 @@ func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, remo
 				return errors.Wrap(err, "marshal config error")
 			}
 			if _, err := client.KV().Put(&api.KVPair{
-				Key:   consulConfigPath(name, "bootstrap.json"), //path.Join("configs", name, "bootstrap.json"),
+				Key:   source.ConfigPath(serviceName, "bootstrap.json"), //path.Join("configs", name, "bootstrap.json"),
 				Value: marshal,
 			}, nil); err != nil {
 				return errors.Wrap(err, "consul put error")
@@ -71,4 +49,32 @@ func SyncConfig(name string, bs *configs.Bootstrap, envs map[string]string, remo
 		return nil
 	}
 	return errors.New("not support config type")
+}
+
+func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string) error {
+	cfg := bs.Config
+	if cfg == nil {
+		return errors.New("config is nil")
+	}
+
+	var src SourceConfig
+	src.Type = cfg.Type
+	if cfg.File != nil {
+		src.File = FileSource{
+			Path:   cfg.File.Path,
+			Format: cfg.File.Format,
+		}
+	}
+	if cfg.Consul != nil {
+		src.Consul = ConsulSource{
+			Address: cfg.Consul.Address,
+			Scheme:  cfg.Consul.Scheme,
+		}
+	}
+
+	err := codec.EncodeToFile(file, &src)
+	if err != nil {
+		return errors.Wrap(err, "marshal config error")
+	}
+	return nil
 }

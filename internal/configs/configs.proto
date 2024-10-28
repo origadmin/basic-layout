@@ -29,8 +29,9 @@ message Etcd {
 }
 
 message Config {
-  string type = 1 [(validate.rules).string = {in: ["file", "consul", "etcd"]}];
-  repeated File files = 2;
-  optional Consul consul = 3;
-  optional Etcd etcd = 4;
+  string type = 1 [(validate.rules).string = {in: ["none", "file", "consul", "etcd"]}];
+  string name = 2 [json_name = "name"];
+  optional File file = 3 [json_name = "file"];
+  optional Consul consul = 4 [json_name = "consul"];
+  optional Etcd etcd = 5 [json_name = "etcd"];
 }

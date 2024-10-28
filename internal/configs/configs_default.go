@@ -40,9 +40,14 @@ var DefaultBootstrap = &Bootstrap{
 	Version:     "v1.0.0",
 	CryptoType:  "argon2",
 	Server: &Server{
+		Entry: &Server_Entry{
+			Network: "tcp",
+			Addr:    "0.0.0.0:8000",
+			Timeout: durationpb.New(3 * time.Minute),
+		},
 		Gins: &Server_GINS{
 			Network:         "tcp",
-			Addr:            "${gins_address=0.0.0.0:7000}",
+			Addr:            "${gins_address=0.0.0.0:8100}",
 			UseTls:          false,
 			CertFile:        "",
 			KeyFile:         "",
@@ -54,7 +59,7 @@ var DefaultBootstrap = &Bootstrap{
 		},
 		Http: &Server_HTTP{
 			Network:         "tcp",
-			Addr:            "${http_address=0.0.0.0:8000}",
+			Addr:            "${http_address=0.0.0.0:8200}",
 			UseTls:          false,
 			CertFile:        "",
 			KeyFile:         "",
@@ -66,7 +71,7 @@ var DefaultBootstrap = &Bootstrap{
 		},
 		Grpc: &Server_GRPC{
 			Network:         "tcp",
-			Addr:            "${grpc_address=0.0.0.0:9000}",
+			Addr:            "${grpc_address=0.0.0.0:8300}",
 			UseTls:          false,
 			CertFile:        "",
 			KeyFile:         "",

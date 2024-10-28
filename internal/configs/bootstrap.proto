@@ -39,6 +39,14 @@ message Discovery {
 }
 
 message Server {
+  message Entry{
+    string name = 1;
+    string addr = 2;
+    string network = 3;
+    string weight = 4;
+    optional google.protobuf.Duration timeout = 5 [json_name = "timeout"];
+  }
+
   message GINS {
     string network = 1;
     string addr = 2;
@@ -117,11 +125,11 @@ message Server {
     Traces traces = 3 [json_name = "traces"];
     Logger logger = 4 [json_name = "logger"];
   }
-
-  GINS gins = 1 [json_name = "gins"];
-  HTTP http = 2 [json_name = "http"];
-  GRPC grpc = 3 [json_name = "grpc"];
-  Middleware middleware = 4 [json_name = "middleware"];
+  Entry entry = 1 [json_name = "entry"];
+  GINS gins = 2 [json_name = "gins"];
+  HTTP http = 3 [json_name = "http"];
+  GRPC grpc = 4 [json_name = "grpc"];
+  Middleware middleware = 5 [json_name = "middleware"];
 
 }
 
