@@ -22,7 +22,7 @@ import (
 
 // buildInjectors init kratos application.
 func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
-	discovery := bootstrap.NewDiscovery(configsBootstrap, logger)
+	discovery := bootloader.NewDiscovery(configsBootstrap, logger)
 	ginsServer := server.NewGINSServer(configsBootstrap, logger)
 	httpServer := server.NewHTTPServer(configsBootstrap, logger)
 	database, cleanup, err := dal.NewDB(configsBootstrap, logger)
@@ -32,7 +32,7 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	greeterDao := dal.NewGreeterDal(database, logger)
 	greeterClient := biz.NewGreeterClient(greeterDao, logger)
 	greeterServer := service.NewGreeterServer(greeterClient)
-	injectorClient := &bootstrap.InjectorClient{
+	injectorClient := &bootloader.InjectorClient{
 		Logger:        logger,
 		Discovery:     discovery,
 		Bootstrap:     configsBootstrap,

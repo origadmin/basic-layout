@@ -11,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/internal/bootloader"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -39,7 +39,7 @@ func NewGRPCServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l lo
 		c.Middleware = new(configs.Server_Middleware)
 	}
 
-	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	middlewares, err := bootloader.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, grpc.Middleware(middlewares...))
 	}

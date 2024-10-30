@@ -1,4 +1,4 @@
-package api
+package internal
 
 //generate helloworld proto file
 // if you want to generate the client code to the same directory, please use the following command

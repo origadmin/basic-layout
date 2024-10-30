@@ -8,9 +8,12 @@ package main
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"origadmin/basic-layout/internal/bootstrap"
+	_ "go.uber.org/automaxprocs"
+
+	"origadmin/basic-layout/internal/bootloader"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
@@ -18,28 +21,24 @@ import (
 	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
-import (
-	_ "go.uber.org/automaxprocs"
-)
-
 // Injectors from wire.go:
 
 // buildInjectors init kratos application.
-func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
-	registrar := bootstrap.NewRegistrar(configsBootstrap, logger)
-	database, cleanup, err := dal.NewDB(configsBootstrap, logger)
+func buildInjectors(contextContext context.Context, bootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
+	registrar := bootloader.NewRegistrar(bootstrap, logger)
+	database, cleanup, err := dal.NewDB(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}
 	greeterDao := dal.NewGreeterDal(database, logger)
 	greeterClient := biz.NewGreeterClient(greeterDao, logger)
 	greeterServer := service.NewGreeterServer(greeterClient)
-	grpcServer := server.NewGRPCServer(configsBootstrap, greeterServer, logger)
-	httpServer := server.NewHTTPServer(configsBootstrap, greeterServer, logger)
-	injectorServer := &bootstrap.InjectorServer{
+	grpcServer := server.NewGRPCServer(bootstrap, greeterServer, logger)
+	httpServer := server.NewHTTPServer(bootstrap, greeterServer, logger)
+	injectorServer := &bootloader.InjectorServer{
 		Logger:     logger,
 		Registrar:  registrar,
-		Bootstrap:  configsBootstrap,
+		Bootstrap:  bootstrap,
 		ServerGRPC: grpcServer,
 		ServerHTTP: httpServer,
 	}

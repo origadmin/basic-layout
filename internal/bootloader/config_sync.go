@@ -1,9 +1,10 @@
-package bootstrap
+package bootloader
 
 import (
 	"github.com/hashicorp/consul/api"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/errors"
+	"github.com/origadmin/toolkits/runtime/config"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"origadmin/basic-layout/internal/configs"
@@ -57,16 +58,16 @@ func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string
 		return errors.New("config is nil")
 	}
 
-	var src SourceConfig
+	var src config.SourceConfig
 	src.Type = cfg.Type
 	if cfg.File != nil {
-		src.File = FileSource{
-			Path:   cfg.File.Path,
-			Format: cfg.File.Format,
+		src.File = &config.SourceConfig_File{
+			Path: cfg.File.Path,
+			//Format: cfg.File.Format,
 		}
 	}
 	if cfg.Consul != nil {
-		src.Consul = ConsulSource{
+		src.Consul = &config.SourceConfig_Consul{
 			Address: cfg.Consul.Address,
 			Scheme:  cfg.Consul.Scheme,
 		}

@@ -13,7 +13,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/internal/bootloader"
 )
 
 // go build -ldflags "-X main.Version=vx.y.z -X main.Name=origadmin.service.v1.helloworld"
@@ -23,29 +23,30 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootstrap.Flags{}
+	flags = bootloader.BootFlags{}
 )
 
 func init() {
-	flags = bootstrap.NewFlags(Name, Version)
+	flags = bootloader.NewBootFlags(Name, Version)
 	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 }
 
 func main() {
 	flag.Parse()
 
-	flags.MetaData = make(map[string]string)
+	flags.Metadata = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.ID,
-		"service.name", flags.Name,
+		"service.name", flags.ServiceName,
 		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 
-	bs, err := bootstrap.Load(flags.ConfigPath, flags.Name)
+	fmt.Printf("bootstrap flags: %+v\n", flags)
+	bs, err := bootloader.Load(flags, true)
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}
@@ -65,10 +66,10 @@ func main() {
 	}
 }
 
-func NewApp(ctx context.Context, injector *bootstrap.InjectorServer) *kratos.App {
+func NewApp(ctx context.Context, injector *bootloader.InjectorServer) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
-		kratos.Name(flags.Name),
+		kratos.Name(flags.ServiceName),
 		kratos.Version(flags.Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),

@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
@@ -9,7 +11,7 @@ import (
 	"github.com/origadmin/toolkits/errors"
 	_ "go.uber.org/automaxprocs"
 
-	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/internal/bootloader"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -19,13 +21,13 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootstrap.Flags{}
+	flags = bootloader.BootFlags{}
 	// remote is the remote of bootstrap flags.
 	output = "resources"
 )
 
 func init() {
-	flags = bootstrap.NewFlags(Name, Version)
+	flags = bootloader.NewBootFlags(Name, Version)
 	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 	flag.StringVar(&output, "o", "", "output a bootstrap config from local config, eg: -o bootstrap.toml")
 }
@@ -33,23 +35,24 @@ func init() {
 func main() {
 	flag.Parse()
 
-	flags.MetaData = make(map[string]string)
+	flags.Metadata = make(map[string]string)
 	_ = log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.ID,
-		"service.name", flags.Name,
+		"service.name", flags.ServiceName,
 		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	flags.ConfigPath = filepath.Join(flags.WorkDir, flags.ConfigPath, "local.toml")
 	//env, _ := bootstrap.LoadEnv(flags.EnvPath)
-	bs, err := bootstrap.Load(flags.ConfigPath, flags.Name)
+	bs, err := bootloader.Load(flags, true)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
-
-	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, output)
+	fmt.Printf("bootstrap: %v", bs)
+	err = bootloader.SyncConfig(bs.GetServiceName(), bs, output)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

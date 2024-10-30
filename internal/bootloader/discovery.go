@@ -1,4 +1,4 @@
-package bootstrap
+package bootloader
 
 import (
 	registryconsul "github.com/go-kratos/kratos/contrib/registry/consul/v2"

@@ -5,10 +5,10 @@ option go_package = "internal/configs;configs";
 
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
-import "middlewares/logger/logger.proto";
-import "middlewares/metrics/metrics.proto";
-import "middlewares/cors/cors.proto";
-import "middlewares/security/security.proto";
+import "middlewares/logger.proto";
+import "middlewares/metrics.proto";
+import "middlewares/cors.proto";
+import "middlewares/security.proto";
 import "configs/configs.proto";
 
 message Bootstrap {

@@ -1,4 +1,4 @@
-package bootstrap
+package bootloader
 
 type Type string
 

@@ -18,7 +18,6 @@ import (
 	logger "github.com/origadmin/slog-kratos"
 	"github.com/spf13/cobra"
 
-	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/toolkits/utils"
 )
 
@@ -36,7 +35,7 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootstrap.Flags{}
+	flags = bootloader.Flags{}
 )
 
 var cmd = &cobra.Command{
@@ -46,7 +45,7 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	flags = bootstrap.NewFlags(Name, Version)
+	flags = bootloader.NewFlags(Name, Version)
 }
 
 // Cmd The function defines a CLI command to start a server with various flags and options, including the
@@ -82,7 +81,7 @@ func startRun(cmd *cobra.Command, args []string) error {
 	//envpath := filepath.Join(flags.WorkDir, flags.EnvPath)
 	log.Infow(startWorkDir, flags.WorkDir, startStatic, staticDir, startConfig, path)
 	//env, _ := bootstrap.LoadEnv(envpath)
-	bs, err := bootstrap.FromLocal(flags.Name, path, nil, l)
+	bs, err := bootloader.FromLocal(flags.Name, path, nil, l)
 	if err != nil {
 		return err
 	}
@@ -138,7 +137,7 @@ func startRun(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func NewApp(ctx context.Context, injector *bootstrap.InjectorClient) *kratos.App {
+func NewApp(ctx context.Context, injector *bootloader.InjectorClient) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
 		kratos.Name(flags.Name),
@@ -151,7 +150,7 @@ func NewApp(ctx context.Context, injector *bootstrap.InjectorClient) *kratos.App
 		//kratos.Server(injector.ServerGINS),
 	}
 
-	err := bootstrap.InjectorGinServer(injector)
+	err := bootloader.InjectorGinServer(injector)
 	if err != nil {
 		panic(err)
 	}

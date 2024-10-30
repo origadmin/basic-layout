@@ -10,7 +10,6 @@ import (
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -40,7 +39,7 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 		c.Middleware = new(configs.Server_Middleware)
 	}
 
-	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	middlewares, err := bootloader.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, gins.Middleware(middlewares...))
 	}
@@ -88,7 +87,7 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
-	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	middlewares, err := bootloader.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, http.Middleware(middlewares...))
 	}

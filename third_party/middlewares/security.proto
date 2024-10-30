@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package middleware.traces.v1;
 
-option go_package = "origadmin/basic-layout/toolkits/middlewares/security;security";
+option go_package = "github.com/origadmin/toolkits/runtime/middlewares";
 
 import "google/protobuf/duration.proto";
 

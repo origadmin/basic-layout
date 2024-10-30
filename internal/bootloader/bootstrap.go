@@ -1,4 +1,4 @@
-package bootstrap
+package bootloader
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/errors"
+	"github.com/origadmin/toolkits/runtime/kratos"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
@@ -22,8 +23,8 @@ import (
 
 var (
 	ProviderSet = wire.NewSet(
-		NewRegistrar,
-		NewDiscovery,
+		kratos.NewRegistrar,
+		kratos.NewDiscovery,
 		wire.Struct(new(InjectorServer), "*"),
 		wire.Struct(new(InjectorClient), "*"),
 	)

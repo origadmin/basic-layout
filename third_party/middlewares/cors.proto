@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package middleware.cors.v1;
 
-option go_package = "origadmin/basic-layout/toolkits/middlewares/cors;cors";
+option go_package = "github.com/origadmin/toolkits/runtime/middlewares";
 
 import "google/protobuf/duration.proto";
 

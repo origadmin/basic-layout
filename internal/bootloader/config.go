@@ -1,75 +1,62 @@
-package bootstrap
+package bootloader
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 
-	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
+	"github.com/origadmin/toolkits/runtime/bootstrap"
+	"github.com/origadmin/toolkits/runtime/config"
+	"github.com/origadmin/toolkits/runtime/kratos"
 	"github.com/origadmin/toolkits/utils/replacer"
 
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/toolkits/oneof/source"
 )
 
-type FileSource struct {
-	Path   string
-	Format string
+type BootFlags struct {
+	bootstrap.Bootstrap
+	bootstrap.Flags
 }
 
-type ConsulSource struct {
-	Address string
-	Scheme  string
+func init() {
+	kratos.RegistryConfig("file", NewFileConfig)
 }
-
-type EnvSource struct {
-	Files  []string
-	Envs   map[string]string
-	Prefix []string
-}
-
-type SourceConfig struct {
-	Type   string
-	File   FileSource
-	Consul ConsulSource
-	Env    EnvSource
-}
-
-func Load(path string, serviceName string) (*configs.Bootstrap, error) {
-	//var s SourceConfig
-	//err := codec.DecodeFromFile(path, s)
-	//if err != nil {
-	//	return nil, err
-	//}
-	sourceConfig := LoadSourceFiles(path)
-	if sourceConfig.Env.Files != nil {
-		envs, err := LoadEnvFiles(sourceConfig.Env.Files...)
-		if err != nil {
-			return nil, err
-		}
-		if sourceConfig.Env.Envs != nil {
-			for k, v := range envs {
-				if _, has := sourceConfig.Env.Envs[k]; !has {
-					envs[k] = v
-				}
-			}
-		} else {
-			sourceConfig.Env.Envs = envs
-		}
+func NewBootFlags(serviceName, version string) BootFlags {
+	return BootFlags{
+		Bootstrap: bootstrap.DefaultBootstrap(),
+		Flags:     bootstrap.NewFlags(serviceName, version),
 	}
-	return LoadBootstrap(serviceName, sourceConfig, nil)
+}
+
+func Load(flags BootFlags, useEnv bool) (*configs.Bootstrap, error) {
+	sourceConfig := LoadSourceFiles(flags.WorkDir, flags.ConfigPath)
+	fmt.Printf("source: %+v\n", sourceConfig)
+	switch sourceConfig.Type {
+	case "file":
+		//sourceConfig.File.Path
+	case "consul":
+		sourceConfig.Consul.Path = filepath.Join("configs", flags.ServiceName, "bootstrap.json")
+	default:
+		return nil, errors.New("invalid config type")
+	}
+
+	return LoadBootstrap(sourceConfig, nil)
 }
 
 // LoadSourceFiles Loads configuration files in various formats from a directory,
 // and parses them into a config.
-func LoadSourceFiles(path string) *SourceConfig {
-	cfg := NewFileSourceConfig(path)
+func LoadSourceFiles(wd, path string) *config.SourceConfig {
+	if !filepath.IsAbs(path) {
+		path = filepath.Join(wd, path)
+	}
 	path, _ = filepath.Abs(path)
+	cfg := config.NewFileConfig(path)
 	stat, err := os.Stat(path)
 	if err != nil {
 		return cfg
@@ -80,58 +67,7 @@ func LoadSourceFiles(path string) *SourceConfig {
 	} else {
 		cfg = loadSourceFromFile(path)
 	}
-
 	return cfg
-}
-
-// sourceFromConfig creates the appropriate config source based on the type.
-func sourceFromConfig(name string, cfg *SourceConfig, l log.Logger) ([]config.Source, error) {
-	var configSource config.Source
-	var err error
-	switch cfg.Type {
-	case "file":
-		if cfg.File.Path == "" {
-			return nil, errors.New("file config is nil")
-		}
-		configSource = file.NewSource(cfg.File.Path)
-		if cfg.File.Format != "" {
-			// todo
-		}
-	case "consul":
-		if cfg.Consul.Address == "" {
-			return nil, errors.New("consul config is nil")
-		}
-		path := source.ConfigPath(name, "bootstrap.json")
-		configSource, err = source.NewSource(path, &configs.Consul{
-			Address: cfg.Consul.Address,
-			Scheme:  cfg.Consul.Scheme,
-		})
-		if err != nil {
-			return nil, errors.Wrap(err, "consul source error")
-		}
-	default:
-		return nil, errors.New("unsupported source type")
-	}
-
-	if configSource == nil {
-		return nil, errors.New("source is nil")
-	}
-	srcs := []config.Source{configSource}
-	if cfg.Env.Envs != nil {
-		srcs = append(srcs, envf.WithEnv(cfg.Env.Envs, cfg.Env.Prefix...))
-	}
-
-	return srcs, nil
-}
-
-// NewFileSourceConfig returns a new SourceConfig for file-based configurations.
-func NewFileSourceConfig(path string) *SourceConfig {
-	return &SourceConfig{
-		Type: "file",
-		File: FileSource{
-			Path: path,
-		},
-	}
 }
 
 // LoadEnvFiles Loads configuration files in various formats from a directory,
@@ -160,7 +96,7 @@ func LoadEnvFiles(paths ...string) (map[string]string, error) {
 	return envs, nil
 }
 
-func FromLocal(name, path string, envs map[string]string, l log.Logger) (*configs.Bootstrap, error) {
+func FromLocal(serviceName, path string, l log.Logger) (*configs.Bootstrap, error) {
 	path, _ = filepath.Abs(path)
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -168,28 +104,38 @@ func FromLocal(name, path string, envs map[string]string, l log.Logger) (*config
 	}
 	log.NewHelper(l).Infof("loading config from %s", path)
 
-	var cfg *SourceConfig
+	var cfg *config.SourceConfig
 	if stat.IsDir() {
 		cfg = loadSourceFromDir(path)
 	} else {
 		cfg = loadSourceFromFile(path)
 	}
 	if cfg == nil {
-		cfg = NewFileSourceConfig(path)
+		cfg = config.NewFileConfig(path)
 	}
 
-	if envs != nil {
-		cfg.Env = EnvSource{
-			Envs: envs,
-		}
+	source, err := kratos.NewConfig(cfg)
+	if err != nil {
+		return nil, err
 	}
 
-	return LoadBootstrap(name, cfg, l)
+	bs := configs.DefaultBootstrap
+	if err := source.Load(); err != nil {
+		return nil, errors.Wrap(err, "load config error")
+	}
+	if err := source.Scan(bs); err != nil {
+		return nil, errors.Wrap(err, "scan config error")
+	}
+	if err := bs.ValidateAll(); err != nil {
+		return nil, errors.Wrap(err, "validate config error")
+	}
+	return bs, nil
+
 }
 
 // loadSourceFromDir loads configuration from a directory.
-func loadSourceFromDir(path string) *SourceConfig {
-	var cfg SourceConfig
+func loadSourceFromDir(path string) *config.SourceConfig {
+	var cfg config.SourceConfig
 	err := filepath.WalkDir(path, func(walkpath string, d os.DirEntry, err error) error {
 		if err != nil {
 			return errors.Wrapf(err, "failed to get config file %s", walkpath)
@@ -213,8 +159,8 @@ func loadSourceFromDir(path string) *SourceConfig {
 }
 
 // loadSourceFromFile loads configuration from a single file.
-func loadSourceFromFile(path string) *SourceConfig {
-	var cfg SourceConfig
+func loadSourceFromFile(path string) *config.SourceConfig {
+	var cfg config.SourceConfig
 	if err := codec.DecodeFromFile(path, &cfg); err != nil {
 		return nil
 	}
@@ -222,19 +168,19 @@ func loadSourceFromFile(path string) *SourceConfig {
 }
 
 // LoadBootConfig returns a new kratos config .
-func LoadBootConfig(serviceName string, cfg *SourceConfig, l log.Logger) (config.Config, error) {
-	srcs, err := sourceFromConfig(serviceName, cfg, l)
-	if err != nil {
-		return nil, err
-	}
-
-	return config.New(config.WithSource(srcs...)), nil
+func LoadBootConfig(flags BootFlags, cfg *config.SourceConfig, l log.Logger) (config.Config, error) {
+	//srcs, err := sourceFromConfig(serviceName, cfg, l)
+	//if err != nil {
+	//	return nil, err
+	//}
+	return kratos.NewConfig(cfg)
 }
 
 // LoadBootstrap Loads configuration files in various formats from a directory,
 // and parses them into a struct.
-func LoadBootstrap(serviceName string, cfg *SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
-	source, err := LoadBootConfig(serviceName, cfg, l)
+func LoadBootstrap(cfg *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
+
+	source, err := kratos.NewConfig(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -260,4 +206,13 @@ func ApplyEnv(content []byte, envs map[string]string) []byte {
 // consul path
 func consulConfigPath(dir, name string) string {
 	return path.Join("configs", dir, name)
+}
+
+func NewFileConfig(ccfg *config.SourceConfig, opts ...config.Option) (config.Config, error) {
+	if ccfg.EnvArgs != nil {
+		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path), envf.WithEnv(ccfg.EnvArgs, ccfg.EnvPrefixes...)))
+	} else {
+		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path)))
+	}
+	return config.New(opts...), nil
 }
