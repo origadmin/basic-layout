@@ -14,10 +14,10 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.30.0
 	github.com/origadmin/slog-kratos v1.0.2
-	github.com/origadmin/toolkits v0.0.80
+	github.com/origadmin/toolkits v0.0.81
 	github.com/origadmin/toolkits/codec v0.0.17
 	github.com/origadmin/toolkits/contrib/config v0.0.8
-	github.com/origadmin/toolkits/runtime v0.0.3
+	github.com/origadmin/toolkits/runtime v0.0.4
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/automaxprocs v1.6.0
@@ -27,6 +27,7 @@ require (
 )
 
 require (
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.1-20240920164238-5a7b106cbb87.1 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect

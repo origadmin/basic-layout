@@ -2,20 +2,68 @@ GOHOSTOS:=$(shell go env GOHOSTOS)
 GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
 
+PROJECT_ORG=OrigAdmin
+THIRD_PARTY_PATH=third_party
+
 ifeq ($(GOHOSTOS), windows)
 	#the `find.exe` is different from `find` in bash/shell.
 	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
 	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
 	#Git_Bash= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
-	Git_Bash=$(subst \,/,$(subst cmd\,bin\bash.exe,$(dir $(shell where git))))
-	INTERNAL_PROTO_FILES=$(shell $(Git_Bash) -c "find internal -name *.proto")
-	TOOLKITS_PROTO_FILES=$(shell $(Git_Bash) -c "find toolkits -name *.proto")
-	API_PROTO_FILES=$(shell $(Git_Bash) -c "find api -name *.proto")
+	#Git_Bash=$(subst \,/,$(subst cmd\,bin\bash.exe,$(dir $(shell where git))))
+	VERSION=$(shell git describe --tags --always)
+	BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
+	HEAD_TAG=$(shell git tag --points-at '${gitHash}')
+	# gitHash Current commit id, same as gitCommit result
+	gitHash = $(shell git rev-parse HEAD)
+
+	# Use PowerShell to find .proto files, convert to relative paths, and replace \ with /
+	INTERNAL_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse internal -Filter *.proto | Resolve-Path -Relative")
+	TOOLKITS_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse toolkits -Filter *.proto | Resolve-Path -Relative")
+	API_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse api -Filter *.proto | Resolve-Path -Relative")
+
+	# Replace \ with /
+	INTERNAL_PROTO_FILES := $(subst \,/, $(INTERNAL_PROTO_FILES))
+	TOOLKITS_PROTO_FILES := $(subst \,/, $(TOOLKITS_PROTO_FILES))
+	API_PROTO_FILES := $(subst \,/, $(API_PROTO_FILES))
+
+	BUILT_DATE = $(shell powershell -Command "Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK'")
+	TREE_STATE = $(shell powershell -Command "if ((git status) -match 'clean') { 'clean' } else { 'dirty' }")
+	TAG = $(shell powershell -Command "if ((git tag --points-at '${gitHash}') -match '^v') { '$(HEAD_TAG)' } else { '${gitHash}' }")
+	# buildDate = $(shell TZ=Asia/Shanghai date +%F\ %T%z | tr 'T' ' ')
+	# same as gitHash previously
+	COMMIT = $(shell git log --pretty=format:'%h' -n 1)
 else
+	VERSION=$(shell git describe --tags --always)
+	BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
+	HEAD_TAG=$(shell git tag --points-at '${gitHash}')
+	# gitHash Current commit id, same as gitCommit result
+	gitHash = $(shell git rev-parse HEAD)
+
 	INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
 	TOOLKITS_PROTO_FILES=$(shell find toolkits -name *.proto)
 	API_PROTO_FILES=$(shell find api -name *.proto)
+
+	BUILT_DATE = $(shell TZ=Asia/Shanghai date +%FT%T%z)
+	TREE_STATE = $(shell if git status | grep -q 'clean'; then echo clean; else echo dirty; fi)
+	TAG = $(shell if git tag --points-at "${gitHash}" | grep -q '^v'; then echo $(HEAD_TAG); else echo ${gitHash}; fi)
+	# buildDate = $(shell TZ=Asia/Shanghai date +%F\ %T%z | tr 'T' ' ')
+	# same as gitHash previously
+	COMMIT = $(shell git log --pretty=format:'%h' -n 1)
 endif
+
+BUILT_BY = $(PROJECT_ORG)
+
+ifeq ($(ENV), release)
+    LDFLAGS = -s -w
+endif
+MODULE_PATH=github.com/origadmin/toolkits/version
+LDFLAGS := -X $(MODULE_PATH).gitTag=$(TAG) \
+           -X $(MODULE_PATH).buildDate=$(BUILT_DATE) \
+           -X $(MODULE_PATH).gitCommit=$(COMMIT) \
+           -X $(MODULE_PATH).gitTreeState=$(TREE_STATE) \
+           -X $(MODULE_PATH).gitBranch=$(BRANCH) \
+           -X $(MODULE_PATH).version=$(VERSION)
 
 .PHONY: init
 # init env
@@ -28,16 +76,26 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
 
+	go install github.com/bufbuild/buf/cmd/buf@latest
+
+	buf export buf.build/bufbuild/protovalidate -o $(THIRD_PARTY_PATH)
+	buf export buf.build/protocolbuffers/wellknowntypes -o $(THIRD_PARTY_PATH)
+	buf export buf.build/googleapis/googleapis -o $(THIRD_PARTY_PATH)
+	buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
+	buf export buf.build/envoyproxy/protoc-gen-validate -o $(THIRD_PARTY_PATH)
+	buf export buf.build/gnostic/gnostic -o $(THIRD_PARTY_PATH)
+	buf export buf.build/origadmin/rpcerr -o $(THIRD_PARTY_PATH)
+	buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
 
 .PHONY: tools
 # generate tools proto or use ./toolkits/generate.go
 tools:
 	protoc --proto_path=./internal \
-		--proto_path=./third_party \
-		--proto_path=./toolkits \
-		--go_out=paths=source_relative:./toolkits \
-		--validate_out=lang=go,paths=source_relative:./toolkits \
-		$(TOOLKITS_PROTO_FILES)
+	--proto_path=./third_party \
+	--proto_path=./toolkits \
+	--go_out=paths=source_relative:./toolkits \
+	--validate_out=lang=go,paths=source_relative:./toolkits \
+	$(TOOLKITS_PROTO_FILES)
 
 .PHONY: config
 # generate internal proto or use ./internal/generate.go
@@ -53,7 +111,7 @@ config:
 # generate api proto or use ./api/generate.go
 api:
 #	protoc --proto_path=./api \
-#	       --proto_path=./third_party \
+#	       --proto_path=$(THIRD_PARTY_PATH) \
 # 	       --go_out=paths=source_relative:./api \
 # 	       --go-http_out=paths=source_relative:./api \
 # 	       --go-grpc_out=paths=source_relative:./api \
@@ -77,7 +135,7 @@ pre:
 .PHONY: build
 # build
 build:
-	mkdir -p dist/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./dist/ ./...
+	go build -ldflags "$(LDFLAGS)" -gcflags=all="-N -l" -o ./dist/ ./...
 
 .PHONY: release
 # release

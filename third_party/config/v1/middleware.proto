@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package config.v1;
+
+option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+
+import "google/protobuf/duration.proto";
+import "config/v1/cors.proto";
+import "config/v1/metrics.proto";
+import "config/v1/logger.proto";
+import "config/v1/security.proto";
+
+message MiddlewareConfig {
+
+  CorsConfig cors = 1 [json_name = "cors"];
+  MetricConfig metric = 2 [json_name = "metric"];
+  LoggerConfig logger = 3 [json_name = "logger"];
+  SecurityConfig security = 4 [json_name = "security"];
+
+  google.protobuf.Duration timeout = 5 [json_name = "timeout"];
+}

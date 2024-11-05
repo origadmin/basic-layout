@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package config.v1;
+
+option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+
+//import "google/protobuf/duration.proto";
+
+// metric config.
+message MetricConfig {
+
+  repeated string includes = 2 [json_name = "includes"];
+
+  string name = 3 [json_name = "name"];
+}

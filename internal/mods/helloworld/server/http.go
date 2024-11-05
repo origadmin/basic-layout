@@ -11,7 +11,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/internal/bootloader"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -38,7 +37,7 @@ func NewHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l lo
 	if c.Middleware == nil {
 		c.Middleware = new(configs.Server_Middleware)
 	}
-	middlewares, err := bootloader.LoadMiddlewares(bs.GetServiceName(), bs, l)
+	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, http.Middleware(middlewares...))
 	}

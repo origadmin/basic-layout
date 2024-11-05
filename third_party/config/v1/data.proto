@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package config.v1;
+
+option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+
+import "google/protobuf/duration.proto";
+
+message DataConfig {
+  // Database
+  message Database {
+    bool debug = 1; // Debugging
+
+    string driver = 2;  // Driver name: mysql, postgresql, mongodb, sqlite......
+    string source = 3;  // Data source (DSN string)
+
+    bool migrate = 10; // Data migration switch
+
+    bool enable_trace = 12; // Link tracking switch
+    bool enable_metrics = 13; // Performance analysis switch
+
+    int32 max_idle_connections = 20; // Maximum number of free connections in the connection pool
+    int32 max_open_connections = 21; // Maximum number of open connections in the connection pool
+    google.protobuf.Duration connection_max_lifetime = 22; // Maximum length of time that the connection can be reused
+  }
+}

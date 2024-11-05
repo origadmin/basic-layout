@@ -4,52 +4,54 @@ package origadmin.configs.api;
 option go_package = "internal/configs;configs";
 
 import "google/protobuf/duration.proto";
-import "validate/validate.proto";
-import "middlewares/logger.proto";
-import "middlewares/metrics.proto";
-import "middlewares/cors.proto";
-import "middlewares/security.proto";
-import "configs/configs.proto";
+//import "buf/validate/validate.proto";
+//import "config/v1/middleware.proto";
+import "config/v1/metrics.proto";
+import "config/v1/cors.proto";
+import "config/v1/security.proto";
+import "config/v1/logger.proto";
+import "config/v1/registry.proto";
+import "config/v1/data.proto";
+import "config/v1/service.proto";
+import "config/v1/source.proto";
 
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
   string crypto_type = 3 [json_name = "crypto_type"];
-  Config config = 4 [json_name = "config"];
-  Server server = 5 [json_name = "server"];
-  Data data = 6 [json_name = "data"];
+  config.v1.SourceConfig source = 4 [json_name = "source"];
+  config.v1.ServiceConfig service = 5 [json_name = "service"];
+  config.v1.DataConfig data = 6 [json_name = "data"];
   Settings settings = 7 [json_name = "settings"];
-  Discovery discovery = 8 [json_name = "discovery"];
+  config.v1.RegistryConfig registry = 8 [json_name = "registry"];
   Middlewares middlewares = 9 [json_name = "middlewares"];
   string id = 99 ;
 }
 
 message Middlewares {
   bool RegisterAsGlobal = 1 [json_name = "register_as_global"];
-  middleware.logger.v1.LoggerConfig logger = 2 [json_name = "logger"];
-  middleware.cors.v1.CorsConfig cors = 3 [json_name = "cors"];
-  middleware.metrics.v1.MetricConfig metrics = 4 [json_name = "metrics"];
-  middleware.traces.v1.SecurityConfig security = 5 [json_name = "security"];
+  config.v1.LoggerConfig logger = 2 [json_name = "logger"];
+  config.v1.CorsConfig cors = 3 [json_name = "cors"];
+  config.v1.MetricConfig metrics = 4 [json_name = "metrics"];
+  config.v1.SecurityConfig security = 5 [json_name = "security"];
 }
 
-message Discovery {
-  string type = 1 [(validate.rules).string = {in: ["none", "consul", "etcd"]}];
-  optional Consul consul = 3;
-  optional Etcd etcd = 4;
-}
+
 
 message Server {
   message Entry{
-    string name = 1;
-    string addr = 2;
-    string network = 3;
+    string name = 1 [json_name = "name"];
+    string addr = 2 [json_name = "addr"];
+    string network = 3 [json_name = "network"];
     string weight = 4;
     optional google.protobuf.Duration timeout = 5 [json_name = "timeout"];
+    bool enable_swagger = 6;
+    bool enable_pprof = 7 ;
   }
 
   message GINS {
-    string network = 1;
-    string addr = 2;
+    string network = 1 [json_name = "network"];
+    string addr = 2 [json_name = "addr"];
     bool use_tls = 3 [json_name = "use_tls"];
     string cert_file = 4 [json_name = "cert_file"];
     string key_file = 5 [json_name = "key_file"];
@@ -62,8 +64,8 @@ message Server {
   }
 
   message HTTP {
-    string network = 1;
-    string addr = 2;
+    string network = 1 [json_name = "network"];
+    string addr = 2 [json_name = "addr"];
     bool use_tls = 3 [json_name = "use_tls"];
     string cert_file = 4 [json_name = "cert_file"];
     string key_file = 5 [json_name = "key_file"];

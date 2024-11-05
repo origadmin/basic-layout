@@ -12,8 +12,6 @@ import (
 	logger "github.com/origadmin/slog-kratos"
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
-
-	"origadmin/basic-layout/internal/bootloader"
 )
 
 // go build -ldflags "-X main.Version=vx.y.z -X main.Name=origadmin.service.v1.helloworld"
@@ -23,11 +21,11 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootloader.BootFlags{}
+	flags = bootstrap.BootFlags{}
 )
 
 func init() {
-	flags = bootloader.NewBootFlags(Name, Version)
+	flags = bootstrap.NewBootFlags(Name, Version)
 	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 }
 
@@ -46,7 +44,7 @@ func main() {
 	)
 
 	fmt.Printf("bootstrap flags: %+v\n", flags)
-	bs, err := bootloader.Load(flags, true)
+	bs, err := bootstrap.Load(flags, true)
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}
@@ -66,7 +64,7 @@ func main() {
 	}
 }
 
-func NewApp(ctx context.Context, injector *bootloader.InjectorServer) *kratos.App {
+func NewApp(ctx context.Context, injector *bootstrap.InjectorServer) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
 		kratos.Name(flags.ServiceName),

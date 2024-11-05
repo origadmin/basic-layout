@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package config.v1;
+
+option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+
+message TraceConfig {
+
+  string name = 2 [json_name = "name"];
+  string endpoint = 3 [json_name = "endpoint"];
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package config.v1;
+
+option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+
+//import "google/protobuf/duration.proto";
+
+// logger config.
+message LoggerConfig {
+
+  string name = 2 [json_name = "name"];
+}

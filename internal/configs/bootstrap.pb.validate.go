@@ -64,11 +64,11 @@ func (m *Bootstrap) validate(all bool) error {
 	// no validation rules for CryptoType
 
 	if all {
-		switch v := interface{}(m.GetConfig()).(type) {
+		switch v := interface{}(m.GetSource()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Config",
+					field:  "Source",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -76,16 +76,16 @@ func (m *Bootstrap) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Config",
+					field:  "Source",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetSource()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return BootstrapValidationError{
-				field:  "Config",
+				field:  "Source",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -93,11 +93,11 @@ func (m *Bootstrap) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetServer()).(type) {
+		switch v := interface{}(m.GetService()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Server",
+					field:  "Service",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -105,16 +105,16 @@ func (m *Bootstrap) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Server",
+					field:  "Service",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetServer()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetService()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return BootstrapValidationError{
-				field:  "Server",
+				field:  "Service",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -180,11 +180,11 @@ func (m *Bootstrap) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetDiscovery()).(type) {
+		switch v := interface{}(m.GetRegistry()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Discovery",
+					field:  "Registry",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -192,16 +192,16 @@ func (m *Bootstrap) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "Discovery",
+					field:  "Registry",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetDiscovery()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetRegistry()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return BootstrapValidationError{
-				field:  "Discovery",
+				field:  "Registry",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -532,188 +532,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MiddlewaresValidationError{}
-
-// Validate checks the field values on Discovery with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Discovery) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Discovery with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DiscoveryMultiError, or nil
-// if none found.
-func (m *Discovery) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Discovery) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if _, ok := _Discovery_Type_InLookup[m.GetType()]; !ok {
-		err := DiscoveryValidationError{
-			field:  "Type",
-			reason: "value must be in list [none consul etcd]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.Consul != nil {
-
-		if all {
-			switch v := interface{}(m.GetConsul()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, DiscoveryValidationError{
-						field:  "Consul",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, DiscoveryValidationError{
-						field:  "Consul",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetConsul()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return DiscoveryValidationError{
-					field:  "Consul",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.Etcd != nil {
-
-		if all {
-			switch v := interface{}(m.GetEtcd()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, DiscoveryValidationError{
-						field:  "Etcd",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, DiscoveryValidationError{
-						field:  "Etcd",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetEtcd()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return DiscoveryValidationError{
-					field:  "Etcd",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if len(errors) > 0 {
-		return DiscoveryMultiError(errors)
-	}
-
-	return nil
-}
-
-// DiscoveryMultiError is an error wrapping multiple validation errors returned
-// by Discovery.ValidateAll() if the designated constraints aren't met.
-type DiscoveryMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DiscoveryMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DiscoveryMultiError) AllErrors() []error { return m }
-
-// DiscoveryValidationError is the validation error returned by
-// Discovery.Validate if the designated constraints aren't met.
-type DiscoveryValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DiscoveryValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DiscoveryValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DiscoveryValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DiscoveryValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DiscoveryValidationError) ErrorName() string { return "DiscoveryValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DiscoveryValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDiscovery.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DiscoveryValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DiscoveryValidationError{}
-
-var _Discovery_Type_InLookup = map[string]struct{}{
-	"none":   {},
-	"consul": {},
-	"etcd":   {},
-}
 
 // Validate checks the field values on Server with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -1246,6 +1064,10 @@ func (m *Server_Entry) validate(all bool) error {
 	// no validation rules for Network
 
 	// no validation rules for Weight
+
+	// no validation rules for EnableSwagger
+
+	// no validation rules for EnablePprof
 
 	if m.Timeout != nil {
 

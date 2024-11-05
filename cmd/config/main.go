@@ -10,8 +10,6 @@ import (
 	logger "github.com/origadmin/slog-kratos"
 	"github.com/origadmin/toolkits/errors"
 	_ "go.uber.org/automaxprocs"
-
-	"origadmin/basic-layout/internal/bootloader"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -21,13 +19,13 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootloader.BootFlags{}
+	flags = bootstrap.BootFlags{}
 	// remote is the remote of bootstrap flags.
 	output = "resources"
 )
 
 func init() {
-	flags = bootloader.NewBootFlags(Name, Version)
+	flags = bootstrap.NewBootFlags(Name, Version)
 	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 	flag.StringVar(&output, "o", "", "output a bootstrap config from local config, eg: -o bootstrap.toml")
 }
@@ -47,12 +45,12 @@ func main() {
 	)
 	flags.ConfigPath = filepath.Join(flags.WorkDir, flags.ConfigPath, "local.toml")
 	//env, _ := bootstrap.LoadEnv(flags.EnvPath)
-	bs, err := bootloader.Load(flags, true)
+	bs, err := bootstrap.Load(flags, true)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
 	fmt.Printf("bootstrap: %v", bs)
-	err = bootloader.SyncConfig(bs.GetServiceName(), bs, output)
+	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, output)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
