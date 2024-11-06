@@ -1,19 +1,18 @@
 syntax = "proto3";
 package origadmin.configs.api;
 
-option go_package = "internal/configs;configs";
-
-import "google/protobuf/duration.proto";
-//import "buf/validate/validate.proto";
-//import "config/v1/middleware.proto";
-import "config/v1/metrics.proto";
 import "config/v1/cors.proto";
-import "config/v1/security.proto";
-import "config/v1/logger.proto";
-import "config/v1/registry.proto";
 import "config/v1/data.proto";
+import "config/v1/logger.proto";
+import "config/v1/metrics.proto";
+import "config/v1/middleware.proto";
+import "config/v1/registry.proto";
+import "config/v1/security.proto";
 import "config/v1/service.proto";
 import "config/v1/source.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "internal/configs;configs";
 
 message Bootstrap {
   string service_name = 1 [json_name = "service_name"];
@@ -29,7 +28,7 @@ message Bootstrap {
 }
 
 message Middlewares {
-  bool RegisterAsGlobal = 1 [json_name = "register_as_global"];
+  bool register_as_global = 1 [json_name = "register_as_global"];
   config.v1.LoggerConfig logger = 2 [json_name = "logger"];
   config.v1.CorsConfig cors = 3 [json_name = "cors"];
   config.v1.MetricConfig metrics = 4 [json_name = "metrics"];

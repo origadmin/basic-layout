@@ -1,4 +1,4 @@
-package helloworld
+package errors
 
 import (
 	"strings"

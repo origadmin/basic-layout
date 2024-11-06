@@ -338,7 +338,7 @@ func (m *Middlewares) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RegisterAsGlobal
+	// no validation rules for register_as_global
 
 	if all {
 		switch v := interface{}(m.GetLogger()).(type) {

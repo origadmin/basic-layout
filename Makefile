@@ -81,11 +81,12 @@ init:
 	buf export buf.build/bufbuild/protovalidate -o $(THIRD_PARTY_PATH)
 	buf export buf.build/protocolbuffers/wellknowntypes -o $(THIRD_PARTY_PATH)
 	buf export buf.build/googleapis/googleapis -o $(THIRD_PARTY_PATH)
-	buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
 	buf export buf.build/envoyproxy/protoc-gen-validate -o $(THIRD_PARTY_PATH)
 	buf export buf.build/gnostic/gnostic -o $(THIRD_PARTY_PATH)
+	buf export buf.build/kratos/apis -o $(THIRD_PARTY_PATH)
 	buf export buf.build/origadmin/rpcerr -o $(THIRD_PARTY_PATH)
 	buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
+
 
 .PHONY: tools
 # generate tools proto or use ./toolkits/generate.go

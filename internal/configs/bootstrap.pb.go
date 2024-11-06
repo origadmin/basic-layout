@@ -144,7 +144,7 @@ type Middlewares struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RegisterAsGlobal bool                   `protobuf:"varint,1,opt,name=RegisterAsGlobal,json=register_as_global,proto3" json:"RegisterAsGlobal,omitempty"`
+	RegisterAsGlobal bool                   `protobuf:"varint,1,opt,name=register_as_global,json=register_as_global,proto3" json:"register_as_global,omitempty"`
 	Logger           *config.LoggerConfig   `protobuf:"bytes,2,opt,name=logger,proto3" json:"logger,omitempty"`
 	Cors             *config.CorsConfig     `protobuf:"bytes,3,opt,name=cors,proto3" json:"cors,omitempty"`
 	Metrics          *config.MetricConfig   `protobuf:"bytes,4,opt,name=metrics,proto3" json:"metrics,omitempty"`

@@ -1,0 +1,32 @@
+version: v2
+
+managed:
+  enabled: true
+  #  override:
+  #    - file_option: go_package_prefix
+  #      value: github.com/origadmin/toolkits/runtime
+plugins:
+  - local: protoc-gen-openapi
+    out: api/v1/services
+    opt: naming=proto,fq_schema_naming=true,default_response=false
+  - local: protoc-gen-go
+    out: api/v1/services
+    opt: paths=source_relative
+  - local: protoc-gen-validate
+    out: api/v1/services
+    opt:
+      - paths=source_relative
+      - lang=go
+  - local: protoc-gen-go-errors
+    out: api/v1/services
+    opt: paths=source_relative
+  - local: protoc-gen-go-http
+    out: api/v1/services
+    opt: paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: api/v1/services
+    opt: paths=source_relative
+  - local: protoc-gen-go-gins
+    out: api/v1/services
+    opt: paths=source_relative
+clean: true
