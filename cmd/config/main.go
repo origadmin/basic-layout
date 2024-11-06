@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -10,6 +9,8 @@ import (
 	logger "github.com/origadmin/slog-kratos"
 	"github.com/origadmin/toolkits/errors"
 	_ "go.uber.org/automaxprocs"
+
+	"origadmin/basic-layout/internal/bootstrap"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -34,7 +35,7 @@ func main() {
 	flag.Parse()
 
 	flags.Metadata = make(map[string]string)
-	_ = log.With(logger.NewLogger(),
+	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.ID,
@@ -43,13 +44,14 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	log.SetLogger(l)
 	flags.ConfigPath = filepath.Join(flags.WorkDir, flags.ConfigPath, "local.toml")
 	//env, _ := bootstrap.LoadEnv(flags.EnvPath)
-	bs, err := bootstrap.Load(flags, true)
+	bs, err := bootstrap.FromFlags(flags, l)
 	if err != nil {
 		panic(errors.WithStack(err))
 	}
-	fmt.Printf("bootstrap: %v", bs)
+	log.Infof("bootstrap: %+v", bootstrap.PrintString(bs))
 	err = bootstrap.SyncConfig(bs.GetServiceName(), bs, output)
 	if err != nil {
 		panic(errors.WithStack(err))

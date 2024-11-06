@@ -221,6 +221,8 @@ github.com/origadmin/toolkits/codec v0.0.17 h1:UFmbSUd+Tv0NNNKeo4EiZD5Ak52tEsNR0
 github.com/origadmin/toolkits/codec v0.0.17/go.mod h1:3L457OP48ztyzPezg+aA9YvyGyzQw3W1jdK1Mymqux4=
 github.com/origadmin/toolkits/contrib/config v0.0.8 h1:5/isudmnn1juu+HeJ+j9Ckh7g+xz3BL+E9GUSgOBf00=
 github.com/origadmin/toolkits/contrib/config v0.0.8/go.mod h1:5pfIM7eHA0nZSnieyXrmk9SqrgzDRDtQste2biUhPOA=
+github.com/origadmin/toolkits/contrib/consul v0.0.3 h1:CzTXjSBCGHP7RVcwwseHHE8N+wldwkIhHKAdsxQFT6k=
+github.com/origadmin/toolkits/contrib/consul v0.0.3/go.mod h1:baydbhUJTkbxYeXoGfl7hF6AT+W4GJ/Sk6RDQfBxneQ=
 github.com/origadmin/toolkits/runtime v0.0.4 h1:lYvD3wsJjXXQShh6ETDc2VhSg8eOyREIbbsRT1E06ok=
 github.com/origadmin/toolkits/runtime v0.0.4/go.mod h1:1PgsZzhUw4KugWhbWxdJQE0V2FoWm4fcStO627I0bOY=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=

@@ -17,7 +17,7 @@ extend google.protobuf.MessageOptions {
 }
 
 // The greeting service definition.
-service GreeterService {
+service GreeterAPI {
   // SayHello is a get method
   rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {
     option (google.api.http) = {

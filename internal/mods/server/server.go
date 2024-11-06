@@ -7,10 +7,12 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
+	"github.com/origadmin/toolkits/runtime/config"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
+	"origadmin/basic-layout/toolkits/errors"
 )
 
 // ProviderSet is server providers.
@@ -22,9 +24,12 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 			recovery.Recovery(),
 		),
 	}
-	c := bs.Server
+	c := bs.Service
+	if c == nil {
+		c = new(config.ServiceConfig)
+	}
 	if c.Entry == nil {
-		c.Entry = new(configs.Server_Entry)
+		c.Entry = new(config.ServiceConfig_Entry)
 	}
 	if c.Entry.Network != "" {
 		opts = append(opts, gins.Network(c.Entry.Network))
@@ -35,11 +40,11 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 	if c.Entry.Timeout != nil {
 		opts = append(opts, gins.Timeout(c.Entry.Timeout.AsDuration()))
 	}
-	if c.Middleware == nil {
-		c.Middleware = new(configs.Server_Middleware)
-	}
+	//if c.Middleware == nil {
+	//	c.Middleware = new(configs.Server_Middleware)
+	//}
 
-	middlewares, err := bootloader.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, gins.Middleware(middlewares...))
 	}
@@ -59,7 +64,7 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 			recovery.Recovery(),
 		),
 		http.ErrorEncoder(func(w http.ResponseWriter, r *http.Request, err error) {
-			se := helloworld.ToHttpError(err)
+			se := errors.ToHttpError(err)
 			codec, _ := http.CodecForRequest(r, "Accept")
 			body, err := codec.Marshal(se)
 			if err != nil {
@@ -71,9 +76,12 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 			_, _ = w.Write(body)
 		}),
 	}
-	c := bs.Server
+	c := bs.Service
+	if c == nil {
+		c = new(config.ServiceConfig)
+	}
 	if c.Http == nil {
-		c.Http = new(configs.Server_HTTP)
+		c.Http = new(config.ServiceConfig_HTTP)
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))
@@ -84,10 +92,10 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
-	if c.Middleware == nil {
-		c.Middleware = new(configs.Server_Middleware)
-	}
-	middlewares, err := bootloader.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	//if c.Middleware == nil {
+	//	c.Middleware = new(configs.Server_Middleware)
+	//}
+	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, http.Middleware(middlewares...))
 	}

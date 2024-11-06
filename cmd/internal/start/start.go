@@ -16,8 +16,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
+	"github.com/origadmin/toolkits/errors"
 	"github.com/spf13/cobra"
 
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/toolkits/utils"
 )
 
@@ -35,7 +37,7 @@ var (
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
 	// flags are the bootstrap flags.
-	flags = bootloader.Flags{}
+	flags = bootstrap.BootFlags{}
 )
 
 var cmd = &cobra.Command{
@@ -45,7 +47,7 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	flags = bootloader.NewFlags(Name, Version)
+	flags = bootstrap.NewBootFlags(Name, Version)
 }
 
 // Cmd The function defines a CLI command to start a server with various flags and options, including the
@@ -53,7 +55,7 @@ func init() {
 func Cmd() *cobra.Command {
 	cmd.Flags().BoolP(startRandom, "r", false, "start with random password")
 	cmd.Flags().StringP(startWorkDir, "d", ".", "working directory")
-	cmd.Flags().StringP(startConfig, "c", "resources",
+	cmd.Flags().StringP(startConfig, "c", "bootstrap.toml",
 		"runtime configuration files or directory (relative to workdir, multiple separated by commas)")
 	cmd.Flags().StringP(startStatic, "s", "", "static files directory")
 	cmd.Flags().Bool(startDaemon, false, "run as a daemon")
@@ -66,25 +68,35 @@ func startRun(cmd *cobra.Command, args []string) error {
 	flags.ConfigPath, _ = cmd.Flags().GetString(startConfig)
 	//random, _ := cmd.Flags().GetBool(startRandom)
 
-	flags.MetaData = make(map[string]string)
+	flags.Metadata = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", flags.ID,
-		"service.name", flags.Name,
+		"service.name", flags.ServiceName,
 		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 	log.SetLogger(l)
-	path := filepath.Join(flags.WorkDir, flags.ConfigPath)
+	//path := filepath.Join(flags.WorkDir, flags.ConfigPath)
 	//envpath := filepath.Join(flags.WorkDir, flags.EnvPath)
-	log.Infow(startWorkDir, flags.WorkDir, startStatic, staticDir, startConfig, path)
+	log.Infow("msg", "start info", startWorkDir, flags.WorkDir, startStatic, staticDir, startConfig, flags.ConfigPath)
 	//env, _ := bootstrap.LoadEnv(envpath)
-	bs, err := bootloader.FromLocal(flags.Name, path, nil, l)
+	//bs, err := bootstrap.FromLocalPath(flags.ServiceName, path, l)
+	//if err != nil {
+	//	return errors.Wrap(err, "load config error")
+	//}
+	src := bootstrap.LoadSourceFiles(flags.WorkDir, flags.ConfigPath)
+	bs, err := bootstrap.FromRemote(flags.ServiceName, src)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "load config error")
 	}
+	if bs == nil {
+		return fmt.Errorf("bootstrap config not found")
+	}
+
+	log.Infof("bootstrap: %+v", bootstrap.PrintString(bs))
 
 	if daemon, _ := cmd.Flags().GetBool("daemon"); daemon {
 		bin, err := filepath.Abs(os.Args[0])
@@ -106,22 +118,11 @@ func startRun(cmd *cobra.Command, args []string) error {
 		}
 
 		pid := command.Process.Pid
-		//err = os.WriteFile(
-		//	fmt.Sprintf("%s.lock", utils.ToLower(cmd)),
-		//	[]byte(fmt.Sprintf("%d", pid)),
-		//	0o600)
-		//if err != nil {
-		//	log.Errorf("failed to write pid file: %s \n", err.Error())
-		//}
 		log.Errorf("service %s daemon thread started with pid %d \n", bs.ServiceName, pid)
 		return nil
 	}
 	lockfile := fmt.Sprintf("%s.lock", utils.ToLower(cmd))
-	err = os.WriteFile(
-		lockfile,
-		[]byte(fmt.Sprintf("%d", os.Getpid())),
-		0o600)
-	if err == nil {
+	if err = os.WriteFile(lockfile, []byte(fmt.Sprintf("%d", os.Getpid())), 0o600); err == nil {
 		defer os.Remove(lockfile)
 	}
 	//info to ctx
@@ -137,10 +138,10 @@ func startRun(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func NewApp(ctx context.Context, injector *bootloader.InjectorClient) *kratos.App {
+func NewApp(ctx context.Context, injector *bootstrap.InjectorClient) *kratos.App {
 	opts := []kratos.Option{
 		kratos.ID(flags.ID),
-		kratos.Name(flags.Name),
+		kratos.Name(flags.ServiceName),
 		kratos.Version(flags.Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),
@@ -150,7 +151,7 @@ func NewApp(ctx context.Context, injector *bootloader.InjectorClient) *kratos.Ap
 		//kratos.Server(injector.ServerGINS),
 	}
 
-	err := bootloader.InjectorGinServer(injector)
+	err := bootstrap.InjectorGinServer(injector)
 	if err != nil {
 		panic(err)
 	}

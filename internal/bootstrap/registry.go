@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/origadmin/toolkits/runtime/kratos"
 
@@ -9,16 +10,26 @@ import (
 
 // NewRegistrar creates a new registrar.
 func NewRegistrar(bootstrap *configs.Bootstrap) registry.Registrar {
+	if bootstrap == nil || bootstrap.Registry == nil {
+		log.Infof("no registry config")
+		return nil
+	}
 	registrar, err := kratos.NewRegistrar(bootstrap.Registry)
 	if err != nil {
+		log.Errorf("new registrar failed: %v", err)
 		return nil
 	}
 	return registrar
 }
 
 func NewDiscovery(bootstrap *configs.Bootstrap) registry.Discovery {
+	if bootstrap == nil || bootstrap.Registry == nil {
+		log.Infof("no registry config")
+		return nil
+	}
 	discovery, err := kratos.NewDiscovery(bootstrap.Registry)
 	if err != nil {
+		log.Errorf("new discovery failed: %v", err)
 		return nil
 	}
 	return discovery

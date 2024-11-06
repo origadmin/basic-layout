@@ -13,7 +13,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime/kratos"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
@@ -23,8 +22,8 @@ import (
 
 var (
 	ProviderSet = wire.NewSet(
-		kratos.NewRegistrar,
-		kratos.NewDiscovery,
+		NewRegistrar,
+		NewDiscovery,
 		wire.Struct(new(InjectorServer), "*"),
 		wire.Struct(new(InjectorClient), "*"),
 	)
@@ -36,7 +35,7 @@ type InjectorClient struct {
 	Discovery     registry.Discovery
 	ServerGINS    *gins.Server
 	ServerHTTP    *http.Server
-	GreeterServer helloworld.GreeterServer
+	GreeterServer helloworld.GreeterAPIServer
 }
 
 type InjectorServer struct {
@@ -72,7 +71,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 	if err != nil {
 		return err
 	}
-	gClient := helloworld.NewGreeterClient(conn)
+	gClient := helloworld.NewGreeterAPIClient(conn)
 	// new http client
 	hConn, err := http.NewClient(
 		context.Background(),
@@ -86,14 +85,14 @@ func InjectorGinServer(injector *InjectorClient) error {
 	if err != nil {
 		return err
 	}
-	hClient := helloworld.NewGreeterHTTPClient(hConn)
+	hClient := helloworld.NewGreeterAPIHTTPClient(hConn)
 	grpcClient := service.NewGreeterServer(gClient)
 	httpClient := service.NewGreeterHTTPServer(hClient)
 	// add _ to avoid unused
 	_ = grpcClient
 	_ = httpClient
-	helloworld.RegisterGreeterGINServer(injector.ServerGINS, httpClient)
-	helloworld.RegisterGreeterHTTPServer(injector.ServerHTTP, httpClient)
+	helloworld.RegisterGreeterAPIGINServer(injector.ServerGINS, httpClient)
+	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, httpClient)
 	//}
 
 	return nil

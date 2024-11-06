@@ -49,7 +49,7 @@ func DefaultBootstrap() *Bootstrap {
 			},
 			Gins: &config.ServiceConfig_GINS{
 				Network:         "tcp",
-				Addr:            "${gins_address=0.0.0.0:8100}",
+				Addr:            "${gins_address:0.0.0.0:8100}",
 				UseTls:          false,
 				CertFile:        "",
 				KeyFile:         "",
@@ -61,7 +61,7 @@ func DefaultBootstrap() *Bootstrap {
 			},
 			Http: &config.ServiceConfig_HTTP{
 				Network:         "tcp",
-				Addr:            "${http_address=0.0.0.0:8200}",
+				Addr:            "${http_address:0.0.0.0:8200}",
 				UseTls:          false,
 				CertFile:        "",
 				KeyFile:         "",
@@ -73,7 +73,7 @@ func DefaultBootstrap() *Bootstrap {
 			},
 			Grpc: &config.ServiceConfig_GRPC{
 				Network:         "tcp",
-				Addr:            "${grpc_address=0.0.0.0:8300}",
+				Addr:            "${grpc_address:0.0.0.0:8300}",
 				UseTls:          false,
 				CertFile:        "",
 				KeyFile:         "",
@@ -83,13 +83,13 @@ func DefaultBootstrap() *Bootstrap {
 				WriteTimeout:    durationpb.New(3 * time.Minute),
 				IdleTimeout:     durationpb.New(3 * time.Minute),
 			},
-			Host: "${host=127.0.0.1}",
+			Host: "${host:127.0.0.1}",
 		},
 		Data: &config.DataConfig{},
-		Source: &config.SourceConfig{
-			Type: "file",
-			Consul: &config.SourceConfig_Consul{
-				Address: "${consul_address=127.0.0.1:8500}",
+		Registry: &config.RegistryConfig{
+			Type: "consul",
+			Consul: &config.RegistryConfig_Consul{
+				Address: "${consul_address:127.0.0.1:8500}",
 				Scheme:  "http",
 			},
 		},

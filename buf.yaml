@@ -9,8 +9,11 @@ lint:
   use:
     - STANDARD
   except:
+    - ENUM_VALUE_PREFIX
+    - ENUM_PASCAL_CASE
     - PACKAGE_VERSION_SUFFIX
     - PACKAGE_DIRECTORY_MATCH
+  service_suffix: API
 breaking:
   use:
     - FILE

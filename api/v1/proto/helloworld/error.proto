@@ -8,8 +8,8 @@ option go_package = "api/v1/services/helloworld;helloworld";
 option java_multiple_files = true;
 option java_package = "com.origadmin.api.v1.services.helloworld";
 
-enum HelloWorldErrorReason {
+enum HELLO_WORLD_ERROR_REASON {
   option (errors.default_code) = 500;
-  HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED = 0;
-  HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND = 1;
+  GREETER_UNSPECIFIED = 0;
+  USER_NOT_FOUND = 1;
 }

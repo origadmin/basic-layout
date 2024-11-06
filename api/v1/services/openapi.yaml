@@ -3,16 +3,16 @@
 
 openapi: 3.0.3
 info:
-    title: GreeterService API
+    title: GreeterAPI API
     description: The greeting service definition.
     version: 0.0.1
 paths:
     /api/v1/greeter:
         get:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: ListGreeter lists Greeters
-            operationId: GreeterService_ListGreeter
+            operationId: GreeterAPI_ListGreeter
             parameters:
                 - name: current
                   in: query
@@ -40,9 +40,9 @@ paths:
                                 $ref: '#/components/schemas/api.v1.services.helloworld.ListGreeterResponse'
         post:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: CreateGreeter creates a new Greeter
-            operationId: GreeterService_CreateGreeter
+            operationId: GreeterAPI_CreateGreeter
             requestBody:
                 content:
                     application/json:
@@ -59,9 +59,9 @@ paths:
     /api/v1/greeter/{id}:
         get:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: GetGreeter gets a Greeter
-            operationId: GreeterService_GetGreeter
+            operationId: GreeterAPI_GetGreeter
             parameters:
                 - name: id
                   in: path
@@ -77,9 +77,9 @@ paths:
                                 $ref: '#/components/schemas/api.v1.services.helloworld.GetGreeterResponse'
         put:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: UpdateGreeter updates a Greeter
-            operationId: GreeterService_UpdateGreeter
+            operationId: GreeterAPI_UpdateGreeter
             parameters:
                 - name: id
                   in: path
@@ -101,9 +101,9 @@ paths:
                                 $ref: '#/components/schemas/api.v1.services.helloworld.UpdateGreeterResponse'
         delete:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: DeleteGreeter deletes a Greeter
-            operationId: GreeterService_DeleteGreeter
+            operationId: GreeterAPI_DeleteGreeter
             parameters:
                 - name: id
                   in: path
@@ -120,9 +120,9 @@ paths:
     /api/v1/greeter/{id}/hello:
         get:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: SayHello is a get method
-            operationId: GreeterService_SayHello
+            operationId: GreeterAPI_SayHello
             parameters:
                 - name: id
                   in: path
@@ -150,9 +150,9 @@ paths:
                                 $ref: '#/components/schemas/api.v1.services.helloworld.SayHelloResponse'
         post:
             tags:
-                - GreeterService
+                - GreeterAPI
             description: PostHello is a post method
-            operationId: GreeterService_PostHello
+            operationId: GreeterAPI_PostHello
             parameters:
                 - name: id
                   in: path
@@ -250,4 +250,4 @@ components:
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
 tags:
-    - name: GreeterService
+    - name: GreeterAPI

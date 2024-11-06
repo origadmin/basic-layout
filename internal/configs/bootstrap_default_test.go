@@ -22,14 +22,14 @@ func TestSaveConf(t *testing.T) {
 			name: "test",
 			args: args{
 				path: "test.toml",
-				conf: DefaultBootstrap,
+				conf: DefaultBootstrap(),
 			},
 		},
 		{
 			name: "test",
 			args: args{
 				path: "test.yml",
-				conf: DefaultBootstrap,
+				conf: DefaultBootstrap(),
 			},
 		},
 	}
@@ -43,7 +43,7 @@ func TestSaveConf(t *testing.T) {
 			EmitUnpopulated: true,
 			Indent:          " ",
 		}
-		bs, _ := opt.Marshal(DefaultBootstrap)
+		bs, _ := opt.Marshal(DefaultBootstrap())
 		_ = os.WriteFile("test.json", bs, os.ModePerm)
 	}
 }
@@ -63,7 +63,7 @@ func TestLoadConf(t *testing.T) {
 			args: args{
 				path: "test.toml",
 			},
-			want:    DefaultBootstrap,
+			want:    DefaultBootstrap(),
 			wantErr: false,
 		},
 		{
@@ -71,7 +71,7 @@ func TestLoadConf(t *testing.T) {
 			args: args{
 				path: "test.json",
 			},
-			want:    DefaultBootstrap,
+			want:    DefaultBootstrap(),
 			wantErr: false,
 		},
 	}

@@ -11,26 +11,26 @@ import (
 // is compatible with the kratos package it is being compiled against.
 const _ = errors.SupportPackageIsVersion1
 
-func IsHelloWorldErrorReasonGreeterUnspecified(err error) bool {
+func IsGreeterUnspecified(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == HelloWorldErrorReason_HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String() && e.Code == 500
+	return e.Reason == HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String() && e.Code == 500
 }
 
-func ErrorHelloWorldErrorReasonGreeterUnspecified(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, HelloWorldErrorReason_HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
+func ErrorGreeterUnspecified(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
 }
 
-func IsHelloWorldErrorReasonUserNotFound(err error) bool {
+func IsUserNotFound(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == HelloWorldErrorReason_HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String() && e.Code == 500
+	return e.Reason == HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String() && e.Code == 500
 }
 
-func ErrorHelloWorldErrorReasonUserNotFound(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, HelloWorldErrorReason_HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), fmt.Sprintf(format, args...))
+func ErrorUserNotFound(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), fmt.Sprintf(format, args...))
 }

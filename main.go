@@ -9,6 +9,8 @@ import (
 	"os"
 
 	goversion "github.com/caarlos0/go-version"
+	_ "github.com/origadmin/toolkits/contrib/consul/config"
+	_ "github.com/origadmin/toolkits/contrib/consul/registry"
 	"github.com/spf13/cobra"
 
 	"origadmin/basic-layout/cmd"
@@ -47,7 +49,7 @@ func init() {
 	rootCmd.Version = goinfo.String()
 }
 
-// @title						OrigAdmin Backend API
+// @title					OrigAdmin Backend API
 // @version					v1.0.0
 // @description				A distributed backend management system with a focus on scalability, security, and flexibility.
 // @contact.name				OrigAdmin

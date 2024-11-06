@@ -2,12 +2,12 @@ package bootstrap
 
 import (
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/origadmin/toolkits/codec"
+	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/runtime/bootstrap"
@@ -16,6 +16,7 @@ import (
 	"github.com/origadmin/toolkits/utils/replacer"
 
 	"origadmin/basic-layout/internal/configs"
+	"origadmin/basic-layout/toolkits/oneof/source"
 )
 
 type BootFlags struct {
@@ -38,10 +39,7 @@ func NewBootFlags(serviceName, version string) BootFlags {
 // LoadSourceFiles Loads configuration files in various formats from a directory,
 // and parses them into a config.
 func LoadSourceFiles(wd, path string) *Config {
-	if !filepath.IsAbs(path) {
-		path = filepath.Join(wd, path)
-	}
-	path, _ = filepath.Abs(path)
+	path = WorkPath(wd, path)
 	cfg := NewFileSource(path)
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -91,23 +89,23 @@ func FromRemote(serviceName string, source *Config) (*configs.Bootstrap, error) 
 	default:
 
 	}
-	return nil, errors.New("invalid config type")
+	return nil, errors.Errorf("unsupported config type: %s", source.Type)
 }
 
-func FromConsul(serviceName string, source *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
-	if source.Consul == nil {
+func FromConsul(serviceName string, cfg *Config, l log.Logger) (*configs.Bootstrap, error) {
+	if cfg.Consul == nil {
 		return nil, errors.New("invalid config file")
 	}
-	source.Consul.Path = filepath.Join("configs", serviceName, "bootstrap.json")
-	return LoadBootstrap(source, l)
+	cfg.Consul.Path = source.ConfigPath(serviceName, "bootstrap.json")
+	return LoadBootstrap(cfg, l)
 }
 
-func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
-	if source.File == nil {
+func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
+	path := WorkPath(flags.WorkDir, flags.ConfigPath)
+	if path == "" {
 		return nil, errors.New("invalid config file")
 	}
 
-	path, _ := filepath.Abs(source.File.Path)
 	stat, err := os.Stat(path)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to state file %s", path)
@@ -123,7 +121,35 @@ func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*
 	if cfg == nil {
 		cfg = NewFileSource(path)
 	}
-	return LoadBootstrap(cfg, l)
+	return LoadBootstrap(PathToSource(cfg, flags.ServiceName), l)
+}
+
+func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
+	if source.File == nil {
+		return nil, errors.New("invalid config file")
+	}
+
+	path := WorkPath("", source.File.Path)
+	stat, err := os.Stat(path)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to state file %s", path)
+	}
+	log.NewHelper(l).Infof("loading config from %s", path)
+
+	var cfg *config.SourceConfig
+	if stat.IsDir() {
+		cfg = loadSourceFromDir(path)
+	} else {
+		cfg = loadSourceFromFile(path)
+	}
+	if cfg == nil {
+		cfg = NewFileSource(path)
+	}
+	return LoadBootstrap(PathToSource(cfg, serviceName), l)
+}
+
+func FromLocalPath(serviceName string, path string, l log.Logger) (*configs.Bootstrap, error) {
+	return FromLocal(serviceName, NewFileSource(path), l)
 }
 
 // loadSourceFromDir loads configuration from a directory.
@@ -165,8 +191,9 @@ func loadSourceFromFile(path string) *config.SourceConfig {
 func LoadBootstrap(cfg *Config, l log.Logger) (*configs.Bootstrap, error) {
 	source, err := kratos.NewConfig(cfg)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "new kratos config error")
 	}
+	log.Infof("load bootstrap config type: %s, values: %+v", cfg.Type, PrintString(cfg))
 	bs := configs.DefaultBootstrap()
 	if err := source.Load(); err != nil {
 		return nil, errors.Wrap(err, "load config error")
@@ -185,11 +212,6 @@ func ApplyEnv(content []byte, envs map[string]string) []byte {
 	return r.Replace(content, envs)
 }
 
-// consul path
-func consulConfigPath(dir, name string) string {
-	return path.Join("configs", dir, name)
-}
-
 func NewFileConfig(ccfg *config.SourceConfig, opts ...config.Option) (config.Config, error) {
 	if ccfg.EnvArgs != nil {
 		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path), envf.WithEnv(ccfg.EnvArgs, ccfg.EnvPrefixes...)))
@@ -206,4 +228,36 @@ func NewFileSource(path string) *Config {
 			Path: path,
 		},
 	}
+}
+
+func WorkPath(wd, path string) string {
+	if wd != "" && !filepath.IsAbs(path) {
+		path = filepath.Join(wd, path)
+	}
+	path, _ = filepath.Abs(path)
+	return path
+}
+
+func PrintString(v any) string {
+	bytes, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
+}
+
+func PathToSource(cfg *Config, serviceName string) *Config {
+	switch cfg.Type {
+	case "file":
+		cfg.File.Path = WorkPath("", cfg.File.Path)
+	case "consul":
+		cfg.Consul.Path = source.ConfigPath(serviceName, "bootstrap.json")
+	//case "etcd":
+	//	return source.ConfigPath(serviceName, "bootstrap.json")
+	//default:
+	//	return source.ConfigPath(serviceName, "bootstrap.json")
+	default:
+
+	}
+	return cfg
 }

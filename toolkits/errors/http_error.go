@@ -6,11 +6,13 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/origadmin/toolkits/errors/httperr"
 	"github.com/origadmin/toolkits/errors/rpcerr"
+
+	"origadmin/basic-layout/api/v1/services/helloworld"
 )
 
 // ErrorHTTP returns an error with the given reason, code, and message.
 // It is also used id for display the error message at the client with i18n support.
-func ErrorHTTP(reason HelloWorldErrorReason, code int32, msg string) *httperr.Error {
+func ErrorHTTP(reason helloworld.HELLO_WORLD_ERROR_REASON, code int32, msg string) *httperr.Error {
 	id := "http.response.status." + strings.ToLower(reason.String())
 	return &httperr.Error{
 		ID:     id,
@@ -19,7 +21,7 @@ func ErrorHTTP(reason HelloWorldErrorReason, code int32, msg string) *httperr.Er
 	}
 }
 
-func ErrorGRPC(reason HelloWorldErrorReason) *rpcerr.Error {
+func ErrorGRPC(reason helloworld.HELLO_WORLD_ERROR_REASON) *rpcerr.Error {
 	id := "grpc.response.status." + strings.ToLower(reason.String())
 	return &rpcerr.Error{
 		Id:     id,

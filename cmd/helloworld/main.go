@@ -12,6 +12,8 @@ import (
 	logger "github.com/origadmin/slog-kratos"
 	_ "go.uber.org/automaxprocs"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	"origadmin/basic-layout/internal/bootstrap"
 )
 
 // go build -ldflags "-X main.Version=vx.y.z -X main.Name=origadmin.service.v1.helloworld"
@@ -42,9 +44,9 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
-
+	log.SetLogger(l)
 	fmt.Printf("bootstrap flags: %+v\n", flags)
-	bs, err := bootstrap.Load(flags, true)
+	bs, err := bootstrap.FromFlags(flags, l)
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}

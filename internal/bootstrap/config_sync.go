@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hashicorp/consul/api"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/errors"
@@ -18,13 +19,16 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 			return err
 		}
 	}
-	cfg := bs.Source
+	cfg := bs.Registry
+	if cfg == nil {
+		return errors.New("registry config is nil")
+	}
 	switch cfg.Type {
 	case "file":
 		return nil
 	case "consul":
 		consulConfig := api.DefaultConfig()
-		if bs.Source != nil && cfg.Consul != nil {
+		if cfg.Consul != nil {
 			consulConfig.Address = cfg.Consul.Address
 			consulConfig.Scheme = cfg.Consul.Scheme
 			client, err := api.NewClient(consulConfig)
@@ -39,12 +43,14 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 			if err != nil {
 				return errors.Wrap(err, "marshal config error")
 			}
+			path := source.ConfigPath(serviceName, "bootstrap.json")
 			if _, err := client.KV().Put(&api.KVPair{
-				Key:   source.ConfigPath(serviceName, "bootstrap.json"), //path.Join("configs", name, "bootstrap.json"),
+				Key:   path, //path.Join("configs", name, "bootstrap.json"),
 				Value: marshal,
 			}, nil); err != nil {
 				return errors.Wrap(err, "consul put error")
 			}
+			log.Infof("sync config to consul path: %s success", source.ConfigPath(serviceName, "bootstrap.json"))
 			return nil
 		}
 	case "etcd":
@@ -54,25 +60,37 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 }
 
 func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string) error {
-	cfg := bs.Source
+	cfg := bs.Registry
 	if cfg == nil {
-		return errors.New("config is nil")
+		return errors.New("registry config is nil")
 	}
 
 	var src config.SourceConfig
 	src.Type = cfg.Type
-	if cfg.File != nil {
+	switch cfg.Type {
+	case "file":
 		src.File = &config.SourceConfig_File{
-			Path: cfg.File.Path,
+			Path: "resources/configs/bootstrap.json",
 			//Format: cfg.File.Format,
 		}
-	}
-	if cfg.Consul != nil {
+	case "consul":
 		src.Consul = &config.SourceConfig_Consul{
 			Address: cfg.Consul.Address,
 			Scheme:  cfg.Consul.Scheme,
 		}
 	}
+	//if cfg.File != nil {
+	//	src.File = &config.SourceConfig_File{
+	//		Path: cfg.File.Path,
+	//		//Format: cfg.File.Format,
+	//	}
+	//}
+	//if cfg.Consul != nil {
+	//	src.Consul = &config.SourceConfig_Consul{
+	//		Address: cfg.Consul.Address,
+	//		Scheme:  cfg.Consul.Scheme,
+	//	}
+	//}
 
 	err := codec.EncodeToFile(file, &src)
 	if err != nil {

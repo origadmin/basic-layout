@@ -64,35 +64,6 @@ func (m *Bootstrap) validate(all bool) error {
 	// no validation rules for CryptoType
 
 	if all {
-		switch v := interface{}(m.GetSource()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, BootstrapValidationError{
-					field:  "Source",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, BootstrapValidationError{
-					field:  "Source",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSource()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return BootstrapValidationError{
-				field:  "Source",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
 		switch v := interface{}(m.GetService()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
@@ -338,7 +309,7 @@ func (m *Middlewares) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for register_as_global
+	// no validation rules for RegisterAsGlobal
 
 	if all {
 		switch v := interface{}(m.GetLogger()).(type) {

@@ -8,54 +8,52 @@ import (
 
 // GreeterService is a greeter service.
 type GreeterService struct {
-	helloworld.GreeterServer
+	helloworld.GreeterAPIServer
 
-	client helloworld.GreeterClient
+	client helloworld.GreeterAPIClient
 }
 
-func (s *GreeterService) CreateGreeter(ctx context.Context, request *helloworld.CreateGreeterRequest) (*helloworld.CreateGreeterReply, error) {
+func (g GreeterService) SayHello(ctx context.Context, request *helloworld.SayHelloRequest) (*helloworld.SayHelloResponse, error) {
+	return g.client.SayHello(ctx, request)
+}
+
+func (g GreeterService) PostHello(ctx context.Context, request *helloworld.PostHelloRequest) (*helloworld.PostHelloResponse, error) {
+	return g.client.PostHello(ctx, request)
+}
+
+func (g GreeterService) CreateGreeter(ctx context.Context, request *helloworld.CreateGreeterRequest) (*helloworld.CreateGreeterResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *GreeterService) UpdateGreeter(ctx context.Context, request *helloworld.UpdateGreeterRequest) (*helloworld.UpdateGreeterReply, error) {
+func (g GreeterService) UpdateGreeter(ctx context.Context, request *helloworld.UpdateGreeterRequest) (*helloworld.UpdateGreeterResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *GreeterService) DeleteGreeter(ctx context.Context, request *helloworld.DeleteGreeterRequest) (*helloworld.DeleteGreeterReply, error) {
+func (g GreeterService) DeleteGreeter(ctx context.Context, request *helloworld.DeleteGreeterRequest) (*helloworld.DeleteGreeterResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *GreeterService) GetGreeter(ctx context.Context, request *helloworld.GetGreeterRequest) (*helloworld.GetGreeterReply, error) {
+func (g GreeterService) GetGreeter(ctx context.Context, request *helloworld.GetGreeterRequest) (*helloworld.GetGreeterResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *GreeterService) ListGreeter(ctx context.Context, request *helloworld.ListGreeterRequest) (*helloworld.ListGreeterReply, error) {
+func (g GreeterService) ListGreeter(ctx context.Context, request *helloworld.ListGreeterRequest) (*helloworld.ListGreeterResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
 // NewGreeterService new a greeter service.
-func NewGreeterService(client helloworld.GreeterClient) *GreeterService {
+func NewGreeterService(client helloworld.GreeterAPIClient) *GreeterService {
 	return &GreeterService{client: client}
 }
 
 // NewGreeterServer new a greeter service.
-func NewGreeterServer(client helloworld.GreeterClient) helloworld.GreeterServer {
+func NewGreeterServer(client helloworld.GreeterAPIClient) helloworld.GreeterAPIServer {
 	return &GreeterService{client: client}
 }
 
-// SayHello implements helloworld.SayHello.
-func (s *GreeterService) SayHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	return s.client.SayHello(ctx, in)
-}
-
-// PostHello implements helloworld.PostHello.
-func (s *GreeterService) PostHello(ctx context.Context, in *helloworld.GreeterRequest) (*helloworld.GreeterReply, error) {
-	return s.client.PostHello(ctx, in)
-}
-
-var _ helloworld.GreeterServer = (*GreeterService)(nil)
+var _ helloworld.GreeterAPIServer = (*GreeterService)(nil)

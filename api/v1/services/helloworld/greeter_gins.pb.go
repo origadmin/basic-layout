@@ -21,15 +21,15 @@ var _ = binding.EncodeURL
 
 const _ = gins.SupportPackageIsVersion1
 
-const GreeterService_CreateGreeter_OperationName = "/api.v1.services.helloworld.GreeterService/CreateGreeter"
-const GreeterService_DeleteGreeter_OperationName = "/api.v1.services.helloworld.GreeterService/DeleteGreeter"
-const GreeterService_GetGreeter_OperationName = "/api.v1.services.helloworld.GreeterService/GetGreeter"
-const GreeterService_ListGreeter_OperationName = "/api.v1.services.helloworld.GreeterService/ListGreeter"
-const GreeterService_PostHello_OperationName = "/api.v1.services.helloworld.GreeterService/PostHello"
-const GreeterService_SayHello_OperationName = "/api.v1.services.helloworld.GreeterService/SayHello"
-const GreeterService_UpdateGreeter_OperationName = "/api.v1.services.helloworld.GreeterService/UpdateGreeter"
+const GreeterAPI_CreateGreeter_OperationName = "/api.v1.services.helloworld.GreeterAPI/CreateGreeter"
+const GreeterAPI_DeleteGreeter_OperationName = "/api.v1.services.helloworld.GreeterAPI/DeleteGreeter"
+const GreeterAPI_GetGreeter_OperationName = "/api.v1.services.helloworld.GreeterAPI/GetGreeter"
+const GreeterAPI_ListGreeter_OperationName = "/api.v1.services.helloworld.GreeterAPI/ListGreeter"
+const GreeterAPI_PostHello_OperationName = "/api.v1.services.helloworld.GreeterAPI/PostHello"
+const GreeterAPI_SayHello_OperationName = "/api.v1.services.helloworld.GreeterAPI/SayHello"
+const GreeterAPI_UpdateGreeter_OperationName = "/api.v1.services.helloworld.GreeterAPI/UpdateGreeter"
 
-type GreeterServiceGINServer interface {
+type GreeterAPIGINServer interface {
 	// CreateGreeter CreateGreeter creates a new Greeter
 	CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterResponse, error)
 	// DeleteGreeter DeleteGreeter deletes a Greeter
@@ -46,17 +46,17 @@ type GreeterServiceGINServer interface {
 	UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterResponse, error)
 }
 
-func RegisterGreeterServiceGINServer(router gin.IRouter, srv GreeterServiceGINServer) {
-	router.GET("/api/v1/greeter/:id/hello", _GreeterService_SayHello0_GIN_Handler(srv))
-	router.POST("/api/v1/greeter/:id/hello", _GreeterService_PostHello0_GIN_Handler(srv))
-	router.POST("/api/v1/greeter", _GreeterService_CreateGreeter0_GIN_Handler(srv))
-	router.PUT("/api/v1/greeter/:id", _GreeterService_UpdateGreeter0_GIN_Handler(srv))
-	router.DELETE("/api/v1/greeter/:id", _GreeterService_DeleteGreeter0_GIN_Handler(srv))
-	router.GET("/api/v1/greeter/:id", _GreeterService_GetGreeter0_GIN_Handler(srv))
-	router.GET("/api/v1/greeter", _GreeterService_ListGreeter0_GIN_Handler(srv))
+func RegisterGreeterAPIGINServer(router gin.IRouter, srv GreeterAPIGINServer) {
+	router.GET("/api/v1/greeter/:id/hello", _GreeterAPI_SayHello0_GIN_Handler(srv))
+	router.POST("/api/v1/greeter/:id/hello", _GreeterAPI_PostHello0_GIN_Handler(srv))
+	router.POST("/api/v1/greeter", _GreeterAPI_CreateGreeter0_GIN_Handler(srv))
+	router.PUT("/api/v1/greeter/:id", _GreeterAPI_UpdateGreeter0_GIN_Handler(srv))
+	router.DELETE("/api/v1/greeter/:id", _GreeterAPI_DeleteGreeter0_GIN_Handler(srv))
+	router.GET("/api/v1/greeter/:id", _GreeterAPI_GetGreeter0_GIN_Handler(srv))
+	router.GET("/api/v1/greeter", _GreeterAPI_ListGreeter0_GIN_Handler(srv))
 }
 
-func _GreeterService_SayHello0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_SayHello0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in SayHelloRequest
 		if err := gins.BindQuery(ctx, &in); err != nil {
@@ -67,7 +67,7 @@ func _GreeterService_SayHello0_GIN_Handler(srv GreeterServiceGINServer) func(ctx
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_SayHello_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_SayHello_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.SayHello(newCtx, &in)
 		if err != nil {
@@ -79,7 +79,7 @@ func _GreeterService_SayHello0_GIN_Handler(srv GreeterServiceGINServer) func(ctx
 	}
 }
 
-func _GreeterService_PostHello0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_PostHello0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in PostHelloRequest
 		if err := gins.BindBody(ctx, &in.Data); err != nil {
@@ -94,7 +94,7 @@ func _GreeterService_PostHello0_GIN_Handler(srv GreeterServiceGINServer) func(ct
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_PostHello_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_PostHello_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.PostHello(newCtx, &in)
 		if err != nil {
@@ -106,7 +106,7 @@ func _GreeterService_PostHello0_GIN_Handler(srv GreeterServiceGINServer) func(ct
 	}
 }
 
-func _GreeterService_CreateGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_CreateGreeter0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in CreateGreeterRequest
 		if err := gins.BindBody(ctx, &in.Data); err != nil {
@@ -117,7 +117,7 @@ func _GreeterService_CreateGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_CreateGreeter_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_CreateGreeter_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.CreateGreeter(newCtx, &in)
 		if err != nil {
@@ -129,7 +129,7 @@ func _GreeterService_CreateGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 	}
 }
 
-func _GreeterService_UpdateGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_UpdateGreeter0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in UpdateGreeterRequest
 		if err := gins.BindBody(ctx, &in.Data); err != nil {
@@ -144,7 +144,7 @@ func _GreeterService_UpdateGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_UpdateGreeter_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_UpdateGreeter_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.UpdateGreeter(newCtx, &in)
 		if err != nil {
@@ -156,7 +156,7 @@ func _GreeterService_UpdateGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 	}
 }
 
-func _GreeterService_DeleteGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_DeleteGreeter0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in DeleteGreeterRequest
 		if err := gins.BindQuery(ctx, &in); err != nil {
@@ -167,7 +167,7 @@ func _GreeterService_DeleteGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_DeleteGreeter_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_DeleteGreeter_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.DeleteGreeter(newCtx, &in)
 		if err != nil {
@@ -179,7 +179,7 @@ func _GreeterService_DeleteGreeter0_GIN_Handler(srv GreeterServiceGINServer) fun
 	}
 }
 
-func _GreeterService_GetGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_GetGreeter0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in GetGreeterRequest
 		if err := gins.BindQuery(ctx, &in); err != nil {
@@ -190,7 +190,7 @@ func _GreeterService_GetGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(c
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_GetGreeter_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_GetGreeter_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.GetGreeter(newCtx, &in)
 		if err != nil {
@@ -202,14 +202,14 @@ func _GreeterService_GetGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(c
 	}
 }
 
-func _GreeterService_ListGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(ctx *gin.Context) {
+func _GreeterAPI_ListGreeter0_GIN_Handler(srv GreeterAPIGINServer) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var in ListGreeterRequest
 		if err := gins.BindQuery(ctx, &in); err != nil {
 			ctx.Error(err)
 			return
 		}
-		gins.SetOperation(ctx, GreeterService_ListGreeter_OperationName)
+		gins.SetOperation(ctx, GreeterAPI_ListGreeter_OperationName)
 		newCtx := gins.NewContext(ctx)
 		reply, err := srv.ListGreeter(newCtx, &in)
 		if err != nil {
@@ -221,7 +221,7 @@ func _GreeterService_ListGreeter0_GIN_Handler(srv GreeterServiceGINServer) func(
 	}
 }
 
-type GreeterServiceGINClient interface {
+type GreeterAPIGINClient interface {
 	CreateGreeter(ctx context.Context, req *CreateGreeterRequest, opts ...gins.CallOption) (rsp *CreateGreeterResponse, err error)
 	DeleteGreeter(ctx context.Context, req *DeleteGreeterRequest, opts ...gins.CallOption) (rsp *DeleteGreeterResponse, err error)
 	GetGreeter(ctx context.Context, req *GetGreeterRequest, opts ...gins.CallOption) (rsp *GetGreeterResponse, err error)
@@ -231,19 +231,19 @@ type GreeterServiceGINClient interface {
 	UpdateGreeter(ctx context.Context, req *UpdateGreeterRequest, opts ...gins.CallOption) (rsp *UpdateGreeterResponse, err error)
 }
 
-type GreeterServiceGINClientImpl struct {
+type GreeterAPIGINClientImpl struct {
 	cc *gins.Client
 }
 
-func NewGreeterServiceGINClient(client *gins.Client) GreeterServiceGINClient {
-	return &GreeterServiceGINClientImpl{client}
+func NewGreeterAPIGINClient(client *gins.Client) GreeterAPIGINClient {
+	return &GreeterAPIGINClientImpl{client}
 }
 
-func (c *GreeterServiceGINClientImpl) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...gins.CallOption) (*CreateGreeterResponse, error) {
+func (c *GreeterAPIGINClientImpl) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...gins.CallOption) (*CreateGreeterResponse, error) {
 	var out CreateGreeterResponse
 	pattern := "/api/v1/greeter"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, gins.Operation(GreeterService_CreateGreeter_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_CreateGreeter_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in.Data, &out, opts...)
 	if err != nil {
@@ -252,11 +252,11 @@ func (c *GreeterServiceGINClientImpl) CreateGreeter(ctx context.Context, in *Cre
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...gins.CallOption) (*DeleteGreeterResponse, error) {
+func (c *GreeterAPIGINClientImpl) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...gins.CallOption) (*DeleteGreeterResponse, error) {
 	var out DeleteGreeterResponse
 	pattern := "/api/v1/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, gins.Operation(GreeterService_DeleteGreeter_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_DeleteGreeter_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
@@ -265,11 +265,11 @@ func (c *GreeterServiceGINClientImpl) DeleteGreeter(ctx context.Context, in *Del
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...gins.CallOption) (*GetGreeterResponse, error) {
+func (c *GreeterAPIGINClientImpl) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...gins.CallOption) (*GetGreeterResponse, error) {
 	var out GetGreeterResponse
 	pattern := "/api/v1/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, gins.Operation(GreeterService_GetGreeter_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_GetGreeter_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -278,11 +278,11 @@ func (c *GreeterServiceGINClientImpl) GetGreeter(ctx context.Context, in *GetGre
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...gins.CallOption) (*ListGreeterResponse, error) {
+func (c *GreeterAPIGINClientImpl) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...gins.CallOption) (*ListGreeterResponse, error) {
 	var out ListGreeterResponse
 	pattern := "/api/v1/greeter"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, gins.Operation(GreeterService_ListGreeter_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_ListGreeter_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -291,11 +291,11 @@ func (c *GreeterServiceGINClientImpl) ListGreeter(ctx context.Context, in *ListG
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) PostHello(ctx context.Context, in *PostHelloRequest, opts ...gins.CallOption) (*PostHelloResponse, error) {
+func (c *GreeterAPIGINClientImpl) PostHello(ctx context.Context, in *PostHelloRequest, opts ...gins.CallOption) (*PostHelloResponse, error) {
 	var out PostHelloResponse
 	pattern := "/api/v1/greeter/{id}/hello"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, gins.Operation(GreeterService_PostHello_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_PostHello_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in.Data, &out.Data, opts...)
 	if err != nil {
@@ -304,11 +304,11 @@ func (c *GreeterServiceGINClientImpl) PostHello(ctx context.Context, in *PostHel
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) SayHello(ctx context.Context, in *SayHelloRequest, opts ...gins.CallOption) (*SayHelloResponse, error) {
+func (c *GreeterAPIGINClientImpl) SayHello(ctx context.Context, in *SayHelloRequest, opts ...gins.CallOption) (*SayHelloResponse, error) {
 	var out SayHelloResponse
 	pattern := "/api/v1/greeter/{id}/hello"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, gins.Operation(GreeterService_SayHello_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_SayHello_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -317,11 +317,11 @@ func (c *GreeterServiceGINClientImpl) SayHello(ctx context.Context, in *SayHello
 	return &out, nil
 }
 
-func (c *GreeterServiceGINClientImpl) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...gins.CallOption) (*UpdateGreeterResponse, error) {
+func (c *GreeterAPIGINClientImpl) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...gins.CallOption) (*UpdateGreeterResponse, error) {
 	var out UpdateGreeterResponse
 	pattern := "/api/v1/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, gins.Operation(GreeterService_UpdateGreeter_OperationName))
+	opts = append(opts, gins.Operation(GreeterAPI_UpdateGreeter_OperationName))
 	opts = append(opts, gins.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in.Data, &out, opts...)
 	if err != nil {
