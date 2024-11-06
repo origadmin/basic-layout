@@ -118,14 +118,15 @@ api:
 # 	       --go-grpc_out=paths=source_relative:./api \
 #	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 #	       $(API_PROTO_FILES)
-	protoc --proto_path=./api \
+	protoc --proto_path=. \
 		--proto_path=./third_party \
-		--proto_path=./toolkits \
-		--go_out=./api \
-		--go-http_out=./api \
-		--go-grpc_out=./api \
-		--validate_out=lang=go:./api \
-		--openapi_out=fq_schema_naming=true,default_response=false:. \
+		--go_out=. \
+		--go-http_out=. \
+		--go-grpc_out=. \
+		--go-gins_out=. \
+		--go-errors_out=. \
+		--validate_out=lang=go:. \
+		--openapi_out=naming=proto,fq_schema_naming=true,default_response=false:api/v1/services \
 		$(API_PROTO_FILES)
 
 .PHONY: pre
