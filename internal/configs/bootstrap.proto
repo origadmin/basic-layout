@@ -1,6 +1,7 @@
 syntax = "proto3";
 package origadmin.configs.api;
 
+import "buf/validate/validate.proto";
 import "config/v1/cors.proto";
 import "config/v1/data.proto";
 import "config/v1/logger.proto";
@@ -14,10 +15,30 @@ import "google/protobuf/duration.proto";
 
 option go_package = "internal/configs;configs";
 
+message EntrySelectorConfig {
+  bool global = 2 [json_name = "global"];
+  string name = 3 [json_name = "name"];
+  string version = 4 [json_name = "version"];
+}
+
 message Bootstrap {
+  // Entry
+  message Entry {
+    string name = 1 [json_name = "name"];
+    string scheme = 2 [json_name = "scheme", (buf.validate.field).string = {in: ["http", "grpc"]}];
+    string addr = 3 [json_name = "addr"];
+    string network = 4 [json_name = "network"];
+    string weight = 5 [json_name = "weight"];
+    optional google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+    bool enable_swagger = 7 [json_name = "enable_swagger"];
+    bool enable_pprof = 8 [json_name = "enable_pprof"];
+    EntrySelectorConfig selector = 9 [json_name = "selector"];
+  }
+
   string service_name = 1 [json_name = "service_name"];
   string version = 2 [json_name = "version"];
   string crypto_type = 3 [json_name = "crypto_type"];
+  Entry entry = 4 [json_name = "entry"];
   config.v1.ServiceConfig service = 5 [json_name = "service"];
   config.v1.DataConfig data = 6 [json_name = "data"];
   Settings settings = 7 [json_name = "settings"];

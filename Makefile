@@ -168,6 +168,11 @@ all:
 	make config;
 	make generate;
 
+.PHONY: http
+# run http request
+http:
+#	docker run --rm -i -t -v $PWD:/workdir jetbrains/intellij-http-client run.http
+
 # show help
 help:
 	@echo ''

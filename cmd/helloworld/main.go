@@ -10,7 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
-	_ "go.uber.org/automaxprocs"
+	_ "github.com/origadmin/toolkits/contrib/consul/config"
+	_ "github.com/origadmin/toolkits/contrib/consul/registry"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"origadmin/basic-layout/internal/bootstrap"

@@ -86,13 +86,20 @@ func InjectorGinServer(injector *InjectorClient) error {
 		return err
 	}
 	hClient := helloworld.NewGreeterAPIHTTPClient(hConn)
-	grpcClient := service.NewGreeterServer(gClient)
-	httpClient := service.NewGreeterHTTPServer(hClient)
-	// add _ to avoid unused
-	_ = grpcClient
-	_ = httpClient
-	helloworld.RegisterGreeterAPIGINSServer(injector.ServerGINS, grpcClient)
-	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, grpcClient)
+
+	var client helloworld.GreeterAPIServer
+	if entry := injector.Bootstrap.GetEntry(); entry != nil && entry.Scheme == "http" {
+		client = service.NewGreeterHTTPServer(hClient)
+	} else {
+		client = service.NewGreeterServer(gClient)
+	}
+	//grpcClient := service.NewGreeterServer(gClient)
+	//httpClient := service.NewGreeterHTTPServer(hClient)
+	//// add _ to avoid unused
+	//_ = grpcClient
+	//_ = httpClient
+	helloworld.RegisterGreeterAPIGINSServer(injector.ServerGINS, client)
+	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, client)
 	//}
 
 	return nil
