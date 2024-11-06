@@ -56,7 +56,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 	serviceName := "origadmin.service.v1.helloworld"
 	discovery := injector.Discovery
 	if discovery == nil {
-		return errors.New("discovery is nil")
+		return errors.String("discovery is nil")
 	}
 	//if discovery, ok := injector.Discoveries[serviceName]; ok {
 	conn, err := grpc.DialInsecure(
@@ -91,8 +91,8 @@ func InjectorGinServer(injector *InjectorClient) error {
 	// add _ to avoid unused
 	_ = grpcClient
 	_ = httpClient
-	helloworld.RegisterGreeterAPIGINServer(injector.ServerGINS, httpClient)
-	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, httpClient)
+	helloworld.RegisterGreeterAPIGINSServer(injector.ServerGINS, grpcClient)
+	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, grpcClient)
 	//}
 
 	return nil

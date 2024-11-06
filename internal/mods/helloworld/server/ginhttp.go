@@ -11,20 +11,22 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/origadmin/toolkits/runtime/config"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
-func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l log.Logger) *http.Server {
+func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterAPIServer, l log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 		),
 	}
-	c := bs.Server
+	c := bs.Service
 	if c.Http == nil {
-		c.Http = new(configs.Server_HTTP)
+		c.Http = new(config.ServiceConfig_HTTP)
 	}
 	if c.Gins.Network != "" {
 		opts = append(opts, http.Network(c.Gins.Network))
@@ -35,21 +37,21 @@ func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l
 	if c.Gins.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Gins.Timeout.AsDuration()))
 	}
-	if c.Middleware == nil {
-		c.Middleware = new(configs.Server_Middleware)
-	}
+	//if c.Middleware == nil {
+	//	c.Middleware = new(configs.Server_Middleware)
+	//}
 	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
 		opts = append(opts, http.Middleware(middlewares...))
 	}
 
-	naip, _ := netip.ParseAddrPort(bs.Server.Gins.Addr)
-	if bs.Server.Gins.Endpoint == "" {
-		bs.Server.Gins.Endpoint = "http://" + bs.Server.Host + ":" + strconv.Itoa(int(naip.Port()))
+	naip, _ := netip.ParseAddrPort(bs.Service.Gins.Addr)
+	if bs.Service.Gins.Endpoint == "" {
+		bs.Service.Gins.Endpoint = "http://" + bs.Service.Host + ":" + strconv.Itoa(int(naip.Port()))
 	} else {
-		prefix, suffix, ok := strings.Cut(bs.Server.Gins.Endpoint, "://")
+		prefix, suffix, ok := strings.Cut(bs.Service.Gins.Endpoint, "://")
 		if !ok {
-			bs.Server.Gins.Endpoint = "http://" + prefix
+			bs.Service.Gins.Endpoint = "http://" + prefix
 		} else {
 			args := strings.SplitN(suffix, ":", 2)
 			if len(args) == 2 {
@@ -58,25 +60,25 @@ func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.GreeterServer, l
 				args = append(args, strconv.Itoa(int(naip.Port())))
 			} else {
 				// unknown
-				log.Infow("unknown http endpoint", bs.Server.Gins.Endpoint)
+				log.Infow("unknown http endpoint", bs.Service.Gins.Endpoint)
 			}
-			bs.Server.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
+			bs.Service.Gins.Endpoint = prefix + "://" + strings.Join(args, ":")
 		}
 	}
 
-	log.Infof("Server.GinHttp.Endpoint: %v", bs.Server.Gins.Endpoint)
-	ep, _ := url.Parse(bs.Server.Gins.Endpoint)
+	log.Infof("Server.GinHttp.Endpoint: %v", bs.Service.Gins.Endpoint)
+	ep, _ := url.Parse(bs.Service.Gins.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)
 	engine := gin.New()
 
 	srv.Server = &stdhttp.Server{
-		Addr:         bs.Server.Gins.Addr,
+		Addr:         bs.Service.Gins.Addr,
 		Handler:      engine.Handler(),
-		ReadTimeout:  bs.Server.Gins.ReadTimeout.AsDuration(),
-		WriteTimeout: bs.Server.Gins.WriteTimeout.AsDuration(),
-		IdleTimeout:  bs.Server.Gins.IdleTimeout.AsDuration(),
+		ReadTimeout:  bs.Service.Gins.ReadTimeout.AsDuration(),
+		WriteTimeout: bs.Service.Gins.WriteTimeout.AsDuration(),
+		IdleTimeout:  bs.Service.Gins.IdleTimeout.AsDuration(),
 	}
-	helloworld.RegisterGreeterGINServer(engine, greeter)
+	helloworld.RegisterGreeterAPIGINSServer(engine, greeter)
 	return srv
 }

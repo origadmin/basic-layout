@@ -23,6 +23,18 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 		gins.Middleware(
 			recovery.Recovery(),
 		),
+		gins.ErrorEncoder(func(ctx *gins.Context, err error) {
+			se := errors.ToHttpError(err)
+			codec, _ := http.CodecForRequest(ctx.Request, "Accept")
+			body, err := codec.Marshal(se)
+			if err != nil {
+				ctx.Writer.WriteHeader(nethttp.StatusInternalServerError)
+				return
+			}
+			ctx.Writer.Header().Set("Content-Type", ctx.Request.Header.Get("Content-Type"))
+			ctx.Writer.WriteHeader(int(se.Code))
+			_, _ = ctx.Writer.Write(body)
+		}),
 	}
 	c := bs.Service
 	if c == nil {
@@ -63,34 +75,23 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 		http.Middleware(
 			recovery.Recovery(),
 		),
-		http.ErrorEncoder(func(w http.ResponseWriter, r *http.Request, err error) {
-			se := errors.ToHttpError(err)
-			codec, _ := http.CodecForRequest(r, "Accept")
-			body, err := codec.Marshal(se)
-			if err != nil {
-				w.WriteHeader(nethttp.StatusInternalServerError)
-				return
-			}
-			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
-			w.WriteHeader(int(se.Code))
-			_, _ = w.Write(body)
-		}),
+		http.ErrorEncoder(encodeError),
 	}
 	c := bs.Service
 	if c == nil {
 		c = new(config.ServiceConfig)
 	}
-	if c.Http == nil {
-		c.Http = new(config.ServiceConfig_HTTP)
+	if c.Entry == nil {
+		c.Entry = new(config.ServiceConfig_Entry)
 	}
-	if c.Http.Network != "" {
-		opts = append(opts, http.Network(c.Http.Network))
+	if c.Entry.Network != "" {
+		opts = append(opts, http.Network(c.Entry.Network))
 	}
-	if c.Http.Addr != "" {
-		opts = append(opts, http.Address(":8000"))
+	if c.Entry.Addr != "" {
+		opts = append(opts, http.Address(c.Entry.Addr))
 	}
-	if c.Http.Timeout != nil {
-		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
+	if c.Entry.Timeout != nil {
+		opts = append(opts, http.Timeout(c.Entry.Timeout.AsDuration()))
 	}
 	//if c.Middleware == nil {
 	//	c.Middleware = new(configs.Server_Middleware)
@@ -102,4 +103,17 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 
 	srv := http.NewServer(opts...)
 	return srv
+}
+
+func encodeError(w http.ResponseWriter, r *http.Request, err error) {
+	se := errors.ToHttpError(err)
+	codec, _ := http.CodecForRequest(r, "Accept")
+	body, err := codec.Marshal(se)
+	if err != nil {
+		w.WriteHeader(nethttp.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	w.WriteHeader(int(se.Code))
+	_, _ = w.Write(body)
 }

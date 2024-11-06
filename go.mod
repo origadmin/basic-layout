@@ -5,8 +5,8 @@ go 1.23.1
 replace github.com/armon/go-metrics v0.4.1 => github.com/hashicorp/go-metrics v0.4.1
 
 require (
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.1-20240920164238-5a7b106cbb87.1
 	github.com/caarlos0/go-version v0.1.1
-	github.com/envoyproxy/protoc-gen-validate v1.1.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241030023738-861493a20524
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20241030023738-861493a20524
@@ -17,8 +17,8 @@ require (
 	github.com/origadmin/toolkits v0.0.81
 	github.com/origadmin/toolkits/codec v0.0.17
 	github.com/origadmin/toolkits/contrib/config v0.0.8
+	github.com/origadmin/toolkits/contrib/consul v0.0.3
 	github.com/origadmin/toolkits/runtime v0.0.4
-	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38
@@ -27,7 +27,6 @@ require (
 )
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.1-20240920164238-5a7b106cbb87.1 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
@@ -68,8 +67,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/origadmin/toolkits/contrib/consul v0.0.3 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect

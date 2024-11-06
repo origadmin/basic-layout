@@ -21,7 +21,7 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 	}
 	cfg := bs.Registry
 	if cfg == nil {
-		return errors.New("registry config is nil")
+		return errors.String("registry config is nil")
 	}
 	switch cfg.Type {
 	case "file":
@@ -56,13 +56,13 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 	case "etcd":
 		return nil
 	}
-	return errors.New("not support config type")
+	return errors.Errorf("unsupported registry type: %s", cfg.Type)
 }
 
 func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string) error {
 	cfg := bs.Registry
 	if cfg == nil {
-		return errors.New("registry config is nil")
+		return errors.String("registry config is nil")
 	}
 
 	var src config.SourceConfig

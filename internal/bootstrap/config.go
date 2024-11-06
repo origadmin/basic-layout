@@ -82,8 +82,6 @@ func LoadEnvFiles(paths ...string) (map[string]string, error) {
 
 func FromRemote(serviceName string, source *Config) (*configs.Bootstrap, error) {
 	switch source.Type {
-	//case "file":
-
 	case "consul":
 		return FromConsul(serviceName, source, nil)
 	default:
@@ -94,7 +92,7 @@ func FromRemote(serviceName string, source *Config) (*configs.Bootstrap, error) 
 
 func FromConsul(serviceName string, cfg *Config, l log.Logger) (*configs.Bootstrap, error) {
 	if cfg.Consul == nil {
-		return nil, errors.New("invalid config file")
+		return nil, errors.String("consul config is nil")
 	}
 	cfg.Consul.Path = source.ConfigPath(serviceName, "bootstrap.json")
 	return LoadBootstrap(cfg, l)
@@ -103,7 +101,7 @@ func FromConsul(serviceName string, cfg *Config, l log.Logger) (*configs.Bootstr
 func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
 	path := WorkPath(flags.WorkDir, flags.ConfigPath)
 	if path == "" {
-		return nil, errors.New("invalid config file")
+		return nil, errors.String("config path is empty")
 	}
 
 	stat, err := os.Stat(path)
@@ -126,7 +124,7 @@ func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
 
 func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
 	if source.File == nil {
-		return nil, errors.New("invalid config file")
+		return nil, errors.String("file config is nil")
 	}
 
 	path := WorkPath("", source.File.Path)
