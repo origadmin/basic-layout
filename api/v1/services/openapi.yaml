@@ -3,16 +3,16 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
+    title: GreeterService API
     description: The greeting service definition.
     version: 0.0.1
 paths:
     /api/v1/greeter:
         get:
             tags:
-                - Greeter
+                - GreeterService
             description: ListGreeter lists Greeters
-            operationId: Greeter_ListGreeter
+            operationId: GreeterService_ListGreeter
             parameters:
                 - name: current
                   in: query
@@ -37,12 +37,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.ListGreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.ListGreeterResponse'
         post:
             tags:
-                - Greeter
+                - GreeterService
             description: CreateGreeter creates a new Greeter
-            operationId: Greeter_CreateGreeter
+            operationId: GreeterService_CreateGreeter
             requestBody:
                 content:
                     application/json:
@@ -55,13 +55,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.CreateGreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.CreateGreeterResponse'
     /api/v1/greeter/{id}:
         get:
             tags:
-                - Greeter
+                - GreeterService
             description: GetGreeter gets a Greeter
-            operationId: Greeter_GetGreeter
+            operationId: GreeterService_GetGreeter
             parameters:
                 - name: id
                   in: path
@@ -74,12 +74,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.GetGreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.GetGreeterResponse'
         put:
             tags:
-                - Greeter
+                - GreeterService
             description: UpdateGreeter updates a Greeter
-            operationId: Greeter_UpdateGreeter
+            operationId: GreeterService_UpdateGreeter
             parameters:
                 - name: id
                   in: path
@@ -98,12 +98,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.UpdateGreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.UpdateGreeterResponse'
         delete:
             tags:
-                - Greeter
+                - GreeterService
             description: DeleteGreeter deletes a Greeter
-            operationId: Greeter_DeleteGreeter
+            operationId: GreeterService_DeleteGreeter
             parameters:
                 - name: id
                   in: path
@@ -116,13 +116,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.DeleteGreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.DeleteGreeterResponse'
     /api/v1/greeter/{id}/hello:
         get:
             tags:
-                - Greeter
+                - GreeterService
             description: SayHello is a get method
-            operationId: Greeter_SayHello
+            operationId: GreeterService_SayHello
             parameters:
                 - name: id
                   in: path
@@ -147,12 +147,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.GreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.SayHelloResponse'
         post:
             tags:
-                - Greeter
+                - GreeterService
             description: PostHello is a post method
-            operationId: Greeter_PostHello
+            operationId: GreeterService_PostHello
             parameters:
                 - name: id
                   in: path
@@ -175,16 +175,16 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.GreeterReply'
+                                $ref: '#/components/schemas/api.v1.services.helloworld.PostHelloResponse'
 components:
     schemas:
-        api.v1.services.helloworld.CreateGreeterReply:
+        api.v1.services.helloworld.CreateGreeterResponse:
             type: object
             properties: {}
-        api.v1.services.helloworld.DeleteGreeterReply:
+        api.v1.services.helloworld.DeleteGreeterResponse:
             type: object
             properties: {}
-        api.v1.services.helloworld.GetGreeterReply:
+        api.v1.services.helloworld.GetGreeterResponse:
             type: object
             properties: {}
         api.v1.services.helloworld.GreeterData:
@@ -194,13 +194,7 @@ components:
                     type: string
                 name:
                     type: string
-        api.v1.services.helloworld.GreeterReply:
-            type: object
-            properties:
-                data:
-                    $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-            description: The response message containing the greetings
-        api.v1.services.helloworld.ListGreeterReply:
+        api.v1.services.helloworld.ListGreeterResponse:
             type: object
             properties:
                 success:
@@ -216,7 +210,19 @@ components:
                     $ref: '#/components/schemas/errors.rpcerr.Error'
                 extra:
                     $ref: '#/components/schemas/google.protobuf.Any'
-        api.v1.services.helloworld.UpdateGreeterReply:
+        api.v1.services.helloworld.PostHelloResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
+            description: The response message containing the greetings
+        api.v1.services.helloworld.SayHelloResponse:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
+            description: The response message containing the greetings
+        api.v1.services.helloworld.UpdateGreeterResponse:
             type: object
             properties:
                 success:
@@ -244,4 +250,4 @@ components:
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
 tags:
-    - name: Greeter
+    - name: GreeterService

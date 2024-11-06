@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package api.v1.services.helloworld;
 
+import "buf/validate/validate.proto";
+import "errors/rpcerr/rpcerr.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
-import "errors/rpcerr/rpcerr.proto";
 import "google/protobuf/descriptor.proto";
-import "validate/validate.proto";
 
 option go_package = "v1/services/helloworld;helloworld";
 option java_multiple_files = true;
@@ -18,15 +18,15 @@ extend google.protobuf.MessageOptions {
 }
 
 // The greeting service definition.
-service Greeter {
+service GreeterService {
   // SayHello is a get method
-  rpc SayHello (GreeterRequest) returns (GreeterReply) {
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {
     option (google.api.http) = {
       get: "/api/v1/greeter/{id}/hello",
     };
   }
   // PostHello is a post method
-  rpc PostHello (GreeterRequest) returns (GreeterReply) {
+  rpc PostHello (PostHelloRequest) returns (PostHelloResponse) {
     option (google.api.http) = {
       post: "/api/v1/greeter/{id}/hello",
       body: "data",
@@ -34,33 +34,33 @@ service Greeter {
     };
   }
   // CreateGreeter creates a new Greeter
-  rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
+  rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterResponse) {
     option (google.api.http) = {
       post: "/api/v1/greeter",
       body: "data",
     };
   }
   // UpdateGreeter updates a Greeter
-  rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterReply){
+  rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterResponse) {
     option (google.api.http) = {
       put: "/api/v1/greeter/{id}",
       body: "data",
     };
   }
   // DeleteGreeter deletes a Greeter
-  rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterReply){
+  rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterResponse) {
     option (google.api.http) = {
       delete: "/api/v1/greeter/{id}",
     };
   }
   // GetGreeter gets a Greeter
-  rpc GetGreeter (GetGreeterRequest) returns (GetGreeterReply){
+  rpc GetGreeter (GetGreeterRequest) returns (GetGreeterResponse) {
     option (google.api.http) = {
       get: "/api/v1/greeter/{id}",
     };
   }
   // ListGreeter lists Greeters
-  rpc ListGreeter (ListGreeterRequest) returns (ListGreeterReply){
+  rpc ListGreeter (ListGreeterRequest) returns (ListGreeterResponse) {
     option (google.api.http) = {
       get: "/api/v1/greeter",
     };
@@ -73,14 +73,27 @@ message GreeterData {
 }
 
 // The request message containing the user's name.
-message GreeterRequest {
-  string id = 1 [(validate.rules).string.min_len = 1];
+message SayHelloRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
   string name = 2;
   GreeterData data = 3;
 }
 
 // The response message containing the greetings
-message GreeterReply {
+message SayHelloResponse {
+  GreeterData data = 1;
+}
+
+
+// The request message containing the user's name.
+message PostHelloRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 2;
+  GreeterData data = 3;
+}
+
+// The response message containing the greetings
+message PostHelloResponse {
   GreeterData data = 1;
 }
 
@@ -88,13 +101,13 @@ message GreeterReply {
 message CreateGreeterRequest {
   GreeterData data = 1;
 }
-message CreateGreeterReply {}
+message CreateGreeterResponse {}
 
 message UpdateGreeterRequest {
   string id = 1;
   GreeterData data = 3;
 }
-message UpdateGreeterReply {
+message UpdateGreeterResponse {
   bool success = 1;
   repeated GreeterData data = 3;
 }
@@ -102,12 +115,12 @@ message UpdateGreeterReply {
 message DeleteGreeterRequest {
   string id = 1;
 }
-message DeleteGreeterReply {}
+message DeleteGreeterResponse {}
 
 message GetGreeterRequest {
   string id = 1;
 }
-message GetGreeterReply {}
+message GetGreeterResponse {}
 
 message ListGreeterRequest {
   // Current page
@@ -119,7 +132,7 @@ message ListGreeterRequest {
   // Whether not paging
   optional bool no_paging = 5;
 }
-message ListGreeterReply {
+message ListGreeterResponse {
   bool success = 1;
   int32 total = 2;
   repeated GreeterData data = 3;

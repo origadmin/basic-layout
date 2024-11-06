@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package api.v1.services.helloworld;
 
+import "errors/errors.proto";
+
 option go_package = "v1/services/helloworld;helloworld";
 option java_multiple_files = true;
 //option java_outer_classname = "APIV1ServicesHelloworld";
@@ -9,10 +11,8 @@ option java_package = "com.origadmin.api.v1.services.helloworld";
 option objc_class_prefix = "APIV1ServicesHelloworld";
 //option csharp_namespace = "APIV1ServicesHelloworld";
 
-import "errors/errors.proto";
-
 enum HelloWorldErrorReason {
   option (errors.default_code) = 500;
-  GREETER_UNSPECIFIED = 0;
-  USER_NOT_FOUND = 1;
+  HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED = 0;
+  HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND = 1;
 }
