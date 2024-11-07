@@ -1,4 +1,8 @@
-package configs
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
+package bootstrap
 
 const (
 	Application = `OrigAdmin`

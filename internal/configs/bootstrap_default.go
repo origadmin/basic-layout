@@ -1,40 +1,11 @@
 package configs
 
 import (
-	"fmt"
-	"path/filepath"
 	"time"
 
-	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/runtime/config"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
-
-func SaveConf(path string, conf *Bootstrap) error {
-	typo := codec.TypeFromExt(filepath.Ext(path))
-	if typo == codec.UNKNOWN {
-		return fmt.Errorf("unknown file type: %s", path)
-	}
-	err := codec.EncodeToFile(path, conf)
-	if err != nil {
-		return err
-	}
-	return nil
-	//return os.WriteFile(path, marshal, os.ModePerm)
-}
-
-func LoadConf(path string) (*Bootstrap, error) {
-	typo := codec.TypeFromExt(filepath.Ext(path))
-	if typo == codec.UNKNOWN {
-		return nil, fmt.Errorf("unknown file type: %s", path)
-	}
-	var bs Bootstrap
-	err := codec.DecodeFromFile(path, &bs)
-	if err != nil {
-		return nil, err
-	}
-	return &bs, nil
-}
 
 func DefaultBootstrap() *Bootstrap {
 	return &Bootstrap{

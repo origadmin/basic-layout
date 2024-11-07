@@ -29,6 +29,7 @@ require (
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
+	entgo.io/ent v0.13.2-0.20240717044502-34158f2c129b // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/bytedance/sonic v1.12.3 // indirect
