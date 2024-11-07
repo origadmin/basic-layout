@@ -19,7 +19,8 @@ import (
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/helloworld/service"
+	helloworldservice "origadmin/basic-layout/internal/mods/helloworld/service"
+	secondworldservice "origadmin/basic-layout/internal/mods/secondworld/service"
 )
 
 var (
@@ -50,6 +51,16 @@ type InjectorServer struct {
 }
 
 func InjectorGinServer(injector *InjectorClient) error {
+	if err := newHelloWorldServer(injector); err != nil {
+		return err
+	}
+	if err := newSecondWorldServer(injector); err != nil {
+		return err
+	}
+	return nil
+}
+
+func newHelloWorldServer(injector *InjectorClient) error {
 	// Create route Filter: Filter instances whose version number is "2.0.0"
 	filter := filter.Version("v1.0.0")
 	// Create the Selector for the P2C load balancing algorithm and inject the route Filter
@@ -94,9 +105,9 @@ func InjectorGinServer(injector *InjectorClient) error {
 
 	var client helloworld.HelloGreeterAPIServer
 	if entry := injector.Bootstrap.GetEntry(); entry != nil && entry.Scheme == "http" {
-		client = service.NewGreeterHTTPServer(hClient)
+		client = helloworldservice.NewGreeterHTTPServer(hClient)
 	} else {
-		client = service.NewGreeterServer(gClient)
+		client = helloworldservice.NewGreeterServer(gClient)
 	}
 	//grpcClient := service.NewGreeterServer(gClient)
 	//httpClient := service.NewGreeterHTTPServer(hClient)
@@ -105,6 +116,67 @@ func InjectorGinServer(injector *InjectorClient) error {
 	//_ = httpClient
 	helloworld.RegisterHelloGreeterAPIGINSServer(injector.ServerGINS, client)
 	helloworld.RegisterHelloGreeterAPIHTTPServer(injector.ServerHTTP, client)
+	//}
+
+	return nil
+}
+
+func newSecondWorldServer(injector *InjectorClient) error {
+	// Create route Filter: Filter instances whose version number is "2.0.0"
+	filter := filter.Version("v1.0.0")
+	// Create the Selector for the P2C load balancing algorithm and inject the route Filter
+	selector.SetGlobalSelector(random.NewBuilder())
+	//selector.SetGlobalSelector(wrr.NewBuilder())
+
+	serviceName := "origadmin.service.v1.secondworld"
+	discovery := injector.Discovery
+	if discovery == nil {
+		return errors.String("discovery is nil")
+	}
+	//if discovery, ok := injector.Discoveries[serviceName]; ok {
+	conn, err := grpc.DialInsecure(
+		context.Background(),
+		grpc.WithMiddleware(
+			recovery.Recovery(),
+			metadata.Client(),
+		),
+		grpc.WithEndpoint("discovery:///"+serviceName),
+		grpc.WithDiscovery(discovery),
+		grpc.WithNodeFilter(filter),
+	)
+	if err != nil {
+		return err
+	}
+	gClient := secondworld.NewSecondGreeterAPIClient(conn)
+	// new http client
+	hConn, err := http.NewClient(
+		context.Background(),
+		http.WithMiddleware(
+			recovery.Recovery(),
+			metadata.Client(),
+		),
+		http.WithEndpoint("discovery:///"+serviceName),
+		http.WithDiscovery(discovery),
+		http.WithNodeFilter(filter),
+	)
+	if err != nil {
+		return err
+	}
+	hClient := secondworld.NewSecondGreeterAPIHTTPClient(hConn)
+
+	var client secondworld.SecondGreeterAPIServer
+	if entry := injector.Bootstrap.GetEntry(); entry != nil && entry.Scheme == "http" {
+		client = secondworldservice.NewGreeterHTTPServer(hClient)
+	} else {
+		client = secondworldservice.NewGreeterServer(gClient)
+	}
+	//grpcClient := service.NewGreeterServer(gClient)
+	//httpClient := service.NewGreeterHTTPServer(hClient)
+	//// add _ to avoid unused
+	//_ = grpcClient
+	//_ = httpClient
+	secondworld.RegisterSecondGreeterAPIGINSServer(injector.ServerGINS, client)
+	secondworld.RegisterSecondGreeterAPIHTTPServer(injector.ServerHTTP, client)
 	//}
 
 	return nil

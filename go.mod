@@ -6,6 +6,7 @@ replace github.com/armon/go-metrics v0.4.1 => github.com/hashicorp/go-metrics v0
 
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.1-20240920164238-5a7b106cbb87.1
+	entgo.io/contrib v0.6.0
 	github.com/caarlos0/go-version v0.1.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241030023738-861493a20524
@@ -28,7 +29,6 @@ require (
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
-	entgo.io/ent v0.14.1 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/bytedance/sonic v1.12.3 // indirect
