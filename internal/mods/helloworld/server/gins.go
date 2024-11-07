@@ -18,7 +18,7 @@ import (
 )
 
 // NewGINSServer new a gin server.
-func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.GreeterAPIServer, l log.Logger) *gins.Server {
+func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServer, l log.Logger) *gins.Server {
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
@@ -75,6 +75,6 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.GreeterAPIServer, l
 	ep, _ := url.Parse(bs.Service.Gins.Endpoint)
 	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)
-	helloworld.RegisterGreeterAPIGINSServer(srv, greeter)
+	helloworld.RegisterHelloGreeterAPIGINSServer(srv, greeter)
 	return srv
 }

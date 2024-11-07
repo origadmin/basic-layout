@@ -19,15 +19,15 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationGreeterAPICreateGreeter = "/api.v1.services.helloworld.GreeterAPI/CreateGreeter"
-const OperationGreeterAPIDeleteGreeter = "/api.v1.services.helloworld.GreeterAPI/DeleteGreeter"
-const OperationGreeterAPIGetGreeter = "/api.v1.services.helloworld.GreeterAPI/GetGreeter"
-const OperationGreeterAPIListGreeter = "/api.v1.services.helloworld.GreeterAPI/ListGreeter"
-const OperationGreeterAPIPostHello = "/api.v1.services.helloworld.GreeterAPI/PostHello"
-const OperationGreeterAPISayHello = "/api.v1.services.helloworld.GreeterAPI/SayHello"
-const OperationGreeterAPIUpdateGreeter = "/api.v1.services.helloworld.GreeterAPI/UpdateGreeter"
+const OperationHelloGreeterAPICreateGreeter = "/api.v1.services.helloworld.HelloGreeterAPI/CreateGreeter"
+const OperationHelloGreeterAPIDeleteGreeter = "/api.v1.services.helloworld.HelloGreeterAPI/DeleteGreeter"
+const OperationHelloGreeterAPIGetGreeter = "/api.v1.services.helloworld.HelloGreeterAPI/GetGreeter"
+const OperationHelloGreeterAPIListGreeter = "/api.v1.services.helloworld.HelloGreeterAPI/ListGreeter"
+const OperationHelloGreeterAPIPostHello = "/api.v1.services.helloworld.HelloGreeterAPI/PostHello"
+const OperationHelloGreeterAPISayHello = "/api.v1.services.helloworld.HelloGreeterAPI/SayHello"
+const OperationHelloGreeterAPIUpdateGreeter = "/api.v1.services.helloworld.HelloGreeterAPI/UpdateGreeter"
 
-type GreeterAPIHTTPServer interface {
+type HelloGreeterAPIHTTPServer interface {
 	// CreateGreeter CreateGreeter creates a new Greeter
 	CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterResponse, error)
 	// DeleteGreeter DeleteGreeter deletes a Greeter
@@ -44,18 +44,18 @@ type GreeterAPIHTTPServer interface {
 	UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterResponse, error)
 }
 
-func RegisterGreeterAPIHTTPServer(s *http.Server, srv GreeterAPIHTTPServer) {
+func RegisterHelloGreeterAPIHTTPServer(s *http.Server, srv HelloGreeterAPIHTTPServer) {
 	r := s.Route("/")
-	r.GET("/api/v1/greeter/{id}/hello", _GreeterAPI_SayHello0_HTTP_Handler(srv))
-	r.POST("/api/v1/greeter/{id}/hello", _GreeterAPI_PostHello0_HTTP_Handler(srv))
-	r.POST("/api/v1/greeter", _GreeterAPI_CreateGreeter0_HTTP_Handler(srv))
-	r.PUT("/api/v1/greeter/{id}", _GreeterAPI_UpdateGreeter0_HTTP_Handler(srv))
-	r.DELETE("/api/v1/greeter/{id}", _GreeterAPI_DeleteGreeter0_HTTP_Handler(srv))
-	r.GET("/api/v1/greeter/{id}", _GreeterAPI_GetGreeter0_HTTP_Handler(srv))
-	r.GET("/api/v1/greeter", _GreeterAPI_ListGreeter0_HTTP_Handler(srv))
+	r.GET("/api/v1/helloworld/greeter/{id}/hello", _HelloGreeterAPI_SayHello0_HTTP_Handler(srv))
+	r.POST("/api/v1/helloworld/greeter/{id}/hello", _HelloGreeterAPI_PostHello0_HTTP_Handler(srv))
+	r.POST("/api/v1/helloworld/greeter", _HelloGreeterAPI_CreateGreeter0_HTTP_Handler(srv))
+	r.PUT("/api/v1/helloworld/greeter/{id}", _HelloGreeterAPI_UpdateGreeter0_HTTP_Handler(srv))
+	r.DELETE("/api/v1/helloworld/greeter/{id}", _HelloGreeterAPI_DeleteGreeter0_HTTP_Handler(srv))
+	r.GET("/api/v1/helloworld/greeter/{id}", _HelloGreeterAPI_GetGreeter0_HTTP_Handler(srv))
+	r.GET("/api/v1/helloworld/greeter", _HelloGreeterAPI_ListGreeter0_HTTP_Handler(srv))
 }
 
-func _GreeterAPI_SayHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_SayHello0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SayHelloRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -64,7 +64,7 @@ func _GreeterAPI_SayHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPISayHello)
+		http.SetOperation(ctx, OperationHelloGreeterAPISayHello)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.SayHello(ctx, req.(*SayHelloRequest))
 		})
@@ -77,7 +77,7 @@ func _GreeterAPI_SayHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.
 	}
 }
 
-func _GreeterAPI_PostHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_PostHello0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PostHelloRequest
 		if err := ctx.Bind(&in.Data); err != nil {
@@ -89,7 +89,7 @@ func _GreeterAPI_PostHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPIPostHello)
+		http.SetOperation(ctx, OperationHelloGreeterAPIPostHello)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.PostHello(ctx, req.(*PostHelloRequest))
 		})
@@ -102,7 +102,7 @@ func _GreeterAPI_PostHello0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http
 	}
 }
 
-func _GreeterAPI_CreateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_CreateGreeter0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateGreeterRequest
 		if err := ctx.Bind(&in.Data); err != nil {
@@ -111,7 +111,7 @@ func _GreeterAPI_CreateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPICreateGreeter)
+		http.SetOperation(ctx, OperationHelloGreeterAPICreateGreeter)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateGreeter(ctx, req.(*CreateGreeterRequest))
 		})
@@ -124,7 +124,7 @@ func _GreeterAPI_CreateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 	}
 }
 
-func _GreeterAPI_UpdateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_UpdateGreeter0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateGreeterRequest
 		if err := ctx.Bind(&in.Data); err != nil {
@@ -136,7 +136,7 @@ func _GreeterAPI_UpdateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPIUpdateGreeter)
+		http.SetOperation(ctx, OperationHelloGreeterAPIUpdateGreeter)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateGreeter(ctx, req.(*UpdateGreeterRequest))
 		})
@@ -149,7 +149,7 @@ func _GreeterAPI_UpdateGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 	}
 }
 
-func _GreeterAPI_DeleteGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_DeleteGreeter0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteGreeterRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -158,7 +158,7 @@ func _GreeterAPI_DeleteGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPIDeleteGreeter)
+		http.SetOperation(ctx, OperationHelloGreeterAPIDeleteGreeter)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.DeleteGreeter(ctx, req.(*DeleteGreeterRequest))
 		})
@@ -171,7 +171,7 @@ func _GreeterAPI_DeleteGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx 
 	}
 }
 
-func _GreeterAPI_GetGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_GetGreeter0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetGreeterRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -180,7 +180,7 @@ func _GreeterAPI_GetGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPIGetGreeter)
+		http.SetOperation(ctx, OperationHelloGreeterAPIGetGreeter)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetGreeter(ctx, req.(*GetGreeterRequest))
 		})
@@ -193,13 +193,13 @@ func _GreeterAPI_GetGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx htt
 	}
 }
 
-func _GreeterAPI_ListGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx http.Context) error {
+func _HelloGreeterAPI_ListGreeter0_HTTP_Handler(srv HelloGreeterAPIHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListGreeterRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterAPIListGreeter)
+		http.SetOperation(ctx, OperationHelloGreeterAPIListGreeter)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ListGreeter(ctx, req.(*ListGreeterRequest))
 		})
@@ -212,7 +212,7 @@ func _GreeterAPI_ListGreeter0_HTTP_Handler(srv GreeterAPIHTTPServer) func(ctx ht
 	}
 }
 
-type GreeterAPIHTTPClient interface {
+type HelloGreeterAPIHTTPClient interface {
 	CreateGreeter(ctx context.Context, req *CreateGreeterRequest, opts ...http.CallOption) (rsp *CreateGreeterResponse, err error)
 	DeleteGreeter(ctx context.Context, req *DeleteGreeterRequest, opts ...http.CallOption) (rsp *DeleteGreeterResponse, err error)
 	GetGreeter(ctx context.Context, req *GetGreeterRequest, opts ...http.CallOption) (rsp *GetGreeterResponse, err error)
@@ -222,19 +222,19 @@ type GreeterAPIHTTPClient interface {
 	UpdateGreeter(ctx context.Context, req *UpdateGreeterRequest, opts ...http.CallOption) (rsp *UpdateGreeterResponse, err error)
 }
 
-type GreeterAPIHTTPClientImpl struct {
+type HelloGreeterAPIHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewGreeterAPIHTTPClient(client *http.Client) GreeterAPIHTTPClient {
-	return &GreeterAPIHTTPClientImpl{client}
+func NewHelloGreeterAPIHTTPClient(client *http.Client) HelloGreeterAPIHTTPClient {
+	return &HelloGreeterAPIHTTPClientImpl{client}
 }
 
-func (c *GreeterAPIHTTPClientImpl) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...http.CallOption) (*CreateGreeterResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...http.CallOption) (*CreateGreeterResponse, error) {
 	var out CreateGreeterResponse
-	pattern := "/api/v1/greeter"
+	pattern := "/api/v1/helloworld/greeter"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationGreeterAPICreateGreeter))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPICreateGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in.Data, &out, opts...)
 	if err != nil {
@@ -243,11 +243,11 @@ func (c *GreeterAPIHTTPClientImpl) CreateGreeter(ctx context.Context, in *Create
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...http.CallOption) (*DeleteGreeterResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...http.CallOption) (*DeleteGreeterResponse, error) {
 	var out DeleteGreeterResponse
-	pattern := "/api/v1/greeter/{id}"
+	pattern := "/api/v1/helloworld/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationGreeterAPIDeleteGreeter))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPIDeleteGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
@@ -256,11 +256,11 @@ func (c *GreeterAPIHTTPClientImpl) DeleteGreeter(ctx context.Context, in *Delete
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...http.CallOption) (*GetGreeterResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...http.CallOption) (*GetGreeterResponse, error) {
 	var out GetGreeterResponse
-	pattern := "/api/v1/greeter/{id}"
+	pattern := "/api/v1/helloworld/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationGreeterAPIGetGreeter))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPIGetGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -269,11 +269,11 @@ func (c *GreeterAPIHTTPClientImpl) GetGreeter(ctx context.Context, in *GetGreete
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...http.CallOption) (*ListGreeterResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...http.CallOption) (*ListGreeterResponse, error) {
 	var out ListGreeterResponse
-	pattern := "/api/v1/greeter"
+	pattern := "/api/v1/helloworld/greeter"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationGreeterAPIListGreeter))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPIListGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -282,11 +282,11 @@ func (c *GreeterAPIHTTPClientImpl) ListGreeter(ctx context.Context, in *ListGree
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) PostHello(ctx context.Context, in *PostHelloRequest, opts ...http.CallOption) (*PostHelloResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) PostHello(ctx context.Context, in *PostHelloRequest, opts ...http.CallOption) (*PostHelloResponse, error) {
 	var out PostHelloResponse
-	pattern := "/api/v1/greeter/{id}/hello"
+	pattern := "/api/v1/helloworld/greeter/{id}/hello"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationGreeterAPIPostHello))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPIPostHello))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in.Data, &out.Data, opts...)
 	if err != nil {
@@ -295,11 +295,11 @@ func (c *GreeterAPIHTTPClientImpl) PostHello(ctx context.Context, in *PostHelloR
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) SayHello(ctx context.Context, in *SayHelloRequest, opts ...http.CallOption) (*SayHelloResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) SayHello(ctx context.Context, in *SayHelloRequest, opts ...http.CallOption) (*SayHelloResponse, error) {
 	var out SayHelloResponse
-	pattern := "/api/v1/greeter/{id}/hello"
+	pattern := "/api/v1/helloworld/greeter/{id}/hello"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationGreeterAPISayHello))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPISayHello))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -308,11 +308,11 @@ func (c *GreeterAPIHTTPClientImpl) SayHello(ctx context.Context, in *SayHelloReq
 	return &out, nil
 }
 
-func (c *GreeterAPIHTTPClientImpl) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...http.CallOption) (*UpdateGreeterResponse, error) {
+func (c *HelloGreeterAPIHTTPClientImpl) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...http.CallOption) (*UpdateGreeterResponse, error) {
 	var out UpdateGreeterResponse
-	pattern := "/api/v1/greeter/{id}"
+	pattern := "/api/v1/helloworld/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationGreeterAPIUpdateGreeter))
+	opts = append(opts, http.Operation(OperationHelloGreeterAPIUpdateGreeter))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in.Data, &out, opts...)
 	if err != nil {

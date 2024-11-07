@@ -8,9 +8,9 @@ import (
 
 // GreeterHTTPService is a greeter service.
 type GreeterHTTPService struct {
-	helloworld.GreeterAPIServer
+	helloworld.HelloGreeterAPIServer
 
-	client helloworld.GreeterAPIHTTPClient
+	client helloworld.HelloGreeterAPIHTTPClient
 }
 
 func (g GreeterHTTPService) SayHello(ctx context.Context, request *helloworld.SayHelloRequest) (*helloworld.SayHelloResponse, error) {
@@ -47,13 +47,13 @@ func (g GreeterHTTPService) ListGreeter(ctx context.Context, request *helloworld
 }
 
 // NewGreeterHTTPService new a greeter service.
-func NewGreeterHTTPService(client helloworld.GreeterAPIHTTPClient) *GreeterHTTPService {
+func NewGreeterHTTPService(client helloworld.HelloGreeterAPIHTTPClient) *GreeterHTTPService {
 	return &GreeterHTTPService{client: client}
 }
 
 // NewGreeterHTTPServer new a greeter service.
-func NewGreeterHTTPServer(client helloworld.GreeterAPIHTTPClient) helloworld.GreeterAPIServer {
+func NewGreeterHTTPServer(client helloworld.HelloGreeterAPIHTTPClient) helloworld.HelloGreeterAPIServer {
 	return &GreeterHTTPService{client: client}
 }
 
-var _ helloworld.GreeterAPIServer = (*GreeterHTTPService)(nil)
+var _ helloworld.HelloGreeterAPIServer = (*GreeterHTTPService)(nil)

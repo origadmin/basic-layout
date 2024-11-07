@@ -12,10 +12,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/helloworld/biz"
-	"origadmin/basic-layout/internal/mods/helloworld/dal"
-	"origadmin/basic-layout/internal/mods/helloworld/server"
-	"origadmin/basic-layout/internal/mods/helloworld/service"
+	"origadmin/basic-layout/internal/mods/secondworld/biz"
+	"origadmin/basic-layout/internal/mods/secondworld/dal"
+	"origadmin/basic-layout/internal/mods/secondworld/server"
+	"origadmin/basic-layout/internal/mods/secondworld/service"
 )
 
 import (
@@ -33,10 +33,10 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 		return nil, nil, err
 	}
 	greeterDao := dal.NewGreeterDal(database, logger)
-	helloGreeterAPIClient := biz.NewGreeterClient(greeterDao, logger)
-	helloGreeterAPIServer := service.NewGreeterServer(helloGreeterAPIClient)
-	grpcServer := server.NewGRPCServer(configsBootstrap, helloGreeterAPIServer, logger)
-	httpServer := server.NewHTTPServer(configsBootstrap, helloGreeterAPIServer, logger)
+	secondGreeterAPIClient := biz.NewGreeterClient(greeterDao, logger)
+	secondGreeterAPIServer := service.NewGreeterServer(secondGreeterAPIClient)
+	grpcServer := server.NewGRPCServer(configsBootstrap, secondGreeterAPIServer, logger)
+	httpServer := server.NewHTTPServer(configsBootstrap, secondGreeterAPIServer, logger)
 	injectorServer := &bootstrap.InjectorServer{
 		Bootstrap:  configsBootstrap,
 		Logger:     logger,

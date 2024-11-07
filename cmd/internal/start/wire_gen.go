@@ -33,12 +33,12 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	greeterAPIClient := biz.NewGreeterClient(greeterDao, logger)
 	greeterAPIServer := service.NewGreeterServer(greeterAPIClient)
 	injectorClient := &bootstrap.InjectorClient{
-		Bootstrap:     configsBootstrap,
-		Logger:        logger,
-		Discovery:     discovery,
-		ServerGINS:    ginsServer,
-		ServerHTTP:    httpServer,
-		GreeterServer: greeterAPIServer,
+		Bootstrap:          configsBootstrap,
+		Logger:             logger,
+		Discovery:          discovery,
+		ServerGINS:         ginsServer,
+		ServerHTTP:         httpServer,
+		HelloGreeterServer: greeterAPIServer,
 	}
 	app := NewApp(contextContext, injectorClient)
 	return app, func() {

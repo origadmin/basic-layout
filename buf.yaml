@@ -22,3 +22,4 @@ deps:
   - buf.build/googleapis/googleapis
   - buf.build/bufbuild/protovalidate
   - buf.build/origadmin/rpcerr
+  - buf.build/origadmin/entgen

@@ -19,21 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GreeterAPI_SayHello_FullMethodName      = "/api.v1.services.helloworld.GreeterAPI/SayHello"
-	GreeterAPI_PostHello_FullMethodName     = "/api.v1.services.helloworld.GreeterAPI/PostHello"
-	GreeterAPI_CreateGreeter_FullMethodName = "/api.v1.services.helloworld.GreeterAPI/CreateGreeter"
-	GreeterAPI_UpdateGreeter_FullMethodName = "/api.v1.services.helloworld.GreeterAPI/UpdateGreeter"
-	GreeterAPI_DeleteGreeter_FullMethodName = "/api.v1.services.helloworld.GreeterAPI/DeleteGreeter"
-	GreeterAPI_GetGreeter_FullMethodName    = "/api.v1.services.helloworld.GreeterAPI/GetGreeter"
-	GreeterAPI_ListGreeter_FullMethodName   = "/api.v1.services.helloworld.GreeterAPI/ListGreeter"
+	HelloGreeterAPI_SayHello_FullMethodName      = "/api.v1.services.helloworld.HelloGreeterAPI/SayHello"
+	HelloGreeterAPI_PostHello_FullMethodName     = "/api.v1.services.helloworld.HelloGreeterAPI/PostHello"
+	HelloGreeterAPI_CreateGreeter_FullMethodName = "/api.v1.services.helloworld.HelloGreeterAPI/CreateGreeter"
+	HelloGreeterAPI_UpdateGreeter_FullMethodName = "/api.v1.services.helloworld.HelloGreeterAPI/UpdateGreeter"
+	HelloGreeterAPI_DeleteGreeter_FullMethodName = "/api.v1.services.helloworld.HelloGreeterAPI/DeleteGreeter"
+	HelloGreeterAPI_GetGreeter_FullMethodName    = "/api.v1.services.helloworld.HelloGreeterAPI/GetGreeter"
+	HelloGreeterAPI_ListGreeter_FullMethodName   = "/api.v1.services.helloworld.HelloGreeterAPI/ListGreeter"
 )
 
-// GreeterAPIClient is the client API for GreeterAPI service.
+// HelloGreeterAPIClient is the client API for HelloGreeterAPI service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // The greeting service definition.
-type GreeterAPIClient interface {
+type HelloGreeterAPIClient interface {
 	// SayHello is a get method
 	SayHello(ctx context.Context, in *SayHelloRequest, opts ...grpc.CallOption) (*SayHelloResponse, error)
 	// PostHello is a post method
@@ -50,90 +50,90 @@ type GreeterAPIClient interface {
 	ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...grpc.CallOption) (*ListGreeterResponse, error)
 }
 
-type greeterAPIClient struct {
+type helloGreeterAPIClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGreeterAPIClient(cc grpc.ClientConnInterface) GreeterAPIClient {
-	return &greeterAPIClient{cc}
+func NewHelloGreeterAPIClient(cc grpc.ClientConnInterface) HelloGreeterAPIClient {
+	return &helloGreeterAPIClient{cc}
 }
 
-func (c *greeterAPIClient) SayHello(ctx context.Context, in *SayHelloRequest, opts ...grpc.CallOption) (*SayHelloResponse, error) {
+func (c *helloGreeterAPIClient) SayHello(ctx context.Context, in *SayHelloRequest, opts ...grpc.CallOption) (*SayHelloResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SayHelloResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_SayHello_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_SayHello_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) PostHello(ctx context.Context, in *PostHelloRequest, opts ...grpc.CallOption) (*PostHelloResponse, error) {
+func (c *helloGreeterAPIClient) PostHello(ctx context.Context, in *PostHelloRequest, opts ...grpc.CallOption) (*PostHelloResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PostHelloResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_PostHello_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_PostHello_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...grpc.CallOption) (*CreateGreeterResponse, error) {
+func (c *helloGreeterAPIClient) CreateGreeter(ctx context.Context, in *CreateGreeterRequest, opts ...grpc.CallOption) (*CreateGreeterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateGreeterResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_CreateGreeter_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_CreateGreeter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...grpc.CallOption) (*UpdateGreeterResponse, error) {
+func (c *helloGreeterAPIClient) UpdateGreeter(ctx context.Context, in *UpdateGreeterRequest, opts ...grpc.CallOption) (*UpdateGreeterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateGreeterResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_UpdateGreeter_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_UpdateGreeter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...grpc.CallOption) (*DeleteGreeterResponse, error) {
+func (c *helloGreeterAPIClient) DeleteGreeter(ctx context.Context, in *DeleteGreeterRequest, opts ...grpc.CallOption) (*DeleteGreeterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteGreeterResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_DeleteGreeter_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_DeleteGreeter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...grpc.CallOption) (*GetGreeterResponse, error) {
+func (c *helloGreeterAPIClient) GetGreeter(ctx context.Context, in *GetGreeterRequest, opts ...grpc.CallOption) (*GetGreeterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetGreeterResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_GetGreeter_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_GetGreeter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *greeterAPIClient) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...grpc.CallOption) (*ListGreeterResponse, error) {
+func (c *helloGreeterAPIClient) ListGreeter(ctx context.Context, in *ListGreeterRequest, opts ...grpc.CallOption) (*ListGreeterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListGreeterResponse)
-	err := c.cc.Invoke(ctx, GreeterAPI_ListGreeter_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HelloGreeterAPI_ListGreeter_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// GreeterAPIServer is the server API for GreeterAPI service.
-// All implementations must embed UnimplementedGreeterAPIServer
+// HelloGreeterAPIServer is the server API for HelloGreeterAPI service.
+// All implementations must embed UnimplementedHelloGreeterAPIServer
 // for forward compatibility.
 //
 // The greeting service definition.
-type GreeterAPIServer interface {
+type HelloGreeterAPIServer interface {
 	// SayHello is a get method
 	SayHello(context.Context, *SayHelloRequest) (*SayHelloResponse, error)
 	// PostHello is a post method
@@ -148,218 +148,218 @@ type GreeterAPIServer interface {
 	GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterResponse, error)
 	// ListGreeter lists Greeters
 	ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterResponse, error)
-	mustEmbedUnimplementedGreeterAPIServer()
+	mustEmbedUnimplementedHelloGreeterAPIServer()
 }
 
-// UnimplementedGreeterAPIServer must be embedded to have
+// UnimplementedHelloGreeterAPIServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedGreeterAPIServer struct{}
+type UnimplementedHelloGreeterAPIServer struct{}
 
-func (UnimplementedGreeterAPIServer) SayHello(context.Context, *SayHelloRequest) (*SayHelloResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) SayHello(context.Context, *SayHelloRequest) (*SayHelloResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (UnimplementedGreeterAPIServer) PostHello(context.Context, *PostHelloRequest) (*PostHelloResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) PostHello(context.Context, *PostHelloRequest) (*PostHelloResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PostHello not implemented")
 }
-func (UnimplementedGreeterAPIServer) CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) CreateGreeter(context.Context, *CreateGreeterRequest) (*CreateGreeterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGreeter not implemented")
 }
-func (UnimplementedGreeterAPIServer) UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) UpdateGreeter(context.Context, *UpdateGreeterRequest) (*UpdateGreeterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGreeter not implemented")
 }
-func (UnimplementedGreeterAPIServer) DeleteGreeter(context.Context, *DeleteGreeterRequest) (*DeleteGreeterResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) DeleteGreeter(context.Context, *DeleteGreeterRequest) (*DeleteGreeterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGreeter not implemented")
 }
-func (UnimplementedGreeterAPIServer) GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) GetGreeter(context.Context, *GetGreeterRequest) (*GetGreeterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGreeter not implemented")
 }
-func (UnimplementedGreeterAPIServer) ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterResponse, error) {
+func (UnimplementedHelloGreeterAPIServer) ListGreeter(context.Context, *ListGreeterRequest) (*ListGreeterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListGreeter not implemented")
 }
-func (UnimplementedGreeterAPIServer) mustEmbedUnimplementedGreeterAPIServer() {}
-func (UnimplementedGreeterAPIServer) testEmbeddedByValue()                    {}
+func (UnimplementedHelloGreeterAPIServer) mustEmbedUnimplementedHelloGreeterAPIServer() {}
+func (UnimplementedHelloGreeterAPIServer) testEmbeddedByValue()                         {}
 
-// UnsafeGreeterAPIServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to GreeterAPIServer will
+// UnsafeHelloGreeterAPIServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to HelloGreeterAPIServer will
 // result in compilation errors.
-type UnsafeGreeterAPIServer interface {
-	mustEmbedUnimplementedGreeterAPIServer()
+type UnsafeHelloGreeterAPIServer interface {
+	mustEmbedUnimplementedHelloGreeterAPIServer()
 }
 
-func RegisterGreeterAPIServer(s grpc.ServiceRegistrar, srv GreeterAPIServer) {
-	// If the following call pancis, it indicates UnimplementedGreeterAPIServer was
+func RegisterHelloGreeterAPIServer(s grpc.ServiceRegistrar, srv HelloGreeterAPIServer) {
+	// If the following call pancis, it indicates UnimplementedHelloGreeterAPIServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&GreeterAPI_ServiceDesc, srv)
+	s.RegisterService(&HelloGreeterAPI_ServiceDesc, srv)
 }
 
-func _GreeterAPI_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SayHelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).SayHello(ctx, in)
+		return srv.(HelloGreeterAPIServer).SayHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_SayHello_FullMethodName,
+		FullMethod: HelloGreeterAPI_SayHello_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).SayHello(ctx, req.(*SayHelloRequest))
+		return srv.(HelloGreeterAPIServer).SayHello(ctx, req.(*SayHelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_PostHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_PostHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PostHelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).PostHello(ctx, in)
+		return srv.(HelloGreeterAPIServer).PostHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_PostHello_FullMethodName,
+		FullMethod: HelloGreeterAPI_PostHello_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).PostHello(ctx, req.(*PostHelloRequest))
+		return srv.(HelloGreeterAPIServer).PostHello(ctx, req.(*PostHelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_CreateGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_CreateGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateGreeterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).CreateGreeter(ctx, in)
+		return srv.(HelloGreeterAPIServer).CreateGreeter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_CreateGreeter_FullMethodName,
+		FullMethod: HelloGreeterAPI_CreateGreeter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).CreateGreeter(ctx, req.(*CreateGreeterRequest))
+		return srv.(HelloGreeterAPIServer).CreateGreeter(ctx, req.(*CreateGreeterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_UpdateGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_UpdateGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateGreeterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).UpdateGreeter(ctx, in)
+		return srv.(HelloGreeterAPIServer).UpdateGreeter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_UpdateGreeter_FullMethodName,
+		FullMethod: HelloGreeterAPI_UpdateGreeter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).UpdateGreeter(ctx, req.(*UpdateGreeterRequest))
+		return srv.(HelloGreeterAPIServer).UpdateGreeter(ctx, req.(*UpdateGreeterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_DeleteGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_DeleteGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteGreeterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).DeleteGreeter(ctx, in)
+		return srv.(HelloGreeterAPIServer).DeleteGreeter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_DeleteGreeter_FullMethodName,
+		FullMethod: HelloGreeterAPI_DeleteGreeter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).DeleteGreeter(ctx, req.(*DeleteGreeterRequest))
+		return srv.(HelloGreeterAPIServer).DeleteGreeter(ctx, req.(*DeleteGreeterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_GetGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_GetGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetGreeterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).GetGreeter(ctx, in)
+		return srv.(HelloGreeterAPIServer).GetGreeter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_GetGreeter_FullMethodName,
+		FullMethod: HelloGreeterAPI_GetGreeter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).GetGreeter(ctx, req.(*GetGreeterRequest))
+		return srv.(HelloGreeterAPIServer).GetGreeter(ctx, req.(*GetGreeterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreeterAPI_ListGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloGreeterAPI_ListGreeter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListGreeterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterAPIServer).ListGreeter(ctx, in)
+		return srv.(HelloGreeterAPIServer).ListGreeter(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GreeterAPI_ListGreeter_FullMethodName,
+		FullMethod: HelloGreeterAPI_ListGreeter_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterAPIServer).ListGreeter(ctx, req.(*ListGreeterRequest))
+		return srv.(HelloGreeterAPIServer).ListGreeter(ctx, req.(*ListGreeterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// GreeterAPI_ServiceDesc is the grpc.ServiceDesc for GreeterAPI service.
+// HelloGreeterAPI_ServiceDesc is the grpc.ServiceDesc for HelloGreeterAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var GreeterAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.services.helloworld.GreeterAPI",
-	HandlerType: (*GreeterAPIServer)(nil),
+var HelloGreeterAPI_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.v1.services.helloworld.HelloGreeterAPI",
+	HandlerType: (*HelloGreeterAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SayHello",
-			Handler:    _GreeterAPI_SayHello_Handler,
+			Handler:    _HelloGreeterAPI_SayHello_Handler,
 		},
 		{
 			MethodName: "PostHello",
-			Handler:    _GreeterAPI_PostHello_Handler,
+			Handler:    _HelloGreeterAPI_PostHello_Handler,
 		},
 		{
 			MethodName: "CreateGreeter",
-			Handler:    _GreeterAPI_CreateGreeter_Handler,
+			Handler:    _HelloGreeterAPI_CreateGreeter_Handler,
 		},
 		{
 			MethodName: "UpdateGreeter",
-			Handler:    _GreeterAPI_UpdateGreeter_Handler,
+			Handler:    _HelloGreeterAPI_UpdateGreeter_Handler,
 		},
 		{
 			MethodName: "DeleteGreeter",
-			Handler:    _GreeterAPI_DeleteGreeter_Handler,
+			Handler:    _HelloGreeterAPI_DeleteGreeter_Handler,
 		},
 		{
 			MethodName: "GetGreeter",
-			Handler:    _GreeterAPI_GetGreeter_Handler,
+			Handler:    _HelloGreeterAPI_GetGreeter_Handler,
 		},
 		{
 			MethodName: "ListGreeter",
-			Handler:    _GreeterAPI_ListGreeter_Handler,
+			Handler:    _HelloGreeterAPI_ListGreeter_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

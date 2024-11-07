@@ -1,50 +1,53 @@
 package server
 
 import (
-	stdhttp "net/http"
 	"net/netip"
 	"net/url"
 	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/origadmin/toolkits/runtime/config"
+	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
-func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServer, l log.Logger) *http.Server {
-	var opts = []http.ServerOption{
-		http.Middleware(
+// NewGINSServer new a gin server.
+func NewGINSServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPIServer, l log.Logger) *gins.Server {
+	var opts = []gins.ServerOption{
+		gins.Middleware(
 			recovery.Recovery(),
 			metadata.Server(),
 		),
 	}
 	c := bs.Service
-	if c.Http == nil {
-		c.Http = new(config.ServiceConfig_HTTP)
+	if c.Gins == nil {
+		c.Gins = new(config.ServiceConfig_GINS)
 	}
 	if c.Gins.Network != "" {
-		opts = append(opts, http.Network(c.Gins.Network))
+		opts = append(opts, gins.Network(c.Gins.Network))
 	}
 	if c.Gins.Addr != "" {
-		opts = append(opts, http.Address(c.Gins.Addr))
+		opts = append(opts, gins.Address(c.Gins.Addr))
 	}
 	if c.Gins.Timeout != nil {
-		opts = append(opts, http.Timeout(c.Gins.Timeout.AsDuration()))
+		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
 	}
 	//if c.Middleware == nil {
 	//	c.Middleware = new(configs.Server_Middleware)
 	//}
 	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {
-		opts = append(opts, http.Middleware(middlewares...))
+		opts = append(opts, gins.Middleware(middlewares...))
+	}
+
+	if l != nil {
+		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
 	}
 
 	naip, _ := netip.ParseAddrPort(bs.Service.Gins.Addr)
@@ -68,19 +71,10 @@ func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIS
 		}
 	}
 
-	log.Infof("Server.GinHttp.Endpoint: %v", bs.Service.Gins.Endpoint)
+	log.Infof("Server.Gins.Endpoint: %v", bs.Service.Gins.Endpoint)
 	ep, _ := url.Parse(bs.Service.Gins.Endpoint)
-	opts = append(opts, http.Endpoint(ep))
-	srv := http.NewServer(opts...)
-	engine := gin.New()
-
-	srv.Server = &stdhttp.Server{
-		Addr:         bs.Service.Gins.Addr,
-		Handler:      engine.Handler(),
-		ReadTimeout:  bs.Service.Gins.ReadTimeout.AsDuration(),
-		WriteTimeout: bs.Service.Gins.WriteTimeout.AsDuration(),
-		IdleTimeout:  bs.Service.Gins.IdleTimeout.AsDuration(),
-	}
-	helloworld.RegisterHelloGreeterAPIGINSServer(engine, greeter)
+	opts = append(opts, gins.Endpoint(ep))
+	srv := gins.NewServer(opts...)
+	secondworld.RegisterSecondGreeterAPIGINSServer(srv, greeter)
 	return srv
 }

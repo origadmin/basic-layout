@@ -12,13 +12,13 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/origadmin/toolkits/runtime/config"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServer, l log.Logger) *grpc.Server {
+func NewGRPCServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPIServer, l log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -72,6 +72,6 @@ func NewGRPCServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServ
 	ep, _ := url.Parse(bs.Service.Grpc.Endpoint)
 	opts = append(opts, grpc.Endpoint(ep))
 	srv := grpc.NewServer(opts...)
-	helloworld.RegisterHelloGreeterAPIServer(srv, greeter)
+	secondworld.RegisterSecondGreeterAPIServer(srv, greeter)
 	return srv
 }

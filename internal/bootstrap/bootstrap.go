@@ -17,6 +17,7 @@ import (
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/helloworld/service"
 )
@@ -31,12 +32,13 @@ var (
 )
 
 type InjectorClient struct {
-	Bootstrap     *configs.Bootstrap
-	Logger        log.Logger
-	Discovery     registry.Discovery
-	ServerGINS    *gins.Server
-	ServerHTTP    *http.Server
-	GreeterServer helloworld.GreeterAPIServer
+	Bootstrap           *configs.Bootstrap
+	Logger              log.Logger
+	Discovery           registry.Discovery
+	ServerGINS          *gins.Server
+	ServerHTTP          *http.Server
+	HelloGreeterServer  helloworld.HelloGreeterAPIServer
+	SecondGreeterServer secondworld.SecondGreeterAPIServer
 }
 
 type InjectorServer struct {
@@ -73,7 +75,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 	if err != nil {
 		return err
 	}
-	gClient := helloworld.NewGreeterAPIClient(conn)
+	gClient := helloworld.NewHelloGreeterAPIClient(conn)
 	// new http client
 	hConn, err := http.NewClient(
 		context.Background(),
@@ -88,9 +90,9 @@ func InjectorGinServer(injector *InjectorClient) error {
 	if err != nil {
 		return err
 	}
-	hClient := helloworld.NewGreeterAPIHTTPClient(hConn)
+	hClient := helloworld.NewHelloGreeterAPIHTTPClient(hConn)
 
-	var client helloworld.GreeterAPIServer
+	var client helloworld.HelloGreeterAPIServer
 	if entry := injector.Bootstrap.GetEntry(); entry != nil && entry.Scheme == "http" {
 		client = service.NewGreeterHTTPServer(hClient)
 	} else {
@@ -101,8 +103,8 @@ func InjectorGinServer(injector *InjectorClient) error {
 	//// add _ to avoid unused
 	//_ = grpcClient
 	//_ = httpClient
-	helloworld.RegisterGreeterAPIGINSServer(injector.ServerGINS, client)
-	helloworld.RegisterGreeterAPIHTTPServer(injector.ServerHTTP, client)
+	helloworld.RegisterHelloGreeterAPIGINSServer(injector.ServerGINS, client)
+	helloworld.RegisterHelloGreeterAPIHTTPServer(injector.ServerHTTP, client)
 	//}
 
 	return nil

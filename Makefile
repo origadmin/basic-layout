@@ -5,6 +5,11 @@ VERSION=$(shell git describe --tags --always)
 PROJECT_ORG=OrigAdmin
 THIRD_PARTY_PATH=third_party
 
+PROTO_INTERNAL_PATH=internal
+PROTO_TOOLKITS_PATH=toolkits
+PROTO_API_PATH=api
+OPENAPI_DOCS_PATH=resources/docs/openapi
+
 ifeq ($(GOHOSTOS), windows)
 	#the `find.exe` is different from `find` in bash/shell.
 	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
@@ -18,9 +23,9 @@ ifeq ($(GOHOSTOS), windows)
 	gitHash = $(shell git rev-parse HEAD)
 
 	# Use PowerShell to find .proto files, convert to relative paths, and replace \ with /
-	INTERNAL_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse internal -Filter *.proto | Resolve-Path -Relative")
-	TOOLKITS_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse toolkits -Filter *.proto | Resolve-Path -Relative")
-	API_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse api -Filter *.proto | Resolve-Path -Relative")
+	INTERNAL_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse ${PROTO_INTERNAL_PATH} -Filter *.proto | Resolve-Path -Relative")
+	TOOLKITS_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse ${PROTO_TOOLKITS_PATH} -Filter *.proto | Resolve-Path -Relative")
+	API_PROTO_FILES := $(shell powershell -Command "Get-ChildItem -Recurse ${PROTO_API_PATH} -Filter *.proto | Resolve-Path -Relative")
 
 	# Replace \ with /
 	INTERNAL_PROTO_FILES := $(subst \,/, $(INTERNAL_PROTO_FILES))
@@ -40,9 +45,9 @@ else
 	# gitHash Current commit id, same as gitCommit result
 	gitHash = $(shell git rev-parse HEAD)
 
-	INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
-	TOOLKITS_PROTO_FILES=$(shell find toolkits -name *.proto)
-	API_PROTO_FILES=$(shell find api -name *.proto)
+	INTERNAL_PROTO_FILES=$(shell find ${PROTO_INTERNAL_PATH} -name *.proto)
+	TOOLKITS_PROTO_FILES=$(shell find ${PROTO_TOOLKITS_PATH} -name *.proto)
+	API_PROTO_FILES=$(shell find ${PROTO_API_PATH} -name *.proto)
 
 	BUILT_DATE = $(shell TZ=Asia/Shanghai date +%FT%T%z)
 	TREE_STATE = $(shell if git status | grep -q 'clean'; then echo clean; else echo dirty; fi)
@@ -65,6 +70,8 @@ LDFLAGS := -X $(MODULE_PATH).gitTag=$(TAG) \
            -X $(MODULE_PATH).gitBranch=$(BRANCH) \
            -X $(MODULE_PATH).version=$(VERSION)
 
+PROTO_PATH := --proto_path=. --proto_path=./third_party
+
 .PHONY: init
 # init env
 init:
@@ -86,27 +93,15 @@ init:
 	buf export buf.build/kratos/apis -o $(THIRD_PARTY_PATH)
 	buf export buf.build/origadmin/rpcerr -o $(THIRD_PARTY_PATH)
 	buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
-
-
-.PHONY: tools
-# generate tools proto or use ./toolkits/generate.go
-tools:
-	protoc --proto_path=./internal \
-	--proto_path=./third_party \
-	--proto_path=./toolkits \
-	--go_out=paths=source_relative:./toolkits \
-	--validate_out=lang=go,paths=source_relative:./toolkits \
-	$(TOOLKITS_PROTO_FILES)
+	buf export buf.build/origadmin/entgen -o $(THIRD_PARTY_PATH)
 
 .PHONY: config
 # generate internal proto or use ./internal/generate.go
 config: 
-	protoc --proto_path=./internal \
-		--proto_path=./third_party \
-		--proto_path=./toolkits \
-		--go_out=paths=source_relative:./internal \
-		--validate_out=lang=go:. \
-		$(INTERNAL_PROTO_FILES)
+	protoc ${PROTO_PATH} \
+	--go_out=paths=source_relative:./internal \
+	--validate_out=lang=go:. \
+	$(INTERNAL_PROTO_FILES)
 
 .PHONY: api
 # generate api proto or use ./api/generate.go
@@ -118,16 +113,29 @@ api:
 # 	       --go-grpc_out=paths=source_relative:./api \
 #	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 #	       $(API_PROTO_FILES)
-	protoc --proto_path=. \
-		--proto_path=./third_party \
+	protoc ${PROTO_PATH} \
 		--go_out=. \
 		--go-http_out=. \
 		--go-grpc_out=. \
 		--go-gins_out=. \
 		--go-errors_out=. \
 		--validate_out=lang=go:. \
-		--openapi_out=naming=proto,fq_schema_naming=true,default_response=false:api/v1/services \
 		$(API_PROTO_FILES)
+
+.PHONY: openapi
+# generate the openapi spec file
+openapi:
+	protoc ${PROTO_PATH} \
+	--openapi_out=output_mode=merge,naming=proto,fq_schema_naming=true,default_response=false:${OPENAPI_DOCS_PATH} \
+	$(API_PROTO_FILES)
+
+.PHONY: ent
+# generate ent proto or use ./toolkits/generate.go
+ent:
+	protoc --proto_path=. \
+		--proto_path=./third_party \
+		--ent_out=./database/ent/schema \
+		api/v1/proto/secondworld/greeter.proto
 
 .PHONY: pre
 # pre
@@ -163,15 +171,16 @@ generate:
 .PHONY: all
 # generate all
 all:
-	make tools;
 	make api;
 	make config;
 	make generate;
+	make openapi;
 
 .PHONY: http
 # run http request
 http:
 #	docker run --rm -i -t -v $PWD:/workdir jetbrains/intellij-http-client run.http
+#   docker run -v %CD%:/local swaggerapi/swagger-codegen-cli generate -l csharp -o /output/csharp -i https://petstore.swagger.io/v2/swagger.json
 
 # show help
 help:

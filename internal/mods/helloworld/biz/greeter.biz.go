@@ -70,8 +70,8 @@ func NewGreeterBiz(repo dto.GreeterDao, logger log.Logger) *GreeterBiz {
 }
 
 // NewGreeterClient new a Greeter use case.
-func NewGreeterClient(repo dto.GreeterDao, logger log.Logger) helloworld.GreeterAPIClient {
+func NewGreeterClient(repo dto.GreeterDao, logger log.Logger) helloworld.HelloGreeterAPIClient {
 	return &GreeterBiz{dao: repo, log: log.NewHelper(logger)}
 }
 
-var _ helloworld.GreeterAPIClient = (*GreeterBiz)(nil)
+var _ helloworld.HelloGreeterAPIClient = (*GreeterBiz)(nil)
