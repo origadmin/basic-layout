@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/origadmin/toolkits/runtime/config"
 	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
@@ -21,6 +22,7 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.GreeterAPIServer, l
 	var opts = []gins.ServerOption{
 		gins.Middleware(
 			recovery.Recovery(),
+			metadata.Server(),
 		),
 	}
 	c := bs.Service

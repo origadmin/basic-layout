@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/selector"
@@ -63,6 +64,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 		context.Background(),
 		grpc.WithMiddleware(
 			recovery.Recovery(),
+			metadata.Client(),
 		),
 		grpc.WithEndpoint("discovery:///"+serviceName),
 		grpc.WithDiscovery(discovery),
@@ -77,6 +79,7 @@ func InjectorGinServer(injector *InjectorClient) error {
 		context.Background(),
 		http.WithMiddleware(
 			recovery.Recovery(),
+			metadata.Client(),
 		),
 		http.WithEndpoint("discovery:///"+serviceName),
 		http.WithDiscovery(discovery),
