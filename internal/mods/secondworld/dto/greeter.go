@@ -10,7 +10,7 @@ import (
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(secondworld.HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED, http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.ErrorHTTP(secondworld.SECOND_WORLD_ERROR_REASON_GREETER_UNSPECIFIED, http.StatusNotFound, "user not found")
 )
 
 // Greeter is a Greeter model.
