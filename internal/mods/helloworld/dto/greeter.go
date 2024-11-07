@@ -10,11 +10,11 @@ import (
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED, http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND, http.StatusNotFound, "user not found")
 )
 
 // Greeter is a Greeter model.
-type Greeter = helloworld.HelloGreeterData
+type Greeter = helloworld.GreeterData
 
 // GreeterQueryParam defines the query parameters for the `Menu` struct.
 type GreeterQueryParam struct {
