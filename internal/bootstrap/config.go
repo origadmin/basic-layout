@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/goexts/ggb/settings"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
@@ -80,25 +81,27 @@ func LoadEnvFiles(paths ...string) (map[string]string, error) {
 	return envs, nil
 }
 
-func FromRemote(serviceName string, source *Config) (*configs.Bootstrap, error) {
+func FromRemote(serviceName string, source *Config, ss ...Setting) (*configs.Bootstrap, error) {
+	o := settings.ApplyOrZero(ss...)
 	switch source.Type {
 	case "consul":
-		return FromConsul(serviceName, source, nil)
+		return FromConsul(serviceName, source, o)
 	default:
 
 	}
 	return nil, errors.Errorf("unsupported config type: %s", source.Type)
 }
 
-func FromConsul(serviceName string, cfg *Config, l log.Logger) (*configs.Bootstrap, error) {
+func FromConsul(serviceName string, cfg *Config, option *Option) (*configs.Bootstrap, error) {
 	if cfg.Consul == nil {
 		return nil, errors.String("consul config is nil")
 	}
 	cfg.Consul.Path = source.ConfigPath(serviceName, "bootstrap.json")
-	return LoadBootstrap(cfg, l)
+	return LoadBootstrap(cfg, option)
 }
 
-func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
+func FromFlags(flags BootFlags, ss ...Setting) (*configs.Bootstrap, error) {
+	o := settings.ApplyOrZero(ss...)
 	path := WorkPath(flags.WorkDir, flags.ConfigPath)
 	if path == "" {
 		return nil, errors.String("config path is empty")
@@ -108,7 +111,7 @@ func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to state file %s", path)
 	}
-	log.NewHelper(l).Infof("loading config from %s", path)
+	log.Infof("loading config from %s", path)
 
 	var cfg *config.SourceConfig
 	if stat.IsDir() {
@@ -119,10 +122,11 @@ func FromFlags(flags BootFlags, l log.Logger) (*configs.Bootstrap, error) {
 	if cfg == nil {
 		cfg = NewFileSource(path)
 	}
-	return LoadBootstrap(PathToSource(cfg, flags.ServiceName), l)
+
+	return LoadBootstrap(PathToSource(cfg, flags.ServiceName), o)
 }
 
-func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*configs.Bootstrap, error) {
+func FromLocal(serviceName string, source *config.SourceConfig, option *Option) (*configs.Bootstrap, error) {
 	if source.File == nil {
 		return nil, errors.String("file config is nil")
 	}
@@ -132,7 +136,7 @@ func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to state file %s", path)
 	}
-	log.NewHelper(l).Infof("loading config from %s", path)
+	log.Infof("loading config from %s", path)
 
 	var cfg *config.SourceConfig
 	if stat.IsDir() {
@@ -143,11 +147,12 @@ func FromLocal(serviceName string, source *config.SourceConfig, l log.Logger) (*
 	if cfg == nil {
 		cfg = NewFileSource(path)
 	}
-	return LoadBootstrap(PathToSource(cfg, serviceName), l)
+	return LoadBootstrap(PathToSource(cfg, serviceName), option)
 }
 
-func FromLocalPath(serviceName string, path string, l log.Logger) (*configs.Bootstrap, error) {
-	return FromLocal(serviceName, NewFileSource(path), l)
+func FromLocalPath(serviceName string, path string, ss ...Setting) (*configs.Bootstrap, error) {
+	o := settings.ApplyOrZero(ss...)
+	return FromLocal(serviceName, NewFileSource(path), o)
 }
 
 // loadSourceFromDir loads configuration from a directory.
@@ -186,7 +191,7 @@ func loadSourceFromFile(path string) *config.SourceConfig {
 
 // LoadBootstrap Loads configuration files in various formats from a directory,
 // and parses them into a struct.
-func LoadBootstrap(cfg *Config, l log.Logger) (*configs.Bootstrap, error) {
+func LoadBootstrap(cfg *Config, option *Option) (*configs.Bootstrap, error) {
 	source, err := kratos.NewConfig(cfg)
 	if err != nil {
 		return nil, errors.Wrap(err, "new kratos config error")
@@ -221,7 +226,7 @@ func NewFileConfig(ccfg *config.SourceConfig, opts ...config.Option) (config.Con
 
 func NewFileSource(path string) *Config {
 	return &Config{
-		Type: File.String(),
+		Type: "file",
 		File: &config.SourceConfig_File{
 			Path: path,
 		},
