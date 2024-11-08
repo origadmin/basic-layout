@@ -42,7 +42,7 @@ func TestValidate(t *testing.T) {
 		Mode: "other",
 	}
 
-	v, err = protovalidate.New()
+	v, err = protovalidate.New(protovalidate.WithFailFast(true))
 	if err != nil {
 		fmt.Println("failed to initialize validator:", err)
 	}
