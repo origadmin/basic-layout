@@ -3,13 +3,15 @@
 
 
 {{ define "database" }}
-
+{{- $pkg := base $.Config.Package -}}
 {{ template "header" $ }}
+
+{{/* Additional dependencies injected to config. */}}
+{{ $deps := list }}{{ with $.Config.Annotations }}{{ $deps = $.Config.Annotations.Dependencies }}{{ end }}
 
 import (
     "context"
     "fmt"
-
     "entgo.io/ent/dialect/sql"
 )
 

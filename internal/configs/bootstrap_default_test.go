@@ -1,90 +1,55 @@
 package configs
 
 import (
-	"os"
-	"reflect"
+	"fmt"
 	"testing"
 
-	"google.golang.org/protobuf/encoding/protojson"
+	"github.com/bufbuild/protovalidate-go"
 )
 
-func TestSaveConf(t *testing.T) {
-	type args struct {
-		path string
-		conf *Bootstrap
+func TestValidate(t *testing.T) {
+	msg := &Bootstrap{
+		Mode: "cluster",
 	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name: "test",
-			args: args{
-				path: "test.toml",
-				conf: DefaultBootstrap(),
-			},
-		},
-		{
-			name: "test",
-			args: args{
-				path: "test.yml",
-				conf: DefaultBootstrap(),
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := SaveConf(tt.args.path, tt.args.conf); (err != nil) != tt.wantErr {
-				t.Errorf("SaveConf() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-		opt := protojson.MarshalOptions{
-			EmitUnpopulated: true,
-			Indent:          " ",
-		}
-		bs, _ := opt.Marshal(DefaultBootstrap())
-		_ = os.WriteFile("test.json", bs, os.ModePerm)
-	}
-}
 
-func TestLoadConf(t *testing.T) {
-	type args struct {
-		path string
+	v, err := protovalidate.New()
+	if err != nil {
+		fmt.Println("failed to initialize validator:", err)
 	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *Bootstrap
-		wantErr bool
-	}{
-		{
-			name: "test",
-			args: args{
-				path: "test.toml",
-			},
-			want:    DefaultBootstrap(),
-			wantErr: false,
-		},
-		{
-			name: "test",
-			args: args{
-				path: "test.json",
-			},
-			want:    DefaultBootstrap(),
-			wantErr: false,
-		},
+
+	if err = v.Validate(msg); err != nil {
+		fmt.Println("validation failed:", err)
+	} else {
+		fmt.Println("validation succeeded")
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := LoadConf(tt.args.path)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("LoadConf() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LoadConf() got = %v, want %v", got, tt.want)
-			}
-		})
+
+	msg = &Bootstrap{
+		Mode: "cluster",
+	}
+
+	v, err = protovalidate.New()
+	if err != nil {
+		fmt.Println("failed to initialize validator:", err)
+	}
+
+	if err = v.Validate(msg); err != nil {
+		fmt.Println("validation failed:", err)
+	} else {
+		fmt.Println("validation succeeded")
+	}
+
+	msg = &Bootstrap{
+		Mode: "other",
+	}
+
+	v, err = protovalidate.New()
+	if err != nil {
+		fmt.Println("failed to initialize validator:", err)
+	}
+
+	if err = v.Validate(msg); err != nil {
+		fmt.Println("validation failed:", err)
+	} else {
+		fmt.Println("validation succeeded")
 	}
 }

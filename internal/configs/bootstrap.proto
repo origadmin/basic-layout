@@ -11,8 +11,6 @@ import "config/v1/security.proto";
 import "config/v1/service.proto";
 import "google/protobuf/duration.proto";
 
-//import "config/v1/source.proto";
-
 option go_package = "internal/configs;configs";
 
 message EntrySelectorConfig {
@@ -35,15 +33,17 @@ message Bootstrap {
     EntrySelectorConfig selector = 9 [json_name = "selector"];
   }
 
-  string service_name = 1 [json_name = "service_name"];
-  string version = 2 [json_name = "version"];
+  string mode = 1 [(buf.validate.field).string = {in: ["singleton", "cluster"]}, json_name = "mode"];
+  string service_name = 2 [json_name = "service_name"];
   string crypto_type = 3 [json_name = "crypto_type"];
-  Entry entry = 4 [json_name = "entry"];
-  config.v1.ServiceConfig service = 5 [json_name = "service"];
-  config.v1.DataConfig data = 6 [json_name = "data"];
-  Settings settings = 7 [json_name = "settings"];
-  config.v1.RegistryConfig registry = 8 [json_name = "registry"];
-  Middlewares middlewares = 9 [json_name = "middlewares"];
+  string version = 4 [json_name = "version"];
+
+  Entry entry = 100 [json_name = "entry"];
+  config.v1.ServiceConfig service = 200 [json_name = "service"];
+  config.v1.DataConfig data = 300 [json_name = "data"];
+  Settings settings = 400 [json_name = "settings"];
+  config.v1.RegistryConfig registry = 500 [json_name = "registry"];
+  Middlewares middlewares = 600 [json_name = "middlewares"];
   string id = 99 ;
 }
 

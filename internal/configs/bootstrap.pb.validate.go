@@ -165,11 +165,13 @@ func (m *Bootstrap) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Mode
+
 	// no validation rules for ServiceName
 
-	// no validation rules for Version
-
 	// no validation rules for CryptoType
+
+	// no validation rules for Version
 
 	if all {
 		switch v := interface{}(m.GetEntry()).(type) {
