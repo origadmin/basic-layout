@@ -8,7 +8,7 @@ package bootstrap
 //func TestSaveConf(t *testing.T) {
 //	type args struct {
 //		path string
-//		conf *Bootstrap
+//		conf *Config
 //	}
 //	tests := []struct {
 //		name    string
@@ -52,7 +52,7 @@ package bootstrap
 //	tests := []struct {
 //		name    string
 //		args    args
-//		want    *configs.Bootstrap
+//		want    *configs.Config
 //		wantErr bool
 //	}{
 //		{

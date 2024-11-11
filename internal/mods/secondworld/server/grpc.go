@@ -68,7 +68,7 @@ func NewGRPCServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 		}
 	}
 
-	log.Infof("Server.Grpc.Endpoint: %v", bs.Service.Grpc.Endpoint)
+	log.Infof("Server.GRPC.Endpoint: %v", bs.Service.Grpc.Endpoint)
 	ep, _ := url.Parse(bs.Service.Grpc.Endpoint)
 	opts = append(opts, grpc.Endpoint(ep))
 	srv := grpc.NewServer(opts...)

@@ -19,24 +19,24 @@ import (
 	"github.com/origadmin/toolkits/runtime"
 	"github.com/origadmin/toolkits/runtime/config"
 
-	"origadmin/basic-layout/api/v1/services/secondworld"
+	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/configs"
-	secondworldservice "origadmin/basic-layout/internal/mods/secondworld/service"
+	helloworldservice "origadmin/basic-layout/internal/mods/helloworld/service"
 )
 
 const (
-	// DefaultSecondWorldServiceName is the name of the service.
-	DefaultSecondWorldServiceName = "origadmin.service.v1.secondworld"
+	// DefaultHelloWorldServiceName is the name of the service.
+	DefaultHelloWorldServiceName = "origadmin.service.v1.helloworld"
 )
 
-func NewSecondGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.RegistryConfig) (secondworld.SecondGreeterAPIServer, error) {
+func NewHelloGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.RegistryConfig) (helloworld.HelloGreeterAPIServer, error) {
 	// Create route Filter: Filter instances whose version number is "2.0.0"
 	filter := filter.Version("v1.0.0")
 	// Create the Selector for the P2C load balancing algorithm and inject the route Filter
 	selector.SetGlobalSelector(random.NewBuilder())
 	//selector.SetGlobalSelector(wrr.NewBuilder())
 
-	serviceName := DefaultSecondWorldServiceName
+	serviceName := DefaultHelloWorldServiceName
 	if registry.ServiceName != "" {
 		serviceName = registry.ServiceName
 	}
@@ -60,7 +60,7 @@ func NewSecondGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.Re
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create grpc client")
 	}
-	gClient := secondworld.NewSecondGreeterAPIClient(conn)
+	gClient := helloworld.NewHelloGreeterAPIClient(conn)
 	// new http client
 	hConn, err := http.NewClient(
 		context.Background(),
@@ -75,21 +75,21 @@ func NewSecondGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.Re
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create http client")
 	}
-	hClient := secondworld.NewSecondGreeterAPIHTTPClient(hConn)
+	hClient := helloworld.NewHelloGreeterAPIHTTPClient(hConn)
 
-	var client secondworld.SecondGreeterAPIServer
+	var client helloworld.HelloGreeterAPIServer
 	if entry := bootstrap.GetEntry(); entry != nil && entry.Scheme == "http" {
-		client = secondworldservice.NewGreeterHTTPServer(hClient)
+		client = helloworldservice.NewGreeterHTTPServer(hClient)
 	} else {
-		client = secondworldservice.NewGreeterServer(gClient)
+		client = helloworldservice.NewGreeterServer(gClient)
 	}
 	//grpcClient := service.NewGreeterServer(gClient)
 	//httpClient := service.NewGreeterHTTPServer(hClient)
 	//// add _ to avoid unused
 	//_ = grpcClient
 	//_ = httpClient
-	//secondworld.RegisterSecondGreeterAPIGINSServer(injector.ServerGINS, client)
-	//secondworld.RegisterSecondGreeterAPIHTTPServer(injector.ServerHTTP, client)
+	//helloworld.RegisterHelloGreeterAPIGINSServer(injector.ServerGINS, client)
+	//helloworld.RegisterHelloGreeterAPIHTTPServer(injector.ServerHTTP, client)
 	//}
 
 	return client, nil

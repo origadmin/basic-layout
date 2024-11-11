@@ -9,3 +9,9 @@ type Setting = func(*Option)
 type Option struct {
 	Logger log.Logger
 }
+
+func WithLogger(logger log.Logger) Setting {
+	return func(o *Option) {
+		o.Logger = logger
+	}
+}

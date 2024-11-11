@@ -6,35 +6,33 @@ import (
 
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/goexts/ggb/settings"
+	"github.com/goexts/generic/settings"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
+	"github.com/origadmin/toolkits/contrib/replacer"
 	"github.com/origadmin/toolkits/errors"
+	"github.com/origadmin/toolkits/runtime"
 	"github.com/origadmin/toolkits/runtime/bootstrap"
 	"github.com/origadmin/toolkits/runtime/config"
-	"github.com/origadmin/toolkits/runtime/kratos"
-	"github.com/origadmin/toolkits/utils/replacer"
 
+	"origadmin/basic-layout/helpers/oneof/source"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/toolkits/oneof/source"
 )
 
-type BootFlags struct {
-	bootstrap.Bootstrap
-	bootstrap.Flags
-}
+type Bootstrap = bootstrap.Bootstrap
 
 type Config = config.SourceConfig
 
 func init() {
-	kratos.RegistryConfig("file", NewFileConfig)
+	//cfg := runtime.ConfigBuildFunc(NewFileConfig)
+	runtime.RegisterConfigFunc("file", NewFileConfig)
 }
-func NewBootFlags(serviceName, version string) BootFlags {
-	return BootFlags{
-		Bootstrap: bootstrap.DefaultBootstrap(),
-		Flags:     bootstrap.NewFlags(serviceName, version),
-	}
+func DefaultBootstrap() *Bootstrap {
+	//boot := &Config{}
+	//boot.Flags = bootstrap.NewFlags(serviceName, version)
+	//return boot
+	return bootstrap.DefaultBootstrap()
 }
 
 // LoadSourceFiles Loads configuration files in various formats from a directory,
@@ -100,9 +98,9 @@ func FromConsul(serviceName string, cfg *Config, option *Option) (*configs.Boots
 	return LoadBootstrap(cfg, option)
 }
 
-func FromFlags(flags BootFlags, ss ...Setting) (*configs.Bootstrap, error) {
+func FromFlags(boot *Bootstrap, ss ...Setting) (*configs.Bootstrap, error) {
 	o := settings.ApplyOrZero(ss...)
-	path := WorkPath(flags.WorkDir, flags.ConfigPath)
+	path := WorkPath(boot.WorkDir, boot.ConfigPath)
 	if path == "" {
 		return nil, errors.String("config path is empty")
 	}
@@ -123,7 +121,7 @@ func FromFlags(flags BootFlags, ss ...Setting) (*configs.Bootstrap, error) {
 		cfg = NewFileSource(path)
 	}
 
-	return LoadBootstrap(PathToSource(cfg, flags.ServiceName), o)
+	return LoadBootstrap(PathToSource(cfg, boot.ServiceName()), o)
 }
 
 func FromLocal(serviceName string, source *config.SourceConfig, option *Option) (*configs.Bootstrap, error) {
@@ -192,7 +190,7 @@ func loadSourceFromFile(path string) *config.SourceConfig {
 // LoadBootstrap Loads configuration files in various formats from a directory,
 // and parses them into a struct.
 func LoadBootstrap(cfg *Config, option *Option) (*configs.Bootstrap, error) {
-	source, err := kratos.NewConfig(cfg)
+	source, err := runtime.NewConfig(cfg)
 	if err != nil {
 		return nil, errors.Wrap(err, "new kratos config error")
 	}

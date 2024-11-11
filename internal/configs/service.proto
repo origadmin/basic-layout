@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package origadmin.configs.api;
+
+import "config/v1/data.proto";
+import "config/v1/registry.proto";
+import "config/v1/service.proto";
+import "configs/bootstrap.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "internal/configs;configs";
+
+message ServiceConfig {
+    // GINS
+    message GINS {
+        string network = 1 [json_name = "network"];
+        string addr = 2 [json_name = "addr"];
+        bool use_tls = 3 [json_name = "use_tls"];
+        string cert_file = 4 [json_name = "cert_file"];
+        string key_file = 5 [json_name = "key_file"];
+        optional google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+        optional google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
+        optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
+        optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
+        optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+        string endpoint = 11 [json_name = "endpoint"];
+    }
+
+    // HTTP
+    message HTTP {
+        string network = 1;
+        string addr = 2;
+        bool use_tls = 3 [json_name = "use_tls"];
+        string cert_file = 4 [json_name = "cert_file"];
+        string key_file = 5 [json_name = "key_file"];
+        google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+        google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
+        google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
+        google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
+        google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+        string endpoint = 11 [json_name = "endpoint"];
+    }
+
+    // GRPC
+    message GRPC {
+        string network = 1;
+        string addr = 2;
+        bool use_tls = 3 [json_name = "use_tls"];
+        string cert_file = 4 [json_name = "cert_file"];
+        string key_file = 5 [json_name = "key_file"];
+        optional google.protobuf.Duration timeout = 6 [json_name = "timeout"];
+        optional google.protobuf.Duration shutdown_timeout = 7 [json_name = "shutdown_timeout"];
+        optional google.protobuf.Duration read_timeout = 8 [json_name = "read_timeout"];
+        optional google.protobuf.Duration write_timeout = 9 [json_name = "write_timeout"];
+        optional google.protobuf.Duration idle_timeout = 10 [json_name = "idle_timeout"];
+        string endpoint = 11 [json_name = "endpoint"];
+    }
+
+    // Websocket
+    message Websocket {
+        string network = 1 [json_name = "network"];
+        string addr = 2 [json_name = "addr"];
+        string path = 3 [json_name = "path"];
+        string codec = 4 [json_name = "codec"];
+        google.protobuf.Duration timeout = 5 [json_name = "timeout"];
+    }
+
+
+    message Middleware {
+        message Metrics {
+            bool enabled = 1;
+            string name = 2;
+        }
+
+        message Traces {
+            bool enabled = 1;
+            string name = 2;
+        }
+
+        message Logger {
+            bool enabled = 1;
+            string name = 2;
+        }
+
+        message Cors {
+            bool enabled = 1;
+            bool allow_all_origins = 2 [json_name = "allow_all_origins"];
+            repeated string allow_origins = 3 [json_name = "allow_origins"];
+            repeated string allow_methods = 4 [json_name = "allow_methods"];
+            repeated string allow_headers = 5 [json_name = "allow_headers"];
+            bool allow_credentials = 6 [json_name = "allow_credentials"];
+            repeated string expose_headers = 7 [json_name = "expose_headers"];
+            int32 max_age = 8 [json_name = "max_age"];
+            bool allow_wildcard = 9 [json_name = "allow_wildcard"];
+            bool allow_browser_extensions = 10 [json_name = "allow_browser_extensions"];
+            bool allow_web_sockets = 11 [json_name = "allow_web_sockets"];
+            bool allow_files = 12 [json_name = "allow_files"];
+        }
+
+        Cors cors = 1 [json_name = "cors"];
+        Metrics metrics = 2 [json_name = "metrics"];
+        Traces traces = 3 [json_name = "traces"];
+        Logger logger = 4 [json_name = "logger"];
+    }
+    GINS gins = 2 [json_name = "gins"];
+    HTTP http = 3 [json_name = "http"];
+    GRPC grpc = 4 [json_name = "grpc"];
+    config.v1.RegistryConfig registry = 200 [json_name = "registry"];
+    config.v1.DataConfig data = 300 [json_name = "data"];
+    Settings settings = 400 [json_name = "settings"];
+    config.v1.ServiceConfig service = 500 [json_name = "service"];
+    Middlewares middlewares = 600 [json_name = "middlewares"];
+    string host = 99 [json_name = "host"];
+}

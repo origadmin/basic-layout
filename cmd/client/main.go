@@ -14,7 +14,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
-	"github.com/origadmin/toolkits/utils/replacer"
+	"github.com/origadmin/toolkits/contrib/replacer"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/mods/helloworld/dto"
@@ -51,7 +51,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	gClient := helloworld.NewGreeterClient(conn)
+	gClient := helloworld.NewHelloGreeterAPIClient(conn)
 
 	// 创建路由 Filter：筛选版本号为"2.0.0"的实例
 	filter := filter.Version("v1.0.0")
@@ -75,7 +75,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer hConn.Close()
-	hClient := helloworld.NewGreeterHTTPClient(hConn)
+	hClient := helloworld.NewHelloGreeterAPIHTTPClient(hConn)
 	fmt.Println("start")
 	for {
 		time.Sleep(time.Second)
@@ -85,8 +85,8 @@ func main() {
 	}
 }
 
-func callGRPC(client helloworld.GreeterClient) {
-	req := &helloworld.GreeterRequest{
+func callGRPC(client helloworld.HelloGreeterAPIClient) {
+	req := &helloworld.PostHelloRequest{
 		Id:   "kratos",
 		Name: "kratos",
 		Data: &dto.Greeter{
@@ -106,8 +106,8 @@ func callGRPC(client helloworld.GreeterClient) {
 	log.Printf("[grpc] SayHello %+v\n", reply.Data)
 }
 
-func callHTTP(client helloworld.GreeterHTTPClient) {
-	req := &helloworld.GreeterRequest{
+func callHTTP(client helloworld.HelloGreeterAPIHTTPClient) {
+	req := &helloworld.PostHelloRequest{
 		Id:   "kratos",
 		Name: "kratos",
 		Data: &dto.Greeter{

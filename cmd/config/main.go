@@ -19,35 +19,35 @@ var (
 	Name string = "origadmin.service.v1.config"
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
-	// flags are the bootstrap flags.
-	flags = bootstrap.BootFlags{}
-	// remote is the remote of bootstrap flags.
+	// boot are the bootstrap boot.
+	boot = &bootstrap.Bootstrap{}
+	// remote is the remote of bootstrap boot.
 	output = "resources"
 )
 
 func init() {
-	flags = bootstrap.NewBootFlags(Name, Version)
-	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
+	boot.SetFlags(Name, Version)
+	flag.StringVar(&boot.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 	flag.StringVar(&output, "o", "", "output a bootstrap config from local config, eg: -o bootstrap.toml")
 }
 
 func main() {
 	flag.Parse()
 
-	flags.Metadata = make(map[string]string)
+	//boot.Flags.Metadata = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		"service.id", flags.ID,
-		"service.name", flags.ServiceName,
-		"service.version", flags.Version,
+		"service.id", boot.ID,
+		"service.name", boot.ServiceName,
+		"service.version", boot.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 	log.SetLogger(l)
-	flags.ConfigPath = filepath.Join(flags.WorkDir, flags.ConfigPath, "local.toml")
-	//env, _ := bootstrap.LoadEnv(flags.EnvPath)
-	bs, err := bootstrap.FromFlags(flags, l)
+	boot.ConfigPath = filepath.Join(boot.WorkDir, boot.ConfigPath, "local.toml")
+	//env, _ := bootstrap.LoadEnv(boot.EnvPath)
+	bs, err := bootstrap.FromFlags(boot, bootstrap.WithLogger(l))
 	if err != nil {
 		panic(errors.WithStack(err))
 	}

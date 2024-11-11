@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package origadmin.configs.api;
+
+import "config/v1/registry.proto";
+
+option go_package = "internal/configs;configs";
+
+message Registry {
+    repeated config.v1.RegistryConfig registries = 1 [json_name = "registries"];
+}

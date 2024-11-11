@@ -67,7 +67,7 @@ func NewHTTPServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 		}
 	}
 
-	log.Infof("Server.Http.Endpoint: %v", bs.Service.Http.Endpoint)
+	log.Infof("Server.HTTP.Endpoint: %v", bs.Service.Http.Endpoint)
 	ep, _ := url.Parse(bs.Service.Http.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)

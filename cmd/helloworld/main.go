@@ -23,31 +23,30 @@ var (
 	Name = "origadmin.service.v1.helloworld"
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
-	// flags are the bootstrap flags.
-	flags = bootstrap.BootFlags{}
+	// boot are the bootstrap boot.
+	boot = &bootstrap.Bootstrap{}
 )
 
 func init() {
-	flags = bootstrap.NewBootFlags(Name, Version)
-	flag.StringVar(&flags.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
+	boot.SetFlags(Name, Version)
+	flag.StringVar(&boot.ConfigPath, "c", "resources", "config path, eg: -c config.toml")
 }
 
 func main() {
 	flag.Parse()
 
-	flags.Metadata = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		"service.id", flags.ID,
-		"service.name", flags.ServiceName,
-		"service.version", flags.Version,
+		"service.id", boot.ID(),
+		"service.name", boot.ServiceName(),
+		"service.version", boot.Version(),
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 	log.SetLogger(l)
-	fmt.Printf("bootstrap flags: %+v\n", flags)
-	bs, err := bootstrap.FromFlags(flags, l)
+	fmt.Printf("bootstrap boot: %+v\n", boot)
+	bs, err := bootstrap.FromFlags(boot, bootstrap.WithLogger(l))
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}
@@ -69,10 +68,10 @@ func main() {
 
 func NewApp(ctx context.Context, injector *bootstrap.InjectorServer) *kratos.App {
 	opts := []kratos.Option{
-		kratos.ID(flags.ID),
-		kratos.Name(flags.ServiceName),
-		kratos.Version(flags.Version),
-		kratos.Metadata(map[string]string{}),
+		kratos.ID(boot.ID()),
+		kratos.Name(boot.ServiceName()),
+		kratos.Version(boot.Version()),
+		kratos.Metadata(boot.Metadata()),
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 		kratos.Logger(injector.Logger),

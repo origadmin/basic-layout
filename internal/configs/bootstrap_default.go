@@ -57,13 +57,6 @@ func DefaultBootstrap() *Bootstrap {
 			Host: "${host:127.0.0.1}",
 		},
 		Data: &config.DataConfig{},
-		Registry: &config.RegistryConfig{
-			Type: "consul",
-			Consul: &config.RegistryConfig_Consul{
-				Address: "${consul_address:127.0.0.1:8500}",
-				Scheme:  "http",
-			},
-		},
 		Settings: &Settings{
 			CryptoType: "argon2",
 		},

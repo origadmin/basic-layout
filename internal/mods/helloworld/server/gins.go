@@ -10,7 +10,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/origadmin/toolkits/runtime/config"
-	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
+	"github.com/origadmin/toolkits/runtime/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/bootstrap"
@@ -71,7 +71,7 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServ
 		}
 	}
 
-	log.Infof("Server.Gins.Endpoint: %v", bs.Service.Gins.Endpoint)
+	log.Infof("Server.GINS.Endpoint: %v", bs.Service.Gins.Endpoint)
 	ep, _ := url.Parse(bs.Service.Gins.Endpoint)
 	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)

@@ -8,11 +8,10 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/toolkits/runtime/config"
-	"github.com/origadmin/toolkits/runtime/kratos/transport/gins"
+	"github.com/origadmin/toolkits/runtime/transport/gins"
 
-	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/helpers/errors"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/toolkits/errors"
 )
 
 // ProviderSet is server providers.
@@ -56,10 +55,10 @@ func NewGINSServer(bs *configs.Bootstrap, l log.Logger) *gins.Server {
 	//	c.Middleware = new(configs.Server_Middleware)
 	//}
 
-	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
-	if err == nil && len(middlewares) > 0 {
-		opts = append(opts, gins.Middleware(middlewares...))
-	}
+	//middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	//if err == nil && len(middlewares) > 0 {
+	//	opts = append(opts, gins.Middleware(middlewares...))
+	//}
 
 	if l != nil {
 		opts = append(opts, gins.WithLogger(log.With(l, "module", "gins")))
@@ -96,10 +95,10 @@ func NewHTTPServer(bs *configs.Bootstrap, l log.Logger) *http.Server {
 	//if c.Middleware == nil {
 	//	c.Middleware = new(configs.Server_Middleware)
 	//}
-	middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
-	if err == nil && len(middlewares) > 0 {
-		opts = append(opts, http.Middleware(middlewares...))
-	}
+	//middlewares, err := bootstrap.LoadGlobalMiddlewares(bs.GetServiceName(), bs, l)
+	//if err == nil && len(middlewares) > 0 {
+	//	opts = append(opts, http.Middleware(middlewares...))
+	//}
 
 	srv := http.NewServer(opts...)
 	return srv

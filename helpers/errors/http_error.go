@@ -10,8 +10,8 @@ import (
 
 // ErrorHTTP returns an error with the given reason, code, and message.
 // It is also used id for display the error message at the client with i18n support.
-func ErrorHTTP(reason Coder, code int32, msg string) *httperr.Error {
-	id := "http.response.status." + strings.ToLower(reason.String())
+func ErrorHTTP(reason string, code int32, msg string) *httperr.Error {
+	id := "http.response.status." + strings.ToLower(reason)
 	return &httperr.Error{
 		ID:     id,
 		Code:   code,
@@ -19,12 +19,13 @@ func ErrorHTTP(reason Coder, code int32, msg string) *httperr.Error {
 	}
 }
 
-func ErrorGRPC(reason Coder) *rpcerr.Error {
-	id := "grpc.response.status." + strings.ToLower(reason.String())
+func ErrorGRPC(err error) *rpcerr.Error {
+	rerr := FromError(err)
+	id := "grpc.response.status." + strings.ToLower(rerr.Reason)
 	return &rpcerr.Error{
 		Id:     id,
-		Code:   int32(reason.Number()),
-		Detail: reason.String(),
+		Code:   rerr.Code,
+		Detail: rerr.String(),
 	}
 }
 
@@ -51,7 +52,7 @@ func ToHttpError(err error) *httperr.Error {
 		}
 	}
 
-	kerr := errors.FromError(err)
+	kerr := FromError(err)
 	return &httperr.Error{
 		ID:     "http.response.status." + strings.ToLower(kerr.Reason),
 		Code:   kerr.Code,

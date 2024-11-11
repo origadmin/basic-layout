@@ -11,17 +11,19 @@ require (
 	github.com/bufbuild/protovalidate-go v0.7.2
 	github.com/caarlos0/go-version v0.1.1
 	github.com/gin-gonic/gin v1.10.0
-	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241030023738-861493a20524
-	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20241030023738-861493a20524
+	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241105072421-f8b97f675b32
+	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20241105072421-f8b97f675b32
 	github.com/go-kratos/kratos/v2 v2.8.2
+	github.com/goexts/generic v0.1.0
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.30.0
-	github.com/origadmin/slog-kratos v1.0.2
-	github.com/origadmin/toolkits v0.0.81
-	github.com/origadmin/toolkits/codec v0.0.17
-	github.com/origadmin/toolkits/contrib/config v0.0.8
-	github.com/origadmin/toolkits/contrib/consul v0.0.3
-	github.com/origadmin/toolkits/runtime v0.0.4
+	github.com/origadmin/slog-kratos v1.0.3
+	github.com/origadmin/toolkits v0.0.86
+	github.com/origadmin/toolkits/codec v0.0.20
+	github.com/origadmin/toolkits/contrib/config v0.0.11
+	github.com/origadmin/toolkits/contrib/consul v0.0.5
+	github.com/origadmin/toolkits/contrib/replacer v0.0.1
+	github.com/origadmin/toolkits/runtime v0.0.6
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/automaxprocs v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38
@@ -38,7 +40,7 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/bytedance/sonic v1.12.3 // indirect
+	github.com/bytedance/sonic v1.12.4 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
@@ -92,13 +94,13 @@ require (
 	go.opentelemetry.io/otel/sdk v1.31.0 // indirect
 	go.opentelemetry.io/otel/trace v1.31.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
-	golang.org/x/crypto v0.28.0 // indirect
+	golang.org/x/crypto v0.29.0 // indirect
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

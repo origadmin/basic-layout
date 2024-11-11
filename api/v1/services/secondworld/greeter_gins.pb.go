@@ -10,7 +10,7 @@ import (
 	context "context"
 	gin "github.com/gin-gonic/gin"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	gins "github.com/origadmin/toolkits/runtime/kratos/transport/gins"
+	gins "github.com/origadmin/toolkits/runtime/transport/gins"
 )
 
 // This is a compile-time assertion to ensure that this generated file

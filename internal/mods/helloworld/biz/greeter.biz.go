@@ -8,13 +8,13 @@ import (
 	"google.golang.org/grpc"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
+	"origadmin/basic-layout/helpers/errors"
 	"origadmin/basic-layout/internal/mods/helloworld/dto"
-	"origadmin/basic-layout/toolkits/errors"
 )
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND, http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), http.StatusNotFound, "user not found")
 )
 
 // GreeterBiz is a Greeter use case.

@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/toolkits/errors"
+	"origadmin/basic-layout/helpers/errors"
 )
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND, http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), http.StatusNotFound, "user not found")
 )
 
 // Greeter is a Greeter model.

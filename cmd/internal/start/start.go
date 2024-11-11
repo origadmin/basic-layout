@@ -19,8 +19,8 @@ import (
 	"github.com/origadmin/toolkits/errors"
 	"github.com/spf13/cobra"
 
+	"origadmin/basic-layout/helpers/utils"
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/toolkits/utils"
 )
 
 const (
@@ -36,8 +36,8 @@ var (
 	Name = "origadmin.server.v1"
 	// Version is the Version of the compiled software.
 	Version = "v1.0.0"
-	// flags are the bootstrap flags.
-	flags = bootstrap.BootFlags{}
+	// boot are the bootstrap boot.
+	boot = bootstrap.Bootstrap{}
 )
 
 var cmd = &cobra.Command{
@@ -47,10 +47,10 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	flags = bootstrap.NewBootFlags(Name, Version)
+	boot.SetFlags(Name, Version)
 }
 
-// Cmd The function defines a CLI command to start a server with various flags and options, including the
+// Cmd The function defines a CLI command to start a server with various boot and options, including the
 // ability to run as a daemon.
 func Cmd() *cobra.Command {
 	cmd.Flags().BoolP(startRandom, "r", false, "start with random password")
@@ -63,32 +63,31 @@ func Cmd() *cobra.Command {
 }
 
 func startRun(cmd *cobra.Command, args []string) error {
-	flags.WorkDir, _ = cmd.Flags().GetString(startWorkDir)
+	boot.WorkDir, _ = cmd.Flags().GetString(startWorkDir)
 	staticDir, _ := cmd.Flags().GetString(startStatic)
-	flags.ConfigPath, _ = cmd.Flags().GetString(startConfig)
+	boot.ConfigPath, _ = cmd.Flags().GetString(startConfig)
 	//random, _ := cmd.Flags().GetBool(startRandom)
 
-	flags.Metadata = make(map[string]string)
 	l := log.With(logger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
-		"service.id", flags.ID,
-		"service.name", flags.ServiceName,
-		"service.version", flags.Version,
+		"service.id", boot.ID,
+		"service.name", boot.ServiceName,
+		"service.version", boot.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 	log.SetLogger(l)
-	//path := filepath.Join(flags.WorkDir, flags.ConfigPath)
-	//envpath := filepath.Join(flags.WorkDir, flags.EnvPath)
-	log.Infow("msg", "start info", startWorkDir, flags.WorkDir, startStatic, staticDir, startConfig, flags.ConfigPath)
+	//path := filepath.Join(boot.WorkDir, boot.ConfigPath)
+	//envpath := filepath.Join(boot.WorkDir, boot.EnvPath)
+	log.Infow("msg", "start info", startWorkDir, boot.WorkDir, startStatic, staticDir, startConfig, boot.ConfigPath)
 	//env, _ := bootstrap.LoadEnv(envpath)
-	//bs, err := bootstrap.FromLocalPath(flags.ServiceName, path, l)
+	//bs, err := bootstrap.FromLocalPath(boot.ServiceName, path, l)
 	//if err != nil {
 	//	return errors.Wrap(err, "load config error")
 	//}
-	src := bootstrap.LoadSourceFiles(flags.WorkDir, flags.ConfigPath)
-	bs, err := bootstrap.FromRemote(flags.ServiceName, src)
+	src := bootstrap.LoadSourceFiles(boot.WorkDir, boot.ConfigPath)
+	bs, err := bootstrap.FromRemote(boot.ServiceName(), src)
 	if err != nil {
 		return errors.Wrap(err, "load config error")
 	}
@@ -106,8 +105,8 @@ func startRun(cmd *cobra.Command, args []string) error {
 		}
 
 		cmdArgs := []string{"start"}
-		cmdArgs = append(cmdArgs, "-d", strings.TrimSpace(flags.WorkDir))
-		cmdArgs = append(cmdArgs, "-c", strings.TrimSpace(flags.ConfigPath))
+		cmdArgs = append(cmdArgs, "-d", strings.TrimSpace(boot.WorkDir))
+		cmdArgs = append(cmdArgs, "-c", strings.TrimSpace(boot.ConfigPath))
 		cmdArgs = append(cmdArgs, "-s", strings.TrimSpace(staticDir))
 		_, _ = fmt.Printf("execute command: %s %s \n", bin, strings.Join(cmdArgs, " "))
 		command := exec.Command(bin, cmdArgs...)
@@ -126,7 +125,7 @@ func startRun(cmd *cobra.Command, args []string) error {
 		defer os.Remove(lockfile)
 	}
 	//info to ctx
-	app, cleanup, err := buildInjectors(cmd.Context(), bs, l)
+	app, cleanup, err := buildInjectors(cmd.Context(), src, bs, l)
 	if err != nil {
 		return err
 	}
@@ -140,9 +139,9 @@ func startRun(cmd *cobra.Command, args []string) error {
 
 func NewApp(ctx context.Context, injector *bootstrap.InjectorClient) *kratos.App {
 	opts := []kratos.Option{
-		kratos.ID(flags.ID),
-		kratos.Name(flags.ServiceName),
-		kratos.Version(flags.Version),
+		kratos.ID(boot.ID()),
+		kratos.Name(boot.ServiceName()),
+		kratos.Version(boot.Version()),
 		kratos.Metadata(map[string]string{}),
 		kratos.Context(ctx),
 		kratos.Signal(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
