@@ -23,7 +23,7 @@ plugins:
       #      - output_mode=source_relative # Output file generation mode. By default, only one openapi.yaml file is generated in the output folder. Using "source_relative" generates a separate "[inputfile].openapi.yaml" file for each '[inputfile].proto' file. The default is: merged.
       #      - output_mode=merge
       - fq_schema_naming=true # Schema named whether to add a package name, is true, will add a package name, for example: system. Service. V1. ListDictDetailResponse, otherwise as follows: ListDictDetailResponse. The default value is false.
-    strategy: all
+    strategy: all # This tag will generate all files without split files in different directories.
   - local: protoc-gen-go
     out: api/v1/services
     opt: paths=source_relative
