@@ -1,14 +1,16 @@
-package configs
+package bootstrap
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/bufbuild/protovalidate-go"
+
+	"origadmin/basic-layout/internal/configs"
 )
 
 func TestValidate(t *testing.T) {
-	msg := &Bootstrap{
+	msg := &configs.Bootstrap{
 		Mode: "cluster",
 	}
 
@@ -23,7 +25,7 @@ func TestValidate(t *testing.T) {
 		fmt.Println("validation succeeded")
 	}
 
-	msg = &Bootstrap{
+	msg = &configs.Bootstrap{
 		Mode: "cluster",
 	}
 
@@ -38,7 +40,7 @@ func TestValidate(t *testing.T) {
 		fmt.Println("validation succeeded")
 	}
 
-	msg = &Bootstrap{
+	msg = &configs.Bootstrap{
 		Mode: "other",
 	}
 

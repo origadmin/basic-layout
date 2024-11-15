@@ -11,16 +11,16 @@ import (
 // is compatible with the kratos package it is being compiled against.
 const _ = errors.SupportPackageIsVersion1
 
-func IsGreeterUnspecified(err error) bool {
+func IsSecondWorldErrorReasonUnspecified(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == SECOND_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String() && e.Code == 500
+	return e.Reason == SECOND_WORLD_ERROR_REASON_SECOND_WORLD_ERROR_REASON_UNSPECIFIED.String() && e.Code == 500
 }
 
-func ErrorGreeterUnspecified(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, SECOND_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
+func ErrorSecondWorldErrorReasonUnspecified(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, SECOND_WORLD_ERROR_REASON_SECOND_WORLD_ERROR_REASON_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
 }
 
 func IsUserNotFound(err error) bool {

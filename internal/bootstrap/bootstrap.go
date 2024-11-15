@@ -6,13 +6,12 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-	"github.com/origadmin/toolkits/runtime/config"
-	"github.com/origadmin/toolkits/runtime/transport/gins"
 
+	"github.com/origadmin/toolkits/runtime/transport/gins"
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/api/v1/services/secondworld"
+	"origadmin/basic-layout/internal/client"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/server"
 )
 
 var (
@@ -28,7 +27,7 @@ var (
 type InjectorClient struct {
 	Config      *Config
 	Bootstrap   *configs.Bootstrap
-	Discoveries []*config.RegistryConfig
+	Discoveries map[string]registry.Discovery
 	Logger      log.Logger
 	ServerGINS  *gins.Server
 	ServerHTTP  *http.Server
@@ -43,17 +42,17 @@ type InjectorServer struct {
 }
 
 func InjectorGinServer(injector *InjectorClient) error {
-	for _, discovery := range injector.Discoveries {
-		switch discovery.ServiceName {
+	for name, discovery := range injector.Discoveries {
+		switch name {
 		case "origadmin.service.v1.helloworld":
-			cli, err := server.NewHelloGreeterAPIServer(injector.Bootstrap, discovery)
+			cli, err := client.NewHelloGreeterAPIServer(injector.Bootstrap, discovery)
 			if err != nil {
 				return err
 			}
 			helloworld.RegisterHelloGreeterAPIGINSServer(injector.ServerGINS, cli)
 			helloworld.RegisterHelloGreeterAPIHTTPServer(injector.ServerHTTP, cli)
 		case "origadmin.service.v1.secondworld":
-			cli, err := server.NewSecondGreeterAPIServer(injector.Bootstrap, discovery)
+			cli, err := client.NewSecondGreeterAPIServer(injector.Bootstrap, discovery)
 			if err != nil {
 				return err
 			}

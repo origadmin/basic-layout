@@ -2,8 +2,8 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
-// Package server implements the functions, types, and interfaces for the module.
-package server
+// Package client implements the functions, types, and interfaces for the module.
+package client
 
 import (
 	"context"
@@ -15,9 +15,9 @@ import (
 	"github.com/go-kratos/kratos/v2/selector/random"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime"
-	"github.com/origadmin/toolkits/runtime/config"
+	"github.com/origadmin/toolkits/runtime/registry"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/configs"
@@ -29,22 +29,23 @@ const (
 	DefaultHelloWorldServiceName = "origadmin.service.v1.helloworld"
 )
 
-func NewHelloGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.RegistryConfig) (helloworld.HelloGreeterAPIServer, error) {
+func NewHelloGreeterAPIServer(bootstrap *configs.Bootstrap, discovery registry.Discovery) (helloworld.HelloGreeterAPIServer, error) {
 	// Create route Filter: Filter instances whose version number is "2.0.0"
 	filter := filter.Version("v1.0.0")
+
 	// Create the Selector for the P2C load balancing algorithm and inject the route Filter
 	selector.SetGlobalSelector(random.NewBuilder())
 	//selector.SetGlobalSelector(wrr.NewBuilder())
 
 	serviceName := DefaultHelloWorldServiceName
-	if registry.ServiceName != "" {
-		serviceName = registry.ServiceName
-	}
-
-	discovery, err := runtime.NewDiscovery(registry)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to create discovery")
-	}
+	//if registry.ServiceName != "" {
+	//	serviceName = registry.ServiceName
+	//}
+	//
+	//discovery, err := runtime.NewDiscovery(registry)
+	//if err != nil {
+	//	return nil, errors.Wrap(err, "failed to create discovery")
+	//}
 
 	//if discovery, ok := injector.Discoveries[serviceName]; ok {
 	conn, err := grpc.DialInsecure(
@@ -56,6 +57,7 @@ func NewHelloGreeterAPIServer(bootstrap *configs.Bootstrap, registry *config.Reg
 		grpc.WithEndpoint("discovery:///"+serviceName),
 		grpc.WithDiscovery(discovery),
 		grpc.WithNodeFilter(filter),
+		grpc.WithPrintDiscoveryDebugLog(true),
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create grpc client")

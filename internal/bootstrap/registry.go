@@ -2,8 +2,8 @@ package bootstrap
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
+
 	"github.com/origadmin/toolkits/runtime"
-	"github.com/origadmin/toolkits/runtime/config"
 	"github.com/origadmin/toolkits/runtime/registry"
 
 	"origadmin/basic-layout/internal/configs"
@@ -38,26 +38,16 @@ func NewDiscovery(bootstrap *configs.Bootstrap) registry.Discovery {
 	return discovery
 }
 
-func NewDiscoveries(config *Config) ([]*config.RegistryConfig, error) {
-	bs, err := FromRemote("", config)
-	if err != nil {
-		return nil, err
+func NewDiscoveries(bootstrap *configs.Bootstrap) (map[string]registry.Discovery, error) {
+	registries := bootstrap.GetRegistries()
+	discoveries := make(map[string]registry.Discovery, len(registries))
+	for i := range registries {
+		cfg, err := runtime.NewDiscovery(registries[i])
+		if err != nil {
+			return nil, err
+		}
+		discoveries[registries[i].ServiceName] = cfg
 	}
-	if bs == nil {
-		return nil, nil
-	}
-	registries, err := LoadRegistries(config)
-	if err != nil {
-		return nil, err
-	}
-	//discoveries := make(map[string]registry.Discovery, len(registries))
-	//for i := range registries {
-	//	cfg, err := runtime.NewDiscovery(registries[i])
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	discoveries[registries[i].ServiceName] = cfg
-	//}
 
-	return registries, nil
+	return discoveries, nil
 }

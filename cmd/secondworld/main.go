@@ -3,17 +3,15 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"syscall"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
+
 	_ "github.com/origadmin/toolkits/contrib/consul/config"
 	_ "github.com/origadmin/toolkits/contrib/consul/registry"
-	"google.golang.org/protobuf/encoding/protojson"
-
 	"origadmin/basic-layout/internal/bootstrap"
 )
 
@@ -45,14 +43,16 @@ func main() {
 		"span.id", tracing.SpanID(),
 	)
 	log.SetLogger(l)
-	fmt.Printf("bootstrap boot: %+v\n", boot)
+	log.Infof("bootstrap flags: %+v\n", boot)
 	bs, err := bootstrap.FromFlags(boot, bootstrap.WithLogger(l))
 	if err != nil {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}
-
-	v, _ := protojson.Marshal(bs)
-	fmt.Printf("show bootstrap config: %+v\n", string(v))
+	//if err := bootstrap.SyncRegistry(boot.ServiceName(), bs); err != nil {
+	//	log.Warnf("sync config to consul error: %s", err.Error())
+	//	return
+	//}
+	log.Infof("bootstrap config: %+v\n", bootstrap.PrintString(bs))
 	ctx := context.Background()
 	//info to ctx
 	app, cleanup, err := buildInjectors(ctx, bs, l)

@@ -1,17 +1,22 @@
 syntax = "proto3";
-package origadmin.configs.api;
+
+package origadmin.configs;
 
 import "buf/validate/validate.proto";
-import "config/v1/cors.proto";
 import "config/v1/data.proto";
-import "config/v1/logger.proto";
-import "config/v1/metrics.proto";
+import "config/v1/middleware.proto";
 import "config/v1/registry.proto";
-import "config/v1/security.proto";
 import "config/v1/service.proto";
+import "config/v1/source.proto";
+import "configs/setting.proto";
 import "google/protobuf/duration.proto";
 
+option cc_enable_arenas = true;
 option go_package = "internal/configs;configs";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigsProto";
+option java_package = "com.github.origadmin.basic-layout.configs";
+option objc_class_prefix = "Configs";
 
 message EntrySelectorConfig {
   bool global = 2 [json_name = "global"];
@@ -39,23 +44,12 @@ message Bootstrap {
   string version = 4 [json_name = "version"];
 
   Entry entry = 100 [json_name = "entry"];
-  config.v1.RegistryConfig registry = 200 [json_name = "registry"];
-  config.v1.DataConfig data = 300 [json_name = "data"];
-  Settings settings = 400 [json_name = "settings"];
-  config.v1.ServiceConfig service = 500 [json_name = "service"];
-  Middlewares middlewares = 600 [json_name = "middlewares"];
-  string id = 99 ;
+  config.v1.SourceConfig source = 200 [json_name = "source"];
+  config.v1.Registry registry = 300 [json_name = "registry"];
+  repeated config.v1.Registry registries = 400 [json_name = "registries"];
+  config.v1.Data data = 500 [json_name = "data"];
+  Setting setting = 600 [json_name = "setting"];
+  config.v1.Service service = 700 [json_name = "service"];
+  config.v1.Middleware middleware = 800 [json_name = "middleware"];
 }
 
-message Middlewares {
-  bool register_as_global = 1 [json_name = "register_as_global"];
-  config.v1.LoggerConfig logger = 2 [json_name = "logger"];
-  config.v1.CorsConfig cors = 3 [json_name = "cors"];
-  config.v1.MetricConfig metrics = 4 [json_name = "metrics"];
-  config.v1.SecurityConfig security = 5 [json_name = "security"];
-}
-
-
-message Settings {
-  string crypto_type = 1 [json_name = "crypto_type"];
-}

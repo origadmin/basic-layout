@@ -11,16 +11,16 @@ import (
 // is compatible with the kratos package it is being compiled against.
 const _ = errors.SupportPackageIsVersion1
 
-func IsGreeterUnspecified(err error) bool {
+func IsHelloWorldErrorReasonUnspecified(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String() && e.Code == 500
+	return e.Reason == HELLO_WORLD_ERROR_REASON_HELLO_WORLD_ERROR_REASON_UNSPECIFIED.String() && e.Code == 500
 }
 
-func ErrorGreeterUnspecified(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, HELLO_WORLD_ERROR_REASON_GREETER_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
+func ErrorHelloWorldErrorReasonUnspecified(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, HELLO_WORLD_ERROR_REASON_HELLO_WORLD_ERROR_REASON_UNSPECIFIED.String(), fmt.Sprintf(format, args...))
 }
 
 func IsUserNotFound(err error) bool {

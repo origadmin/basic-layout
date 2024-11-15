@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package origadmin.configs;
 
-import "config/v1/registry.proto";
+import "google/protobuf/any.proto";
 
 option cc_enable_arenas = true;
 option go_package = "internal/configs;configs";
@@ -11,6 +11,6 @@ option java_outer_classname = "ConfigsProto";
 option java_package = "com.github.origadmin.basic-layout.configs";
 option objc_class_prefix = "Configs";
 
-message Registry {
-    repeated config.v1.Registry registries = 1 [json_name = "registries"];
+message Setting {
+    google.protobuf.Any todo = 1 [json_name = "todo"];
 }

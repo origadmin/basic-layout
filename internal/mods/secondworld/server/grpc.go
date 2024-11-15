@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/origadmin/toolkits/runtime/config"
 
+	"github.com/origadmin/toolkits/runtime/config"
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
@@ -27,7 +27,7 @@ func NewGRPCServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 	}
 	c := bs.Service
 	if c.Grpc == nil {
-		c.Grpc = new(config.ServiceConfig_GRPC)
+		c.Grpc = new(config.Service_GRPC)
 	}
 	if c.Grpc.Network != "" {
 		opts = append(opts, grpc.Network(c.Grpc.Network))

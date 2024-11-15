@@ -9,9 +9,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+
 	"github.com/origadmin/toolkits/runtime/config"
 	"github.com/origadmin/toolkits/runtime/transport/gins"
-
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
@@ -27,7 +27,7 @@ func NewGINSServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 	}
 	c := bs.Service
 	if c.Gins == nil {
-		c.Gins = new(config.ServiceConfig_GINS)
+		c.Gins = new(config.Service_GINS)
 	}
 	if c.Gins.Network != "" {
 		opts = append(opts, gins.Network(c.Gins.Network))

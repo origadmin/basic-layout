@@ -14,8 +14,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/hashicorp/consul/api"
-	"github.com/origadmin/toolkits/contrib/replacer"
 
+	"github.com/origadmin/toolkits/contrib/replacer"
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/mods/helloworld/dto"
 )

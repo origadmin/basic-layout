@@ -5,20 +5,22 @@ import (
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/hashicorp/consul/api"
+
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/runtime/config"
 )
 
-func NewSource(path string, sourceConfig *config.SourceConfig_Consul) (config.Source, error) {
+func NewSource(name string, sourceConfig *config.SourceConfig_Consul) (config.Source, error) {
 	client, err := api.NewClient(&api.Config{
-		Address: sourceConfig.Address,
-		Scheme:  sourceConfig.Scheme,
+		Address: sourceConfig.GetAddress(),
+		Scheme:  sourceConfig.GetScheme(),
+		Token:   sourceConfig.GetToken(),
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "consul client error")
 	}
 	source, err := consul.New(client,
-		consul.WithPath(path),
+		consul.WithPath(name),
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "consul source error")

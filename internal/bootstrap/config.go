@@ -7,6 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/goexts/generic/settings"
+
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
@@ -194,8 +195,8 @@ func LoadBootstrap(cfg *Config, option *Option) (*configs.Bootstrap, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "new kratos config error")
 	}
-	log.Infof("load bootstrap config type: %s, values: %+v", cfg.Type, PrintString(cfg))
-	bs := configs.DefaultBootstrap()
+	log.Infof("load bootstrap config from: %s, values: %+v", cfg.Type, PrintString(cfg))
+	bs := DefaultConfig()
 	if err := source.Load(); err != nil {
 		return nil, errors.Wrap(err, "load config error")
 	}

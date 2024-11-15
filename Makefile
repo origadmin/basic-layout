@@ -85,6 +85,9 @@ init:
 
 	go install github.com/bufbuild/buf/cmd/buf@latest
 
+.PHONY: deps
+# export protobuf dependencies from buf.build to ./third_party
+deps:
 	buf export buf.build/bufbuild/protovalidate -o $(THIRD_PARTY_PATH)
 	buf export buf.build/protocolbuffers/wellknowntypes -o $(THIRD_PARTY_PATH)
 	buf export buf.build/googleapis/googleapis -o $(THIRD_PARTY_PATH)

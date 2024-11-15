@@ -2,15 +2,16 @@ package bootstrap
 
 import (
 	"path"
+	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hashicorp/consul/api"
+	"google.golang.org/protobuf/encoding/protojson"
+
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/runtime"
 	"github.com/origadmin/toolkits/runtime/config"
-	"google.golang.org/protobuf/encoding/protojson"
-
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -97,7 +98,7 @@ func RegistryPath(configName string) string {
 	return path.Join("registry", configName)
 }
 
-func LoadRegistries(sourceConfig *config.SourceConfig) ([]*config.RegistryConfig, error) {
+func LoadRegistries(sourceConfig *config.SourceConfig) ([]*config.Registry, error) {
 	cfg, err := runtime.NewConfig(sourceConfig)
 	if err != nil {
 		return nil, err
@@ -150,5 +151,52 @@ func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string
 	if err != nil {
 		return errors.Wrap(err, "marshal config error")
 	}
+	return nil
+}
+
+func SyncRegistry(name string, bs *configs.Bootstrap) error {
+	path, _ := filepath.Abs("resources/registries.json")
+
+	if bs.GetSource() == nil {
+		bs.Source = NewFileSource(path)
+	}
+	registries, err := LoadRegistries(bs.Source)
+	if err == nil {
+		exist := false
+		for i := range registries {
+			if registries[i].GetServiceName() == name {
+				exist = true
+				break
+			}
+		}
+		if exist {
+			log.Infof("sync config to consul path: %s exist", path)
+			return nil
+		}
+	}
+
+	registry := bs.GetRegistry()
+	if registry == nil {
+		return errors.String("registry config is nil")
+	}
+	registry.ServiceName = name
+	registries = append(registries, registry)
+	//opt := protojson.MarshalOptions{
+	//	EmitUnpopulated: true,
+	//	Indent:          " ",
+	//}
+	//marshal, err := opt.Marshal(&configs.Registry{
+	//	Registries: registries,
+	//})
+	//if err != nil {
+	//	log.Errorf("marshal config error: %v", err)
+	//	return
+	//}
+	if err := codec.EncodeToFile(path, &configs.Registry{
+		Registries: registries,
+	}); err != nil {
+		return err
+	}
+	log.Infof("sync config to) consul path: %s success", path)
 	return nil
 }

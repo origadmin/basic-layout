@@ -8,13 +8,14 @@ import (
 	//"origadmin/basic-layout/toolkits/middlewares/metrics"
 	//"origadmin/basic-layout/toolkits/middlewares/security"
 
+	"github.com/origadmin/toolkits/runtime/config"
 	"origadmin/basic-layout/internal/configs"
 )
 
 func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
 	var middlewares []middleware.Middleware
 	middlewares = append(middlewares, validate.Validator())
-	mc := bootstrap.Middlewares
+	mc := bootstrap.Middleware
 	if mc == nil {
 		return nil, nil
 	}
@@ -55,11 +56,11 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 
 // LoadGlobalMiddlewares Loading global middleware
 func LoadGlobalMiddlewares(name string, conf *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
-	if conf.Middlewares == nil {
-		conf.Middlewares = new(configs.Middlewares)
+	if conf.Middleware == nil {
+		conf.Middleware = new(config.Middleware)
 	}
-	if !conf.Middlewares.RegisterAsGlobal {
-		return nil, nil
-	}
+	//if !conf.Middleware.RegisterAsGlobal {
+	//	return nil, nil
+	//}
 	return LoadMiddlewares(name, conf, l)
 }

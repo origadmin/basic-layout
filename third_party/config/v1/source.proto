@@ -2,13 +2,18 @@ syntax = "proto3";
 
 package config.v1;
 
-option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+import "buf/validate/validate.proto";
+import "google/protobuf/any.proto";
 
-import "validate/validate.proto";
+option cc_enable_arenas = true;
+option go_package = "github.com/origadmin/toolkits/runtime/gen/go/config/v1;configv1";
+option java_multiple_files = true;
+option java_outer_classname = "CorsProto";
+option java_package = "com.github.origadmin.toolkits.runtime.config";
+option objc_class_prefix = "Config";
 
-// Registration source center
+// SourceConfig is the source file for load configuration
 message SourceConfig {
-
   // File
   message File {
     string path = 1 [json_name = "path"];
@@ -27,16 +32,28 @@ message SourceConfig {
     //  string health_check_interval = 8 [json_name = "health_check_interval"];
     //  string health_check_timeout = 9[json_name = "health_check_timeout"];
   }
+  // ETCD
   message ETCD {
     repeated string endpoints = 1 [json_name = "endpoints"];
   }
-  string type = 1 [(validate.rules).string = {in: ["none", "consul", "etcd", "nacos", "apollo", "kubernetes", "polaris"]}];  // Type
-  string name = 2 [json_name = "name"];  // Name
-  optional File file = 3 [json_name = "file"];
-  optional Consul consul = 4 [json_name = "consul"];  // Consul
-  optional ETCD etcd = 5 [json_name = "etcd"];  // ETCD
 
-  repeated string formats = 6 [json_name = "formats"];
-  repeated string env_prefixes = 8 [json_name = "env_prefixes"];
+  message Custom {
+    google.protobuf.Any config = 1 [json_name = "config"];
+  }
+
+  string type = 1 [(buf.validate.field).string = {in: ["none", "file", "consul", "etcd", "nacos", "apollo", "kubernetes", "polaris", "custom"]}];  // Type
+  // name
+  string name = 2 [json_name = "name"];
+  // set the supported file format, if not set, all formats are supported
+  repeated string formats = 3 [json_name = "formats"];
+  // set the environment variable name
   map<string, string> env_args = 7 [json_name = "env_args"];
+  // set the environment variable prefix
+  repeated string env_prefixes = 8 [json_name = "env_prefixes"];
+
+  optional File file = 100 [json_name = "file"];
+  optional Consul consul = 200 [json_name = "consul"];
+  optional ETCD etcd = 300 [json_name = "etcd"];
+  optional Custom custom = 1000 [json_name = "custom"];
+
 }

@@ -16,9 +16,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
-	"github.com/origadmin/toolkits/errors"
 	"github.com/spf13/cobra"
 
+	"github.com/origadmin/toolkits/errors"
 	"origadmin/basic-layout/helpers/utils"
 	"origadmin/basic-layout/internal/bootstrap"
 )
@@ -43,7 +43,7 @@ var (
 var cmd = &cobra.Command{
 	Use:   "start",
 	Short: "start the server",
-	RunE:  startRun,
+	RunE:  startCommandRun,
 }
 
 func init() {
@@ -62,7 +62,7 @@ func Cmd() *cobra.Command {
 	return cmd
 }
 
-func startRun(cmd *cobra.Command, args []string) error {
+func startCommandRun(cmd *cobra.Command, args []string) error {
 	boot.WorkDir, _ = cmd.Flags().GetString(startWorkDir)
 	staticDir, _ := cmd.Flags().GetString(startStatic)
 	boot.ConfigPath, _ = cmd.Flags().GetString(startConfig)

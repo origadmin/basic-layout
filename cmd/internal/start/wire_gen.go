@@ -11,26 +11,26 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"origadmin/basic-layout/internal/bootstrap"
+	"origadmin/basic-layout/internal/client"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/server"
 )
 
 // Injectors from wire.go:
 
 // buildInjectors init kratos application.
 func buildInjectors(contextContext context.Context, arg *bootstrap.Config, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
-	v, err := bootstrap.NewDiscoveries(arg)
+	v, err := bootstrap.NewDiscoveries(configsBootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	ginsServer := server.NewGINSServer(configsBootstrap, logger)
-	httpServer := server.NewHTTPServer(configsBootstrap, logger)
+	server := client.NewGINSServer(configsBootstrap, logger)
+	httpServer := client.NewHTTPServer(configsBootstrap, logger)
 	injectorClient := &bootstrap.InjectorClient{
 		Config:      arg,
 		Bootstrap:   configsBootstrap,
 		Discoveries: v,
 		Logger:      logger,
-		ServerGINS:  ginsServer,
+		ServerGINS:  server,
 		ServerHTTP:  httpServer,
 	}
 	app := NewApp(contextContext, injectorClient)

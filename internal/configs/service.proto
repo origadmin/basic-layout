@@ -1,14 +1,20 @@
 syntax = "proto3";
 
-package origadmin.configs.api;
+package origadmin.configs;
 
+import "config/v1/cors.proto";
 import "config/v1/data.proto";
 import "config/v1/registry.proto";
 import "config/v1/service.proto";
-import "configs/bootstrap.proto";
+import "configs/setting.proto";
 import "google/protobuf/duration.proto";
 
+option cc_enable_arenas = true;
 option go_package = "internal/configs;configs";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigsProto";
+option java_package = "com.github.origadmin.basic-layout.configs";
+option objc_class_prefix = "Configs";
 
 message ServiceConfig {
     // GINS
@@ -97,7 +103,6 @@ message ServiceConfig {
             bool allow_files = 12 [json_name = "allow_files"];
         }
 
-        Cors cors = 1 [json_name = "cors"];
         Metrics metrics = 2 [json_name = "metrics"];
         Traces traces = 3 [json_name = "traces"];
         Logger logger = 4 [json_name = "logger"];
@@ -105,10 +110,11 @@ message ServiceConfig {
     GINS gins = 2 [json_name = "gins"];
     HTTP http = 3 [json_name = "http"];
     GRPC grpc = 4 [json_name = "grpc"];
-    config.v1.RegistryConfig registry = 200 [json_name = "registry"];
-    config.v1.DataConfig data = 300 [json_name = "data"];
-    Settings settings = 400 [json_name = "settings"];
-    config.v1.ServiceConfig service = 500 [json_name = "service"];
-    Middlewares middlewares = 600 [json_name = "middlewares"];
+    config.v1.Cors cors = 100 [json_name = "cors"];
+    config.v1.Registry registry = 200 [json_name = "registry"];
+    config.v1.Data data = 300 [json_name = "data"];
+    Setting setting = 400 [json_name = "setting"];
+    config.v1.Service service = 500 [json_name = "service"];
+    Middleware middleware = 600 [json_name = "middleware"];
     string host = 99 [json_name = "host"];
 }

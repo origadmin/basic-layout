@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/origadmin/toolkits/runtime/config"
 
+	"github.com/origadmin/toolkits/runtime/config"
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
@@ -27,7 +27,7 @@ func NewHTTPServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 	}
 	c := bs.Service
 	if c.Http == nil {
-		c.Http = new(config.ServiceConfig_HTTP)
+		c.Http = new(config.Service_HTTP)
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))
@@ -69,7 +69,7 @@ func NewHTTPServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 
 	log.Infof("Server.HTTP.Endpoint: %v", bs.Service.Http.Endpoint)
 	ep, _ := url.Parse(bs.Service.Http.Endpoint)
-	opts = append(opts, http.Endpoint(ep))
+	opts = append(opts, http.PathPrefix("test"), http.Endpoint(ep))
 	srv := http.NewServer(opts...)
 	secondworld.RegisterSecondGreeterAPIHTTPServer(srv, greeter)
 	return srv

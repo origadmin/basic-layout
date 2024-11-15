@@ -2,131 +2,20 @@ syntax = "proto3";
 
 package config.v1;
 
-option go_package = "github.com/origadmin/toolkits/runtime/config;config";
-
+import "config/v1/message.proto";
+import "config/v1/middleware.proto";
+import "config/v1/task.proto";
+import "config/v1/websocket.proto";
 import "google/protobuf/duration.proto";
 
-message EntrySelectorConfig {
-  bool global = 2 [json_name = "global"];
-  string name = 3 [json_name = "name"];
-  string version = 4 [json_name = "version"];
-}
+option cc_enable_arenas = true;
+option go_package = "github.com/origadmin/toolkits/runtime/gen/go/config/v1;configv1";
+option java_multiple_files = true;
+option java_outer_classname = "CorsProto";
+option java_package = "com.github.origadmin.toolkits.runtime.config";
+option objc_class_prefix = "Config";
 
-message MessageConfig {
-  // MQTT
-  message MQTT {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  // Kafka
-  message Kafka {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  // RabbitMQ
-  message RabbitMQ {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message ActiveMQ {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message NATS {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message NSQ {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message Pulsar {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message Redis {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-  }
-
-  message RocketMQ {
-    string endpoint = 1 [json_name = "endpoint"];  // Peer network address
-    string codec = 2 [json_name = "codec"];  // Codec: json,xml,yaml...
-    bool enable_trace = 3;
-
-    repeated string name_servers = 4;
-    string name_server_domain = 5;
-
-    string access_key = 6;
-    string secret_key = 7;
-    string security_token = 8;
-
-    string namespace = 9;
-    string instance_name = 10;
-    string group_name = 11;
-  }
-
-  string name = 2 [json_name = "name"];
-  MQTT mqtt = 3 [json_name = "mqtt"];
-  Kafka kafka = 4 [json_name = "kafka"];
-  RabbitMQ rabbitmq = 5 [json_name = "rabbitmq"];
-  ActiveMQ activemq = 6 [json_name = "activemq"];
-  NATS nats = 7 [json_name = "nats"];
-  NSQ nsq = 8 [json_name = "nsq"];
-  Pulsar pulsar = 9 [json_name = "pulsar"];
-  Redis redis = 10 [json_name = "redis"];
-  RocketMQ rocketmq = 11 [json_name = "rocketmq"];
-}
-
-message TaskConfig {
-  // Asynq
-  message Asynq {
-    string endpoint = 1;  // Peer network address
-    string password = 2; // redis Login password
-    int32 db = 3;// Database index
-    string location = 4;// Time Zone
-  }
-
-  // Machinery
-  message Machinery {
-    repeated string brokers = 1;  // broker address, which can be specified as Redis, AMQP, or AWS SQS according to the actual storage medium used;
-    repeated string backends = 2;  // backend configures the media for storing results. The value can be Redis, memcached, or mongodb as required.  }
-  }
-
-  // Cron
-  message Cron {
-    string endpoint = 1;  // Peer network address
-    string password = 2; // redis Login password
-    int32 db = 3;// Database index
-    string location = 4;// Time Zone
-  }
-
-  string name = 2 [json_name = "name"];
-  Asynq asynq = 3 [json_name = "asynq"];
-  Machinery machinery = 4 [json_name = "machinery"];
-  Cron cron = 5 [json_name = "cron"];
-}
-
-message ServiceConfig {
-
-  // Entry
-  message Entry {
-    string name = 1 [json_name = "name"];
-    string addr = 2 [json_name = "addr"];
-    string network = 3 [json_name = "network"];
-    string weight = 4 [json_name = "weight"];
-    optional google.protobuf.Duration timeout = 5 [json_name = "timeout"];
-    bool enable_swagger = 6 [json_name = "enable_swagger"];
-    bool enable_pprof = 7 [json_name = "enable_pprof"];
-    EntrySelectorConfig selector = 8 [json_name = "selector"];
-  }
+message Service {
 
   // GINS
   message GINS {
@@ -173,58 +62,26 @@ message ServiceConfig {
     string endpoint = 11 [json_name = "endpoint"];
   }
 
-  // Websocket
-  message Websocket {
-    string network = 1 [json_name = "network"];
-    string addr = 2 [json_name = "addr"];
-    string path = 3 [json_name = "path"];
-    string codec = 4 [json_name = "codec"];
-    google.protobuf.Duration timeout = 5 [json_name = "timeout"];
+  // Selector
+  message Selector {
+    string version = 1;
+    string builder = 2;
   }
 
+  // Service name for service discovery
+  string name = 1 [json_name = "name"];
+  bool auto_endpoint = 2 [json_name = "auto_endpoint"];
 
+  GRPC grpc = 10 [json_name = "grpc"];
+  HTTP http = 20 [json_name = "http"];
+  GINS gins = 30 [json_name = "gins"];
 
-  message Middleware {
-    message Metrics {
-      string name = 2;
-    }
+  config.v1.WebSocket websocket = 100 [json_name = "websocket"];
+  config.v1.Message message = 200 [json_name = "message"];
+  config.v1.Task task = 300 [json_name = "task"];
 
-    message Traces {
-      string name = 2;
-    }
-
-    message Logger {
-      string name = 2;
-    }
-
-    message Cors {
-      bool allow_all_origins = 2 [json_name = "allow_all_origins"];
-      repeated string allow_origins = 3 [json_name = "allow_origins"];
-      repeated string allow_methods = 4 [json_name = "allow_methods"];
-      repeated string allow_headers = 5 [json_name = "allow_headers"];
-      bool allow_credentials = 6 [json_name = "allow_credentials"];
-      repeated string expose_headers = 7 [json_name = "expose_headers"];
-      int32 max_age = 8 [json_name = "max_age"];
-      bool allow_wildcard = 9 [json_name = "allow_wildcard"];
-      bool allow_browser_extensions = 10 [json_name = "allow_browser_extensions"];
-      bool allow_web_sockets = 11 [json_name = "allow_web_sockets"];
-      bool allow_files = 12 [json_name = "allow_files"];
-    }
-
-    Cors cors = 1 [json_name = "cors"];
-    Metrics metrics = 2 [json_name = "metrics"];
-    Traces traces = 3 [json_name = "traces"];
-    Logger logger = 4 [json_name = "logger"];
-  }
-
-  Entry entry = 1 [json_name = "entry"];
-  GINS gins = 2 [json_name = "gins"];
-  HTTP http = 3 [json_name = "http"];
-  GRPC grpc = 4 [json_name = "grpc"];
-  Websocket websocket = 5 [json_name = "websocket"];
-
-  MessageConfig message = 10 [json_name = "message"];
-  TaskConfig task = 20 [json_name = "task"];
+  config.v1.Middleware middleware = 400 [json_name = "middleware"];
+  Selector selector = 500 [json_name = "selector"];
 
   string host = 99 [json_name = "host"];
 }

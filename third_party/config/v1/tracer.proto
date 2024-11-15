@@ -2,10 +2,17 @@ syntax = "proto3";
 
 package config.v1;
 
-option go_package = "github.com/origadmin/toolkits/runtime/config;config";
+option cc_enable_arenas = true;
+option go_package = "github.com/origadmin/toolkits/runtime/gen/go/config/v1;configv1";
+option java_multiple_files = true;
+option java_outer_classname = "CorsProto";
+option java_package = "com.github.origadmin.toolkits.runtime.config";
+option objc_class_prefix = "Config";
 
-message TraceConfig {
-
-  string name = 2 [json_name = "name"];
-  string endpoint = 3 [json_name = "endpoint"];
+// Trace config.
+message Trace {
+    // name of trace service
+    string name = 2 [json_name = "name"];
+    // endpoint is the endpoint of trace service
+    string endpoint = 3 [json_name = "endpoint"];
 }

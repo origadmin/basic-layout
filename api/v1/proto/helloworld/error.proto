@@ -10,6 +10,6 @@ option java_package = "com.origadmin.api.v1.services.helloworld";
 
 enum HELLO_WORLD_ERROR_REASON {
   option (errors.default_code) = 500;
-  GREETER_UNSPECIFIED = 0;
+  HELLO_WORLD_ERROR_REASON_UNSPECIFIED = 0;
   USER_NOT_FOUND = 1;
 }
