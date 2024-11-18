@@ -249,3 +249,33 @@ func (guo *GreeterUpdateOne) sqlSave(ctx context.Context) (_node *Greeter, err e
 	guo.mutation.done = true
 	return _node, nil
 }
+
+// SetGreeter set the Greeter
+func (gu *GreeterUpdate) SetGreeter(input *Greeter, fields ...string) *GreeterUpdate {
+	m := gu.mutation
+	_ = m.SetFields(input, fields...)
+	return gu
+}
+
+// SetGreeter set the Greeter
+func (guo *GreeterUpdateOne) SetGreeter(input *Greeter, fields ...string) *GreeterUpdateOne {
+	m := guo.mutation
+	_ = m.SetFields(input, fields...)
+	return guo
+}
+
+// Omit allows the unselect one or more fields/columns for the given query,
+// instead of selecting all fields in the entity.
+func (guo *GreeterUpdateOne) Omit(fields ...string) *GreeterUpdateOne {
+	omits := make(map[string]struct{}, len(fields))
+	for i := range fields {
+		omits[fields[i]] = struct{}{}
+	}
+	guo.fields = []string(nil)
+	for _, col := range greeter.Columns {
+		if _, ok := omits[col]; !ok {
+			guo.fields = append(guo.fields, col)
+		}
+	}
+	return guo
+}

@@ -253,8 +253,9 @@ func (gq *GreeterQuery) Clone() *GreeterQuery {
 		inters:     append([]Interceptor{}, gq.inters...),
 		predicates: append([]predicate.Greeter{}, gq.predicates...),
 		// clone intermediate query.
-		sql:  gq.sql.Clone(),
-		path: gq.path,
+		sql:       gq.sql.Clone(),
+		path:      gq.path,
+		modifiers: append([]func(*sql.Selector){}, gq.modifiers...),
 	}
 }
 
@@ -477,6 +478,36 @@ func (gq *GreeterQuery) ForShare(opts ...sql.LockOption) *GreeterQuery {
 func (gq *GreeterQuery) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelect {
 	gq.modifiers = append(gq.modifiers, modifiers...)
 	return gq.Select()
+}
+
+// Omit allows the unselect one or more fields/columns for the given query,
+// instead of selecting all fields in the entity.
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Greeter.Query().
+//		Omit(
+//		greeter.FieldName,
+//		).
+//		Scan(ctx, &v)
+func (gq *GreeterQuery) Omit(fields ...string) *GreeterSelect {
+	omits := make(map[string]struct{}, len(fields))
+	for i := range fields {
+		omits[fields[i]] = struct{}{}
+	}
+	for _, col := range greeter.Columns {
+		if _, ok := omits[col]; !ok {
+			gq.ctx.Fields = append(gq.ctx.Fields, col)
+		}
+	}
+
+	sbuild := &GreeterSelect{GreeterQuery: gq}
+	sbuild.label = greeter.Label
+	sbuild.flds, sbuild.scan = &gq.ctx.Fields, sbuild.Scan
+	return sbuild
 }
 
 // GreeterGroupBy is the group-by builder for Greeter entities.

@@ -100,6 +100,13 @@ func (gc *GreeterCreate) createSpec() (*Greeter, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// SetGreeter set the Greeter
+func (gc *GreeterCreate) SetGreeter(input *Greeter, fields ...string) *GreeterCreate {
+	m := gc.mutation
+	_ = m.SetFields(input, fields...)
+	return gc
+}
+
 // GreeterCreateBulk is the builder for creating many Greeter entities in bulk.
 type GreeterCreateBulk struct {
 	config

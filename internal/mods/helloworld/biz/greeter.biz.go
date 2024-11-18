@@ -19,7 +19,7 @@ var (
 
 // GreeterBiz is a Greeter use case.
 type GreeterBiz struct {
-	dao dto.GreeterDao
+	dao dto.GreeterRepo
 	log *log.Helper
 }
 
@@ -65,12 +65,12 @@ func (g GreeterBiz) ListGreeter(ctx context.Context, in *helloworld.ListGreeterR
 }
 
 // NewGreeterBiz new a Greeter use case.
-func NewGreeterBiz(repo dto.GreeterDao, logger log.Logger) *GreeterBiz {
+func NewGreeterBiz(repo dto.GreeterRepo, logger log.Logger) *GreeterBiz {
 	return &GreeterBiz{dao: repo, log: log.NewHelper(logger)}
 }
 
 // NewGreeterClient new a Greeter use case.
-func NewGreeterClient(repo dto.GreeterDao, logger log.Logger) helloworld.HelloGreeterAPIClient {
+func NewGreeterClient(repo dto.GreeterRepo, logger log.Logger) helloworld.HelloGreeterAPIClient {
 	return &GreeterBiz{dao: repo, log: log.NewHelper(logger)}
 }
 

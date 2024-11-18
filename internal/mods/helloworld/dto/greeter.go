@@ -29,8 +29,8 @@ type GreeterQueryParam struct {
 	RoleID           string   `form:"-" json:"-"`                                           // Role ID
 }
 
-// GreeterDao is a Greater dao.
-type GreeterDao interface {
+// GreeterRepo is a Greater dao.
+type GreeterRepo interface {
 	Save(context.Context, *Greeter) (*Greeter, error)
 	Update(context.Context, *Greeter) (*Greeter, error)
 	FindByID(context.Context, string, *GreeterQueryParam) (*Greeter, error)

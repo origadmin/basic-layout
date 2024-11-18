@@ -27,10 +27,12 @@ import (
 )
 
 {{ range $n := $.Nodes }}
-    {{ template "crud/helper/create" $n }}
-    {{ template "crud/helper/query" $n }}
-    {{ template "crud/helper/update" $n }}
-    {{ template "crud/helper/updateone" $n }}
+    {{- /* Support adding create methods by global templates. */}}
+    {{- with $tmpls := matchTemplate "crud/helper/*" }}
+        {{- range $tmpl := $tmpls }}
+            {{ xtemplate $tmpl $n }}
+        {{- end }}
+    {{- end }}
 {{ end }}
 
 {{ end }}
