@@ -7,13 +7,10 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/goexts/generic/settings"
-
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
-	"github.com/origadmin/toolkits/contrib/replacer"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime"
 	"github.com/origadmin/toolkits/runtime/bootstrap"
 	"github.com/origadmin/toolkits/runtime/config"
 

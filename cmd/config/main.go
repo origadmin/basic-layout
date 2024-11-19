@@ -6,9 +6,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	logger "github.com/origadmin/slog-kratos"
-	_ "go.uber.org/automaxprocs"
-
 	"github.com/origadmin/toolkits/errors"
+
 	"origadmin/basic-layout/internal/bootstrap"
 )
 

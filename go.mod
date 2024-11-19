@@ -5,10 +5,10 @@ go 1.23.1
 replace github.com/armon/go-metrics v0.5.4 => github.com/origadmin/go-metrics v0.5.4
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.1-20240920164238-5a7b106cbb87.1
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.2-20240920164238-5a7b106cbb87.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.1
-	github.com/bufbuild/protovalidate-go v0.7.2
+	github.com/bufbuild/protovalidate-go v0.7.3
 	github.com/caarlos0/go-version v0.1.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20241105072421-f8b97f675b32
@@ -18,25 +18,25 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.30.0
 	github.com/origadmin/slog-kratos v1.0.3
-	github.com/origadmin/toolkits v0.0.88
-	github.com/origadmin/toolkits/codec v0.0.21
-	github.com/origadmin/toolkits/contrib/config v0.0.11
-	github.com/origadmin/toolkits/contrib/consul v0.0.5
-	github.com/origadmin/toolkits/contrib/replacer v0.0.1
-	github.com/origadmin/toolkits/runtime v0.0.6
+	github.com/origadmin/toolkits v0.0.91
+	github.com/origadmin/toolkits/codec v0.0.23
+	github.com/origadmin/toolkits/contrib/config v0.0.13
+	github.com/origadmin/toolkits/contrib/consul v0.0.7
+	github.com/origadmin/toolkits/contrib/replacer v0.0.3
+	github.com/origadmin/toolkits/runtime v0.0.8
 	github.com/spf13/cobra v1.8.1
-	go.uber.org/automaxprocs v1.6.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20241104194629-dd2ea8efbc28
+	google.golang.org/genproto/googleapis/api v0.0.0-20241118233622-e639e219e697
 	google.golang.org/grpc v1.68.0
-	google.golang.org/protobuf v1.35.1
+	google.golang.org/protobuf v1.35.2
 )
 
 require (
 	ariga.io/atlas v0.28.1 // indirect
+	cel.dev/expr v0.18.0 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
-	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/armon/go-metrics v0.5.4 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
@@ -55,9 +55,9 @@ require (
 	github.com/go-playground/form/v4 v4.2.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.22.1 // indirect
+	github.com/go-playground/validator/v10 v10.23.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
-	github.com/google/cel-go v0.21.0 // indirect
+	github.com/google/cel-go v0.22.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
@@ -68,7 +68,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
-	github.com/hashicorp/hcl/v2 v2.22.0 // indirect
+	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -101,7 +101,7 @@ require (
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/tools v0.27.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241118233622-e639e219e697 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
