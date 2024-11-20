@@ -2,8 +2,8 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
-// Package client implements the functions, types, and interfaces for the module.
-package client
+// Package agent implements the functions, types, and interfaces for the module.
+package agent
 
 import (
 	"context"

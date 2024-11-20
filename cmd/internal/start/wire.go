@@ -20,7 +20,7 @@ import (
 func buildInjectors(context.Context, *bootstrap.Config, *configs.Bootstrap, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		bootstrap.ProviderSet,
-		client.ProviderSet,
+		agent.ProviderSet,
 		//helloworlddal.ProviderSet,
 		//helloworldbiz.ProviderSet,
 		//helloworldservice.ProviderSet,

@@ -8,10 +8,12 @@ package start
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+
+	"origadmin/basic-layout/internal/agent"
 	"origadmin/basic-layout/internal/bootstrap"
-	"origadmin/basic-layout/internal/client"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -23,8 +25,8 @@ func buildInjectors(contextContext context.Context, arg *bootstrap.Config, confi
 	if err != nil {
 		return nil, nil, err
 	}
-	server := client.NewGINSServer(configsBootstrap, logger)
-	httpServer := client.NewHTTPServer(configsBootstrap, logger)
+	server := agent.NewGINSServer(configsBootstrap, logger)
+	httpServer := agent.NewHTTPServer(configsBootstrap, logger)
 	injectorClient := &bootstrap.InjectorClient{
 		Config:      arg,
 		Bootstrap:   configsBootstrap,

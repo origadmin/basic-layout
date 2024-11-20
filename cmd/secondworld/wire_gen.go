@@ -8,19 +8,18 @@ package main
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	_ "github.com/origadmin/toolkits/contrib/consul/config"
+	_ "github.com/origadmin/toolkits/contrib/consul/registry"
+
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/secondworld/biz"
 	"origadmin/basic-layout/internal/mods/secondworld/dal"
 	"origadmin/basic-layout/internal/mods/secondworld/server"
 	"origadmin/basic-layout/internal/mods/secondworld/service"
-)
-
-import (
-	_ "github.com/origadmin/toolkits/contrib/consul/config"
-	_ "github.com/origadmin/toolkits/contrib/consul/registry"
 )
 
 // Injectors from wire.go:

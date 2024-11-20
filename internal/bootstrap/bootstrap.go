@@ -45,14 +45,14 @@ func InjectorGinServer(injector *InjectorClient) error {
 	for name, discovery := range injector.Discoveries {
 		switch name {
 		case "origadmin.service.v1.helloworld":
-			cli, err := client.NewHelloGreeterAPIServer(injector.Bootstrap, discovery)
+			cli, err := agent.NewHelloGreeterAPIServer(injector.Bootstrap, discovery)
 			if err != nil {
 				return err
 			}
 			helloworld.RegisterHelloGreeterAPIGINSServer(injector.ServerGINS, cli)
 			helloworld.RegisterHelloGreeterAPIHTTPServer(injector.ServerHTTP, cli)
 		case "origadmin.service.v1.secondworld":
-			cli, err := client.NewSecondGreeterAPIServer(injector.Bootstrap, discovery)
+			cli, err := agent.NewSecondGreeterAPIServer(injector.Bootstrap, discovery)
 			if err != nil {
 				return err
 			}

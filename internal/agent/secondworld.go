@@ -2,8 +2,8 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
-// Package client implements the functions, types, and interfaces for the module.
-package client
+// Package agent implements the functions, types, and interfaces for the module.
+package agent
 
 import (
 	"context"
@@ -18,6 +18,7 @@ import (
 
 	"github.com/origadmin/toolkits/errors"
 	"github.com/origadmin/toolkits/runtime/registry"
+
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/configs"
 	secondworldservice "origadmin/basic-layout/internal/mods/secondworld/service"
