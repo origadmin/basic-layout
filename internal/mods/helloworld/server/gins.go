@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 
-	"github.com/origadmin/toolkits/runtime/config"
 	"github.com/origadmin/toolkits/runtime/transport/gins"
+
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
@@ -25,18 +25,18 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServ
 			metadata.Server(),
 		),
 	}
-	c := bs.Service
-	if c.Gins == nil {
-		c.Gins = new(config.Service_GINS)
+	cfg := bs.GetService().GetGins()
+	if cfg == nil {
+		cfg = bootstrap.DefaultServiceGins()
 	}
-	if c.Gins.Network != "" {
-		opts = append(opts, gins.Network(c.Gins.Network))
+	if cfg.Network != "" {
+		opts = append(opts, gins.Network(cfg.Network))
 	}
-	if c.Gins.Addr != "" {
-		opts = append(opts, gins.Address(c.Gins.Addr))
+	if cfg.Addr != "" {
+		opts = append(opts, gins.Address(cfg.Addr))
 	}
-	if c.Gins.Timeout != nil {
-		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
+	if cfg.Timeout != nil {
+		opts = append(opts, gins.Timeout(cfg.Timeout.AsDuration()))
 	}
 	//if c.Middleware == nil {
 	//	c.Middleware = new(configs.Server_Middleware)
