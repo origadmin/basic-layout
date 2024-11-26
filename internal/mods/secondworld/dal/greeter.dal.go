@@ -39,7 +39,7 @@ func (g greeterDal) ListAll(ctx context.Context, param *dto.GreeterQueryParam) (
 }
 
 // NewGreeterDal .
-func NewGreeterDal(db *Database, logger log.Logger) dto.GreeterDao {
+func NewGreeterDal(db *Database, logger log.Logger) dto.GreeterRepo {
 	return &greeterDal{
 		db:  db,
 		log: log.NewHelper(logger),

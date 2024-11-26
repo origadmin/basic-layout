@@ -71,7 +71,7 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServ
 		}
 	}
 
-	log.Infof("Server.GINS.Endpoint: %v", bs.Service.Gins.Endpoint)
+	log.Infof("Server.GINS.EndpointURL: %v", bs.Service.Gins.Endpoint)
 	ep, _ := url.Parse(bs.Service.Gins.Endpoint)
 	opts = append(opts, gins.Endpoint(ep))
 	srv := gins.NewServer(opts...)

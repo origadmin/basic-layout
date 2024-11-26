@@ -430,7 +430,7 @@ func (m *ServiceConfig_GINS) validate(all bool) error {
 
 	// no validation rules for KeyFile
 
-	// no validation rules for Endpoint
+	// no validation rules for EndpointURL
 
 	if m.Timeout != nil {
 
@@ -854,7 +854,7 @@ func (m *ServiceConfig_HTTP) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for Endpoint
+	// no validation rules for EndpointURL
 
 	if len(errors) > 0 {
 		return ServiceConfig_HTTPMultiError(errors)
@@ -968,7 +968,7 @@ func (m *ServiceConfig_GRPC) validate(all bool) error {
 
 	// no validation rules for KeyFile
 
-	// no validation rules for Endpoint
+	// no validation rules for EndpointURL
 
 	if m.Timeout != nil {
 

@@ -35,6 +35,8 @@ message Data {
         int32 max_open_connections = 21 [json_name = "max_open_connections"];
         // Maximum length of time that the connection can be reused
         google.protobuf.Duration connection_max_lifetime = 22 [json_name = "connection_max_lifetime"];
+      // Maximum number of connections in the connection pool for reading
+      google.protobuf.Duration connection_max_idle_time = 23 [json_name = "connection_max_idle_time"];
     }
 
     // Redis
@@ -92,7 +94,7 @@ message Data {
     // Cache
     message Cache {
         // Driver name: redis, memcached, etc.
-        string driver = 1 [json_name = "driver", (buf.validate.field).string = {in: ["redis", "memcached", "memory"]}];
+      string driver = 1 [json_name = "driver", (buf.validate.field).string = {in: ["none", "redis", "memcached", "memory"]}];
         // Redis
         Redis redis = 2 [json_name = "redis"];
         // Memcached

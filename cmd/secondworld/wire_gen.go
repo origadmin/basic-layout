@@ -8,18 +8,19 @@ package main
 
 import (
 	"context"
-
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	_ "github.com/origadmin/toolkits/contrib/consul/config"
-	_ "github.com/origadmin/toolkits/contrib/consul/registry"
-
 	"origadmin/basic-layout/internal/bootstrap"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/secondworld/biz"
 	"origadmin/basic-layout/internal/mods/secondworld/dal"
 	"origadmin/basic-layout/internal/mods/secondworld/server"
 	"origadmin/basic-layout/internal/mods/secondworld/service"
+)
+
+import (
+	_ "github.com/origadmin/toolkits/contrib/consul/config"
+	_ "github.com/origadmin/toolkits/contrib/consul/registry"
 )
 
 // Injectors from wire.go:
@@ -31,8 +32,8 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterDao := dal.NewGreeterDal(database, logger)
-	secondGreeterAPIClient := biz.NewGreeterClient(greeterDao, logger)
+	greeterRepo := dal.NewGreeterDal(database, logger)
+	secondGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
 	secondGreeterAPIServer := service.NewGreeterServer(secondGreeterAPIClient)
 	grpcServer := server.NewGRPCServer(configsBootstrap, secondGreeterAPIServer, logger)
 	httpServer := server.NewHTTPServer(configsBootstrap, secondGreeterAPIServer, logger)

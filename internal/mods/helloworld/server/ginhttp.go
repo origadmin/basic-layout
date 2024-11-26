@@ -36,7 +36,7 @@ func NewGinHTTPServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIS
 	}
 
 	cfg.Endpoint = endpoint.Parse("http", bs.GetService().Host, cfg.Addr, cfg.Endpoint)
-	log.Infof("Server.GinHttp.Endpoint: %v", cfg.Endpoint)
+	log.Infof("Server.GinHttp.EndpointURL: %v", cfg.Endpoint)
 	ep, _ := url.Parse(cfg.Endpoint)
 	opts = append(opts, http.Endpoint(ep))
 	srv := http.NewServer(opts...)

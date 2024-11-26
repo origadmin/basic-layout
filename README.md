@@ -56,3 +56,57 @@ docker build -t <your-docker-image-name> .
 # run
 docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf <your-docker-image-name>
 ```
+
+Tree:
+
+```shell
+./
+├─api
+│  └─v1
+│      ├─proto
+│      │  ├─helloworld
+│      │  └─secondworld
+│      └─services
+│          ├─helloworld
+│          └─secondworld
+├─cmd
+│  ├─testclient
+│  ├─config
+│  ├─helloworld
+│  ├─internal
+│  │  ├─config
+│  │  └─start
+│  └─secondworld
+├─helpers
+│  ├─context
+│  ├─endpoint
+│  ├─errors
+│  ├─oneof
+│  │  └─source
+│  └─utils
+├─internal
+│  ├─agent
+│  ├─bootstrap
+│  ├─configs
+│  └─mods
+│      ├─helloworld
+│      │  ├─biz
+│      │  ├─dal
+│      │  │  └─ent
+│      │  ├─dto
+│      │  ├─server
+│      │  └─service
+│      └─secondworld
+│          ├─biz
+│          ├─dal
+│          ├─dto
+│          ├─server
+│          └─service
+├─resources
+│  ├─configs
+│  ├─docs
+│  │  ├─buf
+│  │  └─openapi
+└─third_party
+    └─validate
+```

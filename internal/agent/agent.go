@@ -5,7 +5,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-
 	"github.com/origadmin/toolkits/runtime/transport/gins"
 
 	"origadmin/basic-layout/helpers/errors"
@@ -74,13 +73,6 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, l log.Logger) *http.Server {
 	if bootstrap.Entry.Timeout != nil {
 		opts = append(opts, http.Timeout(bootstrap.Entry.Timeout.AsDuration()))
 	}
-	//if bootstrap.Middleware == nil {
-	//	bootstrap.Middleware = new(configs.Server_Middleware)
-	//}
-	//middlewares, err := bootstrap.LoadGlobalMiddlewares(bootstrap.GetServiceName(), bootstrap, l)
-	//if err == nil && len(middlewares) > 0 {
-	//	opts = append(opts, http.Middleware(middlewares...))
-	//}
 
 	srv := http.NewServer(opts...)
 	return srv

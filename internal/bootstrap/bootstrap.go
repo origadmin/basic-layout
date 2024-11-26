@@ -8,9 +8,10 @@ import (
 	"github.com/google/wire"
 
 	"github.com/origadmin/toolkits/runtime/transport/gins"
+
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/api/v1/services/secondworld"
-	"origadmin/basic-layout/internal/client"
+	"origadmin/basic-layout/internal/agent"
 	"origadmin/basic-layout/internal/configs"
 )
 

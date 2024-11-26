@@ -11,8 +11,10 @@ import (
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
+	"github.com/origadmin/toolkits/runtime"
 	"github.com/origadmin/toolkits/runtime/bootstrap"
 	"github.com/origadmin/toolkits/runtime/config"
+	configv1 "github.com/origadmin/toolkits/runtime/gen/go/config/v1"
 
 	"origadmin/basic-layout/helpers/oneof/source"
 	"origadmin/basic-layout/internal/configs"
@@ -20,7 +22,7 @@ import (
 
 type Bootstrap = bootstrap.Bootstrap
 
-type Config = config.SourceConfig
+type Config = configv1.SourceConfig
 
 func init() {
 	//cfg := runtime.ConfigBuildFunc(NewFileConfig)
@@ -109,7 +111,7 @@ func FromFlags(boot *Bootstrap, ss ...Setting) (*configs.Bootstrap, error) {
 	}
 	log.Infof("loading config from %s", path)
 
-	var cfg *config.SourceConfig
+	var cfg *Config
 	if stat.IsDir() {
 		cfg = loadSourceFromDir(path)
 	} else {
@@ -122,7 +124,7 @@ func FromFlags(boot *Bootstrap, ss ...Setting) (*configs.Bootstrap, error) {
 	return LoadBootstrap(PathToSource(cfg, boot.ServiceName()), o)
 }
 
-func FromLocal(serviceName string, source *config.SourceConfig, option *Option) (*configs.Bootstrap, error) {
+func FromLocal(serviceName string, source *Config, option *Option) (*configs.Bootstrap, error) {
 	if source.File == nil {
 		return nil, errors.String("file config is nil")
 	}
@@ -134,7 +136,7 @@ func FromLocal(serviceName string, source *config.SourceConfig, option *Option) 
 	}
 	log.Infof("loading config from %s", path)
 
-	var cfg *config.SourceConfig
+	var cfg *Config
 	if stat.IsDir() {
 		cfg = loadSourceFromDir(path)
 	} else {
@@ -152,8 +154,8 @@ func FromLocalPath(serviceName string, path string, ss ...Setting) (*configs.Boo
 }
 
 // loadSourceFromDir loads configuration from a directory.
-func loadSourceFromDir(path string) *config.SourceConfig {
-	var cfg config.SourceConfig
+func loadSourceFromDir(path string) *Config {
+	var cfg Config
 	err := filepath.WalkDir(path, func(walkpath string, d os.DirEntry, err error) error {
 		if err != nil {
 			return errors.Wrapf(err, "failed to get config file %s", walkpath)
@@ -177,8 +179,8 @@ func loadSourceFromDir(path string) *config.SourceConfig {
 }
 
 // loadSourceFromFile loads configuration from a single file.
-func loadSourceFromFile(path string) *config.SourceConfig {
-	var cfg config.SourceConfig
+func loadSourceFromFile(path string) *Config {
+	var cfg Config
 	if err := codec.DecodeFromFile(path, &cfg); err != nil {
 		return nil
 	}
@@ -206,12 +208,7 @@ func LoadBootstrap(cfg *Config, option *Option) (*configs.Bootstrap, error) {
 	return bs, nil
 }
 
-func ApplyEnv(content []byte, envs map[string]string) []byte {
-	r := replacer.New(replacer.WithSeparator("="))
-	return r.Replace(content, envs)
-}
-
-func NewFileConfig(ccfg *config.SourceConfig, opts ...config.Option) (config.Config, error) {
+func NewFileConfig(ccfg *Config, opts ...config.Option) (config.Config, error) {
 	if ccfg.EnvArgs != nil {
 		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path), envf.WithEnv(ccfg.EnvArgs, ccfg.EnvPrefixes...)))
 	} else {
@@ -223,7 +220,7 @@ func NewFileConfig(ccfg *config.SourceConfig, opts ...config.Option) (config.Con
 func NewFileSource(path string) *Config {
 	return &Config{
 		Type: "file",
-		File: &config.SourceConfig_File{
+		File: &configv1.SourceConfig_File{
 			Path: path,
 		},
 	}

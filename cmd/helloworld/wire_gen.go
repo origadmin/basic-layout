@@ -32,8 +32,8 @@ func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bo
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterDao := dal.NewGreeterDal(database, logger)
-	helloGreeterAPIClient := biz.NewGreeterClient(greeterDao, logger)
+	greeterRepo := dal.NewGreeterDal(database, logger)
+	helloGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
 	helloGreeterAPIServer := service.NewGreeterServer(helloGreeterAPIClient)
 	grpcServer := server.NewGRPCServer(configsBootstrap, helloGreeterAPIServer, logger)
 	httpServer := server.NewHTTPServer(configsBootstrap, helloGreeterAPIServer, logger)

@@ -38,11 +38,10 @@ message Registry {
     google.protobuf.Any config = 1 [json_name = "config"];
   }
 
-  string type = 1 [(buf.validate.field).string = {in: ["none", "consul", "etcd", "nacos", "apollo", "kubernetes", "polaris", "custom"]}];  // Type
+  string type = 1 [(buf.validate.field).string = {in: ["none", "consul", "etcd", "nacos", "apollo", "kubernetes", "polaris"]}];  // Type
   string service_name = 2 [json_name = "service_name"];  // ServiceName
   bool debug = 5 [json_name = "debug"];
 
   optional Consul consul = 300 [json_name = "consul"];  // Consul
   optional ETCD etcd = 400 [json_name = "etcd"];  // ETCD
-  optional Custom custom = 500 [json_name = "custom"]; // Custom
 }

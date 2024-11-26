@@ -77,9 +77,6 @@ message UserMetric {
     map<string, string> metadata = 9;
 }
 
-
-
-
 // Security middleware config.
 message Security {
 
