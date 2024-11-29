@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package main
 
 // for linux or macos you can use make generate

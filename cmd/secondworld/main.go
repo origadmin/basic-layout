@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package main
 
 import (
@@ -8,9 +12,9 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	_ "github.com/origadmin/contrib/consul/config"
+	_ "github.com/origadmin/contrib/consul/registry"
 	logger "github.com/origadmin/slog-kratos"
-	_ "github.com/origadmin/toolkits/contrib/consul/config"
-	_ "github.com/origadmin/toolkits/contrib/consul/registry"
 
 	"origadmin/basic-layout/internal/bootstrap"
 )

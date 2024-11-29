@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package server
 
 import (
@@ -7,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/origadmin/toolkits/runtime/middleware"
+	"github.com/origadmin/runtime/middleware"
 
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/helpers/endpoint"

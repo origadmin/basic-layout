@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
@@ -7,16 +11,16 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/goexts/generic/settings"
+	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/bootstrap"
+	"github.com/origadmin/runtime/config"
+	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/codec/json"
 	"github.com/origadmin/toolkits/contrib/config/envf"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime"
-	"github.com/origadmin/toolkits/runtime/bootstrap"
-	"github.com/origadmin/toolkits/runtime/config"
-	configv1 "github.com/origadmin/toolkits/runtime/gen/go/config/v1"
 
-	"origadmin/basic-layout/helpers/oneof/source"
+	"origadmin/basic-layout/helpers/utils/oneof/source"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -208,13 +212,22 @@ func LoadBootstrap(cfg *Config, option *Option) (*configs.Bootstrap, error) {
 	return bs, nil
 }
 
-func NewFileConfig(ccfg *Config, opts ...config.Option) (config.Config, error) {
-	if ccfg.EnvArgs != nil {
-		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path), envf.WithEnv(ccfg.EnvArgs, ccfg.EnvPrefixes...)))
+func NewFileConfig(cfg *Config, ss ...config.SourceSetting) (config.Config, error) {
+	var configOption config.Option
+	if cfg.EnvArgs != nil {
+		configOption = config.WithSource(
+			file.NewSource(cfg.File.Path),
+			envf.WithEnv(cfg.EnvArgs, cfg.EnvPrefixes...),
+		)
 	} else {
-		opts = append(opts, config.WithSource(file.NewSource(ccfg.File.Path)))
+		configOption = config.WithSource(
+			file.NewSource(cfg.File.Path),
+		)
 	}
-	return config.New(opts...), nil
+	opt := settings.Apply(&config.SourceOption{
+		Options: []config.Option{configOption},
+	}, ss)
+	return config.New(opt.Options...), nil
 }
 
 func NewFileSource(path string) *Config {

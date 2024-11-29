@@ -1,4 +1,6 @@
-// Copyright (c) 2024 OrigAdmin. All rights reserved.
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
 
 // Package errors implements the functions, types, and interfaces for the module.
 package errors
@@ -8,7 +10,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/transport/http"
 
-	"github.com/origadmin/toolkits/runtime/transport/gins"
+	"github.com/origadmin/contrib/transport/gins"
 )
 
 func GinErrorEncoder(ctx *gins.Context, err error) {

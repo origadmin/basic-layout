@@ -1,6 +1,10 @@
 //go:build wireinject
 // +build wireinject
 
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 // The build tag makes sure the stub is not built in the final build.
 package start
 

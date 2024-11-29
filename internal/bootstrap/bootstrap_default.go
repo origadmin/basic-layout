@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
 	"time"
 
-	configv1 "github.com/origadmin/toolkits/runtime/gen/go/config/v1"
+	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	"origadmin/basic-layout/internal/configs"

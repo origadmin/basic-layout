@@ -15,9 +15,8 @@ import (
 	"github.com/go-kratos/kratos/v2/selector/random"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-
+	"github.com/origadmin/runtime/registry"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime/registry"
 
 	"origadmin/basic-layout/api/v1/services/secondworld"
 	"origadmin/basic-layout/internal/configs"

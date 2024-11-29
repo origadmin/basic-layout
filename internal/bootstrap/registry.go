@@ -1,10 +1,14 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
 
-	"github.com/origadmin/toolkits/runtime"
-	"github.com/origadmin/toolkits/runtime/registry"
+	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/registry"
 
 	"origadmin/basic-layout/internal/configs"
 )

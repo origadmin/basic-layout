@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package source
 
 import (
@@ -5,12 +9,13 @@ import (
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/hashicorp/consul/api"
+	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
 
+	"github.com/origadmin/runtime/config"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime/config"
 )
 
-func NewSource(name string, sourceConfig *config.SourceConfig_Consul) (config.Source, error) {
+func NewSource(name string, sourceConfig *configv1.SourceConfig_Consul) (config.Source, error) {
 	client, err := api.NewClient(&api.Config{
 		Address: sourceConfig.GetAddress(),
 		Scheme:  sourceConfig.GetScheme(),

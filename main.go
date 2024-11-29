@@ -1,4 +1,6 @@
-// Copyright (c) 2024 OrigAdmin. All rights reserved.
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
 
 // Package main is the main package
 package main
@@ -9,8 +11,8 @@ import (
 	"os"
 
 	goversion "github.com/caarlos0/go-version"
-	_ "github.com/origadmin/toolkits/contrib/consul/config"
-	_ "github.com/origadmin/toolkits/contrib/consul/registry"
+	_ "github.com/origadmin/contrib/consul/config"
+	_ "github.com/origadmin/contrib/consul/registry"
 	"github.com/spf13/cobra"
 
 	"origadmin/basic-layout/cmd"

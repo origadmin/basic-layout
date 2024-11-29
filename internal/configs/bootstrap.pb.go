@@ -8,7 +8,7 @@ package configs
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	v1 "github.com/origadmin/toolkits/runtime/gen/go/config/v1"
+	v1 "github.com/origadmin/runtime/gen/go/config/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"

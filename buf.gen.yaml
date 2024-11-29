@@ -4,7 +4,7 @@ managed:
   enabled: true
   #  override:
   #    - file_option: go_package_prefix
-  #      value: github.com/origadmin/toolkits/runtime
+  #      value: github.com/origadmin/runtime
   #inputs:
   #  - directory: api/v1/proto/helloworld
   #  disable:

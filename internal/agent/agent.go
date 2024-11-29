@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package agent
 
 import (
@@ -5,7 +9,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-	"github.com/origadmin/toolkits/runtime/transport/gins"
+	"github.com/origadmin/contrib/transport/gins"
 
 	"origadmin/basic-layout/helpers/errors"
 	"origadmin/basic-layout/internal/configs"
@@ -19,7 +23,7 @@ func NewGINSServer(bootstrap *configs.Bootstrap, l log.Logger) *gins.Server {
 		gins.Middleware(
 			recovery.Recovery(),
 		),
-		gins.ErrorEncoder(errors.GinErrorEncoder),
+		//gins.ErrorEncoder(errors.GinErrorEncoder),
 	}
 
 	if bootstrap.GetEntry() == nil {

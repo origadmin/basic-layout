@@ -5,6 +5,7 @@ modules:
   - path: api/v1/proto
 #    includes:
 #      - api/v1/proto
+#  - path: api/v1/multiplatform/proto
 lint:
   use:
     - STANDARD

@@ -1,14 +1,19 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
+	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
+
 	//"origadmin/basic-layout/toolkits/middlewares/logger"
 	//"origadmin/basic-layout/toolkits/middlewares/metrics"
 	//"origadmin/basic-layout/toolkits/middlewares/security"
 
-	"github.com/origadmin/toolkits/runtime/config"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -57,7 +62,7 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 // LoadGlobalMiddlewares Loading global middleware
 func LoadGlobalMiddlewares(name string, conf *configs.Bootstrap, l log.Logger) ([]middleware.Middleware, error) {
 	if conf.Middleware == nil {
-		conf.Middleware = new(config.Middleware)
+		conf.Middleware = new(configv1.Middleware)
 	}
 	//if !conf.Middleware.RegisterAsGlobal {
 	//	return nil, nil

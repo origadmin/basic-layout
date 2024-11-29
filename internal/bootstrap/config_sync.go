@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
@@ -6,12 +10,13 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hashicorp/consul/api"
+	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 
+	"github.com/origadmin/runtime"
 	"github.com/origadmin/toolkits/codec"
 	"github.com/origadmin/toolkits/errors"
-	"github.com/origadmin/toolkits/runtime"
-	"github.com/origadmin/toolkits/runtime/config"
+
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -41,7 +46,7 @@ func SyncConfig(serviceName string, bs *configs.Bootstrap, output string) error 
 
 			registries, err := LoadRegistries(&Config{
 				Type: "consul",
-				Consul: &config.SourceConfig_Consul{
+				Consul: &configv1.SourceConfig_Consul{
 					Address: sourceConfig.Consul.Address,
 					Scheme:  sourceConfig.Consul.Scheme,
 					Path:    RegistryPath("registries.json"),
@@ -98,7 +103,7 @@ func RegistryPath(configName string) string {
 	return path.Join("registry", configName)
 }
 
-func LoadRegistries(sourceConfig *config.SourceConfig) ([]*config.Registry, error) {
+func LoadRegistries(sourceConfig *configv1.SourceConfig) ([]*configv1.Registry, error) {
 	cfg, err := runtime.NewConfig(sourceConfig)
 	if err != nil {
 		return nil, err
@@ -120,16 +125,16 @@ func GenerateRemoteConfig(serviceName string, bs *configs.Bootstrap, file string
 		return errors.String("registry config is nil")
 	}
 
-	var src config.SourceConfig
+	var src configv1.SourceConfig
 	src.Type = cfg.Type
 	switch cfg.Type {
 	case "file":
-		src.File = &config.SourceConfig_File{
+		src.File = &configv1.SourceConfig_File{
 			Path: "resources/configs/bootstrap.json",
 			//Format: cfg.File.Format,
 		}
 	case "consul":
-		src.Consul = &config.SourceConfig_Consul{
+		src.Consul = &configv1.SourceConfig_Consul{
 			Address: cfg.Consul.Address,
 			Scheme:  cfg.Consul.Scheme,
 		}

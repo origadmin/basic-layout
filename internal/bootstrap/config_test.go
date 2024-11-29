@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
@@ -6,8 +10,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/origadmin/runtime/config"
 	"github.com/origadmin/toolkits/codec"
-	"github.com/origadmin/toolkits/runtime/config"
 )
 
 func TestNewFileSourceConfig(t *testing.T) {

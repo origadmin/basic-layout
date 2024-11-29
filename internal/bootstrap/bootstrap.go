@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 OrigAdmin. All rights reserved.
+ */
+
 package bootstrap
 
 import (
@@ -7,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	"github.com/origadmin/toolkits/runtime/transport/gins"
+	"github.com/origadmin/contrib/transport/gins"
 
 	"origadmin/basic-layout/api/v1/services/helloworld"
 	"origadmin/basic-layout/api/v1/services/secondworld"

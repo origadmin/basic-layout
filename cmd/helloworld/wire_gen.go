@@ -19,8 +19,8 @@ import (
 )
 
 import (
-	_ "github.com/origadmin/toolkits/contrib/consul/config"
-	_ "github.com/origadmin/toolkits/contrib/consul/registry"
+	_ "github.com/origadmin/contrib/consul/config"
+	_ "github.com/origadmin/contrib/consul/registry"
 )
 
 // Injectors from wire.go:
