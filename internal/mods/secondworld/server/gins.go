@@ -42,8 +42,8 @@ func NewGINSServer(bs *configs.Bootstrap, greeter secondworld.SecondGreeterAPISe
 	if c.Gins.Timeout != nil {
 		opts = append(opts, gins.Timeout(c.Gins.Timeout.AsDuration()))
 	}
-	//if c.Middleware == nil {
-	//	c.Middleware = new(configs.Server_Middleware)
+	//if c.BuildMiddleware == nil {
+	//	c.BuildMiddleware = new(configs.Server_Middleware)
 	//}
 	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {

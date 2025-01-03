@@ -38,13 +38,13 @@ func NewGINSServer(bootstrap *configs.Bootstrap, l log.Logger) *gins.Server {
 	if bootstrap.Entry.Timeout != nil {
 		opts = append(opts, gins.Timeout(bootstrap.Entry.Timeout.AsDuration()))
 	}
-	//if c.Middleware == nil {
-	//	c.Middleware = new(configs.Server_Middleware)
+	//if c.BuildMiddleware == nil {
+	//	c.BuildMiddleware = new(configs.Server_Middleware)
 	//}
 
 	//middlewares, err := bootstrap.LoadGlobalMiddlewares(bootstrap.GetServiceName(), bootstrap, l)
 	//if err == nil && len(middlewares) > 0 {
-	//	opts = append(opts, gins.Middleware(middlewares...))
+	//	opts = append(opts, gins.BuildMiddleware(middlewares...))
 	//}
 
 	if l != nil {

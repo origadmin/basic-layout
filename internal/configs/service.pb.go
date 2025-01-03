@@ -1194,11 +1194,11 @@ var file_configs_service_proto_goTypes = []any{
 	(*ServiceConfig_HTTP)(nil),               // 2: origadmin.configs.ServiceConfig.HTTP
 	(*ServiceConfig_GRPC)(nil),               // 3: origadmin.configs.ServiceConfig.GRPC
 	(*ServiceConfig_Websocket)(nil),          // 4: origadmin.configs.ServiceConfig.Websocket
-	(*ServiceConfig_Middleware)(nil),         // 5: origadmin.configs.ServiceConfig.Middleware
-	(*ServiceConfig_Middleware_Metrics)(nil), // 6: origadmin.configs.ServiceConfig.Middleware.Metrics
-	(*ServiceConfig_Middleware_Traces)(nil),  // 7: origadmin.configs.ServiceConfig.Middleware.Traces
-	(*ServiceConfig_Middleware_Logger)(nil),  // 8: origadmin.configs.ServiceConfig.Middleware.Logger
-	(*ServiceConfig_Middleware_Cors)(nil),    // 9: origadmin.configs.ServiceConfig.Middleware.Cors
+	(*ServiceConfig_Middleware)(nil),         // 5: origadmin.configs.ServiceConfig.BuildMiddleware
+	(*ServiceConfig_Middleware_Metrics)(nil), // 6: origadmin.configs.ServiceConfig.BuildMiddleware.Metrics
+	(*ServiceConfig_Middleware_Traces)(nil),  // 7: origadmin.configs.ServiceConfig.BuildMiddleware.Traces
+	(*ServiceConfig_Middleware_Logger)(nil),  // 8: origadmin.configs.ServiceConfig.BuildMiddleware.Logger
+	(*ServiceConfig_Middleware_Cors)(nil),    // 9: origadmin.configs.ServiceConfig.BuildMiddleware.Cors
 	(*v1.Cors)(nil),                          // 10: config.v1.Cors
 	(*v1.Registry)(nil),                      // 11: config.v1.Registry
 	(*v1.Data)(nil),                          // 12: config.v1.Data
@@ -1215,7 +1215,7 @@ var file_configs_service_proto_depIdxs = []int32{
 	12, // 5: origadmin.configs.ServiceConfig.data:type_name -> config.v1.Data
 	13, // 6: origadmin.configs.ServiceConfig.setting:type_name -> origadmin.configs.Setting
 	14, // 7: origadmin.configs.ServiceConfig.service:type_name -> config.v1.Service
-	5,  // 8: origadmin.configs.ServiceConfig.middleware:type_name -> origadmin.configs.ServiceConfig.Middleware
+	5,  // 8: origadmin.configs.ServiceConfig.middleware:type_name -> origadmin.configs.ServiceConfig.BuildMiddleware
 	15, // 9: origadmin.configs.ServiceConfig.GINS.timeout:type_name -> google.protobuf.Duration
 	15, // 10: origadmin.configs.ServiceConfig.GINS.shutdown_timeout:type_name -> google.protobuf.Duration
 	15, // 11: origadmin.configs.ServiceConfig.GINS.read_timeout:type_name -> google.protobuf.Duration
@@ -1232,9 +1232,9 @@ var file_configs_service_proto_depIdxs = []int32{
 	15, // 22: origadmin.configs.ServiceConfig.GRPC.write_timeout:type_name -> google.protobuf.Duration
 	15, // 23: origadmin.configs.ServiceConfig.GRPC.idle_timeout:type_name -> google.protobuf.Duration
 	15, // 24: origadmin.configs.ServiceConfig.Websocket.timeout:type_name -> google.protobuf.Duration
-	6,  // 25: origadmin.configs.ServiceConfig.Middleware.metrics:type_name -> origadmin.configs.ServiceConfig.Middleware.Metrics
-	7,  // 26: origadmin.configs.ServiceConfig.Middleware.traces:type_name -> origadmin.configs.ServiceConfig.Middleware.Traces
-	8,  // 27: origadmin.configs.ServiceConfig.Middleware.logger:type_name -> origadmin.configs.ServiceConfig.Middleware.Logger
+	6,  // 25: origadmin.configs.ServiceConfig.BuildMiddleware.metrics:type_name -> origadmin.configs.ServiceConfig.BuildMiddleware.Metrics
+	7,  // 26: origadmin.configs.ServiceConfig.BuildMiddleware.traces:type_name -> origadmin.configs.ServiceConfig.BuildMiddleware.Traces
+	8,  // 27: origadmin.configs.ServiceConfig.BuildMiddleware.logger:type_name -> origadmin.configs.ServiceConfig.BuildMiddleware.Logger
 	28, // [28:28] is the sub-list for method output_type
 	28, // [28:28] is the sub-list for method input_type
 	28, // [28:28] is the sub-list for extension type_name
