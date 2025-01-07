@@ -440,7 +440,7 @@ var file_configs_bootstrap_proto_goTypes = []any{
 	(*v1.Data)(nil),             // 5: config.v1.Data
 	(*Setting)(nil),             // 6: origadmin.configs.Setting
 	(*v1.Service)(nil),          // 7: config.v1.Service
-	(*v1.Middleware)(nil),       // 8: config.v1.BuildMiddleware
+	(*v1.Middleware)(nil),       // 8: config.v1.Build
 	(*durationpb.Duration)(nil), // 9: google.protobuf.Duration
 }
 var file_configs_bootstrap_proto_depIdxs = []int32{
@@ -451,7 +451,7 @@ var file_configs_bootstrap_proto_depIdxs = []int32{
 	5,  // 4: origadmin.configs.Bootstrap.data:type_name -> config.v1.Data
 	6,  // 5: origadmin.configs.Bootstrap.setting:type_name -> origadmin.configs.Setting
 	7,  // 6: origadmin.configs.Bootstrap.service:type_name -> config.v1.Service
-	8,  // 7: origadmin.configs.Bootstrap.middleware:type_name -> config.v1.BuildMiddleware
+	8,  // 7: origadmin.configs.Bootstrap.middleware:type_name -> config.v1.Build
 	9,  // 8: origadmin.configs.Bootstrap.Entry.timeout:type_name -> google.protobuf.Duration
 	0,  // 9: origadmin.configs.Bootstrap.Entry.selector:type_name -> origadmin.configs.EntrySelectorConfig
 	10, // [10:10] is the sub-list for method output_type

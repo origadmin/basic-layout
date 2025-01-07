@@ -42,8 +42,8 @@ func NewGINSServer(bs *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServ
 	if cfg.Timeout != nil {
 		opts = append(opts, gins.Timeout(cfg.Timeout.AsDuration()))
 	}
-	//if c.BuildMiddleware == nil {
-	//	c.BuildMiddleware = new(configs.Server_Middleware)
+	//if c.Build == nil {
+	//	c.Build = new(configs.Server_Middleware)
 	//}
 	middlewares, err := bootstrap.LoadMiddlewares(bs.GetServiceName(), bs, l)
 	if err == nil && len(middlewares) > 0 {

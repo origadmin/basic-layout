@@ -26,7 +26,7 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 	}
 
 	//if mc.Logger != nil && mc.Logger.Enabled {
-	//	m, err := logger.BuildMiddleware(&logger.LoggerConfig{
+	//	m, err := logger.Build(&logger.LoggerConfig{
 	//		Name: mc.Logger.Name,
 	//	}, l)
 	//	if err != nil {
@@ -35,7 +35,7 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 	//	middlewares = append(middlewares, m)
 	//}
 	//if v := mc.GetSecurity(); v != nil {
-	//	m, err := security.BuildMiddleware(&security.SecurityConfig{
+	//	m, err := security.Build(&security.SecurityConfig{
 	//		AllowedMethodPaths: nil,
 	//		Authorization:      nil,
 	//		Casbin:             nil,
@@ -47,7 +47,7 @@ func LoadMiddlewares(name string, bootstrap *configs.Bootstrap, l log.Logger) ([
 	//}
 	//
 	//if mc.Metrics != nil && mc.Metrics.Enabled {
-	//	m, err := metrics.BuildMiddleware(metrics.SideServer, &metrics.MetricConfig{
+	//	m, err := metrics.Build(metrics.SideServer, &metrics.MetricConfig{
 	//		Name: mc.Metrics.Name,
 	//	}, l)
 	//	if err != nil {
@@ -64,7 +64,7 @@ func LoadGlobalMiddlewares(name string, conf *configs.Bootstrap, l log.Logger) (
 	if conf.Middleware == nil {
 		conf.Middleware = new(configv1.Middleware)
 	}
-	//if !conf.BuildMiddleware.RegisterAsGlobal {
+	//if !conf.Build.RegisterAsGlobal {
 	//	return nil, nil
 	//}
 	return LoadMiddlewares(name, conf, l)
