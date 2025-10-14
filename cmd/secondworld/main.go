@@ -8,10 +8,9 @@ import (
 	"flag"
 	"log"
 
-	"github.com/go-kratos/kratos/v2"
 	"github.com/origadmin/runtime"
-	"github.com/origadmin/runtime/bootstrap"
-	"github.com/origadmin/runtime/interfaces"
+	// "github.com/origadmin/runtime/bootstrap" // No longer needed directly
+	// "github.com/origadmin/runtime/interfaces" // No longer needed directly
 )
 
 var (
@@ -32,14 +31,14 @@ func init() {
 func main() {
 	flag.Parse()
 
-	// Create AppInfo
-	appInfo := &interfaces.AppInfo{
+	// Create AppInfo using the struct from the runtime package
+	appInfo := &runtime.AppInfo{
 		Name:    Name,
 		Version: Version,
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, cleanup, err := runtime.NewFromBootstrap(flagconf, bootstrap.WithAppInfo(appInfo))
+	rt, cleanup, err := runtime.NewFromBootstrap(flagconf, runtime.WithAppInfo(appInfo))
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}

@@ -8,7 +8,7 @@ package secondworld
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	v1 "github.com/origadmin/runtime/api/gen/go/common/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -705,7 +705,7 @@ type ListGreeterResponse struct {
 	Total   int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	Data    []*GreeterData         `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
 	// Updated to use the new error reason enum from the runtime framework.
-	Error         *v1.ErrorReason `protobuf:"varint,4,opt,name=error,proto3,enum=common.v1.ErrorReason,oneof" json:"error,omitempty"`
+	Error         *v1.ErrorReason `protobuf:"varint,4,opt,name=error,proto3,enum=runtime.common.v1.ErrorReason,oneof" json:"error,omitempty"`
 	Extra         *anypb.Any      `protobuf:"bytes,5,opt,name=extra,proto3,oneof" json:"extra,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -797,7 +797,7 @@ var File_secondworld_greeter_proto protoreflect.FileDescriptor
 
 const file_secondworld_greeter_proto_rawDesc = "" +
 	"\n" +
-	"\x19secondworld/greeter.proto\x12\x1bapi.v1.services.secondworld\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\x1a google/protobuf/descriptor.proto\x1a\x16common/v1/errors.proto\"1\n" +
+	"\x19secondworld/greeter.proto\x12\x1bapi.v1.services.secondworld\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\x1a google/protobuf/descriptor.proto\x1a\x1eruntime/common/v1/errors.proto\"1\n" +
 	"\vGreeterData\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\"\x7f\n" +
@@ -838,12 +838,12 @@ const file_secondworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"_page_sizeB\f\n" +
 	"\n" +
-	"_no_paging\"\xfb\x01\n" +
+	"_no_paging\"\x83\x02\n" +
 	"\x13ListGreeterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12<\n" +
-	"\x04data\x18\x03 \x03(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x121\n" +
-	"\x05error\x18\x04 \x01(\x0e2\x16.common.v1.ErrorReasonH\x00R\x05error\x88\x01\x01\x12/\n" +
+	"\x04data\x18\x03 \x03(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x129\n" +
+	"\x05error\x18\x04 \x01(\x0e2\x1e.runtime.common.v1.ErrorReasonH\x00R\x05error\x88\x01\x01\x12/\n" +
 	"\x05extra\x18\x05 \x01(\v2\x14.google.protobuf.AnyH\x01R\x05extra\x88\x01\x01B\b\n" +
 	"\x06_errorB\b\n" +
 	"\x06_extra2\xf7\b\n" +
@@ -856,8 +856,8 @@ const file_secondworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"GetGreeter\x12..api.v1.services.secondworld.GetGreeterRequest\x1a/.api.v1.services.secondworld.GetGreeterResponse\"(\x82\xd3\xe4\x93\x02\"\x12 /api/v1/secondworld/greeter/{id}\x12\x95\x01\n" +
 	"\vListGreeter\x12/.api.v1.services.secondworld.ListGreeterRequest\x1a0.api.v1.services.secondworld.ListGreeterResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/secondworld/greeter:a\n" +
-	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xe8\a \x01(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x88\x01\x01B\xe8\x01\n" +
-	"\x1fcom.api.v1.services.secondworldB\fGreeterProtoP\x01Z'api/v1/services/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
+	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xe8\a \x01(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x88\x01\x01B\xe6\x01\n" +
+	"\x1fcom.api.v1.services.secondworldB\fGreeterProtoP\x01Z%api/v1/gen/go/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
 
 var (
 	file_secondworld_greeter_proto_rawDescOnce sync.Once
@@ -888,7 +888,7 @@ var file_secondworld_greeter_proto_goTypes = []any{
 	(*GetGreeterResponse)(nil),          // 12: api.v1.services.secondworld.GetGreeterResponse
 	(*ListGreeterRequest)(nil),          // 13: api.v1.services.secondworld.ListGreeterRequest
 	(*ListGreeterResponse)(nil),         // 14: api.v1.services.secondworld.ListGreeterResponse
-	(v1.ErrorReason)(0),                 // 15: common.v1.ErrorReason
+	(v1.ErrorReason)(0),                 // 15: runtime.common.v1.ErrorReason
 	(*anypb.Any)(nil),                   // 16: google.protobuf.Any
 	(*descriptorpb.MessageOptions)(nil), // 17: google.protobuf.MessageOptions
 }
@@ -901,7 +901,7 @@ var file_secondworld_greeter_proto_depIdxs = []int32{
 	0,  // 5: api.v1.services.secondworld.UpdateGreeterRequest.data:type_name -> api.v1.services.secondworld.GreeterData
 	0,  // 6: api.v1.services.secondworld.UpdateGreeterResponse.data:type_name -> api.v1.services.secondworld.GreeterData
 	0,  // 7: api.v1.services.secondworld.ListGreeterResponse.data:type_name -> api.v1.services.secondworld.GreeterData
-	15, // 8: api.v1.services.secondworld.ListGreeterResponse.error:type_name -> common.v1.ErrorReason
+	15, // 8: api.v1.services.secondworld.ListGreeterResponse.error:type_name -> runtime.common.v1.ErrorReason
 	16, // 9: api.v1.services.secondworld.ListGreeterResponse.extra:type_name -> google.protobuf.Any
 	17, // 10: api.v1.services.secondworld.data:extendee -> google.protobuf.MessageOptions
 	0,  // 11: api.v1.services.secondworld.data:type_name -> api.v1.services.secondworld.GreeterData

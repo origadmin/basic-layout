@@ -8,7 +8,7 @@ package helloworld
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	v1 "github.com/origadmin/runtime/api/gen/go/common/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -706,7 +706,7 @@ type ListGreeterResponse struct {
 	Data    []*GreeterData         `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
 	// Updated to use the new error reason enum from the runtime framework.
 	// Note: This is a breaking API change from the original Error message.
-	Error         *v1.ErrorReason `protobuf:"varint,4,opt,name=error,proto3,enum=common.v1.ErrorReason,oneof" json:"error,omitempty"`
+	Error         *v1.ErrorReason `protobuf:"varint,4,opt,name=error,proto3,enum=runtime.common.v1.ErrorReason,oneof" json:"error,omitempty"`
 	Extra         *anypb.Any      `protobuf:"bytes,5,opt,name=extra,proto3,oneof" json:"extra,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -798,7 +798,7 @@ var File_helloworld_greeter_proto protoreflect.FileDescriptor
 
 const file_helloworld_greeter_proto_rawDesc = "" +
 	"\n" +
-	"\x18helloworld/greeter.proto\x12\x1aapi.v1.services.helloworld\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\x1a google/protobuf/descriptor.proto\x1a\x16common/v1/errors.proto\"1\n" +
+	"\x18helloworld/greeter.proto\x12\x1aapi.v1.services.helloworld\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\x1a google/protobuf/descriptor.proto\x1a\x1eruntime/common/v1/errors.proto\"1\n" +
 	"\vGreeterData\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\"~\n" +
@@ -839,12 +839,12 @@ const file_helloworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"_page_sizeB\f\n" +
 	"\n" +
-	"_no_paging\"\xfa\x01\n" +
+	"_no_paging\"\x82\x02\n" +
 	"\x13ListGreeterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12;\n" +
-	"\x04data\x18\x03 \x03(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x121\n" +
-	"\x05error\x18\x04 \x01(\x0e2\x16.common.v1.ErrorReasonH\x00R\x05error\x88\x01\x01\x12/\n" +
+	"\x04data\x18\x03 \x03(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x129\n" +
+	"\x05error\x18\x04 \x01(\x0e2\x1e.runtime.common.v1.ErrorReasonH\x00R\x05error\x88\x01\x01\x12/\n" +
 	"\x05extra\x18\x05 \x01(\v2\x14.google.protobuf.AnyH\x01R\x05extra\x88\x01\x01B\b\n" +
 	"\x06_errorB\b\n" +
 	"\x06_extra2\xe1\b\n" +
@@ -857,8 +857,8 @@ const file_helloworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"GetGreeter\x12-.api.v1.services.helloworld.GetGreeterRequest\x1a..api.v1.services.helloworld.GetGreeterResponse\"'\x82\xd3\xe4\x93\x02!\x12\x1f/api/v1/helloworld/greeter/{id}\x12\x92\x01\n" +
 	"\vListGreeter\x12..api.v1.services.helloworld.ListGreeterRequest\x1a/.api.v1.services.helloworld.ListGreeterResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/helloworld/greeter:`\n" +
-	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xd0\x0f \x01(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x88\x01\x01B\xe1\x01\n" +
-	"\x1ecom.api.v1.services.helloworldB\fGreeterProtoP\x01Z%api/v1/services/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
+	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xd0\x0f \x01(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x88\x01\x01B\xdf\x01\n" +
+	"\x1ecom.api.v1.services.helloworldB\fGreeterProtoP\x01Z#api/v1/gen/go/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
 
 var (
 	file_helloworld_greeter_proto_rawDescOnce sync.Once
@@ -889,7 +889,7 @@ var file_helloworld_greeter_proto_goTypes = []any{
 	(*GetGreeterResponse)(nil),          // 12: api.v1.services.helloworld.GetGreeterResponse
 	(*ListGreeterRequest)(nil),          // 13: api.v1.services.helloworld.ListGreeterRequest
 	(*ListGreeterResponse)(nil),         // 14: api.v1.services.helloworld.ListGreeterResponse
-	(v1.ErrorReason)(0),                 // 15: common.v1.ErrorReason
+	(v1.ErrorReason)(0),                 // 15: runtime.common.v1.ErrorReason
 	(*anypb.Any)(nil),                   // 16: google.protobuf.Any
 	(*descriptorpb.MessageOptions)(nil), // 17: google.protobuf.MessageOptions
 }
@@ -902,7 +902,7 @@ var file_helloworld_greeter_proto_depIdxs = []int32{
 	0,  // 5: api.v1.services.helloworld.UpdateGreeterRequest.data:type_name -> api.v1.services.helloworld.GreeterData
 	0,  // 6: api.v1.services.helloworld.UpdateGreeterResponse.data:type_name -> api.v1.services.helloworld.GreeterData
 	0,  // 7: api.v1.services.helloworld.ListGreeterResponse.data:type_name -> api.v1.services.helloworld.GreeterData
-	15, // 8: api.v1.services.helloworld.ListGreeterResponse.error:type_name -> common.v1.ErrorReason
+	15, // 8: api.v1.services.helloworld.ListGreeterResponse.error:type_name -> runtime.common.v1.ErrorReason
 	16, // 9: api.v1.services.helloworld.ListGreeterResponse.extra:type_name -> google.protobuf.Any
 	17, // 10: api.v1.services.helloworld.data:extendee -> google.protobuf.MessageOptions
 	0,  // 11: api.v1.services.helloworld.data:type_name -> api.v1.services.helloworld.GreeterData

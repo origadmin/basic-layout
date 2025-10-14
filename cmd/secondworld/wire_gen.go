@@ -7,10 +7,13 @@
 package main
 
 import (
-	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"origadmin/basic-layout/internal/bootstrap"
+	"github.com/go-kratos/kratos/v2/transport"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/google/wire"
+	"github.com/origadmin/runtime"
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/secondworld/biz"
 	"origadmin/basic-layout/internal/mods/secondworld/dal"
@@ -18,34 +21,62 @@ import (
 	"origadmin/basic-layout/internal/mods/secondworld/service"
 )
 
-import (
-	_ "github.com/origadmin/contrib/consul/config"
-	_ "github.com/origadmin/contrib/consul/registry"
-)
-
 // Injectors from wire.go:
 
-// buildInjectors init kratos application.
-func buildInjectors(contextContext context.Context, configsBootstrap *configs.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
-	registrar := bootstrap.NewRegistrar(configsBootstrap)
-	database, cleanup, err := dal.NewDB(configsBootstrap, logger)
+// wireApp initializes the application using wire.
+func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
+	bootstrap, err := provideConfig(rt)
+	if err != nil {
+		return nil, nil, err
+	}
+	logger := provideLogger(rt)
+	database, cleanup, err := dal.NewDB(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}
 	greeterRepo := dal.NewGreeterDal(database, logger)
 	secondGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
 	secondGreeterAPIServer := service.NewGreeterServer(secondGreeterAPIClient)
-	grpcServer := server.NewGRPCServer(configsBootstrap, secondGreeterAPIServer, logger)
-	httpServer := server.NewHTTPServer(configsBootstrap, secondGreeterAPIServer, logger)
-	injectorServer := &bootstrap.InjectorServer{
-		Bootstrap:  configsBootstrap,
-		Logger:     logger,
-		Registrar:  registrar,
-		ServerGRPC: grpcServer,
-		ServerHTTP: httpServer,
+	httpServer, err := server.NewHTTPServer(bootstrap, secondGreeterAPIServer, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
 	}
-	app := NewApp(contextContext, injectorServer)
+	grpcServer, err := server.NewGRPCServer(bootstrap, secondGreeterAPIServer, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	app := NewKratosApp(rt, httpServer, grpcServer)
 	return app, func() {
 		cleanup()
 	}, nil
+}
+
+// wire.go:
+
+// providerSet for components provided by the runtime.
+var runtimeProviderSet = wire.NewSet(
+	provideLogger,
+	provideConfig,
+)
+
+// provideLogger extracts the logger from the runtime instance.
+func provideLogger(rt *runtime.Runtime) log.Logger {
+	return rt.Logger()
+}
+
+// provideConfig extracts and decodes the bootstrap config from the runtime instance.
+func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
+	var bc configs.Bootstrap
+	if err := rt.Config().Decode("", &bc); err != nil {
+		return nil, err
+	}
+	return &bc, nil
+}
+
+// NewKratosApp creates the final kratos.App from the runtime and transport servers.
+func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
+	servers := []transport.Server{hs, gs}
+	return rt.NewApp(servers)
 }

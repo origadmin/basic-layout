@@ -7,9 +7,9 @@
 package configs
 
 import (
-	v11 "github.com/origadmin/runtime/api/gen/go/discovery/v1"
-	v1 "github.com/origadmin/runtime/api/gen/go/service/v1"
-	v12 "github.com/origadmin/runtime/api/gen/go/source/v1"
+	v11 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/service/v1"
+	v12 "github.com/origadmin/runtime/api/gen/go/runtime/source/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -32,9 +32,7 @@ type Bootstrap struct {
 	// Discovery configuration for service registration and discovery.
 	Discovery *v11.Discovery `protobuf:"bytes,2,opt,name=discovery,proto3" json:"discovery,omitempty"`
 	// Source configuration for loading external config files.
-	Source *v12.Sources `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
-	// Generic application settings.
-	Setting       *Setting `protobuf:"bytes,4,opt,name=setting,proto3" json:"setting,omitempty"`
+	Source        *v12.Sources `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -90,23 +88,15 @@ func (x *Bootstrap) GetSource() *v12.Sources {
 	return nil
 }
 
-func (x *Bootstrap) GetSetting() *Setting {
-	if x != nil {
-		return x.Setting
-	}
-	return nil
-}
-
 var File_configs_bootstrap_proto protoreflect.FileDescriptor
 
 const file_configs_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	"\x17configs/bootstrap.proto\x12\x11origadmin.configs\x1a\x18service/v1/service.proto\x1a\x1cdiscovery/v1/discovery.proto\x1a\x16source/v1/source.proto\x1a\x15configs/setting.proto\"\xd3\x01\n" +
-	"\tBootstrap\x12-\n" +
-	"\aservice\x18\x01 \x01(\v2\x13.service.v1.ServiceR\aservice\x125\n" +
-	"\tdiscovery\x18\x02 \x01(\v2\x17.discovery.v1.DiscoveryR\tdiscovery\x12*\n" +
-	"\x06source\x18\x03 \x01(\v2\x12.source.v1.SourcesR\x06source\x124\n" +
-	"\asetting\x18\x04 \x01(\v2\x1a.origadmin.configs.SettingR\asettingB\x1aZ\x18internal/configs;configsb\x06proto3"
+	"\x17configs/bootstrap.proto\x12\x11origadmin.configs\x1a runtime/service/v1/service.proto\x1a$runtime/discovery/v1/discovery.proto\x1a\x1eruntime/source/v1/source.proto\"\xb5\x01\n" +
+	"\tBootstrap\x125\n" +
+	"\aservice\x18\x01 \x01(\v2\x1b.runtime.service.v1.ServiceR\aservice\x12=\n" +
+	"\tdiscovery\x18\x02 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\tdiscovery\x122\n" +
+	"\x06source\x18\x03 \x01(\v2\x1a.runtime.source.v1.SourcesR\x06sourceB\x1aZ\x18internal/configs;configsb\x06proto3"
 
 var (
 	file_configs_bootstrap_proto_rawDescOnce sync.Once
@@ -123,21 +113,19 @@ func file_configs_bootstrap_proto_rawDescGZIP() []byte {
 var file_configs_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_configs_bootstrap_proto_goTypes = []any{
 	(*Bootstrap)(nil),     // 0: origadmin.configs.Bootstrap
-	(*v1.Service)(nil),    // 1: service.v1.Service
-	(*v11.Discovery)(nil), // 2: discovery.v1.Discovery
-	(*v12.Sources)(nil),   // 3: source.v1.Sources
-	(*Setting)(nil),       // 4: origadmin.configs.Setting
+	(*v1.Service)(nil),    // 1: runtime.service.v1.Service
+	(*v11.Discovery)(nil), // 2: runtime.discovery.v1.Discovery
+	(*v12.Sources)(nil),   // 3: runtime.source.v1.Sources
 }
 var file_configs_bootstrap_proto_depIdxs = []int32{
-	1, // 0: origadmin.configs.Bootstrap.service:type_name -> service.v1.Service
-	2, // 1: origadmin.configs.Bootstrap.discovery:type_name -> discovery.v1.Discovery
-	3, // 2: origadmin.configs.Bootstrap.source:type_name -> source.v1.Sources
-	4, // 3: origadmin.configs.Bootstrap.setting:type_name -> origadmin.configs.Setting
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	1, // 0: origadmin.configs.Bootstrap.service:type_name -> runtime.service.v1.Service
+	2, // 1: origadmin.configs.Bootstrap.discovery:type_name -> runtime.discovery.v1.Discovery
+	3, // 2: origadmin.configs.Bootstrap.source:type_name -> runtime.source.v1.Sources
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_configs_bootstrap_proto_init() }
@@ -145,7 +133,6 @@ func file_configs_bootstrap_proto_init() {
 	if File_configs_bootstrap_proto != nil {
 		return
 	}
-	file_configs_setting_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

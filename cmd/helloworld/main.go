@@ -9,7 +9,6 @@ import (
 	"log"
 
 	"github.com/origadmin/runtime"
-	"github.com/origadmin/runtime/bootstrap"
 )
 
 var (
@@ -37,7 +36,7 @@ func main() {
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, cleanup, err := runtime.NewFromBootstrap(flagconf, bootstrap.WithAppInfo(appInfo))
+	rt, cleanup, err := runtime.NewFromBootstrap(flagconf, runtime.WithAppInfo(appInfo))
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package origadmin.configs;
 
-import "discovery/v1/discovery.proto";
+import "runtime/discovery/v1/discovery.proto";
 
 option cc_enable_arenas = true;
 option go_package = "internal/configs;configs";
@@ -12,5 +12,5 @@ option java_package = "com.github.origadmin.basic-layout.configs";
 option objc_class_prefix = "Configs";
 
 message Registry {
-    repeated discovery.v1.Discovery registries = 1 [json_name = "registries"];
+    repeated runtime.discovery.v1.Discovery registries = 1 [json_name = "registries"];
 }

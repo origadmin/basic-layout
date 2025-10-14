@@ -39,7 +39,7 @@ func provideLogger(rt *runtime.Runtime) kratoslog.Logger {
 // provideConfig extracts and decodes the bootstrap config from the runtime instance.
 func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
 	var bc configs.Bootstrap
-	if err := rt.Config().Decode(&bc); err != nil {
+	if err := rt.Config().Decode("", &bc); err != nil { // Added missing key argument ""
 		return nil, err
 	}
 	return &bc, nil

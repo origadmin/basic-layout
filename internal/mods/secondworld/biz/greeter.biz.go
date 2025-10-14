@@ -6,19 +6,19 @@ package biz
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
 
-	"origadmin/basic-layout/api/v1/services/secondworld"
-	"origadmin/basic-layout/helpers/errors"
+	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
+	"github.com/origadmin/runtime/errors"
+	"origadmin/basic-layout/api/v1/gen/go/secondworld"
 	"origadmin/basic-layout/internal/mods/secondworld/dto"
 )
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(secondworld.SECOND_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.NewMessage(commonv1.ErrorReason_NOT_FOUND, "user not found")
 )
 
 // GreeterBiz is a Greeter use case.
@@ -30,9 +30,7 @@ type GreeterBiz struct {
 func (g GreeterBiz) SayHello(ctx context.Context, in *secondworld.SayHelloRequest, opts ...grpc.CallOption) (*secondworld.SayHelloResponse, error) {
 	log.Infof("SayHello: %v data: %v", in.Id, in.Data.Name)
 	return &secondworld.SayHelloResponse{
-		Data: &dto.Greeter{
-			Name: "hello " + in.Id,
-		}}, nil
+		Data: , nil
 }
 
 func (g GreeterBiz) PostHello(ctx context.Context, in *secondworld.PostHelloRequest, opts ...grpc.CallOption) (*secondworld.PostHelloResponse, error) {

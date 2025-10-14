@@ -7,10 +7,10 @@
 package configs
 
 import (
-	v1 "github.com/origadmin/runtime/api/gen/go/discovery/v1"
-	cors "github.com/origadmin/runtime/api/gen/go/middleware/v1/cors"
-	v12 "github.com/origadmin/runtime/api/gen/go/service/v1"
-	v11 "github.com/origadmin/runtime/api/gen/go/storage/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
+	cors "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1/cors"
+	v12 "github.com/origadmin/runtime/api/gen/go/runtime/service/v1"
+	v11 "github.com/origadmin/runtime/api/gen/go/runtime/storage/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
@@ -458,15 +458,15 @@ var File_configs_service_proto protoreflect.FileDescriptor
 
 const file_configs_service_proto_rawDesc = "" +
 	"\n" +
-	"\x15configs/service.proto\x12\x11origadmin.configs\x1a\x1cdiscovery/v1/discovery.proto\x1a\x1dmiddleware/v1/cors/cors.proto\x1a\x18service/v1/service.proto\x1a\x18storage/v1/storage.proto\x1a\x1egoogle/protobuf/duration.proto\"\x94\t\n" +
+	"\x15configs/service.proto\x12\x11origadmin.configs\x1a\x1egoogle/protobuf/duration.proto\x1a$runtime/discovery/v1/discovery.proto\x1a%runtime/middleware/v1/cors/cors.proto\x1a runtime/service/v1/service.proto\x1a runtime/storage/v1/storage.proto\"\xb4\t\n" +
 	"\rServiceConfig\x129\n" +
 	"\x04gins\x18\x02 \x01(\v2%.origadmin.configs.ServiceConfig.GINSR\x04gins\x129\n" +
 	"\x04http\x18\x03 \x01(\v2%.origadmin.configs.ServiceConfig.HTTPR\x04http\x129\n" +
-	"\x04grpc\x18\x04 \x01(\v2%.origadmin.configs.ServiceConfig.GRPCR\x04grpc\x12,\n" +
-	"\x04cors\x18d \x01(\v2\x18.middleware.v1.cors.CorsR\x04cors\x124\n" +
-	"\bregistry\x18\xc8\x01 \x01(\v2\x17.discovery.v1.DiscoveryR\bregistry\x12(\n" +
-	"\x04data\x18\xac\x02 \x01(\v2\x13.storage.v1.StorageR\x04data\x12.\n" +
-	"\aservice\x18\xf4\x03 \x01(\v2\x13.service.v1.ServiceR\aservice\x1a\xcb\x01\n" +
+	"\x04grpc\x18\x04 \x01(\v2%.origadmin.configs.ServiceConfig.GRPCR\x04grpc\x124\n" +
+	"\x04cors\x18d \x01(\v2 .runtime.middleware.v1.cors.CorsR\x04cors\x12<\n" +
+	"\bregistry\x18\xc8\x01 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\bregistry\x120\n" +
+	"\x04data\x18\xac\x02 \x01(\v2\x1b.runtime.storage.v1.StorageR\x04data\x126\n" +
+	"\aservice\x18\xf4\x03 \x01(\v2\x1b.runtime.service.v1.ServiceR\aservice\x1a\xcb\x01\n" +
 	"\x04GINS\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x12\x17\n" +
@@ -522,20 +522,20 @@ var file_configs_service_proto_goTypes = []any{
 	(*ServiceConfig_HTTP)(nil),      // 2: origadmin.configs.ServiceConfig.HTTP
 	(*ServiceConfig_GRPC)(nil),      // 3: origadmin.configs.ServiceConfig.GRPC
 	(*ServiceConfig_Websocket)(nil), // 4: origadmin.configs.ServiceConfig.Websocket
-	(*cors.Cors)(nil),               // 5: middleware.v1.cors.Cors
-	(*v1.Discovery)(nil),            // 6: discovery.v1.Discovery
-	(*v11.Storage)(nil),             // 7: storage.v1.Storage
-	(*v12.Service)(nil),             // 8: service.v1.Service
+	(*cors.Cors)(nil),               // 5: runtime.middleware.v1.cors.Cors
+	(*v1.Discovery)(nil),            // 6: runtime.discovery.v1.Discovery
+	(*v11.Storage)(nil),             // 7: runtime.storage.v1.Storage
+	(*v12.Service)(nil),             // 8: runtime.service.v1.Service
 	(*durationpb.Duration)(nil),     // 9: google.protobuf.Duration
 }
 var file_configs_service_proto_depIdxs = []int32{
 	1,  // 0: origadmin.configs.ServiceConfig.gins:type_name -> origadmin.configs.ServiceConfig.GINS
 	2,  // 1: origadmin.configs.ServiceConfig.http:type_name -> origadmin.configs.ServiceConfig.HTTP
 	3,  // 2: origadmin.configs.ServiceConfig.grpc:type_name -> origadmin.configs.ServiceConfig.GRPC
-	5,  // 3: origadmin.configs.ServiceConfig.cors:type_name -> middleware.v1.cors.Cors
-	6,  // 4: origadmin.configs.ServiceConfig.registry:type_name -> discovery.v1.Discovery
-	7,  // 5: origadmin.configs.ServiceConfig.data:type_name -> storage.v1.Storage
-	8,  // 6: origadmin.configs.ServiceConfig.service:type_name -> service.v1.Service
+	5,  // 3: origadmin.configs.ServiceConfig.cors:type_name -> runtime.middleware.v1.cors.Cors
+	6,  // 4: origadmin.configs.ServiceConfig.registry:type_name -> runtime.discovery.v1.Discovery
+	7,  // 5: origadmin.configs.ServiceConfig.data:type_name -> runtime.storage.v1.Storage
+	8,  // 6: origadmin.configs.ServiceConfig.service:type_name -> runtime.service.v1.Service
 	9,  // 7: origadmin.configs.ServiceConfig.GINS.timeout:type_name -> google.protobuf.Duration
 	9,  // 8: origadmin.configs.ServiceConfig.HTTP.timeout:type_name -> google.protobuf.Duration
 	9,  // 9: origadmin.configs.ServiceConfig.GRPC.timeout:type_name -> google.protobuf.Duration

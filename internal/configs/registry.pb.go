@@ -7,7 +7,7 @@
 package configs
 
 import (
-	v1 "github.com/origadmin/runtime/api/gen/go/discovery/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -70,10 +70,10 @@ var File_configs_registry_proto protoreflect.FileDescriptor
 
 const file_configs_registry_proto_rawDesc = "" +
 	"\n" +
-	"\x16configs/registry.proto\x12\x11origadmin.configs\x1a\x1cdiscovery/v1/discovery.proto\"C\n" +
-	"\bRegistry\x127\n" +
+	"\x16configs/registry.proto\x12\x11origadmin.configs\x1a$runtime/discovery/v1/discovery.proto\"K\n" +
+	"\bRegistry\x12?\n" +
 	"\n" +
-	"registries\x18\x01 \x03(\v2\x17.discovery.v1.DiscoveryR\n" +
+	"registries\x18\x01 \x03(\v2\x1f.runtime.discovery.v1.DiscoveryR\n" +
 	"registriesBb\n" +
 	")com.github.origadmin.basic-layout.configsB\fConfigsProtoP\x01Z\x18internal/configs;configs\xf8\x01\x01\xa2\x02\aConfigsb\x06proto3"
 
@@ -92,10 +92,10 @@ func file_configs_registry_proto_rawDescGZIP() []byte {
 var file_configs_registry_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_configs_registry_proto_goTypes = []any{
 	(*Registry)(nil),     // 0: origadmin.configs.Registry
-	(*v1.Discovery)(nil), // 1: discovery.v1.Discovery
+	(*v1.Discovery)(nil), // 1: runtime.discovery.v1.Discovery
 }
 var file_configs_registry_proto_depIdxs = []int32{
-	1, // 0: origadmin.configs.Registry.registries:type_name -> discovery.v1.Discovery
+	1, // 0: origadmin.configs.Registry.registries:type_name -> runtime.discovery.v1.Discovery
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
