@@ -25,24 +25,24 @@ plugins:
       - fq_schema_naming=true # Schema named whether to add a package name, is true, will add a package name, for example: system. Service. V1. ListDictDetailResponse, otherwise as follows: ListDictDetailResponse. The default value is false.
     strategy: all # This tag will generate all files without split files in different directories.
   - local: protoc-gen-go
-    out: api/v1/services
+    out: api/v1/gen/go
     opt: paths=source_relative
   - local: protoc-gen-validate
-    out: api/v1/services
+    out: api/v1/gen/go
     opt:
       - paths=source_relative
       - lang=go
   - local: protoc-gen-go-errors
-    out: api/v1/services
+    out: api/v1/gen/go
     opt: paths=source_relative
   - local: protoc-gen-go-http
-    out: api/v1/services
+    out: api/v1/gen/go
     opt: paths=source_relative
   - local: protoc-gen-go-grpc
-    out: api/v1/services
+    out: api/v1/gen/go
     opt: paths=source_relative
   - local: protoc-gen-go-gins
-    out: api/v1/services
+    out: api/v1/gen/go
     opt: paths=source_relative
 #  - local: protoc-gen-ent
 #    out: database

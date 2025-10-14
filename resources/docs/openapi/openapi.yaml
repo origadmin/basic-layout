@@ -164,6 +164,9 @@ paths:
                     type: string
                 - name: data.id
                   in: query
+                  description: |-
+                    The original proto had an entgo option here, which is likely not needed for this example.
+                     option (ent.schema).gen = true;
                   schema:
                     type: string
                 - name: data.name
@@ -375,6 +378,9 @@ paths:
                     type: string
                 - name: data.id
                   in: query
+                  description: |-
+                    The original proto had an entgo option here, which is likely not needed for this example.
+                     option (ent.schema).gen = true;
                   schema:
                     type: string
                 - name: data.name
@@ -444,6 +450,9 @@ components:
             properties:
                 id:
                     type: string
+                    description: |-
+                        The original proto had an entgo option here, which is likely not needed for this example.
+                         option (ent.schema).gen = true;
                 name:
                     type: string
         api.v1.services.helloworld.ListGreeterResponse:
@@ -459,7 +468,11 @@ components:
                     items:
                         $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
                 error:
-                    $ref: '#/components/schemas/errors.rpcerr.Error'
+                    type: integer
+                    description: |-
+                        Updated to use the new error reason enum from the runtime framework.
+                         Note: This is a breaking API change from the original Error message.
+                    format: enum
                 extra:
                     $ref: '#/components/schemas/google.protobuf.Any'
         api.v1.services.helloworld.PostHelloResponse:
@@ -497,6 +510,9 @@ components:
             properties:
                 id:
                     type: string
+                    description: |-
+                        The original proto had an entgo option here, which is likely not needed for this example.
+                         option (ent.schema).gen = true;
                 name:
                     type: string
         api.v1.services.secondworld.ListGreeterResponse:
@@ -512,7 +528,9 @@ components:
                     items:
                         $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
                 error:
-                    $ref: '#/components/schemas/errors.rpcerr.Error'
+                    type: integer
+                    description: Updated to use the new error reason enum from the runtime framework.
+                    format: enum
                 extra:
                     $ref: '#/components/schemas/google.protobuf.Any'
         api.v1.services.secondworld.PostHelloResponse:
@@ -536,16 +554,6 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
-        errors.rpcerr.Error:
-            type: object
-            properties:
-                id:
-                    type: string
-                code:
-                    type: integer
-                    format: int32
-                detail:
-                    type: string
         google.protobuf.Any:
             type: object
             properties:

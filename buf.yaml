@@ -22,5 +22,4 @@ deps:
   - buf.build/kratos/apis
   - buf.build/googleapis/googleapis
   - buf.build/bufbuild/protovalidate
-  - buf.build/origadmin/rpcerr
-  - buf.build/origadmin/entgen
+  - buf.build/origadmin/runtime

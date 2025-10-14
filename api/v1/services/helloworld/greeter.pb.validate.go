@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	commonv1 "github.com/origadmin/runtime/api/gen/go/common/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = commonv1.ErrorReason(0)
 )
 
 // Validate checks the field values on GreeterData with the rules defined in
@@ -74,7 +78,7 @@ type GreeterDataMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GreeterDataMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -207,7 +211,7 @@ type SayHelloRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m SayHelloRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -336,7 +340,7 @@ type SayHelloResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m SayHelloResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -469,7 +473,7 @@ type PostHelloRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m PostHelloRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -598,7 +602,7 @@ type PostHelloResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m PostHelloResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -729,7 +733,7 @@ type CreateGreeterRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateGreeterRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -831,7 +835,7 @@ type CreateGreeterResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateGreeterResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -964,7 +968,7 @@ type UpdateGreeterRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateGreeterRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1102,7 +1106,7 @@ type UpdateGreeterResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateGreeterResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1206,7 +1210,7 @@ type DeleteGreeterRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteGreeterRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1308,7 +1312,7 @@ type DeleteGreeterResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteGreeterResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1412,7 +1416,7 @@ type GetGreeterRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetGreeterRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1514,7 +1518,7 @@ type GetGreeterResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetGreeterResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1628,7 +1632,7 @@ type ListGreeterRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListGreeterRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1755,36 +1759,7 @@ func (m *ListGreeterResponse) validate(all bool) error {
 	}
 
 	if m.Error != nil {
-
-		if all {
-			switch v := interface{}(m.GetError()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListGreeterResponseValidationError{
-						field:  "Error",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListGreeterResponseValidationError{
-						field:  "Error",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListGreeterResponseValidationError{
-					field:  "Error",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
+		// no validation rules for Error
 	}
 
 	if m.Extra != nil {
@@ -1834,7 +1809,7 @@ type ListGreeterResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListGreeterResponseMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

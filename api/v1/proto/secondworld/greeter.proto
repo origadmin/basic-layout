@@ -3,11 +3,12 @@ syntax = "proto3";
 package api.v1.services.secondworld;
 
 import "buf/validate/validate.proto";
-import "errors/rpcerr/rpcerr.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
-import "options/opts.proto";
+
+// Import the new common error definitions from the runtime framework
+import "runtime/common/v1/errors.proto";
 
 option go_package = "api/v1/services/secondworld;secondworld";
 option java_multiple_files = true;
@@ -68,7 +69,8 @@ service SecondGreeterAPI {
 }
 
 message GreeterData {
-    option (ent.schema).gen = true; // <-- tell protoc-gen-ent you want to generate a schema from this message
+    // The original proto had an entgo option here, which is likely not needed for this example.
+    // option (ent.schema).gen = true;
     string id = 1;
     string name = 2;
 }
@@ -137,7 +139,7 @@ message ListGreeterResponse {
     bool success = 1;
     int32 total = 2;
     repeated GreeterData data = 3;
-    optional errors.rpcerr.Error error = 4;
+    // Updated to use the new error reason enum from the runtime framework.
+    optional runtime.common.v1.ErrorReason error = 4;
     optional google.protobuf.Any extra = 5;
-
 }

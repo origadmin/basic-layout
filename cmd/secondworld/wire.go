@@ -9,13 +9,15 @@
 package main
 
 import (
-	"context"
-
 	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
+	kratoslog "github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/transport"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/bootstrap"
+	"github.com/origadmin/runtime"
+
 	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/secondworld/biz"
 	"origadmin/basic-layout/internal/mods/secondworld/dal"
@@ -23,7 +25,40 @@ import (
 	"origadmin/basic-layout/internal/mods/secondworld/service"
 )
 
-// buildInjectors init kratos application.
-func buildInjectors(context.Context, *configs.Bootstrap, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(bootstrap.ProviderSet, server.ProviderSet, dal.ProviderSet, biz.ProviderSet, service.ProviderSet, NewApp))
+// providerSet for components provided by the runtime.
+var runtimeProviderSet = wire.NewSet(
+	provideLogger,
+	provideConfig,
+)
+
+// provideLogger extracts the logger from the runtime instance.
+func provideLogger(rt *runtime.Runtime) kratoslog.Logger {
+	return rt.Logger()
+}
+
+// provideConfig extracts and decodes the bootstrap config from the runtime instance.
+func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
+	var bc configs.Bootstrap
+	if err := rt.Config().Decode(&bc); err != nil {
+		return nil, err
+	}
+	return &bc, nil
+}
+
+// NewKratosApp creates the final kratos.App from the runtime and transport servers.
+func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
+	servers := []transport.Server{hs, gs}
+	return rt.NewApp(servers)
+}
+
+// wireApp initializes the application using wire.
+func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
+	panic(wire.Build(
+		runtimeProviderSet,
+		server.ProviderSet,
+		dal.ProviderSet,
+		biz.ProviderSet,
+		service.ProviderSet,
+		NewKratosApp,
+	))
 }

@@ -2,65 +2,35 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
+// Package errors provides helper functions for working with Kratos errors.
 package errors
 
 import (
-	"strings"
-
 	"github.com/go-kratos/kratos/v2/errors"
-
-	"github.com/origadmin/toolkits/errors/httperr"
-	"github.com/origadmin/toolkits/errors/rpcerr"
 )
 
-// ErrorHTTP returns an error with the given reason, code, and message.
-// It is also used id for display the error message at the client with i18n support.
-func ErrorHTTP(reason string, code int32, msg string) *httperr.Error {
-	id := "http.response.status." + strings.ToLower(reason)
-	return &httperr.Error{
-		ID:     id,
-		Code:   code,
-		Detail: msg,
-	}
+// New is a helper to create a new Kratos error.
+// It's a simple wrapper around errors.New.
+func New(code int, reason, message string) *errors.Error {
+	return errors.New(code, reason, message)
 }
 
-func ErrorGRPC(err error) *rpcerr.Error {
-	rerr := FromError(err)
-	id := "grpc.response.status." + strings.ToLower(rerr.Reason)
-	return &rpcerr.Error{
-		Id:     id,
-		Code:   rerr.Code,
-		Detail: rerr.String(),
-	}
-}
-
-func ToHttpError(err error) *httperr.Error {
+// FromError attempts to cast a generic error to a Kratos error.
+// If it fails, it returns a new Kratos error with an unknown reason.
+func FromError(err error) *errors.Error {
 	if err == nil {
 		return nil
 	}
-
-	var httpErr *httperr.Error
-	if errors.As(err, &httpErr) {
-		return httpErr
+	if se := new(errors.Error); errors.As(err, &se) {
+		return se
 	}
+	return errors.New(500, "UNKNOWN_ERROR", err.Error())
+}
 
-	var rpcErr *rpcerr.Error
-	if errors.As(err, &rpcErr) {
-		id := rpcErr.Id
-		if strings.HasPrefix(id, "grpc.") {
-			id = strings.Replace(id, "grpc.", "http.", 1)
-		}
-		return &httperr.Error{
-			ID:     id,
-			Code:   rpcErr.Code,
-			Detail: rpcErr.Detail,
-		}
+// Is matches a Kratos error by reason.
+func Is(err error, reason string) bool {
+	if se := new(errors.Error); errors.As(err, &se) {
+		return se.Reason == reason
 	}
-
-	kerr := FromError(err)
-	return &httperr.Error{
-		ID:     "http.response.status." + strings.ToLower(kerr.Reason),
-		Code:   kerr.Code,
-		Detail: kerr.Message,
-	}
+	return false
 }
