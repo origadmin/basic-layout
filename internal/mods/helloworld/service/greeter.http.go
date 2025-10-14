@@ -7,7 +7,7 @@ package service
 import (
 	"context"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
+	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
 )
 
 // GreeterHTTPService is a greeter service.

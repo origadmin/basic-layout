@@ -30,15 +30,18 @@ type GreeterBiz struct {
 func (g GreeterBiz) SayHello(ctx context.Context, in *secondworld.SayHelloRequest, opts ...grpc.CallOption) (*secondworld.SayHelloResponse, error) {
 	log.Infof("SayHello: %v data: %v", in.Id, in.Data.Name)
 	return &secondworld.SayHelloResponse{
-		Data: , nil
+		Data: in.Data,
+	}, nil
 }
 
 func (g GreeterBiz) PostHello(ctx context.Context, in *secondworld.PostHelloRequest, opts ...grpc.CallOption) (*secondworld.PostHelloResponse, error) {
 	log.Infof("GreeterBiz.PostHello: %v", in.Data.Name)
 	return &secondworld.PostHelloResponse{
-		Data: &dto.Greeter{
+		Data: &secondworld.GreeterData{
+			Id:   in.Data.Id,
 			Name: "hello " + in.Data.Name,
-		}}, nil
+		},
+	}, nil
 }
 
 func (g GreeterBiz) CreateGreeter(ctx context.Context, in *secondworld.CreateGreeterRequest, opts ...grpc.CallOption) (*secondworld.CreateGreeterResponse, error) {

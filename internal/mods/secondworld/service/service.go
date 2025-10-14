@@ -4,7 +4,13 @@
 
 package service
 
-import "github.com/google/wire"
+import (
+	"github.com/google/wire"
+	secondworld "origadmin/basic-layout/api/v1/gen/go/secondworld" // Import secondworld package
+)
 
 // ProviderSet is service providers.
-var ProviderSet = wire.NewSet(NewGreeterService, NewGreeterServer)
+var ProviderSet = wire.NewSet(
+	NewGreeterService, // Provides *GreeterService
+	wire.Bind(new(secondworld.SecondGreeterAPIServer), new(*GreeterService)), // Binds *GreeterService to SecondGreeterAPIServer interface
+)

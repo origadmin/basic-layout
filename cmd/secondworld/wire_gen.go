@@ -36,13 +36,13 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 	}
 	greeterRepo := dal.NewGreeterDal(database, logger)
 	secondGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
-	secondGreeterAPIServer := service.NewGreeterServer(secondGreeterAPIClient)
-	httpServer, err := server.NewHTTPServer(bootstrap, secondGreeterAPIServer, logger)
+	greeterService := service.NewGreeterService(secondGreeterAPIClient)
+	httpServer, err := server.NewHTTPServer(bootstrap, greeterService, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	grpcServer, err := server.NewGRPCServer(bootstrap, secondGreeterAPIServer, logger)
+	grpcServer, err := server.NewGRPCServer(bootstrap, greeterService, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

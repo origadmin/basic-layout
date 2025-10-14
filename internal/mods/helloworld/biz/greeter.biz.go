@@ -11,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
+	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
 	"origadmin/basic-layout/helpers/errors"
 	"origadmin/basic-layout/internal/mods/helloworld/dto"
 )

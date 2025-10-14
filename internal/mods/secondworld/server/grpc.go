@@ -8,9 +8,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/origadmin/runtime/service"
 
-	"origadmin/basic-layout/api/v1/services/secondworld"
+	"github.com/origadmin/runtime/service"
+	"origadmin/basic-layout/api/v1/gen/go/secondworld"
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -22,15 +22,21 @@ func NewGRPCServer(c *configs.Bootstrap, greeter secondworld.SecondGreeterAPISer
 		),
 	}
 
-	if c.Service != nil && c.Service.Server != nil && c.Service.Server.Grpc != nil {
-		if c.Service.Server.Grpc.Network != "" {
-			opts = append(opts, service.NetworkGRPC(c.Service.Server.Grpc.Network))
-		}
-		if c.Service.Server.Grpc.Addr != "" {
-			opts = append(opts, service.AddressGRPC(c.Service.Server.Grpc.Addr))
-		}
-		if c.Service.Server.Grpc.Timeout != nil {
-			opts = append(opts, service.TimeoutGRPC(c.Service.Server.Grpc.Timeout.AsDuration()))
+	if c.Service != nil && c.Service.Servers != nil {
+		for _, srvConfig := range c.Service.Servers { // Iterate through servers
+			if srvConfig.Protocol == "grpc" && srvConfig.Grpc != nil { // Check for gRPC protocol and config
+				if srvConfig.Grpc.Network != "" {
+					opts = append(opts, service.NetworkGRPC(srvConfig.Grpc.Network))
+				}
+				if srvConfig.Grpc.Addr != "" {
+					opts = append(opts, service.AddressGRPC(srvConfig.Grpc.Addr))
+				}
+				if srvConfig.Grpc.Timeout != nil {
+					opts = append(opts, service.TimeoutGRPC(srvConfig.Grpc.Timeout.AsDuration()))
+				}
+				// Break after finding the first gRPC server config
+				break
+			}
 		}
 	}
 
