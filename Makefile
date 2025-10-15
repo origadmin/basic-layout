@@ -180,11 +180,7 @@ proto:
 	@echo "Generating proto files..."
 	if exist internal/configs/*.pb.go del /f /q internal/configs/*.pb.go
 	protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. ./internal/configs/*.proto
-#	cd internal && protoc --proto_path=. \
-#			--proto_path=../third_party \
-#			--go_out=paths=source_relative:./internal \
-#			--validate_out=lang=go,paths=source_relative:./internal \
-#			configs/*.proto
+	protoc -I. -I./third_party --go_out=paths=source_relative:. --go-http_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. ./api/v1/proto/gateway/*.proto
 
 .PHONY: wire
 # generate wire code
@@ -192,12 +188,19 @@ wire:
 	@echo "Generating wire code..."
 	cd cmd/helloworld && wire
 	cd cmd/secondworld && wire
+	cd cmd/gateway && wire
 
 .PHONY: http
 # run http request
 http:
 #	docker run --rm -i -t -v $PWD:/workdir jetbrains/intellij-http-client run.http
 #   docker run -v %CD%:/local swaggerapi/swagger-codegen-cli generate -l csharp -o /output/csharp -i https://petstore.swagger.io/v2/swagger.json
+
+.PHONY: run-gateway
+# run gateway service
+run-gateway:
+	@echo "Running gateway service..."
+	go run ./cmd/gateway
 
 # show help
 help:

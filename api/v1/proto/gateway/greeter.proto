@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package api.v1.services.gateway;
+
+import "google/api/annotations.proto";
+// Correct imports relative to the buf.yaml module root (`api/v1/proto`)
+import "helloworld/greeter.proto";
+import "secondworld/greeter.proto";
+
+option go_package = "origadmin/basic-layout/api/v1/gen/go/gateway;gateway";
+
+// GatewayAPI acts as a facade for helloworld and secondworld services.
+service GatewayAPI {
+  // Forwards to helloworld.HelloGreeterAPI.SayHello
+  rpc SayHello(helloworld.SayHelloRequest) returns (helloworld.SayHelloResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gateway/hello/{id}"
+    };
+  }
+
+  // Forwards to secondworld.SecondGreeterAPI.SayHello
+  rpc SaySecond(secondworld.SayHelloRequest) returns (secondworld.SayHelloResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gateway/second/{id}"
+    };
+  }
+}

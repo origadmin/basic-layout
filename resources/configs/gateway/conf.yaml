@@ -1,0 +1,22 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+
+# Client configuration to connect to backend services
+client:
+  helloworld:
+    grpc:
+      endpoint: 127.0.0.1:9001 # Assuming helloworld gRPC is on port 9001
+      timeout: 1s
+  secondworld:
+    grpc:
+      endpoint: 127.0.0.1:9002 # Assuming secondworld gRPC is on port 9002
+      timeout: 1s
+
+logger:
+  level: info
+  format: console # or json
