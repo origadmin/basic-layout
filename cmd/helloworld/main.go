@@ -7,12 +7,16 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/google/uuid"
 
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	"github.com/origadmin/runtime/bootstrap"
+	_ "github.com/origadmin/runtime/config/envsource"
+	_ "github.com/origadmin/runtime/config/file"
 	"origadmin/basic-layout/internal/transformer"
 )
 
@@ -34,20 +38,46 @@ func init() {
 func main() {
 	flag.Parse()
 
-	// Create AppInfo using the struct from the bootstrap package
-	//appInfo := &runtime.AppInfo{
-	//	ID:      uuid.New().String(), // Add ID field, using Name as ID
-	//	Name:    Name,
-	//	Version: Version,
-	//}
+	// Get the absolute path to the config file
+	configPath := flagconf
+	if !filepath.IsAbs(configPath) {
+		absPath, err := filepath.Abs(filepath.Join(".", configPath))
+		if err != nil {
+			log.Fatalf("failed to get absolute path for config: %v", err)
+		}
+		configPath = absPath
+	}
+
+	// Log the config path for debugging
+	log.Printf("Loading configuration from: %s\n", configPath)
+
+	// Verify config file exists
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		log.Fatalf("config file not found: %s", configPath)
+	}
+
+	// Set working directory to the directory containing the config file
+	configDir := filepath.Dir(configPath)
+	if err := os.Chdir(configDir); err != nil {
+		log.Fatalf("failed to change working directory to %s: %v", configDir, err)
+	}
+	log.Printf("Working directory set to: %s\n", configDir)
+
+	// Create app info
+	appInfo := &appv1.App{
+		Id:      uuid.New().String(),
+		Name:    Name,
+		Version: Version,
+	}
+
+	// Log app info
+	log.Printf("Starting %s %s (ID: %s)\n", appInfo.Name, appInfo.Version, appInfo.Id)
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, cleanup, err := runtime.NewFromBootstrap(flagconf,
-		bootstrap.WithConfigTransformer(transformer.New(&appv1.App{
-			Id:      uuid.New().String(),
-			Name:    Name,
-			Version: Version,
-		})))
+	rt, cleanup, err := runtime.NewFromBootstrap(
+		filepath.Base(configPath), // Use just the filename since we changed the working directory
+		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
+	)
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}

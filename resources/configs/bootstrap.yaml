@@ -1,15 +1,33 @@
 # This bootstrap configuration defines the sources from which the application's main configuration is loaded.
-source:
-  sources:
-    # Environment variable source to resolve placeholders like ${...}
-    - type: env
-      name: "env-vars"
-      priority: 0 # Load environment variables first
+sources:
+  # Environment variable source to resolve placeholders like ${...}
+  - type: env
+    name: "env-vars"
+    priority: 0 # Load environment variables first
 
-    # File source pointing to the main application configuration (v1.yaml)
-    - type: file
-      name: "main-config"
-      formats: ["yaml"]
-      file:
-        path: "resources/configs/conf.yaml"
-      priority: 100 # Load after environment variables
+  # File source pointing to the main application configuration
+  - type: file
+    name: "main-config"
+    formats: [ yaml, yml ]
+    file:
+      path: "conf.yaml"  # Relative to the config directory
+    required: true
+    watch: true
+    priority: 100 # Load after environment variables
+
+  # Fallback to embedded config if file not found (optional)
+  - type: file
+    name: "embedded-config"
+    formats: [ yaml, yml ]
+    file:
+      path: "conf.yaml"  # Relative to the config directory
+    required: false
+    priority: 200
+
+# Map configuration keys to their paths in the configuration files
+paths:
+  # Maps to the 'server' key in your configuration
+  server: "server"
+  # Example for other components:
+  # logger: "logger"
+  # database: "data.database"  # For nested configurations

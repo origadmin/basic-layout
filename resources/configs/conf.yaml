@@ -1,47 +1,50 @@
-service:
-  name: origadmin.server.v1
-  servers:
-    - protocol: http
-      http:
-        addr: ${http_address:0.0.0.0:8000}
-        network: tcp
-        timeout: 180s
-        tls_config:
-          use_tls: false
-          cert_file: ""
-          key_file: ""
-        enable_pprof: true
-        cors:
-          allowed_origins: ["*"]
-          allowed_methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
-          allowed_headers: ["*"]
-          exposed_headers: ["Content-Length", "Content-Type"]
-          allow_credentials: true
-          max_age: 12h
+server:
+  service:
+    name: "origadmin.server.v1"
+    version: "v1.0.0"
+    servers:
+      - protocol: http
+        http:
+          addr: ${http_address:0.0.0.0:8000}
+          network: tcp
+          timeout: 180s
+          tls_config:
+            use_tls: false
+            cert_file: ""
+            key_file: ""
+          enable_pprof: true
 
-    - protocol: grpc
-      grpc:
-        addr: ${grpc_address:0.0.0.0:9000}
-        network: tcp
-        timeout: 180s
-        tls_config:
-          use_tls: false
-          cert_file: ""
-          key_file: ""
+      - protocol: grpc
+        grpc:
+          addr: ${grpc_address:0.0.0.0:9000}
+          network: tcp
+          timeout: 180s
+          tls_config:
+            use_tls: false
+            cert_file: ""
+            key_file: ""
+    
+    clients: []
+    middlewares: []
 
-  clients: []
-  middlewares: []
+  cors:
+    allowed_origins: ["*"]
+    allowed_methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+    allowed_headers: ["*"]
+    exposed_headers: ["Content-Length", "Content-Type"]
+    allow_credentials: true
+    max_age: 12h
+
+  data: {}
 
 discovery:
   name: ""
-  type: consul
-  consul:
-    address: ${consul_address:127.0.0.1:8500}
-    scheme: http
+  type: CONSUL
+  endpoints: ["${consul_address:127.0.0.1:8500}"]
+  config:
+    scheme: "http"
     token: ""
-    heart_beat: false
     health_check: false
-    datacenter: ""
     health_check_interval: 0
     timeout: 0
     deregister_critical_service_after: 0

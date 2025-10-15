@@ -2,12 +2,16 @@
 package transformer
 
 import (
+	"fmt"
+
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	"github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
 	loggerv1 "github.com/origadmin/runtime/api/gen/go/runtime/logger/v1"
 	middlewarev1 "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1"
+	servicev1 "github.com/origadmin/runtime/api/gen/go/runtime/service/v1"
 	"github.com/origadmin/runtime/bootstrap"
 	"github.com/origadmin/runtime/interfaces"
+	"github.com/origadmin/runtime/log"
 	"origadmin/basic-layout/api/v1/gen/go/configs"
 )
 
@@ -38,7 +42,10 @@ func (c *Config) DecodeApp() (*appv1.App, error) {
 }
 
 func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
-	return &loggerv1.Logger{}, nil
+	return &loggerv1.Logger{
+		Default: true,
+		Level:   "debug",
+	}, nil
 }
 
 func (c *Config) DecodeDiscoveries() (map[string]*discoveryv1.Discovery, error) {
@@ -58,9 +65,47 @@ func (c *Config) DecodeMiddleware() (*middlewarev1.Middlewares, error) {
 
 func (c *Config) Transform(config interfaces.Config) (interfaces.StructuredConfig, error) {
 	c.config = config
+	logger := log.NewHelper(log.DefaultLogger)
+
+	// Try to decode the entire config first
 	if err := config.Decode("", &c.bootstrap); err != nil {
-		return nil, err
+		logger.Errorf("Failed to decode bootstrap config: %v", err)
+		// Try to decode just the server part
+		var serverCfg configs.ServiceConfig
+		if err := config.Decode("server", &serverCfg); err != nil {
+			logger.Errorf("Failed to decode server config: %v", err)
+			return nil, fmt.Errorf("failed to decode configuration: %v", err)
+		}
+		c.bootstrap.Server = &serverCfg
 	}
+
+	// If we still don't have a server config, create an empty one
+	if c.bootstrap.Server == nil {
+		logger.Warn("No server configuration found, using defaults")
+		c.bootstrap.Server = &configs.ServiceConfig{
+			Service: &servicev1.Service{
+				Name: c.app.GetName(),
+			}, // Version field doesn't exist in servicev1.Service
+		}
+	}
+
+	// Ensure service name is set
+	if c.bootstrap.Server.Service == nil {
+		c.bootstrap.Server.Service = &servicev1.Service{}
+	}
+
+	// Use app name if service name is not set
+	if c.bootstrap.Server.Service.Name == "" && c.app != nil {
+		c.bootstrap.Server.Service.Name = c.app.GetName()
+	}
+
+	logger.Infof("Service name: %s",
+		c.bootstrap.Server.Service.Name,
+	)
+
+	// Log the final configuration for debugging
+	logger.Debugf("Final bootstrap config: %+v", &c.bootstrap)
+
 	return c, nil
 }
 
