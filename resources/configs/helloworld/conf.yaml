@@ -33,7 +33,7 @@ server:
     allowed_headers: ["*"]
     exposed_headers: ["Content-Length", "Content-Type"]
     allow_credentials: true
-    max_age: 12h
+    max_age: 43200
 
   data: {}
 

@@ -7,7 +7,6 @@ package main
 import (
 	"flag"
 	"log"
-	"os"
 	"path/filepath"
 
 	"github.com/google/uuid"
@@ -28,40 +27,22 @@ var (
 
 	// flagconf is the config flag.
 	flagconf string
+
+	// workdir is a flag to indicate whether to use the working directory as the config path.
+	workdir bool
 )
 
 func init() {
 	// The config path should be the directory containing configuration files.
-	flag.StringVar(&flagconf, "conf", "resources/configs/bootstrap.yaml", "config path, eg: -conf resources/configs/bootstrap.yaml")
+	flag.StringVar(&flagconf, "conf", "resources/configs/helloworld/bootstrap.yaml", "config path, eg: -conf bootstrap.yaml")
+	flag.BoolVar(&workdir, "workdir", false, "use working directory as config path")
 }
 
 func main() {
 	flag.Parse()
 
-	// Get the absolute path to the config file
-	configPath := flagconf
-	if !filepath.IsAbs(configPath) {
-		absPath, err := filepath.Abs(filepath.Join(".", configPath))
-		if err != nil {
-			log.Fatalf("failed to get absolute path for config: %v", err)
-		}
-		configPath = absPath
-	}
-
 	// Log the config path for debugging
-	log.Printf("Loading configuration from: %s\n", configPath)
-
-	// Verify config file exists
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file not found: %s", configPath)
-	}
-
-	// Set working directory to the directory containing the config file
-	configDir := filepath.Dir(configPath)
-	if err := os.Chdir(configDir); err != nil {
-		log.Fatalf("failed to change working directory to %s: %v", configDir, err)
-	}
-	log.Printf("Working directory set to: %s\n", configDir)
+	log.Printf("Loading configuration from: %s\n", flagconf)
 
 	// Create app info
 	appInfo := &appv1.App{
@@ -72,11 +53,18 @@ func main() {
 
 	// Log app info
 	log.Printf("Starting %s %s (ID: %s)\n", appInfo.Name, appInfo.Version, appInfo.Id)
-
+	// If workdir is set, use the working directory as the config path.
+	directory := ""
+	if workdir {
+		directory = filepath.Dir(flagconf)
+		flagconf = filepath.Base(flagconf)
+	}
+	log.Printf("Using config directory: %s\n", directory)
 	// NewFromBootstrap handles config loading, logging, and container setup.
 	rt, cleanup, err := runtime.NewFromBootstrap(
-		filepath.Base(configPath), // Use just the filename since we changed the working directory
+		flagconf, // Use just the filename since we changed the working directory
 		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
+		bootstrap.WithWorkDirectory(directory),
 	)
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
