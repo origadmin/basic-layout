@@ -8,10 +8,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/origadmin/runtime/service"
-	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1" // Import transportv1
 
-	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
+	"github.com/origadmin/runtime/service"
+	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
 	"origadmin/basic-layout/internal/configs"
 )
 
@@ -25,7 +24,7 @@ func NewHTTPServer(c *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServe
 
 	if c.Service != nil && c.Service.Servers != nil {
 		for _, srvConfig := range c.Service.Servers { // Iterate through servers
-			if srvConfig.Protocol == "http" && srvConfig.Http != nil { // Check for HTTP protocol and config
+			if srvConfig.Protocol == "http" && srvConfig.Http != nil {
 				if srvConfig.Http.Network != "" {
 					opts = append(opts, service.NetworkHTTP(srvConfig.Http.Network))
 				}

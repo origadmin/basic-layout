@@ -6,19 +6,19 @@ package biz
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
 
-	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
-	"origadmin/basic-layout/helpers/errors"
+	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
+	"github.com/origadmin/runtime/errors"
+	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
 	"origadmin/basic-layout/internal/mods/helloworld/dto"
 )
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), http.StatusNotFound, "user not found")
+	ErrUserNotFound = errors.NewMessage(commonv1.ErrorReason_NOT_FOUND, "user not found")
 )
 
 // GreeterBiz is a Greeter use case.

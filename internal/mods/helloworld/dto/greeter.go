@@ -6,15 +6,16 @@ package dto
 
 import (
 	"context"
-	"net/http"
 
-	"origadmin/basic-layout/api/v1/services/helloworld"
-	"origadmin/basic-layout/helpers/errors"
+	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
+	"github.com/origadmin/runtime/errors"
+	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
 )
 
 var (
 	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.ErrorHTTP(helloworld.HELLO_WORLD_ERROR_REASON_USER_NOT_FOUND.String(), http.StatusNotFound, "user not found")
+	// Corrected to use Kratos native error creation via helpers/errors.New
+	ErrUserNotFound = errors.NewMessage(commonv1.ErrorReason_NOT_FOUND, "user not found")
 )
 
 // Greeter is a Greeter model.
