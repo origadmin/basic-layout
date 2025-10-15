@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package api.v1.configs;
+package configs;
 
-import "configs/service.proto";
+import "internal/configs/service.proto";
 import "runtime/discovery/v1/discovery.proto";
 
-option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/configs;configs";
+option go_package = "github.com/origadmin/basic-layout/internal/configs;configs";
 
 // Bootstrap is the main configuration structure for an application.
 message Bootstrap {

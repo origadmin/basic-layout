@@ -179,7 +179,7 @@ all: deps config api generate openapi
 proto:
 	@echo "Generating proto files..."
 	if exist internal/configs/*.pb.go del /f /q internal/configs/*.pb.go
-	cd internal && protoc -I. -I../third_party --go_out=paths=source_relative:./internal --validate_out=paths=source_relative,lang=go:../internal ./configs/*.proto
+	protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. ./internal/configs/*.proto
 #	cd internal && protoc --proto_path=. \
 #			--proto_path=../third_party \
 #			--go_out=paths=source_relative:./internal \
