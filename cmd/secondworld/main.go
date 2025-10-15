@@ -7,10 +7,16 @@ package main
 import (
 	"flag"
 	"log"
+	"path/filepath"
 
 	"github.com/google/uuid"
 
 	"github.com/origadmin/runtime"
+	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
+	"github.com/origadmin/runtime/bootstrap"
+	_ "github.com/origadmin/runtime/config/envsource"
+	_ "github.com/origadmin/runtime/config/file"
+	"origadmin/basic-layout/internal/transformer"
 )
 
 var (
@@ -25,21 +31,31 @@ var (
 
 func init() {
 	// The config path should be the directory containing configuration files.
-	flag.StringVar(&flagconf, "conf", "resources/configs/bootstrap.yaml", "config path, eg: -conf resources")
+	flag.StringVar(&flagconf, "conf", "bootstrap.yaml", "config path, eg: -conf bootstrap.yaml")
 }
 
 func main() {
 	flag.Parse()
 
+	// Log the config path for debugging
+	log.Printf("Loading configuration from: %s\n", flagconf)
+
+	if !filepath.IsAbs(flagconf) {
+		flagconf = filepath.Join("resources/configs/secondworld/", flagconf)
+	}
 	// Create AppInfo using the struct from the runtime package
-	appInfo := &runtime.AppInfo{
-		ID:      uuid.New().String(),
+	appInfo := &appv1.App{
+		Id:      uuid.New().String(),
 		Name:    Name,
 		Version: Version,
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, cleanup, err := runtime.NewFromBootstrap(flagconf, runtime.WithAppInfo(appInfo))
+	rt, cleanup, err := runtime.NewFromBootstrap(
+		flagconf,
+		//runtime.WithAppInfo(appInfo),
+		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
+	)
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}

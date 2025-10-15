@@ -29,13 +29,13 @@ var (
 	flagconf string
 
 	// workdir is a flag to indicate whether to use the working directory as the config path.
-	workdir bool
+	//workdir bool
 )
 
 func init() {
 	// The config path should be the directory containing configuration files.
-	flag.StringVar(&flagconf, "conf", "resources/configs/helloworld/bootstrap.yaml", "config path, eg: -conf bootstrap.yaml")
-	flag.BoolVar(&workdir, "workdir", false, "use working directory as config path")
+	flag.StringVar(&flagconf, "conf", "bootstrap.yaml", "config path, eg: -conf bootstrap.yaml")
+	//flag.BoolVar(&workdir, "workdir", false, "use working directory as config path")
 }
 
 func main() {
@@ -54,17 +54,19 @@ func main() {
 	// Log app info
 	log.Printf("Starting %s %s (ID: %s)\n", appInfo.Name, appInfo.Version, appInfo.Id)
 	// If workdir is set, use the working directory as the config path.
-	directory := ""
-	if workdir {
-		directory = filepath.Dir(flagconf)
-		flagconf = filepath.Base(flagconf)
+
+	if filepath.IsAbs(flagconf) {
+		flagconf = filepath.Join("resources/configs/helloworld/", flagconf)
 	}
-	log.Printf("Using config directory: %s\n", directory)
+	//	directory = filepath.Dir(flagconf)
+	//	flagconf = filepath.Base(flagconf)
+	//}
+	//log.Printf("Using config directory: %s\n", directory)
 	// NewFromBootstrap handles config loading, logging, and container setup.
 	rt, cleanup, err := runtime.NewFromBootstrap(
 		flagconf, // Use just the filename since we changed the working directory
 		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
-		bootstrap.WithWorkDirectory(directory),
+		//bootstrap.WithWorkDirectory(directory),
 	)
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
