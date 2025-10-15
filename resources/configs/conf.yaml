@@ -1,0 +1,61 @@
+# This configuration maps to the 'Bootstrap' message defined in bootstrap.proto
+service:
+  name: origadmin.server.v1
+  servers:
+    # Entry server (assuming it's an HTTP server)
+    - protocol: http
+      http:
+        addr: 0.0.0.0:8000
+        network: tcp
+        timeout: 180s # Duration type, e.g., "180s"
+        enable_pprof: false
+
+    # GINS server (assuming it's a custom HTTP server type)
+    - protocol: http
+      http:
+        addr: ${gins_address:0.0.0.0:8100}
+        network: tcp
+        timeout: 180s
+        tls_config:
+          use_tls: false
+          cert_file: ""
+          key_file: ""
+
+    # HTTP server
+    - protocol: http
+      http:
+        addr: ${http_address:0.0.0.0:8200}
+        network: tcp
+        timeout: 180s
+        tls_config:
+          use_tls: false
+          cert_file: ""
+          key_file: ""
+
+    # GRPC server
+    - protocol: grpc
+      grpc:
+        addr: ${grpc_address:0.0.0.0:8300}
+        network: tcp
+        timeout: 180s
+        tls_config:
+          use_tls: false
+          cert_file: ""
+          key_file: ""
+
+  clients: []
+  middlewares: []
+
+discovery:
+  name: ""
+  type: consul
+  consul:
+    address: ${consul_address:127.0.0.1:8500}
+    scheme: http
+    token: ""
+    heart_beat: false
+    health_check: false
+    datacenter: ""
+    health_check_interval: 0
+    timeout: 0 # int64, original was null, 0 is a safe default
+    deregister_critical_service_after: 0 # uint32, original was 0

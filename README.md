@@ -1,112 +1,13 @@
-# Kratos Project Template
+# Resource
 
-## Install Kratos
+The directory usually stores some files required by the runtime,
+such as configuration files, static files, template files, document files, and test files.
 
-```
-go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
-```
-
-## Create a service
-
-```
-# Create a template project
-kratos new server
-
-cd server
-# Add a proto template
-kratos proto add api/server/server.proto
-# Generate the proto code
-kratos proto client api/server/server.proto
-# Generate the source code of service by proto file
-kratos proto server api/server/server.proto -t internal/service
-
-go generate ./...
-go build -o ./bin/ ./...
-./bin/server -conf ./configs
-```
-
-## Generate other auxiliary files by Makefile
-
-```
-# Download and update dependencies
-make init
-# Generate API files (include: pb.go, http, grpc, validate, swagger) by proto file
-make api
-# Generate all files
-make all
-```
-
-## Automated Initialization (wire)
-
-```
-# install wire
-go get github.com/google/wire/cmd/wire
-
-# generate wire
-cd cmd/server
-wire
-```
-
-## Docker
-
-```bash
-# build
-docker build -t <your-docker-image-name> .
-
-# run
-docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf <your-docker-image-name>
-```
-
-Tree:
-
-```shell
-./
-├─api
-│  └─v1
-│      ├─proto
-│      │  ├─helloworld
-│      │  └─secondworld
-│      └─services
-│          ├─helloworld
-│          └─secondworld
-├─cmd
-│  ├─testclient
-│  ├─config
-│  ├─helloworld
-│  ├─internal
-│  │  ├─config
-│  │  └─start
-│  └─secondworld
-├─helpers
-│  ├─context
-│  ├─endpoint
-│  ├─errors
-│  ├─oneof
-│  │  └─source
-│  └─utils
-├─internal
-│  ├─agent
-│  ├─bootstrap
-│  ├─configs
-│  └─mods
-│      ├─helloworld
-│      │  ├─biz
-│      │  ├─dal
-│      │  │  └─ent
-│      │  ├─dto
-│      │  ├─server
-│      │  └─service
-│      └─secondworld
-│          ├─biz
-│          ├─dal
-│          ├─dto
-│          ├─server
-│          └─service
-├─resources
-│  ├─configs
-│  ├─docs
-│  │  ├─buf
-│  │  └─openapi
-└─third_party
-    └─validate
-```
+## An example:
+- configs: 通常放置一些默认的配置文件，如数据库配置等。
+- statics: 以及静态文件，如图片、文件等。
+- templates: 模板文件，如HTML、CSS、JS等。
+- docs: 以及文档文件，如API文档等
+- tests: 以及测试文件，如单元测试等
+- bin: 二进制文件，如可执行文件等。
+- data: 测试数据文件，如数据库脚本等。

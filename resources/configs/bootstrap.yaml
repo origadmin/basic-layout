@@ -1,0 +1,12 @@
+# This is the initial bootstrap config file.
+# It tells the application where to find the main configuration.
+source:
+  sources:
+    - type: file
+      name: "main-config-file"
+      formats: ["yaml"]
+      file:
+        # Path to the main application configuration file.
+        path: "resources/configs/conf.yaml"
+      # Priority for merging. Higher values override lower ones.
+      priority: 100

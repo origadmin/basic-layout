@@ -9,23 +9,28 @@ import (
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/hashicorp/consul/api"
-	configv1 "github.com/origadmin/runtime/gen/go/config/v1"
 
+	sourcev1 "github.com/origadmin/runtime/api/gen/go/runtime/source/v1"
 	"github.com/origadmin/runtime/config"
+	"github.com/origadmin/runtime/interfaces/options"
 	"github.com/origadmin/toolkits/errors"
 )
 
-func NewSource(name string, sourceConfig *configv1.SourceConfig_Consul) (config.Source, error) {
+func NewSource(sourceConfig *sourcev1.SourceConfig, opts ...options.Option) (config.KSource, error) {
+	consulConfig := sourceConfig.GetConsul()
+	if consulConfig == nil {
+		return nil, errors.New("consul config is nil")
+	}
 	client, err := api.NewClient(&api.Config{
-		Address: sourceConfig.GetAddress(),
-		Scheme:  sourceConfig.GetScheme(),
-		Token:   sourceConfig.GetToken(),
+		Address: consulConfig.GetAddress(),
+		Scheme:  consulConfig.GetScheme(),
+		Token:   consulConfig.GetToken(),
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "consul client error")
 	}
 	source, err := consul.New(client,
-		consul.WithPath(name),
+		consul.WithPath(consulConfig.Path),
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "consul source error")
