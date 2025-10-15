@@ -857,8 +857,8 @@ const file_helloworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"GetGreeter\x12-.api.v1.services.helloworld.GetGreeterRequest\x1a..api.v1.services.helloworld.GetGreeterResponse\"'\x82\xd3\xe4\x93\x02!\x12\x1f/api/v1/helloworld/greeter/{id}\x12\x92\x01\n" +
 	"\vListGreeter\x12..api.v1.services.helloworld.ListGreeterRequest\x1a/.api.v1.services.helloworld.ListGreeterResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/helloworld/greeter:`\n" +
-	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xd0\x0f \x01(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x88\x01\x01B\xdf\x01\n" +
-	"\x1ecom.api.v1.services.helloworldB\fGreeterProtoP\x01Z#api/v1/gen/go/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
+	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xd0\x0f \x01(\v2'.api.v1.services.helloworld.GreeterDataR\x04data\x88\x01\x01B\x81\x02\n" +
+	"\x1ecom.api.v1.services.helloworldB\fGreeterProtoP\x01ZEgithub.com/origadmin/basic-layout/api/v1/gen/go/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
 
 var (
 	file_helloworld_greeter_proto_rawDescOnce sync.Once

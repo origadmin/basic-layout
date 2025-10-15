@@ -14,7 +14,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
-	"origadmin/basic-layout/internal/configs"
+	"origadmin/basic-layout/api/v1/gen/go/configs"
 	"origadmin/basic-layout/internal/mods/helloworld/biz"
 	"origadmin/basic-layout/internal/mods/helloworld/dal"
 	"origadmin/basic-layout/internal/mods/helloworld/server"

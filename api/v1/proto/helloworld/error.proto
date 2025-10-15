@@ -4,7 +4,7 @@ package api.v1.services.helloworld;
 
 import "errors/errors.proto";
 
-option go_package = "api/v1/gen/go/helloworld;helloworld";
+option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/helloworld;helloworld";
 option java_multiple_files = true;
 option java_package = "com.origadmin.api.v1.gen.go.helloworld";
 

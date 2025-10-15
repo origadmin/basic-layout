@@ -8,9 +8,9 @@ import (
 	"flag"
 	"log"
 
+	"github.com/google/uuid"
+
 	"github.com/origadmin/runtime"
-	// "github.com/origadmin/runtime/bootstrap" // No longer needed directly
-	// "github.com/origadmin/runtime/interfaces" // No longer needed directly
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 
 func init() {
 	// The config path should be the directory containing configuration files.
-	flag.StringVar(&flagconf, "conf", "resources", "config path, eg: -conf resources")
+	flag.StringVar(&flagconf, "conf", "resources/configs/bootstrap.yaml", "config path, eg: -conf resources")
 }
 
 func main() {
@@ -33,6 +33,7 @@ func main() {
 
 	// Create AppInfo using the struct from the runtime package
 	appInfo := &runtime.AppInfo{
+		ID:      uuid.New().String(),
 		Name:    Name,
 		Version: Version,
 	}

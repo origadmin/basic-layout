@@ -1,23 +1,17 @@
 syntax = "proto3";
 
-package origadmin.configs;
+package api.v1.configs;
 
-// Import from the new runtime API paths
-import "runtime/service/v1/service.proto";
+import "configs/service.proto";
 import "runtime/discovery/v1/discovery.proto";
-import "runtime/source/v1/source.proto";
 
-option go_package = "internal/configs;configs";
+option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/configs;configs";
 
 // Bootstrap is the main configuration structure for an application.
 message Bootstrap {
   // Service configuration, including servers, clients, and middlewares.
-  runtime.service.v1.Service service = 1;
+  configs.ServiceConfig server = 1;
 
   // Discovery configuration for service registration and discovery.
   runtime.discovery.v1.Discovery discovery = 2;
-
-  // Source configuration for loading external config files.
-  runtime.source.v1.Sources source = 3;
-
 }

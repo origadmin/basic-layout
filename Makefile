@@ -172,11 +172,26 @@ generate:
 
 .PHONY: all
 # generate all
-all:
-	make api;
-	make config;
-	make generate;
-	make openapi;
+all: deps config api generate openapi
+
+.PHONY: proto
+# generate proto files
+proto:
+	@echo "Generating proto files..."
+	if exist internal/configs/*.pb.go del /f /q internal/configs/*.pb.go
+	cd internal && protoc -I. -I../third_party --go_out=paths=source_relative:./internal --validate_out=paths=source_relative,lang=go:../internal ./configs/*.proto
+#	cd internal && protoc --proto_path=. \
+#			--proto_path=../third_party \
+#			--go_out=paths=source_relative:./internal \
+#			--validate_out=lang=go,paths=source_relative:./internal \
+#			configs/*.proto
+
+.PHONY: wire
+# generate wire code
+wire:
+	@echo "Generating wire code..."
+	cd cmd/helloworld && wire
+	cd cmd/secondworld && wire
 
 .PHONY: http
 # run http request
@@ -190,13 +205,21 @@ help:
 	@echo 'Usage:'
 	@echo ' make [target]'
 	@echo ''
-	@echo 'Targets:'
+	@echo 'Common Targets:'
+	@echo '  all              Generate all code (api, config, wire, etc.)'
+	@echo '  proto           Generate Go code from proto files'
+	@echo '  wire            Generate wire code for dependency injection'
+	@echo '  deps            Update third-party dependencies'
+	@echo '  init            Initialize development environment'
+	@echo '  help            Show this help message'
+	@echo ''
+	@echo 'Advanced Targets:'
 	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
 	helpMessage = match(lastLine, /^# (.*)/); \
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")); \
 			helpMessage = substr(lastLine, RSTART + 2, RLENGTH); \
-			printf "\033[36m%-22s\033[0m %s\n", helpCommand,helpMessage; \
+			printf "  \033[36m%-22s\033[0m %s\n", helpCommand,helpMessage; \
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)

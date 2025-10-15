@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package api.v1.configs;
+
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/configs;configs";
+
+message Setting {
+  google.protobuf.Any todo = 1 [json_name = "todo"];
+}

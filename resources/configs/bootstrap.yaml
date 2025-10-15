@@ -1,12 +1,15 @@
-# This is the initial bootstrap config file.
-# It tells the application where to find the main configuration.
+# This bootstrap configuration defines the sources from which the application's main configuration is loaded.
 source:
   sources:
+    # Environment variable source to resolve placeholders like ${...}
+    - type: env
+      name: "env-vars"
+      priority: 0 # Load environment variables first
+
+    # File source pointing to the main application configuration (v1.yaml)
     - type: file
-      name: "main-config-file"
+      name: "main-config"
       formats: ["yaml"]
       file:
-        # Path to the main application configuration file.
         path: "resources/configs/conf.yaml"
-      # Priority for merging. Higher values override lower ones.
-      priority: 100
+      priority: 100 # Load after environment variables
