@@ -1,13 +1,193 @@
-# Resource
+# Basic Layout Example
 
-The directory usually stores some files required by the runtime,
-such as configuration files, static files, template files, document files, and test files.
+A multi-module backend project example based on the [Kratos](https://go-kratos.dev/) framework.
 
-## An example:
-- configs: 通常放置一些默认的配置文件，如数据库配置等。
-- statics: 以及静态文件，如图片、文件等。
-- templates: 模板文件，如HTML、CSS、JS等。
-- docs: 以及文档文件，如API文档等
-- tests: 以及测试文件，如单元测试等
-- bin: 二进制文件，如可执行文件等。
-- data: 测试数据文件，如数据库脚本等。
+This project serves as a template for creating a standalone Go application. It depends on several public `origadmin` packages (like `runtime` and `toolkits`), which are managed as standard Go module dependencies.
+
+## ✨ Features
+
+*   **Kratos v2**: Built upon the latest Kratos framework.
+*   **Standard Go Modules**: Manages all dependencies through `go.mod`.
+*   **Multi-Module Monorepo**: Contains three independent services (`helloworld`, `secondworld`, `gateway`) within a single repository structure.
+*   **Microservice Ready**: Provides a clear path for splitting the monorepo into multiple independent microservice repositories.
+*   **API Gateway**: The `gateway` service acts as a unified entry point.
+*   **Code Generation & Publishing**: Integrated with `buf` and `GoReleaser`.
+*   **Makefile**: Provides convenient `make` commands.
+
+## 📂 Project Structure
+
+```
+.
+├── api/                # Protobuf API definitions for all services
+├── cmd/                # Service entrypoints (main.go)
+├── internal/           # Internal business logic, organized by module
+│   └── mods/
+│       ├── helloworld/
+│       ├── secondworld/
+│       └── gateway/
+├── resources/          # Static assets and configuration templates
+├── .goreleaser.yaml    # Automated release configuration
+├── buf.gen.yaml        # Buf code generation configuration
+├── buf.yaml            # Buf module definition
+├── go.mod              # Go module file for the project
+└── Makefile            # Developer helper commands
+```
+
+## 📖 How to Use This Template: From Monolith to Microservices
+
+This guide provides two main paths for using this template.
+
+### Path A: Create a New Single-Repo Project
+
+Use this path if you want to start a new project that will be maintained within a single repository.
+
+1.  **Copy the Template**: Copy the `examples/basic-layout` directory and rename it to your project's name, e.g., `my-awesome-project`.
+
+2.  **Initialize Your Module (Choose Your Naming Strategy)**: Navigate into your new project directory. How you name your module affects how it can be used.
+
+    *   **Option 1: Public, Go-Gettable Module (Recommended)**
+        If you plan to host your code on GitHub and want it to be a standard, fetchable Go module, use a full URL path.
+        ```sh
+        cd my-awesome-project
+        go mod edit -module github.com/your-org/my-awesome-project
+        ```
+
+    *   **Option 2: Local-Only Module**
+        If this is a private project and you don't intend for it to be fetched via `go get`, you can use a simple, non-URL name. This is exactly how the `origadmin/basic-layout` module itself is named.
+        ```sh
+        cd my-awesome-project
+        go mod edit -module my-awesome-project
+        ```
+
+3.  **Synchronize Dependencies**: Run `go mod tidy`. This will download all required remote dependencies.
+    ```sh
+    go mod tidy
+    ```
+
+4.  **Update Import Paths**: Perform a global search-and-replace across your project to replace the old module prefix `origadmin/basic-layout` with the new one you chose in Step 2.
+
+5.  **Start Developing**: You can now customize the project by modifying or removing the example modules.
+
+### Path B: Split into Multiple Independent Microservice Repos
+
+This is the advanced path for building a true microservices architecture where each service lives in its own repository. Let's demonstrate by splitting `basic-layout` into two separate projects: `helloworld-service` and `gateway-service`.
+
+#### Step 1: Create the `helloworld-service`
+
+1.  **Copy & Rename**: Copy `basic-layout` to a new directory named `helloworld-service`.
+2.  **Prune the Project**: Delete all files and directories not related to the `helloworld` service.
+    *   Delete `cmd/gateway/` and `cmd/secondworld/`.
+    *   Delete `internal/mods/gateway/` and `internal/mods/secondworld/`.
+    *   Delete `api/v1/proto/gateway/` and `api/v1/proto/secondworld/`.
+3.  **Configure the Module**:
+    *   `cd helloworld-service`
+    *   `go mod edit -module github.com/your-org/helloworld-service`
+    *   `go mod tidy`
+    *   Update `.goreleaser.yaml` to only build the `helloworld` binary.
+    *   Globally replace `origadmin/basic-layout` with your new module name.
+
+#### Step 2: Create the `gateway-service`
+
+1.  **Copy & Rename**: Copy `basic-layout` again to a new directory named `gateway-service`.
+2.  **Prune the Project**: This time, delete the business logic modules.
+    *   Delete `cmd/helloworld/` and `cmd/secondworld/`.
+    *   Delete `internal/mods/helloworld/` and `internal/mods/secondworld/`.
+    *   Keep `api/v1/proto/gateway/`, but you may need to adjust its imports if the proto files for `helloworld` are now in a separate repository.
+3.  **Configure the Module**:
+    *   `cd gateway-service`
+    *   `go mod edit -module github.com/your-org/gateway-service`
+    *   `go mod tidy`
+    *   Update `.goreleaser.yaml` to only build the `gateway` binary.
+    *   Globally replace `origadmin/basic-layout` with your new module name.
+
+#### Step 3: The Critical Change - Network Communication
+
+Now that they are separate projects, the gateway can no longer call the `helloworld` service in-process. It must call it over the network.
+
+1.  **Configure the Client**: In the `gateway-service` project, you must configure the gRPC client to connect to the `helloworld-service`. Modify the gateway's `resources/configs/gateway/conf.yaml`:
+
+    ```yaml
+    server:
+      # ... (server config) ...
+      clients:
+        # Add a configuration block for the helloworld gRPC client
+        helloworld:
+          protocol: grpc
+          grpc:
+            # The endpoint where helloworld-service is running
+            endpoint: "discovery:///helloworld-service" # Using service discovery
+            # Or a direct address for local testing:
+            # endpoint: "localhost:9001"
+            timeout: 2s
+    ```
+
+2.  **Update Dependency Injection**: The gateway's `wire.go` needs to be updated to use this new configuration to create the `helloworld` client, instead of relying on a local provider. This typically involves creating a `NewHelloWorldClient` function that reads from the configuration.
+
+This process transforms the monorepo template into a distributed system, which is the natural evolution for many growing applications.
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+Ensure you have the following tools installed:
+*   Go (>= 1.24)
+*   [Buf](https://buf.build/docs/installation)
+*   [Protobuf (`protoc`)](https://grpc.io/docs/protoc-installation/)
+*   Go-related `protoc` plugins:
+    ```sh
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+    go install github.com/go-kratos/kratos/cmd/protoc-gen-kratos/v2@latest
+    ```
+
+### 2. Generate Code
+
+From your project directory, run the `make` command to generate all gRPC/HTTP code from the `.proto` files.
+
+```sh
+make generate
+```
+
+### 3. Run the Services
+
+You can run each service in a separate terminal.
+
+```sh
+# Terminal 1: Start the helloworld service
+go run ./cmd/helloworld/ -conf ./resources/configs/helloworld/bootstrap.yaml
+
+# Terminal 2: Start the gateway service
+go run ./cmd/gateway/ -conf ./resources/configs/gateway/bootstrap.yaml
+```
+
+### 4. Test the API
+
+Send a request to the `helloworld` service through the `gateway`.
+
+```sh
+curl http://localhost:8000/api/v1/gateway/hello/123
+```
+
+## 📦 Build and Release
+
+### Using Makefile
+
+The `Makefile` provides several useful commands:
+
+*   `make generate`: Generate code from Protobuf definitions.
+*   `make build`: Compile all services into the `bin/` directory.
+*   `make test`: Run all tests.
+*   `make lint`: Run the linter.
+
+### Using GoReleaser
+
+This project uses `GoReleaser` for automated releases. The configuration is in `.goreleaser.yaml`.
+
+To perform a local test release (this will not publish to GitHub):
+
+```sh
+# This will create binaries and archives in a 'dist' directory
+goreleaser release --snapshot --clean
+```
+
+When a new version tag (e.g., `v1.2.0`) is pushed to the `main` branch of the repository, a GitHub Action workflow will automatically trigger GoReleaser to build and create a new GitHub Release with all the compiled assets.
