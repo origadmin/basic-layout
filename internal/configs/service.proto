@@ -7,7 +7,7 @@ import "runtime/service/v1/service.proto";
 import "runtime/storage/v1/storage.proto";
 
 // Corrected go_package to match buf.gen.yaml output with paths=source_relative
-option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/internal/configs;configs";
+option go_package = "origadmin/basic-layout/internal/configs;configs";
 
 // ServiceConfig is the configuration structure for the service.
 // It uses the runtime service definitions for server and client configurations.
