@@ -4,12 +4,12 @@ package api.v1.services.secondworld;
 
 import "errors/errors.proto";
 
-option go_package = "api/v1/gen/go/secondworld;secondworld";
+option go_package = "origadmin/basic-layout/api/v1/gen/go/secondworld;secondworld";
 option java_multiple_files = true;
-option java_package = "com.origadmin.api.v1.gen.go.secondworld";
+option java_package = "origadmin.api.v1.gen.go.secondworld";
 
 enum SECOND_WORLD_ERROR_REASON {
-    option (errors.default_code) = 500;
-    SECOND_WORLD_ERROR_REASON_UNSPECIFIED = 0;
-    USER_NOT_FOUND = 1;
+  option (errors.default_code) = 500;
+  SECOND_WORLD_ERROR_REASON_UNSPECIFIED = 0;
+  USER_NOT_FOUND = 1;
 }

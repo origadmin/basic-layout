@@ -75,9 +75,9 @@ const file_helloworld_error_proto_rawDesc = "" +
 	"\x16helloworld/error.proto\x12\x1aapi.v1.services.helloworld\x1a\x13errors/errors.proto*^\n" +
 	"\x18HELLO_WORLD_ERROR_REASON\x12(\n" +
 	"$HELLO_WORLD_ERROR_REASON_UNSPECIFIED\x10\x00\x12\x12\n" +
-	"\x0eUSER_NOT_FOUND\x10\x01\x1a\x04\xa0E\xf4\x03B\xff\x01\n" +
+	"\x0eUSER_NOT_FOUND\x10\x01\x1a\x04\xa0E\xf4\x03B\xf4\x01\n" +
 	"\x1ecom.api.v1.services.helloworldB\n" +
-	"ErrorProtoP\x01ZEgithub.com/origadmin/basic-layout/api/v1/gen/go/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
+	"ErrorProtoP\x01Z:origadmin/basic-layout/api/v1/gen/go/helloworld;helloworld\xa2\x02\x04AVSH\xaa\x02\x1aApi.V1.Services.Helloworld\xca\x02\x1aApi\\V1\\Services\\Helloworld\xe2\x02&Api\\V1\\Services\\Helloworld\\GPBMetadata\xea\x02\x1dApi::V1::Services::Helloworldb\x06proto3"
 
 var (
 	file_helloworld_error_proto_rawDescOnce sync.Once

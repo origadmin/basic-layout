@@ -18,7 +18,6 @@ import (
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/interfaces"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/gateway/biz"
 	"origadmin/basic-layout/internal/mods/gateway/client"
 	"origadmin/basic-layout/internal/mods/gateway/server"
 	"origadmin/basic-layout/internal/mods/gateway/service"
@@ -62,7 +61,6 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		runtimeProviderSet,
 		server.ProviderSet,
-		biz.ProviderSet,
 		client.ProviderSet,
 		service.ProviderSet,
 		NewKratosApp,

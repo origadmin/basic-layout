@@ -6,7 +6,7 @@ package client
 
 import (
 	"github.com/google/wire"
-	"github.com/origadmin/runtime/config"
+	"github.com/origadmin/runtime/interfaces"
 	"github.com/origadmin/runtime/service/transport/grpc"
 
 	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld"
@@ -17,11 +17,11 @@ import (
 var ProviderSet = wire.NewSet(NewHelloworldClient, NewSecondworldClient)
 
 // NewHelloworldClient creates a new HelloGreeterAPI client.
-func NewHelloworldClient(c config.Config) helloworld.HelloGreeterAPIClient {
+func NewHelloworldClient(c interfaces.Config) helloworld.HelloGreeterAPIClient {
 	return helloworld.NewHelloGreeterAPIClient(grpc.NewClient(c, "client.helloworld"))
 }
 
 // NewSecondworldClient creates a new SecondGreeterAPI client.
-func NewSecondworldClient(c config.Config) secondworld.SecondGreeterAPIClient {
+func NewSecondworldClient(c interfaces.Config) secondworld.SecondGreeterAPIClient {
 	return secondworld.NewSecondGreeterAPIClient(grpc.NewClient(c, "client.secondworld"))
 }
