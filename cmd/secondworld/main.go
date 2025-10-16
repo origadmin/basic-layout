@@ -16,6 +16,7 @@ import (
 	"github.com/origadmin/runtime/bootstrap"
 	_ "github.com/origadmin/runtime/config/envsource"
 	_ "github.com/origadmin/runtime/config/file"
+	_ "origadmin/basic-layout/helpers/configsource/oneof"
 	"origadmin/basic-layout/internal/transformer"
 )
 

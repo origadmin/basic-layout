@@ -14,6 +14,9 @@ import (
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	"github.com/origadmin/runtime/bootstrap"
+	_ "github.com/origadmin/runtime/config/envsource"
+	_ "github.com/origadmin/runtime/config/file"
+	_ "origadmin/basic-layout/helpers/configsource/oneof"
 	"origadmin/basic-layout/internal/transformer"
 )
 
