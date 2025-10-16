@@ -10,11 +10,11 @@ server:
 client:
   helloworld:
     grpc:
-      endpoint: 127.0.0.1:9001 # Assuming helloworld gRPC is on port 9001
+      endpoint: 127.0.0.1:9000 # Corrected: helloworld gRPC is on port 9000
       timeout: 1s
   secondworld:
     grpc:
-      endpoint: 127.0.0.1:9002 # Assuming secondworld gRPC is on port 9002
+      endpoint: 127.0.0.1:9001 # Corrected: secondworld gRPC is on port 9001
       timeout: 1s
 
 logger:

@@ -2,7 +2,8 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
-package source
+// Package oneof is a configuration source that loads configuration from your source.
+package oneof
 
 import (
 	"path"
@@ -15,6 +16,10 @@ import (
 	"github.com/origadmin/runtime/interfaces/options"
 	"github.com/origadmin/toolkits/errors"
 )
+
+func init() {
+	config.Register("consul", NewSource)
+}
 
 func NewSource(sourceConfig *sourcev1.SourceConfig, opts ...options.Option) (config.KSource, error) {
 	consulConfig := sourceConfig.GetConsul()

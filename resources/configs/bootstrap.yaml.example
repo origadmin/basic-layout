@@ -1,6 +1,5 @@
 # This bootstrap configuration defines the sources from which the application's main configuration is loaded.
 sources:
-
   # Environment variable source to resolve placeholders like ${...}
   - type: env
     name: "env-vars"
