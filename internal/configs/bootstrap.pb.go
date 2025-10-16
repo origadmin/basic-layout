@@ -7,6 +7,7 @@
 package configs
 
 import (
+	configs "github.com/origadmin/basic-layout/api/v1/gen/go/internal/configs"
 	v1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -26,7 +27,7 @@ const (
 type Bootstrap struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Service configuration, including servers, clients, and middlewares.
-	Server *ServiceConfig `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Server *configs.ServiceConfig `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	// Discovery configuration for service registration and discovery.
 	Discovery     *v1.Discovery `protobuf:"bytes,2,opt,name=discovery,proto3" json:"discovery,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -63,7 +64,7 @@ func (*Bootstrap) Descriptor() ([]byte, []int) {
 	return file_internal_configs_bootstrap_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Bootstrap) GetServer() *ServiceConfig {
+func (x *Bootstrap) GetServer() *configs.ServiceConfig {
 	if x != nil {
 		return x.Server
 	}
@@ -84,7 +85,7 @@ const file_internal_configs_bootstrap_proto_rawDesc = "" +
 	" internal/configs/bootstrap.proto\x12\aconfigs\x1a\x1einternal/configs/service.proto\x1a$runtime/discovery/v1/discovery.proto\"z\n" +
 	"\tBootstrap\x12.\n" +
 	"\x06server\x18\x01 \x01(\v2\x16.configs.ServiceConfigR\x06server\x12=\n" +
-	"\tdiscovery\x18\x02 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\tdiscoveryB<Z:github.com/origadmin/basic-layout/internal/configs;configsb\x06proto3"
+	"\tdiscovery\x18\x02 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\tdiscoveryB1Z/origadmin/basic-layout/internal/configs;configsb\x06proto3"
 
 var (
 	file_internal_configs_bootstrap_proto_rawDescOnce sync.Once
@@ -100,9 +101,9 @@ func file_internal_configs_bootstrap_proto_rawDescGZIP() []byte {
 
 var file_internal_configs_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_internal_configs_bootstrap_proto_goTypes = []any{
-	(*Bootstrap)(nil),     // 0: configs.Bootstrap
-	(*ServiceConfig)(nil), // 1: configs.ServiceConfig
-	(*v1.Discovery)(nil),  // 2: runtime.discovery.v1.Discovery
+	(*Bootstrap)(nil),             // 0: configs.Bootstrap
+	(*configs.ServiceConfig)(nil), // 1: configs.ServiceConfig
+	(*v1.Discovery)(nil),          // 2: runtime.discovery.v1.Discovery
 }
 var file_internal_configs_bootstrap_proto_depIdxs = []int32{
 	1, // 0: configs.Bootstrap.server:type_name -> configs.ServiceConfig
@@ -119,7 +120,6 @@ func file_internal_configs_bootstrap_proto_init() {
 	if File_internal_configs_bootstrap_proto != nil {
 		return
 	}
-	file_internal_configs_service_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

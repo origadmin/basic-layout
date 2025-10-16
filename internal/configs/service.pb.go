@@ -32,7 +32,7 @@ type ServiceConfig struct {
 	Service *v1.Service `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// CORS configuration for HTTP servers.
 	Cors *cors.Cors `protobuf:"bytes,2,opt,name=cors,proto3" json:"cors,omitempty"`
-	// Storage configuration for the service.
+	// Storage configuration for HTTP servers.
 	Data          *v11.Storage `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -97,7 +97,7 @@ const file_internal_configs_service_proto_rawDesc = "" +
 	"\rServiceConfig\x125\n" +
 	"\aservice\x18\x01 \x01(\v2\x1b.runtime.service.v1.ServiceR\aservice\x124\n" +
 	"\x04cors\x18\x02 \x01(\v2 .runtime.middleware.v1.cors.CorsR\x04cors\x12/\n" +
-	"\x04data\x18\x03 \x01(\v2\x1b.runtime.storage.v1.StorageR\x04dataB<Z:github.com/origadmin/basic-layout/internal/configs;configsb\x06proto3"
+	"\x04data\x18\x03 \x01(\v2\x1b.runtime.storage.v1.StorageR\x04dataBJZHgithub.com/origadmin/basic-layout/api/v1/gen/go/internal/configs;configsb\x06proto3"
 
 var (
 	file_internal_configs_service_proto_rawDescOnce sync.Once

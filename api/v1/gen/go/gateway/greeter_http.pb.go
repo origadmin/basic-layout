@@ -7,11 +7,11 @@
 package gateway
 
 import (
-	secondworld "api/v1/gen/go/secondworld"
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 	helloworld "github.com/origadmin/basic-layout/api/v1/gen/go/helloworld"
+	secondworld "github.com/origadmin/basic-layout/api/v1/gen/go/secondworld"
 )
 
 // This is a compile-time assertion to ensure that this generated file

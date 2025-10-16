@@ -72,7 +72,7 @@ const file_internal_configs_setting_proto_rawDesc = "" +
 	"\n" +
 	"\x1einternal/configs/setting.proto\x12\aconfigs\x1a\x19google/protobuf/any.proto\"3\n" +
 	"\aSetting\x12(\n" +
-	"\x04todo\x18\x01 \x01(\v2\x14.google.protobuf.AnyR\x04todoB<Z:github.com/origadmin/basic-layout/internal/configs;configsb\x06proto3"
+	"\x04todo\x18\x01 \x01(\v2\x14.google.protobuf.AnyR\x04todoB1Z/origadmin/basic-layout/internal/configs;configsb\x06proto3"
 
 var (
 	file_internal_configs_setting_proto_rawDescOnce sync.Once

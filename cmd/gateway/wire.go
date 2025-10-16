@@ -16,19 +16,25 @@ import (
 	"github.com/google/wire"
 
 	"github.com/origadmin/runtime"
-
-	"origadmin/basic-layout/api/v1/gen/go/configs"
-
+	"github.com/origadmin/runtime/interfaces"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/gateway/biz"
 	"origadmin/basic-layout/internal/mods/gateway/client"
 	"origadmin/basic-layout/internal/mods/gateway/server"
 	"origadmin/basic-layout/internal/mods/gateway/service"
 )
 
+// provideRuntimeConfig extracts the runtime.Config interface from the runtime instance.
+func provideRuntimeConfig(rt *runtime.Runtime) interfaces.Config {
+	// rt.Config() returns interfaces.Config, which should implement runtimeConfig.Config
+	return rt.Config()
+}
+
 // providerSet for components provided by the runtime.
 var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
+	provideRuntimeConfig, // Add this to provide the runtime.Config interface
 )
 
 // provideLogger extracts the logger from the runtime instance.

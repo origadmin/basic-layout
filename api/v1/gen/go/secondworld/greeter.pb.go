@@ -856,8 +856,8 @@ const file_secondworld_greeter_proto_rawDesc = "" +
 	"\n" +
 	"GetGreeter\x12..api.v1.services.secondworld.GetGreeterRequest\x1a/.api.v1.services.secondworld.GetGreeterResponse\"(\x82\xd3\xe4\x93\x02\"\x12 /api/v1/secondworld/greeter/{id}\x12\x95\x01\n" +
 	"\vListGreeter\x12/.api.v1.services.secondworld.ListGreeterRequest\x1a0.api.v1.services.secondworld.ListGreeterResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/secondworld/greeter:a\n" +
-	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xe8\a \x01(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x88\x01\x01B\xe6\x01\n" +
-	"\x1fcom.api.v1.services.secondworldB\fGreeterProtoP\x01Z%api/v1/gen/go/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
+	"\x04data\x12\x1f.google.protobuf.MessageOptions\x18\xe8\a \x01(\v2(.api.v1.services.secondworld.GreeterDataR\x04data\x88\x01\x01B\x88\x02\n" +
+	"\x1fcom.api.v1.services.secondworldB\fGreeterProtoP\x01ZGgithub.com/origadmin/basic-layout/api/v1/gen/go/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
 
 var (
 	file_secondworld_greeter_proto_rawDescOnce sync.Once

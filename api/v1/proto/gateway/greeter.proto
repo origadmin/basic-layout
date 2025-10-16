@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "helloworld/greeter.proto";
 import "secondworld/greeter.proto";
 
-option go_package = "origadmin/basic-layout/api/v1/gen/go/gateway;gateway";
+option go_package = "github.com/origadmin/basic-layout/api/v1/gen/go/gateway;gateway";
 
 // GatewayAPI acts as a facade for helloworld and secondworld services.
 service GatewayAPI {

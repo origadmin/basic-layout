@@ -178,9 +178,7 @@ all: deps config api generate openapi
 # generate proto files
 proto:
 	@echo "Generating proto files..."
-	if exist internal/configs/*.pb.go del /f /q internal/configs/*.pb.go
-	protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. ./internal/configs/*.proto
-	protoc -I. -I./third_party --go_out=paths=source_relative:. --go-http_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. ./api/v1/proto/gateway/*.proto
+	protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. internal/configs/*.proto
 
 .PHONY: wire
 # generate wire code
