@@ -9,7 +9,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 
 	rtservice "github.com/origadmin/runtime/service"
-	"origadmin/basic-layout/api/v1/gen/go/configs"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/api/v1/gen/go/helloworld"
 )
 

@@ -15,7 +15,7 @@ import (
 	"github.com/google/wire"
 
 	"github.com/origadmin/runtime"
-	"origadmin/basic-layout/api/v1/gen/go/configs"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/secondworld/biz"
 	"origadmin/basic-layout/internal/mods/secondworld/dal"
 	"origadmin/basic-layout/internal/mods/secondworld/server"

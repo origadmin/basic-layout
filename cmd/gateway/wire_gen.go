@@ -13,53 +13,47 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-
 	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/interfaces"
 	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/helloworld/biz"
-	"origadmin/basic-layout/internal/mods/helloworld/dal"
-	"origadmin/basic-layout/internal/mods/helloworld/server"
-	"origadmin/basic-layout/internal/mods/helloworld/service"
+	"origadmin/basic-layout/internal/mods/gateway/client"
+	"origadmin/basic-layout/internal/mods/gateway/server"
+	"origadmin/basic-layout/internal/mods/gateway/service"
 )
 
 // Injectors from wire.go:
 
 // wireApp initializes the application using wire.
 func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
+	logger := provideLogger(rt)
 	bootstrap, err := provideConfig(rt)
 	if err != nil {
 		return nil, nil, err
 	}
-	logger := provideLogger(rt)
-	database, cleanup, err := dal.NewDB(bootstrap, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	greeterRepo := dal.NewGreeterDal(database, logger)
-	helloGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
-	greeterService := service.NewGreeterService(helloGreeterAPIClient)
-	httpServer, err := server.NewHTTPServer(bootstrap, greeterService, logger)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	grpcServer, err := server.NewGRPCServer(bootstrap, greeterService, logger)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
+	config := provideRuntimeConfig(rt)
+	helloGreeterAPIClient := client.NewHelloworldClient(config)
+	secondGreeterAPIClient := client.NewSecondworldClient(config)
+	gatewayService := service.NewGatewayService(helloGreeterAPIClient, secondGreeterAPIClient)
+	httpServer := server.NewHTTPServer(logger, bootstrap, gatewayService)
+	grpcServer := server.NewGRPCServer(logger, bootstrap, gatewayService)
 	app := NewKratosApp(rt, httpServer, grpcServer)
 	return app, func() {
-		cleanup()
 	}, nil
 }
 
 // wire.go:
 
+// provideRuntimeConfig extracts the runtime.Config interface from the runtime instance.
+func provideRuntimeConfig(rt *runtime.Runtime) interfaces.Config {
+
+	return rt.Config()
+}
+
 // providerSet for components provided by the runtime.
 var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
+	provideRuntimeConfig,
 )
 
 // provideLogger extracts the logger from the runtime instance.

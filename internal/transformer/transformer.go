@@ -12,7 +12,7 @@ import (
 	"github.com/origadmin/runtime/bootstrap"
 	"github.com/origadmin/runtime/interfaces"
 	"github.com/origadmin/runtime/log"
-	"origadmin/basic-layout/api/v1/gen/go/configs"
+	"origadmin/basic-layout/internal/configs"
 )
 
 type Config struct {
