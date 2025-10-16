@@ -1,14 +1,20 @@
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - "*"
+# This workflow demonstrates how to synchronize a GitHub repository to Gitee.
+# It is provided as an example for users of this template.
+#
+# This workflow is configured to be triggered manually via 'workflow_dispatch'
+# to avoid unnecessary runs in the example repository.
+# When using this in your own project, you would typically change the 'on:'
+# trigger to 'push' and 'pull_request' for your main branch, and ensure
+# the 'src' and 'dst' configurations match your repository.
 
-name: Sync to Gitee
+name: Sync to Gitee Example
+
+on:
+  workflow_dispatch: # Allows manual triggering of the workflow
+
 jobs:
   run:
-    name: Run
+    name: Run Gitee Sync
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
@@ -16,12 +22,19 @@ jobs:
     - name: Mirror Github to Gitee
       uses: Yikun/hub-mirror-action@v1.3
       with:
-        src: github/go-kratos
-        dst: gitee/go-kratos
+        # Source repository on GitHub (e.g., your GitHub organization/user)
+        src: github/origadmin
+        # Destination repository on Gitee (e.g., your Gitee organization/user)
+        dst: gitee/origadmin
+        # Gitee private key (stored as a GitHub secret)
         dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+        # Gitee token (stored as a GitHub secret)
         dst_token: ${{ secrets.GITEE_TOKEN }}
+        # Account type: 'org' for organization, 'user' for personal
         account_type: org
         timeout: 600
         debug: true
         force_update: true
-        static_list: "kratos-layout"
+        # List of repositories to mirror. For this example, it's 'basic-layout'.
+        # If mirroring multiple repos, separate with commas: "repo1,repo2"
+        static_list: "basic-layout"

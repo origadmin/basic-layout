@@ -1,30 +1,35 @@
-name: Go
+# This workflow demonstrates how to build and test a Go project.
+# It is provided as an example for users of this template.
+#
+# This workflow is configured to be triggered manually via 'workflow_dispatch'
+# to avoid unnecessary runs in the example repository.
+# When using this in your own project, you would typically change the 'on:'
+# trigger to 'push' and 'pull_request' for your main branch.
+
+name: Go Example Build & Test
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   build:
-    name: Build
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the Go module directory
+      - name: Check out code
         uses: actions/checkout@v4.2.0
 
-      - name: Set up Go 1.x
+      - name: Set up Go
         uses: actions/setup-go@v5.0.2
         with:
-          go-version: ^1.20
+          go-version: ^1.24 # Use Go 1.24 as specified in go.mod
 
       - name: Setup Environment
         run: |
           echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Module cache
+      - name: Go Module Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -32,18 +37,17 @@ jobs:
             ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go
+            ${{ runner.os }}-go-
 
-      - name: Get dependencies
-        run: |
-          go get -v -t -d ./...
-          if [ -f Gopkg.toml ]; then
-              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-              dep ensure
-          fi
+      - name: Install Tools and Generate Code
+        # This step uses the Makefile to install necessary tools (like buf, wire)
+        # and then generates all protobuf-related code and wire DI code.
+        run: make generate
 
-      - name: Build
-        run: go build -v ./...
+      - name: Build Services
+        # Uses the Makefile to build all defined services
+        run: make build
 
-      - name: Test
-        run: go test -v ./...
+      - name: Run Tests
+        # Uses the Makefile to run all tests
+        run: make test
