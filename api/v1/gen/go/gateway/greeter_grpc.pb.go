@@ -8,11 +8,11 @@ package gateway
 
 import (
 	context "context"
-	secondworld "github.com/origadmin/basic-layout/api/v1/gen/go/secondworld"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld"
+	secondworld "origadmin/basic-layout/api/v1/gen/go/secondworld"
 )
 
 // This is a compile-time assertion to ensure that this generated file

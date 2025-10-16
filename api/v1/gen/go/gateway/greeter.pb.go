@@ -7,11 +7,11 @@
 package gateway
 
 import (
-	secondworld "github.com/origadmin/basic-layout/api/v1/gen/go/secondworld"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld"
+	secondworld "origadmin/basic-layout/api/v1/gen/go/secondworld"
 	reflect "reflect"
 	unsafe "unsafe"
 )
