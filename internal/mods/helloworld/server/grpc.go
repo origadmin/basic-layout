@@ -13,9 +13,9 @@ import (
 	"origadmin/basic-layout/api/v1/gen/go/helloworld"
 )
 
-// NewGRPCServer creates a new gRPC server for the helloworld service.
+// NewServer creates a new gRPC server for the helloworld service.
 // It initializes the gRPC server with the provided configuration and sets up the necessary middleware.
-func NewGRPCServer(bootstrap *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServer, l log.Logger) (*rtservice.GRPCServer, error) {
+func NewServer(bootstrap *configs.Bootstrap, greeter helloworld.HelloGreeterAPIServer, l log.Logger) (*rtservice.GRPCServer, error) {
 	logger := log.NewHelper(log.With(l, "module", "helloworld/grpc"))
 	logger.Info("Initializing gRPC server for helloworld service")
 	var opts = []rtservice.GRPCServerOption{

@@ -10,13 +10,14 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
+	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1" // Added import
 	gatewayAPI "origadmin/basic-layout/api/v1/gen/go/gateway"
-	configs "origadmin/basic-layout/internal/configs"
+	"origadmin/basic-layout/internal/configs"
 	"origadmin/basic-layout/internal/mods/gateway/service"
 )
 
 // ProviderSet is server providers.
-var ProviderSet = wire.NewSet(NewGRPCServer, NewHTTPServer)
+var ProviderSet = wire.NewSet(NewServer, NewHTTPServer)
 
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(logger log.Logger, c *configs.Bootstrap, gw *service.GatewayService) *http.Server {
@@ -25,12 +26,23 @@ func NewHTTPServer(logger log.Logger, c *configs.Bootstrap, gw *service.GatewayS
 			// Add any HTTP middleware here if needed
 		),
 	}
-	if c.Server != nil && c.Server.Http != nil {
-		if c.Server.Http.Addr != "" {
-			opts = append(opts, http.Address(c.Server.Http.Addr))
+
+	var httpServerConfig *transportv1.HttpServerConfig
+	if c.Server != nil && c.Server.Service != nil {
+		for _, s := range c.Server.Service.Servers {
+			if s.GetProtocol() == "http" && s.GetHttp() != nil {
+				httpServerConfig = s.GetHttp()
+				break
+			}
 		}
-		if c.Server.Http.Timeout != nil {
-			opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))
+	}
+
+	if httpServerConfig != nil {
+		if httpServerConfig.Addr != "" {
+			opts = append(opts, http.Address(httpServerConfig.Addr))
+		}
+		if httpServerConfig.Timeout != nil {
+			opts = append(opts, http.Timeout(httpServerConfig.Timeout.AsDuration()))
 		}
 	}
 	srv := http.NewServer(opts...)
@@ -38,19 +50,30 @@ func NewHTTPServer(logger log.Logger, c *configs.Bootstrap, gw *service.GatewayS
 	return srv
 }
 
-// NewGRPCServer new a gRPC server.
-func NewGRPCServer(logger log.Logger, c *configs.Bootstrap, gw *service.GatewayService) *grpc.Server {
+// NewServer new a gRPC server.
+func NewServer(logger log.Logger, c *configs.Bootstrap, gw *service.GatewayService) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			// Add any gRPC middleware here if needed
 		),
 	}
-	if c.Server != nil && c.Server.Grpc != nil {
-		if c.Server.Grpc.Addr != "" {
-			opts = append(opts, grpc.Address(c.Server.Grpc.Addr))
+
+	var grpcServerConfig *transportv1.GrpcServerConfig
+	if c.Server != nil && c.Server.Service != nil {
+		for _, s := range c.Server.Service.Servers {
+			if s.GetProtocol() == "grpc" && s.GetGrpc() != nil {
+				grpcServerConfig = s.GetGrpc()
+				break
+			}
 		}
-		if c.Server.Grpc.Timeout != nil {
-			opts = append(opts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))
+	}
+
+	if grpcServerConfig != nil {
+		if grpcServerConfig.Addr != "" {
+			opts = append(opts, grpc.Address(grpcServerConfig.Addr))
+		}
+		if grpcServerConfig.Timeout != nil {
+			opts = append(opts, grpc.Timeout(grpcServerConfig.Timeout.AsDuration()))
 		}
 	}
 	srv := grpc.NewServer(opts...)

@@ -57,7 +57,7 @@ func (c *Config) DecodeDiscoveries() (map[string]*discoveryv1.Discovery, error) 
 	return discoveries, nil
 }
 
-func (c *Config) DecodeMiddleware() (*middlewarev1.Middlewares, error) {
+func (c *Config) DecodeMiddlewares() (*middlewarev1.Middlewares, error) {
 	middlewares := &middlewarev1.Middlewares{}
 	middlewares.Middlewares = c.bootstrap.GetServer().GetService().GetMiddlewares()
 	return middlewares, nil

@@ -7,6 +7,7 @@
 package main
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
@@ -21,6 +22,12 @@ import (
 	"origadmin/basic-layout/internal/mods/gateway/service"
 )
 
+import (
+	_ "github.com/origadmin/runtime/config/envsource"
+	_ "github.com/origadmin/runtime/config/file"
+	_ "origadmin/basic-layout/helpers/configsource/oneof"
+)
+
 // Injectors from wire.go:
 
 // wireApp initializes the application using wire.
@@ -30,12 +37,18 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	config := provideRuntimeConfig(rt)
-	helloGreeterAPIClient := client.NewHelloworldClient(config)
-	secondGreeterAPIClient := client.NewSecondworldClient(config)
+	context := provideContext()
+	helloGreeterAPIClient, err := client.NewHelloworldClient(context, bootstrap)
+	if err != nil {
+		return nil, nil, err
+	}
+	secondGreeterAPIClient, err := client.NewSecondworldClient(context, bootstrap)
+	if err != nil {
+		return nil, nil, err
+	}
 	gatewayService := service.NewGatewayService(helloGreeterAPIClient, secondGreeterAPIClient)
 	httpServer := server.NewHTTPServer(logger, bootstrap, gatewayService)
-	grpcServer := server.NewGRPCServer(logger, bootstrap, gatewayService)
+	grpcServer := server.NewServer(logger, bootstrap, gatewayService)
 	app := NewKratosApp(rt, httpServer, grpcServer)
 	return app, func() {
 	}, nil
@@ -49,11 +62,17 @@ func provideRuntimeConfig(rt *runtime.Runtime) interfaces.Config {
 	return rt.Config()
 }
 
+// provideContext provides a background context.
+func provideContext() context.Context {
+	return context.Background()
+}
+
 // providerSet for components provided by the runtime.
 var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
 	provideRuntimeConfig,
+	provideContext,
 )
 
 // provideLogger extracts the logger from the runtime instance.

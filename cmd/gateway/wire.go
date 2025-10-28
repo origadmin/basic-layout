@@ -8,6 +8,7 @@
 package main
 
 import (
+	"context" // Added
 	"github.com/go-kratos/kratos/v2"
 	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
@@ -29,11 +30,17 @@ func provideRuntimeConfig(rt *runtime.Runtime) interfaces.Config {
 	return rt.Config()
 }
 
+// provideContext provides a background context.
+func provideContext() context.Context {
+	return context.Background()
+}
+
 // providerSet for components provided by the runtime.
 var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
-	provideRuntimeConfig, // Add this to provide the runtime.Config interface
+	provideRuntimeConfig,
+	provideContext, // Added
 )
 
 // provideLogger extracts the logger from the runtime instance.
