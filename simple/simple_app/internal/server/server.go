@@ -2,6 +2,7 @@ package server
 
 import (
 	"errors"
+	stdhttp "net/http"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -27,7 +28,7 @@ func NewHTTPServer(c *transportv1.Servers, simple *service.SimpleService, logger
 		),
 	}
 	var config *transportv1.Server
-	for _, server := range c.GetServers() {
+	for _, server := range c.GetConfigs() {
 		if server.GetProtocol() == "http" {
 			config = server
 			break
@@ -45,7 +46,12 @@ func NewHTTPServer(c *transportv1.Servers, simple *service.SimpleService, logger
 	if err != nil {
 		return nil, err
 	}
+	helper := log.NewHelper(logger)
 	simplev1.RegisterSimpleServiceHTTPServer(srv, simple)
+
+	srv.WalkHandle(func(method, path string, handler stdhttp.HandlerFunc) {
+		helper.Infof("HTTP %s %s", method, path)
+	})
 	return srv, nil
 }
 
@@ -57,7 +63,7 @@ func NewGRPCServer(c *transportv1.Servers, simple *service.SimpleService, logger
 		),
 	}
 	var config *transportv1.Server
-	for _, server := range c.GetServers() {
+	for _, server := range c.GetConfigs() {
 		if server.GetProtocol() == "grpc" {
 			config = server
 			break
@@ -74,6 +80,7 @@ func NewGRPCServer(c *transportv1.Servers, simple *service.SimpleService, logger
 	if err != nil {
 		return nil, err
 	}
+
 	simplev1.RegisterSimpleServiceServer(srv, simple)
 	return srv, nil
 }

@@ -1,5 +1,5 @@
 servers:
-  servers:
+  configs:
     - grpc:
         addr: 0.0.0.0:9090
         network: tcp
