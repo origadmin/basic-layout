@@ -116,7 +116,7 @@ func generateServerConfig(outputDir string) {
 
 	// 转换服务器配置
 	var serverConfigs []map[string]interface{}
-	for _, srv := range servers.Servers {
+	for _, srv := range servers.Configs {
 		srvCfg := map[string]interface{}{
 			"name":     srv.Name,
 			"protocol": srv.Protocol,
@@ -143,7 +143,7 @@ func generateServerConfig(outputDir string) {
 	}
 
 	v.Set("servers", map[string]interface{}{
-		"servers": serverConfigs,
+		"configs": serverConfigs,
 	})
 
 	// 写入文件

@@ -24,13 +24,13 @@ func DefaultApp() *appv1.App {
 
 func DefaultServers() *transportv1.Servers {
 	return &transportv1.Servers{
-		Servers: []*transportv1.Server{
+		Configs: []*transportv1.Server{
 			{
 				Name:     "grpc_server",
 				Protocol: "grpc",
 				Grpc: &grpcv1.Server{
 					Network: "tcp",
-					Addr:    "0.0.0.0:50051",
+					Addr:    "0.0.0.0:9090",
 				},
 			},
 			{
@@ -47,7 +47,7 @@ func DefaultServers() *transportv1.Servers {
 
 func DefaultDiscoveries() *discoveryv1.Discoveries {
 	return &discoveryv1.Discoveries{
-		Discoveries: []*discoveryv1.Discovery{},
+		Configs: []*discoveryv1.Discovery{},
 	}
 }
 
@@ -75,7 +75,7 @@ func DefaultData() *datav1.Data {
 
 func DefaultMiddlewares() *middlewarev1.Middlewares {
 	return &middlewarev1.Middlewares{
-		Middlewares: []*middlewarev1.Middleware{},
+		Configs: []*middlewarev1.Middleware{},
 	}
 }
 
