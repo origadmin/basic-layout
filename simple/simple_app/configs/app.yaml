@@ -1,0 +1,5 @@
+app:
+  env: dev
+  id: test-app-id
+  name: test-app-name
+  version: test-app-version

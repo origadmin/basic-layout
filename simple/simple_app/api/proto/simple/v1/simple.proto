@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package simple.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "basic-layout/simple/simple_app/api/proto/simple/v1;simplev1";
+
+// SimpleService defines the gRPC service for simple operations.
+service SimpleService {
+  // SayHello sends a greeting.
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {
+    option (google.api.http) = {
+      post: "/v1/simple/hello"
+      body: "*"
+    };
+  }
+}
+
+// SayHelloRequest is the request message for the SayHello method.
+message SayHelloRequest {
+  // name is the name to greet.
+  string name = 1;
+}
+
+// SayHelloResponse is the response message for the SayHello method.
+message SayHelloResponse {
+  // message is the greeting message.
+  string message = 1;
+}

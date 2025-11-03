@@ -1,0 +1,12 @@
+servers:
+  servers:
+    - grpc:
+        addr: 0.0.0.0:9090
+        network: tcp
+      name: grpc_server
+      protocol: grpc
+    - http:
+        addr: 0.0.0.0:8080
+        network: tcp
+      name: http_server
+      protocol: http

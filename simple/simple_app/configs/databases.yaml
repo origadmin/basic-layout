@@ -1,0 +1,10 @@
+data:
+  caches:
+    configs:
+        - driver: memory
+          name: default
+  databases:
+    configs:
+        - dialect: sqlite3
+          name: default
+          source: file:./test.db?cache=shared&mode=memory&_fk=1

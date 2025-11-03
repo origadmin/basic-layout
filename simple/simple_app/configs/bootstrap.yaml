@@ -1,0 +1,13 @@
+sources:
+  - type: "file"
+    file:
+      path: "app.yaml"
+  - type: "file"
+    file:
+      path: "databases.yaml"
+  - type: "file"
+    file:
+      path: "server.yaml"
+  - type: "file"
+    file:
+      path: "logger.yaml"

@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package api.v1.services.secondworld;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/descriptor.proto";
+
+// Import the new common error definitions from the runtime framework
+import "runtime/common/v1/errors.proto";
+
+option go_package = "origadmin/basic-layout/api/v1/gen/go/secondworld;secondworld";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.gen.go.secondworld";
+
+extend google.protobuf.MessageOptions {
+  optional GreeterData data = 1000;
+}
+
+// The greeting service definition.
+service SecondGreeterAPI {
+  // SayHello is a get method
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/secondworld/greeter/{id}/hello",
+    };
+  }
+  // PostHello is a post method
+  rpc PostHello (PostHelloRequest) returns (PostHelloResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/secondworld/greeter/{id}/hello",
+      body: "data",
+      response_body: "data",
+    };
+  }
+  // CreateGreeter creates a new Greeter
+  rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/secondworld/greeter",
+      body: "data",
+    };
+  }
+  // UpdateGreeter updates a Greeter
+  rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/secondworld/greeter/{id}",
+      body: "data",
+    };
+  }
+  // DeleteGreeter deletes a Greeter
+  rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/secondworld/greeter/{id}",
+    };
+  }
+  // GetGreeter gets a Greeter
+  rpc GetGreeter (GetGreeterRequest) returns (GetGreeterResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/secondworld/greeter/{id}",
+    };
+  }
+  // ListGreeter lists Greeters
+  rpc ListGreeter (ListGreeterRequest) returns (ListGreeterResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/secondworld/greeter",
+    };
+  }
+}
+
+message GreeterData {
+  // The original proto had an entgo option here, which is likely not needed for this example.
+  // option (ent.schema).gen = true;
+  string id = 1;
+  string name = 2;
+}
+
+// The request message containing the user's name.
+message SayHelloRequest {
+  string id = 1 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+  string name = 2;
+  GreeterData data = 3;
+}
+
+// The response message containing the greetings
+message SayHelloResponse {
+  GreeterData data = 1;
+}
+
+
+// The request message containing the user's name.
+message PostHelloRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 2;
+  GreeterData data = 3;
+}
+
+// The response message containing the greetings
+message PostHelloResponse {
+  GreeterData data = 1;
+}
+
+
+message CreateGreeterRequest {
+  GreeterData data = 1;
+}
+message CreateGreeterResponse {}
+
+message UpdateGreeterRequest {
+  string id = 1;
+  GreeterData data = 3;
+}
+message UpdateGreeterResponse {
+  bool success = 1;
+  repeated GreeterData data = 3;
+}
+
+message DeleteGreeterRequest {
+  string id = 1;
+}
+message DeleteGreeterResponse {}
+
+message GetGreeterRequest {
+  string id = 1;
+}
+message GetGreeterResponse {}
+
+message ListGreeterRequest {
+  // Current page
+  optional int32 current = 1;
+
+  // The number of lines per page
+  optional int32 page_size = 2;
+
+  // Whether not paging
+  optional bool no_paging = 5;
+}
+message ListGreeterResponse {
+  bool success = 1;
+  int32 total = 2;
+  repeated GreeterData data = 3;
+  // Updated to use the new error reason enum from the runtime framework.
+  optional runtime.common.v1.ErrorReason error = 4;
+  optional google.protobuf.Any extra = 5;
+}
