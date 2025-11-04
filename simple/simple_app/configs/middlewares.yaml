@@ -1,0 +1,10 @@
+middlewares:
+  configs:
+    - name: recovery
+      recovery: {}
+      type: recovery
+      enabled: true
+    - logging: {}
+      name: logging
+      type: logging
+      enabled: true

@@ -12,8 +12,6 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
 	"github.com/origadmin/runtime"
@@ -61,8 +59,7 @@ func provideDataConfig(bc *conf.Bootstrap) *datav1.Data {
 }
 
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
-	servers := []transport.Server{hs, gs}
+func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }
 

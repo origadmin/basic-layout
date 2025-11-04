@@ -15,8 +15,6 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
@@ -31,31 +29,20 @@ import (
 
 // wireApp initializes the application using wire.
 func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
-	bootstrap, err := provideConfig(rt)
+	dataData, cleanup, err := data.NewData(rt)
 	if err != nil {
 		return nil, nil, err
 	}
-	servers := provideServerConfig(bootstrap)
-	datav1Data := provideDataConfig(bootstrap)
-	v := provideLogger(rt)
-	dataData, cleanup, err := data.NewData(datav1Data, v)
-	if err != nil {
-		return nil, nil, err
-	}
-	simpleRepo := data.NewSimpleRepo(dataData, v)
-	simpleUsecase := biz.NewSimpleUsecase(simpleRepo, v)
+	simpleRepo := data.NewSimpleRepo(rt, dataData)
+	logger := provideLogger(rt)
+	simpleUsecase := biz.NewSimpleUsecase(simpleRepo, logger)
 	simpleService := service.NewSimpleService(simpleUsecase)
-	httpServer, err := server.NewHTTPServer(servers, simpleService, v)
+	v, err := server.NewServer(rt, simpleService)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	grpcServer, err := server.NewGRPCServer(servers, simpleService, v)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	app := NewKratosApp(rt, httpServer, grpcServer)
+	app := NewKratosApp(rt, v)
 	return app, func() {
 		cleanup()
 	}, nil
@@ -96,7 +83,6 @@ func provideDataConfig(bc *conf.Bootstrap) *datav1.Data {
 }
 
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
-	servers := []transport.Server{hs, gs}
+func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }

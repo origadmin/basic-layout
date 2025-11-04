@@ -2,16 +2,69 @@
 package configs
 
 import (
+	"cmp"
+
+	"basic-layout/simple/simple_app/internal/conf"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	storagev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/storage/v1"
 	"github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
 	discoveryv1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
+	loggerv1 "github.com/origadmin/runtime/api/gen/go/runtime/logger/v1"
 	middlewarev1 "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1"
 	tracev1 "github.com/origadmin/runtime/api/gen/go/runtime/trace/v1"
 	grpcv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/grpc/v1"
 	httpv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/http/v1"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
+	"github.com/origadmin/runtime/interfaces"
 )
+
+type Config struct {
+	bootstrap conf.Bootstrap
+}
+
+func (c *Config) DecodeApp() (*appv1.App, error) {
+	return c.bootstrap.GetApp(), nil
+}
+
+func (c *Config) DecodeData() (*datav1.Data, error) {
+	return c.bootstrap.GetData(), nil
+}
+
+func (c *Config) DecodeDefaultDiscovery() (string, error) {
+	return cmp.Or(
+		c.bootstrap.GetDiscoveries().GetDefault(),
+		c.bootstrap.GetDiscoveries().GetActive(),
+		interfaces.GlobalDefaultKey), nil
+}
+
+func (c *Config) DecodeDiscoveries() (*discoveryv1.Discoveries, error) {
+	return c.bootstrap.GetDiscoveries(), nil
+}
+
+func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
+	return c.bootstrap.GetLogger(), nil
+}
+
+func (c *Config) DecodeMiddlewares() (*middlewarev1.Middlewares, error) {
+	return c.bootstrap.GetMiddlewares(), nil
+}
+
+func (c *Config) DecodeServers() (*transportv1.Servers, error) {
+	return c.bootstrap.GetServers(), nil
+}
+
+func (c *Config) DecodeClients() (*transportv1.Clients, error) {
+	return c.bootstrap.GetClients(), nil
+}
+
+func (c *Config) Transform(config interfaces.Config, _ interfaces.StructuredConfig) (interfaces.StructuredConfig,
+	error) {
+	err := config.Decode("", &c.bootstrap)
+	if err != nil {
+		return nil, err
+	}
+	return c, nil
+}
 
 func DefaultApp() *appv1.App {
 	return &appv1.App{
@@ -29,16 +82,18 @@ func DefaultServers() *transportv1.Servers {
 				Name:     "grpc_server",
 				Protocol: "grpc",
 				Grpc: &grpcv1.Server{
-					Network: "tcp",
-					Addr:    "0.0.0.0:9090",
+					Network:     "tcp",
+					Addr:        "0.0.0.0:9090",
+					Middlewares: []string{"recovery", "logger"},
 				},
 			},
 			{
 				Name:     "http_server",
 				Protocol: "http",
 				Http: &httpv1.Server{
-					Network: "tcp",
-					Addr:    "0.0.0.0:8080",
+					Network:     "tcp",
+					Addr:        "0.0.0.0:8080",
+					Middlewares: []string{"recovery", "logger"},
 				},
 			},
 		},
@@ -75,7 +130,18 @@ func DefaultData() *datav1.Data {
 
 func DefaultMiddlewares() *middlewarev1.Middlewares {
 	return &middlewarev1.Middlewares{
-		Configs: []*middlewarev1.Middleware{},
+		Configs: []*middlewarev1.Middleware{
+			{
+				Name:     "recovery",
+				Type:     "recovery",
+				Recovery: &middlewarev1.Recovery{},
+			},
+			{
+				Name:    "logging",
+				Type:    "logging",
+				Logging: &middlewarev1.Logging{},
+			},
+		},
 	}
 }
 

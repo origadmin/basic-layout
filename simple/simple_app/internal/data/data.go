@@ -10,8 +10,8 @@ import (
 
 	"basic-layout/simple/simple_app/internal/biz"
 	"basic-layout/simple/simple_app/internal/data/entity/ent"
+	"github.com/origadmin/runtime"
 
-	datav1 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
 	"github.com/origadmin/runtime/interfaces"
 	ifacestorage "github.com/origadmin/runtime/interfaces/storage"
 	"github.com/origadmin/runtime/log"
@@ -31,8 +31,13 @@ type Data struct {
 var ErrNoDatabaseConfig = errors.New("no database config found")
 
 // NewData creates a new Data instance.
-func NewData(dataConfig *datav1.Data, logger log.Logger) (*Data, func(), error) {
-	logHelper := log.NewHelper(logger)
+func NewData(rt *runtime.Runtime) (*Data, func(), error) {
+	logHelper := log.NewHelper(rt.Logger())
+
+	dataConfig, err := rt.StructuredConfig().DecodeData()
+	if err != nil {
+		return nil, nil, err
+	}
 
 	dbs := make(map[string]*entsql.Driver, len(dataConfig.GetDatabases().GetConfigs()))
 	for _, config := range dataConfig.GetDatabases().GetConfigs() {
@@ -123,10 +128,10 @@ type simpleRepo struct {
 }
 
 // NewSimpleRepo creates a new implementation of biz.SimpleRepo.
-func NewSimpleRepo(data *Data, logger log.Logger) biz.SimpleRepo {
+func NewSimpleRepo(rt *runtime.Runtime, data *Data) biz.SimpleRepo {
 	return &simpleRepo{
 		data: data,
-		log:  log.NewHelper(logger),
+		log:  log.NewHelper(rt.Logger()),
 	}
 }
 

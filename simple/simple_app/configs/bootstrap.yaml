@@ -11,3 +11,6 @@ sources:
   - type: "file"
     file:
       path: "logger.yaml"
+  - type: "file"
+    file:
+      path: "middlewares.yaml"

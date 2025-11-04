@@ -26,5 +26,5 @@ func NewSimpleService(uc *biz.SimpleUsecase) *SimpleService {
 
 // SayHello implements SimpleServiceServer.
 func (s *SimpleService) SayHello(ctx context.Context, in *simplev1.SayHelloRequest) (*simplev1.SayHelloResponse, error) {
-	return s.uc.Greet(ctx, &biz.Simple{Name: in.Name})
+	return s.uc.SayHello(ctx, &biz.Simple{Name: in.Name})
 }

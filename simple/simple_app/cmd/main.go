@@ -7,7 +7,9 @@ import (
 
 	_ "github.com/sqlite3ent/sqlite3"
 
+	"basic-layout/simple/simple_app/configs"
 	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/bootstrap"
 )
 
 var (
@@ -30,7 +32,7 @@ func main() {
 	log.Printf("current working directory: %s", wd)
 
 	// Create a new runtime application from the bootstrap configuration.
-	rt, err := runtime.NewFromBootstrap(flagconf)
+	rt, err := runtime.NewFromBootstrap(flagconf, bootstrap.WithConfigTransformer(&configs.Config{}))
 	if err != nil {
 		log.Fatalf("failed to create runtime from bootstrap: %v", err)
 	}

@@ -37,8 +37,8 @@ func NewSimpleUsecase(repo SimpleRepo, logger log.Logger) *SimpleUsecase {
 	return &SimpleUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// Greet creates a greeting, and returns the new greeting.
-func (uc *SimpleUsecase) Greet(ctx context.Context, s *Simple) (*simplev1.SayHelloResponse, error) {
-	uc.log.WithContext(ctx).Infof("Greet: %v", s.Name)
+// SayHello creates a greeting, and returns the new greeting.
+func (uc *SimpleUsecase) SayHello(ctx context.Context, s *Simple) (*simplev1.SayHelloResponse, error) {
+	uc.log.WithContext(ctx).Infof("SayHello: %v", s.Name)
 	return &simplev1.SayHelloResponse{Message: "Hello " + s.Name}, nil
 }

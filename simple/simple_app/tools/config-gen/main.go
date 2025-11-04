@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/viper"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"basic-layout/simple/simple_app/configs"
 )
@@ -34,7 +36,89 @@ func main() {
 	// 5. 生成 logger.yaml
 	generateLoggerConfig(outputDir)
 
+	// 6. 生成 middlewares.yaml
+	generateMiddlewaresConfig(outputDir)
+
+	// 7. 生成 trace.yaml
+	generateTraceConfig(outputDir)
+
 	log.Println("配置文件生成成功!")
+}
+
+func generateTraceConfig(dir string) {
+	v := viper.New()
+	v.SetConfigType("yaml")
+
+	// 从默认配置中获取跟踪配置
+	trace := configs.DefaultTrace()
+
+	// 使用 protojson 序列化跟踪配置
+	m := protojson.MarshalOptions{
+		EmitUnpopulated: false, // 不输出空值
+	}
+
+	// 序列化为 JSON 字节
+	jsonBytes, err := m.Marshal(trace)
+	if err != nil {
+		log.Printf("序列化跟踪配置失败: %v", err)
+		return
+	}
+
+	// 反序列化到 map
+	var traceMap map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &traceMap); err != nil {
+		log.Printf("反序列化跟踪配置失败: %v", err)
+		return
+	}
+
+	// 设置跟踪配置
+	v.Set("trace", traceMap)
+
+	// 写入文件
+	outputFile := filepath.Join(dir, "trace.yaml")
+	if err := v.WriteConfigAs(outputFile); err != nil {
+		log.Printf("生成 trace.yaml 失败: %v", err)
+	} else {
+		log.Printf("生成配置文件: %s", outputFile)
+	}
+}
+
+func generateMiddlewaresConfig(dir string) {
+	v := viper.New()
+	v.SetConfigType("yaml")
+
+	// 从默认配置中获取中间件配置
+	middlewares := configs.DefaultMiddlewares()
+
+	// 使用 protojson 序列化中间件配置
+	m := protojson.MarshalOptions{
+		EmitUnpopulated: false, // 不输出空值
+	}
+
+	// 序列化为 JSON 字节
+	jsonBytes, err := m.Marshal(middlewares)
+	if err != nil {
+		log.Printf("序列化中间件配置失败: %v", err)
+		return
+	}
+
+	// 反序列化到 map
+	var configMap map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &configMap); err != nil {
+		log.Printf("反序列化中间件配置失败: %v", err)
+		return
+	}
+
+	// 设置配置
+	v.Set("middlewares", configMap)
+
+	// 写入文件
+	outputFile := filepath.Join(dir, "middlewares.yaml")
+	if err := v.WriteConfigAs(outputFile); err != nil {
+		log.Printf("生成 middlewares.yaml 失败: %v", err)
+	} else {
+		log.Printf("生成配置文件: %s", outputFile)
+	}
 }
 
 // generateBootstrapConfig 生成 bootstrap.yaml
@@ -66,6 +150,18 @@ func generateBootstrapConfig(outputDir string) {
 			"type": "file",
 			"file": map[string]string{
 				"path": "logger.yaml",
+			},
+		},
+		{
+			"type": "file",
+			"file": map[string]string{
+				"path": "middlewares.yaml",
+			},
+		},
+		{
+			"type": "file",
+			"file": map[string]string{
+				"path": "trace.yaml",
 			},
 		},
 	}
@@ -126,15 +222,17 @@ func generateServerConfig(outputDir string) {
 		case "http":
 			if srv.Http != nil {
 				srvCfg["http"] = map[string]interface{}{
-					"network": srv.Http.Network,
-					"addr":    srv.Http.Addr,
+					"network":     srv.Http.Network,
+					"addr":        srv.Http.Addr,
+					"middlewares": srv.Http.Middlewares,
 				}
 			}
 		case "grpc":
 			if srv.Grpc != nil {
 				srvCfg["grpc"] = map[string]interface{}{
-					"network": srv.Grpc.Network,
-					"addr":    srv.Grpc.Addr,
+					"network":     srv.Grpc.Network,
+					"addr":        srv.Grpc.Addr,
+					"middlewares": srv.Grpc.Middlewares,
 				}
 			}
 		}
