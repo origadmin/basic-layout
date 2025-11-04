@@ -4,7 +4,7 @@ package configs;
 
 import "google/protobuf/any.proto";
 
-option go_package = "origadmin/basic-layout/internal/configs;configs";
+option go_package = "basic-layout/multiple/multiple_sample/internal/configs;configs";
 
 message Setting {
   google.protobuf.Any todo = 1 [json_name = "todo"];

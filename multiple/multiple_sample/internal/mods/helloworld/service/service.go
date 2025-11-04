@@ -7,7 +7,7 @@ package service
 import (
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Import helloworld package
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld" // Import helloworld package
 )
 
 // ProviderSet is service providers.

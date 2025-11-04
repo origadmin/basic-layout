@@ -7,19 +7,24 @@
 package main
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/biz"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/dal"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/server"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
-
 	"github.com/origadmin/runtime"
-	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/secondworld/biz"
-	"origadmin/basic-layout/internal/mods/secondworld/dal"
-	"origadmin/basic-layout/internal/mods/secondworld/server"
-	"origadmin/basic-layout/internal/mods/secondworld/service"
+)
+
+import (
+	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
+	_ "github.com/origadmin/runtime/config/envsource"
+	_ "github.com/origadmin/runtime/config/file"
 )
 
 // Injectors from wire.go:

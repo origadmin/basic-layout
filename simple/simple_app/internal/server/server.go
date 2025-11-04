@@ -36,9 +36,12 @@ func (s serviceInstance) Register(ctx context.Context, srv any) error {
 		simplev1.RegisterSimpleServiceServer(v, s.SimpleService)
 	case *runtimeservice.HTTPServer:
 		simplev1.RegisterSimpleServiceHTTPServer(v, s.SimpleService)
-		v.WalkHandle(func(method, path string, handler stdhttp.HandlerFunc) {
+		err := v.WalkHandle(func(method, path string, handler stdhttp.HandlerFunc) {
 			logger.Infof("HTTP %s %s", method, path)
 		})
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

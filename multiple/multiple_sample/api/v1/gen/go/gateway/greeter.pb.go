@@ -7,11 +7,11 @@
 package gateway
 
 import (
+	helloworld "basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld"
+	secondworld "basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	helloworld "origadmin/basic-layout/api/v1/gen/go/helloworld"
-	secondworld "origadmin/basic-layout/api/v1/gen/go/secondworld"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -31,8 +31,8 @@ const file_gateway_greeter_proto_rawDesc = "" +
 	"\n" +
 	"GatewayAPI\x12\x89\x01\n" +
 	"\bSayHello\x12+.api.v1.services.helloworld.SayHelloRequest\x1a,.api.v1.services.helloworld.SayHelloResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/gateway/hello/{id}\x12\x8d\x01\n" +
-	"\tSaySecond\x12,.api.v1.services.secondworld.SayHelloRequest\x1a-.api.v1.services.secondworld.SayHelloResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/gateway/second/{id}B\xe1\x01\n" +
-	"\x1bcom.api.v1.services.gatewayB\fGreeterProtoP\x01Z4origadmin/basic-layout/api/v1/gen/go/gateway;gateway\xa2\x02\x04AVSG\xaa\x02\x17Api.V1.Services.Gateway\xca\x02\x17Api\\V1\\Services\\Gateway\xe2\x02#Api\\V1\\Services\\Gateway\\GPBMetadata\xea\x02\x1aApi::V1::Services::Gatewayb\x06proto3"
+	"\tSaySecond\x12,.api.v1.services.secondworld.SayHelloRequest\x1a-.api.v1.services.secondworld.SayHelloResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/gateway/second/{id}B\xf0\x01\n" +
+	"\x1bcom.api.v1.services.gatewayB\fGreeterProtoP\x01ZCbasic-layout/multiple/multiple_sample/api/v1/gen/go/gateway;gateway\xa2\x02\x04AVSG\xaa\x02\x17Api.V1.Services.Gateway\xca\x02\x17Api\\V1\\Services\\Gateway\xe2\x02#Api\\V1\\Services\\Gateway\\GPBMetadata\xea\x02\x1aApi::V1::Services::Gatewayb\x06proto3"
 
 var file_gateway_greeter_proto_goTypes = []any{
 	(*helloworld.SayHelloRequest)(nil),   // 0: api.v1.services.helloworld.SayHelloRequest

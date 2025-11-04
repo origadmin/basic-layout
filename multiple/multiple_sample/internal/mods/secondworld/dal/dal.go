@@ -8,7 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/configs"
 )
 
 // ProviderSet is data providers.

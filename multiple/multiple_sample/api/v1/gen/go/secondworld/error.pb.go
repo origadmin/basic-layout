@@ -75,9 +75,9 @@ const file_secondworld_error_proto_rawDesc = "" +
 	"\x17secondworld/error.proto\x12\x1bapi.v1.services.secondworld\x1a\x13errors/errors.proto*`\n" +
 	"\x19SECOND_WORLD_ERROR_REASON\x12)\n" +
 	"%SECOND_WORLD_ERROR_REASON_UNSPECIFIED\x10\x00\x12\x12\n" +
-	"\x0eUSER_NOT_FOUND\x10\x01\x1a\x04\xa0E\xf4\x03B\xfb\x01\n" +
+	"\x0eUSER_NOT_FOUND\x10\x01\x1a\x04\xa0E\xf4\x03B\x8a\x02\n" +
 	"\x1fcom.api.v1.services.secondworldB\n" +
-	"ErrorProtoP\x01Z<origadmin/basic-layout/api/v1/gen/go/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
+	"ErrorProtoP\x01ZKbasic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld;secondworld\xa2\x02\x04AVSS\xaa\x02\x1bApi.V1.Services.Secondworld\xca\x02\x1bApi\\V1\\Services\\Secondworld\xe2\x02'Api\\V1\\Services\\Secondworld\\GPBMetadata\xea\x02\x1eApi::V1::Services::Secondworldb\x06proto3"
 
 var (
 	file_secondworld_error_proto_rawDescOnce sync.Once

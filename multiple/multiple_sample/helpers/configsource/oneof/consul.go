@@ -8,6 +8,7 @@ package oneof
 import (
 	"path"
 
+	kratosconsul "github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/hashicorp/consul/api"
 
 	sourcev1 "github.com/origadmin/runtime/api/gen/go/runtime/source/v1"
@@ -33,8 +34,8 @@ func NewSource(sourceConfig *sourcev1.SourceConfig, opts ...options.Option) (con
 	if err != nil {
 		return nil, errors.Wrap(err, "consul client error")
 	}
-	source, err := consul.New(client,
-		consul.WithPath(consulConfig.Path),
+	source, err := kratosconsul.New(client,
+		kratosconsul.WithPath(consulConfig.Path),
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "consul source error")

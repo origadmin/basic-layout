@@ -8,8 +8,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 
-	"origadmin/basic-layout/api/v1/gen/go/secondworld"
-	"origadmin/basic-layout/internal/configs"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/internal/configs"
 
 	rtservice "github.com/origadmin/runtime/service"
 )
@@ -18,16 +18,16 @@ import (
 // It initializes the gRPC server with the provided configuration and sets up the necessary middleware.
 func NewGRPCServer(bootstrap *configs.Bootstrap, greeter secondworld.SecondGreeterAPIServer, l log.Logger) (*rtservice.ServerGRPC, error) {
 	logger := log.NewHelper(log.With(l, "module", "secondworld/grpc"))
-	logger.Info("Initializing gRPC server for secondworld service")
+	logger.Info("Initializing gRPC server for secondworld servers")
 	var opts = []rtservice.GRPCServerOption{
 		rtservice.MiddlewareGRPC(
 			recovery.Recovery(),
 		),
 	}
 
-	if service := bootstrap.GetServer().GetService(); service != nil {
-		logger.Debugf("Processing gRPC server configurations, total_servers: %d", len(service.Servers))
-		for _, srvConfig := range service.Servers {
+	if servers := bootstrap.GetService().GetServers(); servers != nil {
+		logger.Debugf("Processing gRPC server configurations, total_servers: %d", len(servers))
+		for _, srvConfig := range servers {
 			logger.Debugf("Processing server configuration, protocol: %s", srvConfig.Protocol)
 
 			if srvConfig.Protocol == "grpc" && srvConfig.Grpc != nil {
@@ -46,15 +46,15 @@ func NewGRPCServer(bootstrap *configs.Bootstrap, greeter secondworld.SecondGreet
 				// Break after finding the first gRPC server config
 				break
 			}
+			logger.Infof("gRPC server initialized successfully, servers: %s, methods: %v",
+				srvConfig.GetName(), []string{
+					"/secondworld.v1.SecondGreeter/SayHello",
+				})
 		}
 	}
 
 	srv := rtservice.NewServerGRPC(opts...)
 	secondworld.RegisterSecondGreeterAPIServer(srv, greeter)
 
-	logger.Infof("gRPC server initialized successfully, service: %s, methods: %v",
-		bootstrap.GetServer().GetService().GetName(), []string{
-			"/secondworld.v1.SecondGreeter/SayHello",
-		})
 	return srv, nil
 }

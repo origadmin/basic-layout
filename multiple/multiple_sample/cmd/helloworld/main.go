@@ -11,8 +11,8 @@ import (
 
 	"github.com/google/uuid"
 
-	_ "origadmin/basic-layout/helpers/configsource/oneof"
-	"origadmin/basic-layout/internal/transformer"
+	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
+	"basic-layout/multiple/multiple_sample/internal/transformer"
 
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"

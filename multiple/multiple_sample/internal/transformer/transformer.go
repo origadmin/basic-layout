@@ -4,9 +4,10 @@ package transformer
 import (
 	"fmt"
 
-	servicev1 "github.com/origadmin/runtime/api/gen/go/runtime/service/v1"
-
-	"origadmin/basic-layout/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	datav1 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
+	discoveryv1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
 
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	loggerv1 "github.com/origadmin/runtime/api/gen/go/runtime/logger/v1"
@@ -20,6 +21,26 @@ type Config struct {
 	app       *appv1.App
 	config    interfaces.Config
 	bootstrap configs.Bootstrap
+}
+
+func (c *Config) DecodeData() (*datav1.Data, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (c *Config) DecodeDefaultDiscovery() (string, error) {
+	return "", fmt.Errorf("not implemented")
+}
+
+func (c *Config) DecodeServers() (*transportv1.Servers, error) {
+	return &transportv1.Servers{
+		Configs: c.bootstrap.GetService().GetServers(),
+	}, nil
+}
+
+func (c *Config) DecodeClients() (*transportv1.Clients, error) {
+	return &transportv1.Clients{
+		Configs: c.bootstrap.GetService().GetClients(),
+	}, nil
 }
 
 func (c *Config) Load() error {
@@ -49,18 +70,15 @@ func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
 	}, nil
 }
 
-func (c *Config) DecodeDiscoveries() (map[string]*discoveryv1.Discovery, error) {
-	discoveries := make(map[string]*discoveryv1.Discovery)
-	v := c.bootstrap.GetDiscovery()
-	if v != nil {
-		discoveries[v.Name] = v
-	}
-	return discoveries, nil
+func (c *Config) DecodeDiscoveries() (*discoveryv1.Discoveries, error) {
+	return &discoveryv1.Discoveries{
+		Configs: []*discoveryv1.Discovery{c.bootstrap.GetDiscovery()},
+	}, nil
 }
 
 func (c *Config) DecodeMiddlewares() (*middlewarev1.Middlewares, error) {
 	middlewares := &middlewarev1.Middlewares{}
-	middlewares.Middlewares = c.bootstrap.GetMiddlewares()
+	middlewares.Configs = c.bootstrap.GetService().GetMiddlewares()
 	return middlewares, nil
 }
 
@@ -77,31 +95,37 @@ func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredCon
 			logger.Errorf("Failed to decode server config: %v", err)
 			return nil, fmt.Errorf("failed to decode configuration: %v", err)
 		}
-		c.bootstrap.Server = &serverCfg
+		c.bootstrap.Service = &serverCfg
 	}
 
 	// If we still don't have a server config, create an empty one
-	if c.bootstrap.Server == nil {
+	if c.bootstrap.Service == nil {
 		logger.Warn("No server configuration found, using defaults")
-		c.bootstrap.Server = &configs.ServiceConfig{
-			Service: &servicev1.Service{
-				Name: c.app.GetName(),
+		c.bootstrap.Service = &configs.ServiceConfig{
+			Servers: []*transportv1.Server{
+				{
+					Name: c.app.GetName(),
+				},
 			}, // Version field doesn't exist in servicev1.Service
 		}
 	}
 
 	// Ensure service name is set
-	if c.bootstrap.Server.Service == nil {
-		c.bootstrap.Server.Service = &servicev1.Service{}
+	if c.bootstrap.Service.Servers == nil {
+		c.bootstrap.Service.Servers = []*transportv1.Server{
+			{
+				Name: c.app.GetName(),
+			},
+		}
 	}
 
 	// Use app name if service name is not set
-	if c.bootstrap.Server.Service.Name == "" && c.app != nil {
-		c.bootstrap.Server.Service.Name = c.app.GetName()
+	if c.bootstrap.Service.Servers[0].Name == "" && c.app != nil {
+		c.bootstrap.Service.Servers[0].Name = c.app.GetName()
 	}
 
 	logger.Infof("Service name: %s",
-		c.bootstrap.Server.Service.Name,
+		c.bootstrap.Service.Servers[0].Name,
 	)
 
 	// Log the final configuration for debugging
@@ -121,7 +145,7 @@ func New(app *appv1.App) *Config {
 
 func TransformAfter(cfg *appv1.App) bootstrap.ConfigTransformFunc {
 	return func(config interfaces.Config, sc interfaces.StructuredConfig) (interfaces.StructuredConfig, error) {
-		return New(cfg).Transform(config)
+		return New(cfg).Transform(config, sc)
 	}
 }
 

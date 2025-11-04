@@ -2,28 +2,28 @@ syntax = "proto3";
 
 package configs;
 
-import "runtime/middleware/v1/cors/cors.proto";
-import "runtime/transport/v1/transport.proto";
 import "runtime/data/v1/data.proto"; // Updated import
+import "runtime/middleware/v1/middleware.proto";
+import "runtime/transport/v1/transport.proto";
 
 // Corrected go_package to match buf.gen.yaml output with paths=source_relative
-option go_package = "origadmin/basic-layout/internal/configs;configs";
+option go_package = "basic-layout/multiple/multiple_sample/internal/configs;configs";
 
 // ServiceConfig is the configuration structure for the service.
 // It uses the runtime service definitions for server and client configurations.
 message ServiceConfig {
   // servers is a list of server endpoints that this service will expose.
   // A service can listen on multiple protocols simultaneously, e.g., both gRPC and HTTP.
-  repeated transport.v1.Server servers = 2;
+  repeated runtime.transport.v1.Server servers = 2;
 
   // clients is a list of client configurations for services that this service depends on.
   // This list will be converted into a map in the application's bootstrap logic,
   // using the 'name' field from each Client message as the key.
-  repeated transport.v1.Client clients = 3;
+  repeated runtime.transport.v1.Client clients = 3;
 
   // middlewares is a list of middleware configurations to be applied to the service.
-  repeated middleware.v1.MiddlewareConfig middlewares = 4;
+  repeated runtime.middleware.v1.Middleware middlewares = 4;
 
   // Data configuration for the service.
-  data.v1.Data data = 5; // Updated field type
+  runtime.data.v1.Data data = 5;
 }

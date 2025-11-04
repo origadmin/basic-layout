@@ -10,7 +10,7 @@ import "google/protobuf/descriptor.proto";
 // Import the new common error definitions from the runtime framework
 import "runtime/common/v1/errors.proto";
 
-option go_package = "origadmin/basic-layout/api/v1/gen/go/helloworld;helloworld";
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld;helloworld";
 option java_multiple_files = true;
 option java_package = "origadmin.api.v1.gen.go.helloworld";
 

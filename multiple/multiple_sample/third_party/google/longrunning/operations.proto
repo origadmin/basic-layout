@@ -204,7 +204,7 @@ message ListOperationsResponse {
   // collections e.g. when attempting to list all resources across all supported
   // locations.
   repeated string unreachable = 3
-  [(google.api.field_behavior) = UNORDERED_LIST];
+      [(google.api.field_behavior) = UNORDERED_LIST];
 }
 
 // The request message for

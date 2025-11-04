@@ -17,6 +17,7 @@ ifeq ($(GOHOSTOS), windows)
     SHELL          := powershell.exe
     .SHELLFLAGS    := -NoProfile -Command
     # Git commands for Windows (PowerShell)
+    CMD_SEP        := ;
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -25,6 +26,7 @@ ifeq ($(GOHOSTOS), windows)
 else
     SHELL          := /bin/bash
     # Git commands for Linux/macOS (Bash)
+    CMD_SEP        := &&
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -91,9 +93,9 @@ generate: ## 🧬 Generate all code from Protobuf and run go generate (includes 
 	@echo "Generating Internal Configs Protobuf code..."
 	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. internal/configs/*.proto
 	@echo "Generating Wire code for dependency injection..."
-	@cd cmd/helloworld && wire
-	@cd cmd/secondworld && wire
-	@cd cmd/gateway && wire
+	@cd cmd/helloworld $(CMD_SEP) wire
+	@cd cmd/secondworld $(CMD_SEP) wire
+	@cd cmd/gateway $(CMD_SEP) wire
 	@echo "Running go generate for other code generation tasks..."
 	@go generate ./...
 	@echo "Running go mod tidy after code generation..."

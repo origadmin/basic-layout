@@ -9,6 +9,7 @@
 package main
 
 import (
+	"github.com/go-kratos/kratos/v2"
 	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -17,11 +18,11 @@ import (
 
 	"github.com/origadmin/runtime"
 
-	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/helloworld/biz"
-	"origadmin/basic-layout/internal/mods/helloworld/dal"
-	"origadmin/basic-layout/internal/mods/helloworld/server"
-	"origadmin/basic-layout/internal/mods/helloworld/service"
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/biz"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/server"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/service"
 )
 
 // providerSet for components provided by the runtime.

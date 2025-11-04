@@ -25,17 +25,17 @@ var File_annotations_proto protoreflect.FileDescriptor
 
 const file_annotations_proto_rawDesc = "" +
 	"\n" +
-	"\x11annotations.proto\x12\x0fapi.v1.services\x1a$gnostic/openapi/v3/annotations.protoB\xc7\x04\xbaG\x98\x03\x12\xb1\x02\n" +
-	"\x18Basic Layout Example API\x12nAn example project demonstrating a multi-module gRPC backend with a gateway, based on the OrigAdmin framework.\"Y\n" +
-	"\x13OrigAdmin Community\x12)https://github.com/origadmin/basic-layout\x1a\x17waitforadding@gmail.com*B\n" +
-	"\x03MIT\x12;https://github.com/origadmin/basic-layout/blob/main/LICENSE2\x06v1.0.0\x1a\x17\n" +
+	"\x11annotations.proto\x12\x0fapi.v1.services\x1a$gnostic/openapi/v3/annotations.protoB\xf4\x04\xbaG\xb6\x03\x12\xcf\x02\n" +
+	"\x18Basic Layout Example API\x12nAn example project demonstrating a multi-module gRPC backend with a gateway, based on the OrigAdmin framework.\"h\n" +
+	"\x13OrigAdmin Community\x128https://github.com/basic-layout/multiple/multiple_sample\x1a\x17waitforadding@gmail.com*Q\n" +
+	"\x03MIT\x12Jhttps://github.com/basic-layout/multiple/multiple_sample/blob/main/LICENSE2\x06v1.0.0\x1a\x17\n" +
 	"\x15http://localhost:8000\x1a\x18\n" +
 	"\x16https://localhost:8000*/:-\n" +
 	"+\n" +
 	"\x06Bearer\x12!\n" +
 	"\x1f\n" +
 	"\x06apiKey\x1a\rAuthorization\"\x06header\n" +
-	"\x13com.api.v1.servicesB\x10AnnotationsProtoP\x01Z$origadmin/basic-layout/api/v1/gen/go\xa2\x02\x03AVS\xaa\x02\x0fApi.V1.Services\xca\x02\x0fApi\\V1\\Services\xe2\x02\x1bApi\\V1\\Services\\GPBMetadata\xea\x02\x11Api::V1::Servicesb\x06proto3"
+	"\x13com.api.v1.servicesB\x10AnnotationsProtoP\x01Z3basic-layout/multiple/multiple_sample/api/v1/gen/go\xa2\x02\x03AVS\xaa\x02\x0fApi.V1.Services\xca\x02\x0fApi\\V1\\Services\xe2\x02\x1bApi\\V1\\Services\\GPBMetadata\xea\x02\x11Api::V1::Servicesb\x06proto3"
 
 var file_annotations_proto_goTypes = []any{}
 var file_annotations_proto_depIdxs = []int32{

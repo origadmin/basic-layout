@@ -1,7 +1,6 @@
 package data
 
 import (
-	"cmp"
 	"context"
 	"errors"
 
@@ -11,11 +10,11 @@ import (
 	"basic-layout/simple/simple_app/internal/biz"
 	"basic-layout/simple/simple_app/internal/data/entity/ent"
 	"github.com/origadmin/runtime"
-
 	"github.com/origadmin/runtime/interfaces"
+
+	"github.com/origadmin/runtime/data/storage"
 	ifacestorage "github.com/origadmin/runtime/interfaces/storage"
 	"github.com/origadmin/runtime/log"
-	"github.com/origadmin/runtime/storage"
 )
 
 // ProviderSet is data providers.
@@ -24,8 +23,9 @@ var ProviderSet = wire.NewSet(NewData, NewSimpleRepo)
 // Data encapsulates ent client and cache.
 type Data struct {
 	entClient *ent.Client
-	dbs       map[string]*entsql.Driver
 	cache     ifacestorage.Cache
+	provider  ifacestorage.Provider
+	config    interfaces.StructuredConfig
 }
 
 var ErrNoDatabaseConfig = errors.New("no database config found")
@@ -34,68 +34,27 @@ var ErrNoDatabaseConfig = errors.New("no database config found")
 func NewData(rt *runtime.Runtime) (*Data, func(), error) {
 	logHelper := log.NewHelper(rt.Logger())
 
-	dataConfig, err := rt.StructuredConfig().DecodeData()
+	provider, err := storage.New(rt.StructuredConfig())
 	if err != nil {
 		return nil, nil, err
 	}
 
-	dbs := make(map[string]*entsql.Driver, len(dataConfig.GetDatabases().GetConfigs()))
-	for _, config := range dataConfig.GetDatabases().GetConfigs() {
-		database, err := storage.OpenDatabase(config)
-		if err != nil {
-			return nil, nil, err
-		}
-		key := cmp.Or(config.GetName(), config.GetDialect())
-		dbs[key] = entsql.OpenDB(config.GetDialect(), database)
+	database, err := provider.DefaultDatabase()
+	if err != nil {
+		return nil, nil, err
 	}
 
-	var activeDB *entsql.Driver
-	// Determine the active database connection.
-	// Priority: active > default > first in map.
-	if config := dataConfig.GetDatabases(); config != nil {
-		switch len(dbs) {
-		case 0:
-			return nil, nil, ErrNoDatabaseConfig
-		case 1:
-			for key := range dbs {
-				activeDB = dbs[key]
-				break
-			}
-		default:
-			defaultKey := cmp.Or(config.GetActive(), config.GetDefault(), interfaces.GlobalDefaultKey)
-			activeDB = dbs[defaultKey]
-		}
-	}
-	if activeDB == nil {
-		return nil, nil, ErrNoDatabaseConfig
-	}
-
+	activeDB := entsql.OpenDB(database.Dialect(), database.DB())
 	entClient := ent.NewClient(ent.Driver(activeDB))
 	// Run the auto migration tool.
 	if err := entClient.Schema.Create(context.Background()); err != nil {
 		logHelper.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	caches := make(map[string]ifacestorage.Cache)
-	for _, config := range dataConfig.GetCaches().GetConfigs() {
-		cache, err := storage.New(config)
-		if err != nil {
-			return nil, nil, err
-		}
-		key := cmp.Or(config.GetName(), config.GetDriver())
-		caches[key] = cache
+	cache, err := provider.DefaultCache()
+	if err != nil {
+		return nil, nil, err
 	}
-
-	var cache ifacestorage.Cache
-	// Determine the active cache.
-	// Priority: default > first in map.
-	if len(caches) == 0 {
-		return nil, nil, errors.New("no cache config found")
-	} else {
-		defaultKey := cmp.Or(dataConfig.GetCaches().GetDefault(), interfaces.GlobalDefaultKey)
-		cache = caches[defaultKey]
-	}
-
 	cleanup := func() {
 		logHelper.Info("closing the data resources")
 		if entClient != nil {
@@ -106,7 +65,8 @@ func NewData(rt *runtime.Runtime) (*Data, func(), error) {
 	}
 
 	return &Data{
-		dbs:       dbs,
+		config:    rt.StructuredConfig(),
+		provider:  provider,
 		entClient: entClient,
 		cache:     cache,
 	}, cleanup, nil

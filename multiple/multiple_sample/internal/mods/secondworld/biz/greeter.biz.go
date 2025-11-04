@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
 
-	"origadmin/basic-layout/api/v1/gen/go/secondworld"
-	"origadmin/basic-layout/internal/mods/secondworld/dto"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/dto"
 
 	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
 	"github.com/origadmin/runtime/errors"

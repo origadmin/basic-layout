@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/greeter"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/schema"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

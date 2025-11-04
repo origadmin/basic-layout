@@ -12,9 +12,9 @@ import (
 
 	"github.com/origadmin/runtime/service/transport/grpc" // Renamed for clarity
 
-	"origadmin/basic-layout/api/v1/gen/go/helloworld"
-	"origadmin/basic-layout/api/v1/gen/go/secondworld"
-	"origadmin/basic-layout/internal/configs"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/internal/configs"
 
 	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
 )

@@ -4,7 +4,7 @@ package ent
 
 import (
 	"fmt"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/greeter"
 	"strings"
 
 	"entgo.io/ent"

@@ -10,9 +10,9 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	gatewayAPI "origadmin/basic-layout/api/v1/gen/go/gateway"
-	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/gateway/service"
+	gatewayAPI "basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway"
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
 
 	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1" // Added import
 )

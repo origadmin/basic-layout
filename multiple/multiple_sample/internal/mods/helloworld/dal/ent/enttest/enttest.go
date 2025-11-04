@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent"
 	// required by schema hooks.
-	_ "origadmin/basic-layout/internal/mods/helloworld/dal/ent/runtime"
+	_ "basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/runtime"
 
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/migrate"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

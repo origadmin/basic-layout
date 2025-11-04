@@ -233,7 +233,7 @@ message ExtensionRangeOptions {
   // TODO: flip the default to DECLARATION once all empty ranges
   // are marked as UNVERIFIED.
   optional VerificationState verification = 3
-  [default = UNVERIFIED, retention = RETENTION_SOURCE];
+      [default = UNVERIFIED, retention = RETENTION_SOURCE];
 
   // Clients can define custom options in extensions of this message. See above.
   extensions 1000 to max;
@@ -398,6 +398,9 @@ message ServiceDescriptorProto {
   repeated MethodDescriptorProto method = 2;
 
   optional ServiceOptions options = 3;
+
+  reserved 4;
+  reserved "stream";
 }
 
 // Describes a method of a service.
@@ -473,7 +476,7 @@ message FileOptions {
   optional bool java_multiple_files = 10 [default = false];
 
   // This option does nothing.
-  optional bool java_generate_equals_and_hash = 20 [deprecated = true];
+  optional bool java_generate_equals_and_hash = 20 [deprecated=true];
 
   // A proto2 file can set this to true to opt in to UTF-8 checking for Java,
   // which will throw an exception if invalid UTF-8 is parsed from the wire or
@@ -490,7 +493,7 @@ message FileOptions {
   // Generated classes can be optimized for speed or code size.
   enum OptimizeMode {
     SPEED = 1;         // Generate complete code for parsing, serialization,
-    // etc.
+                       // etc.
     CODE_SIZE = 2;     // Use ReflectionOps to implement these methods.
     LITE_RUNTIME = 3;  // Generate code using MessageLite and the lite runtime.
   }
@@ -957,7 +960,7 @@ message MethodOptions {
     IDEMPOTENT = 2;       // idempotent, but may have side effects
   }
   optional IdempotencyLevel idempotency_level = 34
-  [default = IDEMPOTENCY_UNKNOWN];
+      [default = IDEMPOTENCY_UNKNOWN];
 
   // Any features defined in the specific edition.
   // WARNING: This field should only be used by protobuf plugins or special
@@ -1023,9 +1026,9 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "EXPLICIT"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "IMPLICIT"},
-    edition_defaults = {edition: EDITION_2023, value: "EXPLICIT"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "EXPLICIT" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "IMPLICIT" },
+    edition_defaults = { edition: EDITION_2023, value: "EXPLICIT" }
   ];
 
   enum EnumType {
@@ -1040,8 +1043,8 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "CLOSED"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "OPEN"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "CLOSED" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "OPEN" }
   ];
 
   enum RepeatedFieldEncoding {
@@ -1056,8 +1059,8 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "EXPANDED"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "PACKED"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "EXPANDED" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "PACKED" }
   ];
 
   enum Utf8Validation {
@@ -1073,8 +1076,8 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "NONE"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "VERIFY"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "NONE" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "VERIFY" }
   ];
 
   enum MessageEncoding {
@@ -1089,7 +1092,7 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "LENGTH_PREFIXED"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "LENGTH_PREFIXED" }
   ];
 
   enum JsonFormat {
@@ -1105,8 +1108,8 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2023,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "LEGACY_BEST_EFFORT"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "ALLOW"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "LEGACY_BEST_EFFORT" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "ALLOW" }
   ];
 
   enum EnforceNamingStyle {
@@ -1128,8 +1131,8 @@ message FeatureSet {
     feature_support = {
       edition_introduced: EDITION_2024,
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "STYLE_LEGACY"},
-    edition_defaults = {edition: EDITION_2024, value: "STYLE2024"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "STYLE_LEGACY" },
+    edition_defaults = { edition: EDITION_2024, value: "STYLE2024" }
   ];
 
   message VisibilityFeature {
@@ -1154,14 +1157,14 @@ message FeatureSet {
   }
   optional VisibilityFeature.DefaultSymbolVisibility default_symbol_visibility =
       8 [
-    retention = RETENTION_SOURCE,
-    targets = TARGET_TYPE_FILE,
-    feature_support = {
-      edition_introduced: EDITION_2024,
-    },
-    edition_defaults = {edition: EDITION_LEGACY, value: "EXPORT_ALL"},
-    edition_defaults = {edition: EDITION_2024, value: "EXPORT_TOP_LEVEL"}
-  ];
+        retention = RETENTION_SOURCE,
+        targets = TARGET_TYPE_FILE,
+        feature_support = {
+          edition_introduced: EDITION_2024,
+        },
+        edition_defaults = { edition: EDITION_LEGACY, value: "EXPORT_ALL" },
+        edition_defaults = { edition: EDITION_2024, value: "EXPORT_TOP_LEVEL" }
+      ];
 
   reserved 999;
 
@@ -1176,7 +1179,7 @@ message FeatureSet {
       full_name: ".pb.java",
       type: ".pb.JavaFeatures"
     },
-    declaration = {number: 1002, full_name: ".pb.go", type: ".pb.GoFeatures"},
+    declaration = { number: 1002, full_name: ".pb.go", type: ".pb.GoFeatures" },
     declaration = {
       number: 1003,
       full_name: ".pb.python",

@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 
-	"origadmin/basic-layout/internal/mods/secondworld/dto"
+	"basic-layout/multiple/multiple_sample/internal/mods/secondworld/dto"
 )
 
 type greeterDal struct {

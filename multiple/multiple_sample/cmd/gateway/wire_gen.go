@@ -7,6 +7,10 @@
 package main
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/client"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/server"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
 	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,16 +20,12 @@ import (
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/interfaces"
-	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/gateway/client"
-	"origadmin/basic-layout/internal/mods/gateway/server"
-	"origadmin/basic-layout/internal/mods/gateway/service"
 )
 
 import (
+	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
 	_ "github.com/origadmin/runtime/config/envsource"
 	_ "github.com/origadmin/runtime/config/file"
-	_ "origadmin/basic-layout/helpers/configsource/oneof"
 )
 
 // Injectors from wire.go:

@@ -5,7 +5,7 @@
 package service
 
 import (
-	"origadmin/basic-layout/api/v1/gen/go/secondworld" // Import secondworld package
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld" // Import secondworld package
 
 	"github.com/google/wire"
 )

@@ -11,8 +11,8 @@ import (
 
 	"github.com/google/uuid"
 
-	_ "origadmin/basic-layout/helpers/configsource/oneof"
-	"origadmin/basic-layout/internal/transformer"
+	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
+	"basic-layout/multiple/multiple_sample/internal/transformer"
 
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
@@ -53,7 +53,7 @@ func main() {
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, cleanup, err := runtime.NewFromBootstrap(
+	rt, err := runtime.NewFromBootstrap(
 		flagconf,
 		//runtime.WithAppInfo(appInfo),
 		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
@@ -61,7 +61,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}
-	defer cleanup()
+	defer rt.Cleanup()
 
 	// wireApp now takes the runtime instance and builds the kratos app.
 	app, cleanupApp, err := wireApp(rt)

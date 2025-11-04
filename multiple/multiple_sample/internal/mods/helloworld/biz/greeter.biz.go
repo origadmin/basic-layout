@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
 
-	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
-	"origadmin/basic-layout/internal/mods/helloworld/dto"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld" // Corrected import path
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dto"
 
 	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
 	"github.com/origadmin/runtime/errors"

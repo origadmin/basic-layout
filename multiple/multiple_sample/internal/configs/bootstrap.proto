@@ -5,12 +5,12 @@ package configs;
 import "internal/configs/service.proto";
 import "runtime/discovery/v1/discovery.proto";
 
-option go_package = "origadmin/basic-layout/internal/configs;configs";
+option go_package = "basic-layout/multiple/multiple_sample/internal/configs;configs";
 
 // Bootstrap is the main configuration structure for an application.
 message Bootstrap {
   // Service configuration, including servers, clients, and middlewares.
-  configs.ServiceConfig server = 1;
+  configs.ServiceConfig service = 1;
 
   // Discovery configuration for service registration and discovery.
   runtime.discovery.v1.Discovery discovery = 2;

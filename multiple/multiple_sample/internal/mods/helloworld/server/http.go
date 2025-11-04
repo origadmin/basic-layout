@@ -8,8 +8,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 
-	"origadmin/basic-layout/api/v1/gen/go/helloworld" // Corrected import path
-	"origadmin/basic-layout/internal/configs"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld" // Corrected import path
+	"basic-layout/multiple/multiple_sample/internal/configs"
 
 	rtservice "github.com/origadmin/runtime/service"
 )
@@ -25,7 +25,7 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.HelloGreeter
 		),
 	}
 
-	if service := bootstrap.GetServer().GetService(); service != nil {
+	if service := bootstrap.GetService(); service != nil {
 		logger.Debug("Processing server configurations", "total_servers", len(service.Servers))
 		for _, srvConfig := range service.Servers {
 			logger.Debug("Processing server configuration", "protocol", srvConfig.Protocol)
@@ -45,6 +45,8 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.HelloGreeter
 				// Break after finding the first HTTP server config
 				break
 			}
+			logger.Infof("HTTP server initialized successfully, service: %s, endpoints: /v1/helloworld/*",
+				srvConfig.GetName())
 		}
 	}
 
@@ -54,7 +56,6 @@ func NewHTTPServer(bootstrap *configs.Bootstrap, greeter helloworld.HelloGreeter
 		logger.Debugf("Registered HTTP route: %s %s", route.Method, route.Path)
 		return nil
 	})
-	logger.Infof("HTTP server initialized successfully, service: %s, endpoints: /v1/helloworld/*",
-		bootstrap.GetServer().GetService().GetName())
+
 	return srv, nil
 }

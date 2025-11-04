@@ -4,7 +4,7 @@ package ent
 
 import (
 	"fmt"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/greeter"
 )
 
 // SetFields sets the values of the fields with the given names. It returns an

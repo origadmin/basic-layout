@@ -4,8 +4,8 @@ package ent
 
 import (
 	"context"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/greeter"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/predicate"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 
-	"origadmin/basic-layout/internal/mods/helloworld/dto"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dto"
 )
 
 type greeterRepo struct {

@@ -6,7 +6,8 @@ import (
 
 	"basic-layout/simple/simple_app/internal/conf"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
-	storagev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/storage/v1"
+	cachev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/cache/v1"
+	databasev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/database/v1"
 	"github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
 	discoveryv1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
 	loggerv1 "github.com/origadmin/runtime/api/gen/go/runtime/logger/v1"
@@ -109,7 +110,7 @@ func DefaultDiscoveries() *discoveryv1.Discoveries {
 func DefaultData() *datav1.Data {
 	return &datav1.Data{
 		Databases: &datav1.Databases{
-			Configs: []*storagev1.DatabaseConfig{
+			Configs: []*databasev1.DatabaseConfig{
 				{
 					Name:    "default",
 					Dialect: "sqlite3",
@@ -118,7 +119,7 @@ func DefaultData() *datav1.Data {
 			},
 		},
 		Caches: &datav1.Caches{
-			Configs: []*storagev1.CacheConfig{
+			Configs: []*cachev1.CacheConfig{
 				{
 					Name:   "default",
 					Driver: "memory",

@@ -57,62 +57,106 @@ func (m *ServiceConfig) validate(all bool) error {
 
 	var errors []error
 
-	if all {
-		switch v := interface{}(m.GetService()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ServiceConfigValidationError{
-					field:  "Service",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetServers() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Servers[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Servers[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ServiceConfigValidationError{
-					field:  "Service",
+				return ServiceConfigValidationError{
+					field:  fmt.Sprintf("Servers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetService()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ServiceConfigValidationError{
-				field:  "Service",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
-	if all {
-		switch v := interface{}(m.GetCors()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ServiceConfigValidationError{
-					field:  "Cors",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetClients() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Clients[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Clients[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ServiceConfigValidationError{
-					field:  "Cors",
+				return ServiceConfigValidationError{
+					field:  fmt.Sprintf("Clients[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetCors()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ServiceConfigValidationError{
-				field:  "Cors",
-				reason: "embedded message failed validation",
-				cause:  err,
+
+	}
+
+	for idx, item := range m.GetMiddlewares() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Middlewares[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ServiceConfigValidationError{
+						field:  fmt.Sprintf("Middlewares[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ServiceConfigValidationError{
+					field:  fmt.Sprintf("Middlewares[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
 			}
 		}
+
 	}
 
 	if all {

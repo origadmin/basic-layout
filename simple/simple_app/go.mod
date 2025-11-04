@@ -5,13 +5,14 @@ go 1.24.6
 require (
 	entgo.io/ent v0.14.5
 	github.com/bufbuild/buf v1.59.0
+	github.com/bytedance/gopkg v0.1.3
 	github.com/envoyproxy/protoc-gen-validate v1.2.1
 	github.com/go-kratos/kratos/cmd/kratos/v2 v2.0.0-20251015020953-cdff24709025
 	github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2 v2.0.0-20251015020953-cdff24709025
 	github.com/go-kratos/kratos/v2 v2.9.1
 	github.com/google/gnostic v0.7.1
 	github.com/google/wire v0.7.0
-	github.com/origadmin/runtime v0.2.10
+	github.com/origadmin/runtime v0.2.11
 	github.com/spf13/viper v1.21.0
 	github.com/sqlite3ent/sqlite3 v1.39.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20251103181224-f26f9409b101
@@ -140,8 +141,6 @@ require (
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/vbatts/tar-split v0.12.2 // indirect
-	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
-	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	github.com/zclconf/go-cty v1.16.2 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect

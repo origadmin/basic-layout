@@ -9,9 +9,9 @@ import (
 
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/api/v1/gen/go/gateway"
-	"origadmin/basic-layout/api/v1/gen/go/helloworld"
-	"origadmin/basic-layout/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
 )
 
 // ProviderSet is service providers.

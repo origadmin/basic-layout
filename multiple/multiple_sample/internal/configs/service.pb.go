@@ -7,9 +7,9 @@
 package configs
 
 import (
-	cors "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1/cors"
-	v1 "github.com/origadmin/runtime/api/gen/go/runtime/service/v1"
-	v11 "github.com/origadmin/runtime/api/gen/go/runtime/storage/v1"
+	v12 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
+	v11 "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -28,12 +28,17 @@ const (
 // It uses the runtime service definitions for server and client configurations.
 type ServiceConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Service configuration from the runtime service package.
-	Service *v1.Service `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
-	// CORS configuration for HTTP servers.
-	Cors *cors.Cors `protobuf:"bytes,2,opt,name=cors,proto3" json:"cors,omitempty"`
-	// Storage configuration for HTTP servers.
-	Data          *v11.Storage `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	// servers is a list of server endpoints that this service will expose.
+	// A service can listen on multiple protocols simultaneously, e.g., both gRPC and HTTP.
+	Servers []*v1.Server `protobuf:"bytes,2,rep,name=servers,proto3" json:"servers,omitempty"`
+	// clients is a list of client configurations for services that this service depends on.
+	// This list will be converted into a map in the application's bootstrap logic,
+	// using the 'name' field from each Client message as the key.
+	Clients []*v1.Client `protobuf:"bytes,3,rep,name=clients,proto3" json:"clients,omitempty"`
+	// middlewares is a list of middleware configurations to be applied to the service.
+	Middlewares []*v11.Middleware `protobuf:"bytes,4,rep,name=middlewares,proto3" json:"middlewares,omitempty"`
+	// Data configuration for the service.
+	Data          *v12.Data `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -68,21 +73,28 @@ func (*ServiceConfig) Descriptor() ([]byte, []int) {
 	return file_internal_configs_service_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ServiceConfig) GetService() *v1.Service {
+func (x *ServiceConfig) GetServers() []*v1.Server {
 	if x != nil {
-		return x.Service
+		return x.Servers
 	}
 	return nil
 }
 
-func (x *ServiceConfig) GetCors() *cors.Cors {
+func (x *ServiceConfig) GetClients() []*v1.Client {
 	if x != nil {
-		return x.Cors
+		return x.Clients
 	}
 	return nil
 }
 
-func (x *ServiceConfig) GetData() *v11.Storage {
+func (x *ServiceConfig) GetMiddlewares() []*v11.Middleware {
+	if x != nil {
+		return x.Middlewares
+	}
+	return nil
+}
+
+func (x *ServiceConfig) GetData() *v12.Data {
 	if x != nil {
 		return x.Data
 	}
@@ -93,11 +105,12 @@ var File_internal_configs_service_proto protoreflect.FileDescriptor
 
 const file_internal_configs_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1einternal/configs/service.proto\x12\aconfigs\x1a%runtime/middleware/v1/cors/cors.proto\x1a runtime/service/v1/service.proto\x1a runtime/storage/v1/storage.proto\"\xad\x01\n" +
-	"\rServiceConfig\x125\n" +
-	"\aservice\x18\x01 \x01(\v2\x1b.runtime.service.v1.ServiceR\aservice\x124\n" +
-	"\x04cors\x18\x02 \x01(\v2 .runtime.middleware.v1.cors.CorsR\x04cors\x12/\n" +
-	"\x04data\x18\x03 \x01(\v2\x1b.runtime.storage.v1.StorageR\x04dataB1Z/origadmin/basic-layout/internal/configs;configsb\x06proto3"
+	"\x1einternal/configs/service.proto\x12\aconfigs\x1a\x1aruntime/data/v1/data.proto\x1a&runtime/middleware/v1/middleware.proto\x1a$runtime/transport/v1/transport.proto\"\xef\x01\n" +
+	"\rServiceConfig\x126\n" +
+	"\aservers\x18\x02 \x03(\v2\x1c.runtime.transport.v1.ServerR\aservers\x126\n" +
+	"\aclients\x18\x03 \x03(\v2\x1c.runtime.transport.v1.ClientR\aclients\x12C\n" +
+	"\vmiddlewares\x18\x04 \x03(\v2!.runtime.middleware.v1.MiddlewareR\vmiddlewares\x12)\n" +
+	"\x04data\x18\x05 \x01(\v2\x15.runtime.data.v1.DataR\x04dataB@Z>basic-layout/multiple/multiple_sample/internal/configs;configsb\x06proto3"
 
 var (
 	file_internal_configs_service_proto_rawDescOnce sync.Once
@@ -113,20 +126,22 @@ func file_internal_configs_service_proto_rawDescGZIP() []byte {
 
 var file_internal_configs_service_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_internal_configs_service_proto_goTypes = []any{
-	(*ServiceConfig)(nil), // 0: configs.ServiceConfig
-	(*v1.Service)(nil),    // 1: runtime.service.v1.Service
-	(*cors.Cors)(nil),     // 2: runtime.middleware.v1.cors.Cors
-	(*v11.Storage)(nil),   // 3: runtime.storage.v1.Storage
+	(*ServiceConfig)(nil),  // 0: configs.ServiceConfig
+	(*v1.Server)(nil),      // 1: runtime.transport.v1.Server
+	(*v1.Client)(nil),      // 2: runtime.transport.v1.Client
+	(*v11.Middleware)(nil), // 3: runtime.middleware.v1.Middleware
+	(*v12.Data)(nil),       // 4: runtime.data.v1.Data
 }
 var file_internal_configs_service_proto_depIdxs = []int32{
-	1, // 0: configs.ServiceConfig.service:type_name -> runtime.service.v1.Service
-	2, // 1: configs.ServiceConfig.cors:type_name -> runtime.middleware.v1.cors.Cors
-	3, // 2: configs.ServiceConfig.data:type_name -> runtime.storage.v1.Storage
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 0: configs.ServiceConfig.servers:type_name -> runtime.transport.v1.Server
+	2, // 1: configs.ServiceConfig.clients:type_name -> runtime.transport.v1.Client
+	3, // 2: configs.ServiceConfig.middlewares:type_name -> runtime.middleware.v1.Middleware
+	4, // 3: configs.ServiceConfig.data:type_name -> runtime.data.v1.Data
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_internal_configs_service_proto_init() }

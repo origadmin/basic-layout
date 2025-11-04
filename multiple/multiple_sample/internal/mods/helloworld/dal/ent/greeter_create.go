@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent/greeter"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

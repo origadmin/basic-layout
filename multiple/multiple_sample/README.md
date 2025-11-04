@@ -79,7 +79,7 @@ Use this path if you want to start a new project that will be maintained within 
 
     * **Option 2: Local-Only Module**
       If this is a private project and you don't intend for it to be fetched via `go get`, you can use a simple, non-URL
-      name. This is exactly how the `origadmin/basic-layout` module itself is named.
+      name. This is exactly how the `basic-layout/multiple/multiple_sample` module itself is named.
       ```sh
       cd my-awesome-project
       go mod edit -module my-awesome-project
@@ -91,7 +91,7 @@ Use this path if you want to start a new project that will be maintained within 
    ```
 
 4. **Update Import Paths**: Perform a global search-and-replace across your project to replace the old module prefix
-   `origadmin/basic-layout` with the new one you chose in Step 2.
+   `basic-layout/multiple/multiple_sample` with the new one you chose in Step 2.
 
 5. **Start Developing**: You can now customize the project by modifying or removing the example modules.
 
@@ -112,7 +112,7 @@ Let's demonstrate by splitting `basic-layout` into two separate projects: `hello
     * `go mod edit -module github.com/your-org/helloworld-service`
     * `go mod tidy`
     * Update `.goreleaser.yaml` to only build the `helloworld` binary.
-    * Globally replace `origadmin/basic-layout` with your new module name.
+    * Globally replace `basic-layout/multiple/multiple_sample` with your new module name.
 
 #### Step 2: Create the `gateway-service`
 
@@ -127,7 +127,7 @@ Let's demonstrate by splitting `basic-layout` into two separate projects: `hello
     * `go mod edit -module github.com/your-org/gateway-service`
     * `go mod tidy`
     * Update `.goreleaser.yaml` to only build the `gateway` binary.
-    * Globally replace `origadmin/basic-layout` with your new module name.
+    * Globally replace `basic-layout/multiple/multiple_sample` with your new module name.
 
 #### Step 3: The Critical Change - Network Communication
 

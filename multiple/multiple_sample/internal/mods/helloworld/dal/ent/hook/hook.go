@@ -5,7 +5,7 @@ package hook
 import (
 	"context"
 	"fmt"
-	"origadmin/basic-layout/internal/mods/helloworld/dal/ent"
+	"basic-layout/multiple/multiple_sample/internal/mods/helloworld/dal/ent"
 )
 
 // The GreeterFunc type is an adapter to allow the use of ordinary

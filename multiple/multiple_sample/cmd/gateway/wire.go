@@ -10,16 +10,17 @@ package main
 import (
 	"context" // Added
 
+	"github.com/go-kratos/kratos/v2"
 	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	"origadmin/basic-layout/internal/configs"
-	"origadmin/basic-layout/internal/mods/gateway/client"
-	"origadmin/basic-layout/internal/mods/gateway/server"
-	"origadmin/basic-layout/internal/mods/gateway/service"
+	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/client"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/server"
+	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
 
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/interfaces"

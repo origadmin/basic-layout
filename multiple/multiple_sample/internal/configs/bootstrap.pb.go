@@ -26,7 +26,7 @@ const (
 type Bootstrap struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Service configuration, including servers, clients, and middlewares.
-	Server *ServiceConfig `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Service *ServiceConfig `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Discovery configuration for service registration and discovery.
 	Discovery     *v1.Discovery `protobuf:"bytes,2,opt,name=discovery,proto3" json:"discovery,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -63,9 +63,9 @@ func (*Bootstrap) Descriptor() ([]byte, []int) {
 	return file_internal_configs_bootstrap_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Bootstrap) GetServer() *ServiceConfig {
+func (x *Bootstrap) GetService() *ServiceConfig {
 	if x != nil {
-		return x.Server
+		return x.Service
 	}
 	return nil
 }
@@ -81,10 +81,10 @@ var File_internal_configs_bootstrap_proto protoreflect.FileDescriptor
 
 const file_internal_configs_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	" internal/configs/bootstrap.proto\x12\aconfigs\x1a\x1einternal/configs/service.proto\x1a$runtime/discovery/v1/discovery.proto\"z\n" +
-	"\tBootstrap\x12.\n" +
-	"\x06server\x18\x01 \x01(\v2\x16.configs.ServiceConfigR\x06server\x12=\n" +
-	"\tdiscovery\x18\x02 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\tdiscoveryB1Z/origadmin/basic-layout/internal/configs;configsb\x06proto3"
+	" internal/configs/bootstrap.proto\x12\aconfigs\x1a\x1einternal/configs/service.proto\x1a$runtime/discovery/v1/discovery.proto\"|\n" +
+	"\tBootstrap\x120\n" +
+	"\aservice\x18\x01 \x01(\v2\x16.configs.ServiceConfigR\aservice\x12=\n" +
+	"\tdiscovery\x18\x02 \x01(\v2\x1f.runtime.discovery.v1.DiscoveryR\tdiscoveryB@Z>basic-layout/multiple/multiple_sample/internal/configs;configsb\x06proto3"
 
 var (
 	file_internal_configs_bootstrap_proto_rawDescOnce sync.Once
@@ -105,7 +105,7 @@ var file_internal_configs_bootstrap_proto_goTypes = []any{
 	(*v1.Discovery)(nil),  // 2: runtime.discovery.v1.Discovery
 }
 var file_internal_configs_bootstrap_proto_depIdxs = []int32{
-	1, // 0: configs.Bootstrap.server:type_name -> configs.ServiceConfig
+	1, // 0: configs.Bootstrap.service:type_name -> configs.ServiceConfig
 	2, // 1: configs.Bootstrap.discovery:type_name -> runtime.discovery.v1.Discovery
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type

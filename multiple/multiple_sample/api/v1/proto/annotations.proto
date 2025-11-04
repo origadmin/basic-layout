@@ -4,7 +4,7 @@ package api.v1.services;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "origadmin/basic-layout/api/v1/gen/go";
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go";
 
 option (gnostic.openapi.v3.document) = {
   info: {
@@ -13,12 +13,12 @@ option (gnostic.openapi.v3.document) = {
     description: "An example project demonstrating a multi-module gRPC backend with a gateway, based on the OrigAdmin framework.";
     contact: {
       name: "OrigAdmin Community";
-      url: "https://github.com/origadmin/basic-layout";
+      url: "https://github.com/basic-layout/multiple/multiple_sample";
       email: "waitforadding@gmail.com";
     }
     license: {
       name: "MIT";
-      url: "https://github.com/origadmin/basic-layout/blob/main/LICENSE";
+      url: "https://github.com/basic-layout/multiple/multiple_sample/blob/main/LICENSE";
     }
   }
   servers: [

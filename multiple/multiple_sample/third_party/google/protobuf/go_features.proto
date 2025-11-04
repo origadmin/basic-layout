@@ -28,10 +28,10 @@ message GoFeatures {
       edition_introduced: EDITION_2023,
       edition_deprecated: EDITION_2023,
       deprecation_warning: "The legacy UnmarshalJSON API is deprecated and "
-          "will be removed in a future edition.",
+                           "will be removed in a future edition.",
     },
-    edition_defaults = {edition: EDITION_LEGACY, value: "true"},
-    edition_defaults = {edition: EDITION_PROTO3, value: "false"}
+    edition_defaults = { edition: EDITION_LEGACY, value: "true" },
+    edition_defaults = { edition: EDITION_PROTO3, value: "false" }
   ];
 
   enum APILevel {
@@ -56,7 +56,7 @@ message GoFeatures {
       edition: EDITION_LEGACY,
       value: "API_LEVEL_UNSPECIFIED"
     },
-    edition_defaults = {edition: EDITION_2024, value: "API_OPAQUE"}
+    edition_defaults = { edition: EDITION_2024, value: "API_OPAQUE" }
   ];
 
   enum StripEnumPrefix {
