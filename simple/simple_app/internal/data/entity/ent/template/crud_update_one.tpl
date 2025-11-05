@@ -1,7 +1,7 @@
 {{/* The line below tells Intellij/GoLand to enable the autocompletion based on the *gen.Graph type. */}}
-{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{ define "update/additional/crud_one" }}
+{{ define "update/additional/crud_update_one" }}
     {{ $builder := $.UpdateOneName }}
     {{- if hasSuffix $builder "UpdateOne" }}
         {{ $receiver := receiver $builder }}

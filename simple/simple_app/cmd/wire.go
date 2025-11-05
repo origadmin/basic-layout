@@ -6,6 +6,7 @@
  */
 
 // The build tag makes sure the stub is not built in the final build.
+//go:generate go run -mod=mod github.com/google/wire/cmd/wire gen 
 package main
 
 import (

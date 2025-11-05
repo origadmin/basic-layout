@@ -1,7 +1,7 @@
 {{/* The line below tells Intellij/GoLand to enable the autocompletion based on the *gen.Graph type. */}}
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{ define "query/additional/crud" }}
+{{ define "query/additional/crud_query" }}
 
     {{ $pkg := .Package }}
     {{ $fields := .Fields }}

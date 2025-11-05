@@ -15,15 +15,10 @@ BUILT_BY         := $(PROJECT_ORG)
 # ---------------------------- Git Information ----------------------------- #
 # Use /bin/bash for non-Windows, powershell for Windows for consistent command execution
 ifeq ($(GOHOSTOS), windows)
-    # For Windows (PowerShell), set environment variable
-	GOWORK_OFF := $($env:GOWORK="off")
-
     # Set shell and command separator for PowerShell
     SHELL          := powershell.exe
     .SHELLFLAGS    := -NoProfile -Command
     CMD_SEP        := ;
-
-    # Git commands for Windows (PowerShell)
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -31,13 +26,9 @@ ifeq ($(GOHOSTOS), windows)
     GIT_TREE_STATE := $(shell powershell -Command "if ((git status --porcelain)) { 'dirty' } else { 'clean' }")
     GIT_TAG        := $(shell powershell -Command "if ('${GIT_HEAD_TAG}') { '${GIT_HEAD_TAG}' } else { '${GIT_COMMIT}' }")
 else
-    # For Linux/macOS (Bash), directly set environment variable
-    GOWORK_OFF := $(GOWORK=off)
-
     # Set shell and command separator for Linux/macOS
     SHELL          := /bin/bash
     CMD_SEP        := &&
-
     # Git commands for Linux/macOS (Bash)
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
@@ -108,13 +99,16 @@ deps: ## 📦 Update and export third-party protobuf dependencies
 	@buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
 
 generate: ## 🧬 Generate all code from Protobuf and run go generate (includes wire, openapi)
-	$(GOWORK_OFF)
 	@echo "Generating API Protobuf code using buf..."
 	@buf generate
 	@echo "Generating Internal Configs Protobuf code..."
 	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
 	@echo "Running go generate for all packages (includes wire, etc.)..."
-	@go generate ./...
+ifeq ($(GOHOSTOS), windows)
+	@$$env:GOWORK='off'; go generate ./...
+else
+	@GOWORK=off go generate ./...
+endif
 	@echo "Running go mod tidy after code generation..."
 	@go mod tidy
 
