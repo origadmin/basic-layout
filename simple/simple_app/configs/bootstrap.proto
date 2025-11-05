@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 // Package name remains unchanged
-package conf;
+package configs;
 
 // ----------------------------------------------------------------
 // Import standard configuration modules (Building Blocks) provided by the framework
@@ -17,7 +17,7 @@ import "runtime/trace/v1/trace.proto";
 import "runtime/transport/v1/transport.proto";
 
 // Go package option remains unchanged
-option go_package = "internal/conf;conf";
+option go_package = "simple_app/configs;configs";
 
 // Bootstrap is the root configuration example for the entire application.
 // The new structure aggregates all configuration items into logical groups, making it clearer and easier to understand.

@@ -12,6 +12,8 @@ before:
 
 builds:
   - id: "simple_app"
+    # Explicitly define the project name for this build, useful in monorepos
+    project_name: simple_app
     main: ./cmd/
     binary: simple_app
     ldflags: &ldflags
@@ -56,7 +58,8 @@ changelog:
 release:
   github:
     owner: OrigAdmin
-    # This should match the repository name
-    name: basic-layout
+    # This should match the repository name where the release will be published.
+    # In a monorepo, this typically points to the main repository, which is 'framework'.
+    name: framework
   # You can optionally set it to draft, so you can review before publishing
   # draft: true

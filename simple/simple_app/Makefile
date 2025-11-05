@@ -15,10 +15,15 @@ BUILT_BY         := $(PROJECT_ORG)
 # ---------------------------- Git Information ----------------------------- #
 # Use /bin/bash for non-Windows, powershell for Windows for consistent command execution
 ifeq ($(GOHOSTOS), windows)
+    # For Windows (PowerShell), set environment variable
+	GOWORK_OFF := $($env:GOWORK="off")
+
+    # Set shell and command separator for PowerShell
     SHELL          := powershell.exe
     .SHELLFLAGS    := -NoProfile -Command
-    # Git commands for Windows (PowerShell)
     CMD_SEP        := ;
+
+    # Git commands for Windows (PowerShell)
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -26,8 +31,13 @@ ifeq ($(GOHOSTOS), windows)
     GIT_TREE_STATE := $(shell powershell -Command "if ((git status --porcelain)) { 'dirty' } else { 'clean' }")
     GIT_TAG        := $(shell powershell -Command "if ('${GIT_HEAD_TAG}') { '${GIT_HEAD_TAG}' } else { '${GIT_COMMIT}' }")
 else
+    # For Linux/macOS (Bash), directly set environment variable
+    GOWORK_OFF := $(GOWORK=off)
+
+    # Set shell and command separator for Linux/macOS
     SHELL          := /bin/bash
     CMD_SEP        := &&
+
     # Git commands for Linux/macOS (Bash)
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
@@ -69,6 +79,13 @@ all: init deps generate build ## ✅ Run the full build process (init, deps, gen
 
 init: ## 🔧 Install necessary Go tools for development
 	@echo "Installing Go tools..."
+	@if ! command -v protoc &> /dev/null; then \
+		echo "ERROR: protoc compiler not found. Please install it manually before proceeding."; \
+		echo "  - For macOS: brew install protobuf"; \
+		echo "  - For Ubuntu/Debian: sudo apt-get install protobuf-compiler"; \
+		echo "  - For Windows: Download from https://github.com/protocolbuffers/protobuf/releases and add to PATH."; \
+		exit 1; \
+	fi
 	@go install github.com/bufbuild/buf/cmd/buf@latest
 	@go install github.com/envoyproxy/protoc-gen-validate@latest
 	@go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@latest
@@ -91,13 +108,12 @@ deps: ## 📦 Update and export third-party protobuf dependencies
 	@buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
 
 generate: ## 🧬 Generate all code from Protobuf and run go generate (includes wire, openapi)
+	$(GOWORK_OFF)
 	@echo "Generating API Protobuf code using buf..."
 	@buf generate
 	@echo "Generating Internal Configs Protobuf code..."
-	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. internal/conf/*.proto
-	@echo "Generating Wire code for dependency injection..."
-	@go generate ./cmd/...
-	@echo "Running go generate for other code generation tasks..."
+	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
+	@echo "Running go generate for all packages (includes wire, etc.)..."
 	@go generate ./...
 	@echo "Running go mod tidy after code generation..."
 	@go mod tidy

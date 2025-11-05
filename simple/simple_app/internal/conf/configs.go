@@ -1,10 +1,10 @@
 // Package configs implements the functions, types, and interfaces for the module.
-package configs
+package conf
 
 import (
 	"cmp"
 
-	"basic-layout/simple/simple_app/internal/conf"
+	"basic-layout/simple/simple_app/configs"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
 	cachev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/cache/v1"
 	databasev1 "github.com/origadmin/runtime/api/gen/go/runtime/data/database/v1"
@@ -20,7 +20,7 @@ import (
 )
 
 type Config struct {
-	bootstrap conf.Bootstrap
+	bootstrap configs.Bootstrap
 }
 
 func (c *Config) DecodeApp() (*appv1.App, error) {
