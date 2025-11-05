@@ -82,7 +82,7 @@ type UnsafeSimpleServiceServer interface {
 }
 
 func RegisterSimpleServiceServer(s grpc.ServiceRegistrar, srv SimpleServiceServer) {
-	// If the following call panics, it indicates UnimplementedSimpleServiceServer was
+	// If the following call pancis, it indicates UnimplementedSimpleServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.

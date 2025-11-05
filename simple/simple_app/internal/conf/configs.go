@@ -3,6 +3,7 @@ package conf
 
 import (
 	"cmp"
+	"fmt"
 
 	"basic-layout/simple/simple_app/configs"
 	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
@@ -20,7 +21,8 @@ import (
 )
 
 type Config struct {
-	bootstrap configs.Bootstrap
+	bootstrap        configs.Bootstrap
+	defaultDiscovery string
 }
 
 func (c *Config) DecodeApp() (*appv1.App, error) {
@@ -63,6 +65,32 @@ func (c *Config) Transform(config interfaces.Config, _ interfaces.StructuredConf
 	err := config.Decode("", &c.bootstrap)
 	if err != nil {
 		return nil, err
+	}
+
+	// Determine the default discovery key with a clear priority: active > default > global default.
+	defaultKey := cmp.Or(
+		c.bootstrap.GetDiscoveries().GetActive(),
+		c.bootstrap.GetDiscoveries().GetDefault(),
+		interfaces.GlobalDefaultKey)
+
+	discoveries := c.bootstrap.GetDiscoveries()
+	if discoveries != nil {
+		configs := discoveries.GetConfigs()
+		// If there's only one discovery config, it should be the default, regardless of the key.
+		switch {
+		case len(configs) == 1:
+			c.defaultDiscovery = configs[0].GetName()
+		case len(configs) > 1:
+			for _, discovery := range configs {
+				if discovery.GetName() == defaultKey {
+					c.defaultDiscovery = defaultKey
+					break
+				}
+			}
+			if c.defaultDiscovery == "" {
+				return nil, fmt.Errorf("failed to determine default discovery: key '%s' not found among multiple configurations", defaultKey)
+			}
+		}
 	}
 	return c, nil
 }
