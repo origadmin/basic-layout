@@ -19,6 +19,7 @@ ifeq ($(GOHOSTOS), windows)
     SHELL          := powershell.exe
     .SHELLFLAGS    := -NoProfile -Command
     CMD_SEP        := ;
+    GOWORKOFF      := $$env:GOWORK='off';
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -29,7 +30,7 @@ else
     # Set shell and command separator for Linux/macOS
     SHELL          := /bin/bash
     CMD_SEP        := &&
-    # Git commands for Linux/macOS (Bash)
+    GOWORKOFF      := GOWORK=off
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -104,13 +105,9 @@ generate: ## 🧬 Generate all code from Protobuf and run go generate (includes 
 	@echo "Generating Internal Configs Protobuf code..."
 	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
 	@echo "Running go generate for all packages (includes wire, etc.)..."
-ifeq ($(GOHOSTOS), windows)
-	@$$env:GOWORK='off'; go generate ./...
-else
-	@GOWORK=off go generate ./...
-endif
+	@$(GOWORKOFF) go generate ./...
 	@echo "Running go mod tidy after code generation..."
-	@go mod tidy
+	@$(GOWORKOFF) go mod tidy
 
 build: ## 🔨 Build the application
 	@echo "Building $(APP_NAME) application..."
