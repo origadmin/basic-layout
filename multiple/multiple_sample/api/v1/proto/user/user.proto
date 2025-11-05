@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package api.v1.mods.user;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/user;user";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.mods.user";
+
+// The user service definition.
+service UserAPI {
+  // CreateUser creates a new User
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user",
+      body: "*",
+    };
+  }
+  // UpdateUser updates a User
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/user/{id}",
+      body: "user",
+    };
+  }
+  // DeleteUser deletes a User
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/user/{id}",
+    };
+  }
+  // GetUser gets a User
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/{id}",
+    };
+  }
+  // ListUser lists Users
+  rpc ListUser (ListUserRequest) returns (ListUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user",
+    };
+  }
+}
+
+// User represents a user entity.
+message User {
+  int64 id = 1;
+  string username = 2;
+  string nickname = 3;
+}
+
+message CreateUserRequest {
+  string username = 1 [(buf.validate.field).string.min_len = 3];
+  string password = 2 [(buf.validate.field).string.min_len = 6];
+  string nickname = 3;
+}
+message CreateUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+  User user = 2;
+}
+message UpdateUserResponse {
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message DeleteUserResponse {
+  bool success = 1;
+}
+
+message GetUserRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message GetUserResponse {
+  User user = 1;
+}
+
+message ListUserRequest {
+  optional int32 current = 1;
+  optional int32 page_size = 2;
+}
+message ListUserResponse {
+  int32 total = 2;
+  repeated User data = 3;
+}

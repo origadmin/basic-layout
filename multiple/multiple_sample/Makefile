@@ -60,7 +60,7 @@ OPENAPI_DOCS_PATH  := resources/docs/openapi
 #                           LIFECYCLE TARGETS
 # ============================================================================ #
 
-.PHONY: all init deps generate build test lint clean release run-helloworld run-secondworld run-gateway help
+.PHONY: all init deps generate build test lint clean release run-user run-order run-gateway help
 
 all: init deps generate build ## ✅ Run the full build process (init, deps, generate, build)
 
@@ -91,21 +91,21 @@ generate: ## 🧬 Generate all code from Protobuf and run go generate (includes 
 	@echo "Generating API Protobuf code using buf..."
 	@buf generate
 	@echo "Generating Internal Configs Protobuf code..."
-	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. internal/configs/*.proto
+	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
 	@echo "Generating Wire code for dependency injection..."
-	@cd cmd/helloworld $(CMD_SEP) wire
-	@cd cmd/secondworld $(CMD_SEP) wire
+	@cd cmd/user $(CMD_SEP) wire
+	@cd cmd/order $(CMD_SEP) wire
 	@cd cmd/gateway $(CMD_SEP) wire
 	@echo "Running go generate for other code generation tasks..."
 	@go generate ./...
 	@echo "Running go mod tidy after code generation..."
 	@go mod tidy
 
-build: ## 🔨 Build all services (helloworld, secondworld, gateway)
-	@echo "Building helloworld service..."
-	@go build -ldflags "$(LDFLAGS)" -o ./dist/helloworld ./cmd/helloworld
-	@echo "Building secondworld service..."
-	@go build -ldflags "$(LDFLAGS)" -o ./dist/secondworld ./cmd/secondworld
+build: ## 🔨 Build all services (user, order, gateway)
+	@echo "Building user service..."
+	@go build -ldflags "$(LDFLAGS)" -o ./dist/user ./cmd/user
+	@echo "Building order service..."
+	@go build -ldflags "$(LDFLAGS)" -o ./dist/order ./cmd/order
 	@echo "Building gateway service..."
 	@go build -ldflags "$(LDFLAGS)" -o ./dist/gateway ./cmd/gateway
 
@@ -133,13 +133,13 @@ release: ## 🚀 Run GoReleaser to create releases
 	@echo "Running GoReleaser..."
 	@goreleaser release --clean
 
-run-helloworld: ## ▶️ Run the helloworld service
-	@echo "Running helloworld service..."
-	@go run ./cmd/helloworld/ -conf ./resources/configs/helloworld/bootstrap.yaml
+run-user: ## ▶️ Run the user service
+	@echo "Running user service..."
+	@go run ./cmd/user/ -conf ./resources/configs/user/bootstrap.yaml
 
-run-secondworld: ## ▶️ Run the secondworld service
-	@echo "Running secondworld service..."
-	@go run ./cmd/secondworld/ -conf ./resources/configs/secondworld/bootstrap.yaml
+run-order: ## ▶️ Run the order service
+	@echo "Running order service..."
+	@go run ./cmd/order/ -conf ./resources/configs/order/bootstrap.yaml
 
 run-gateway: ## ▶️ Run the gateway service
 	@echo "Running gateway service..."

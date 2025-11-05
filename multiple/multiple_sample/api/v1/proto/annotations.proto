@@ -4,7 +4,7 @@ package api.v1.services;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go";
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/mods";
 
 option (gnostic.openapi.v3.document) = {
   info: {
@@ -18,7 +18,7 @@ option (gnostic.openapi.v3.document) = {
     }
     license: {
       name: "MIT";
-      url: "https://github.com/basic-layout/multiple/multiple_sample/blob/main/LICENSE";
+      url: "https://github.com/basic-layout/blob/main/LICENSE";
     }
   }
   servers: [

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package api.v1.mods.gateway;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "order/order.proto";
+import "user/user.proto";
+
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway;gateway";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.mods.gateway";
+
+// -------------------------------------------------
+//  1. Edge Gateway Pattern
+// -------------------------------------------------
+// EdgeGatewayAPI defines its own API contract, independent of downstream services.
+// This provides a stable, curated, and secure boundary for external clients.
+// It requires a data transformation (DTO) layer in the gateway's service implementation.
+service EdgeGatewayAPI {
+  // GetOrder retrieves an order via the gateway's own API model.
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {
+    option (google.api.http) = {get: "/api/v1/edge/order/{id}"};
+  }
+
+  // GetUser retrieves a user via the gateway's own API model.
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {get: "/api/v1/edge/user/{id}"};
+  }
+}
+
+// --- Gateway's own API Models (DTOs) for the Edge Pattern ---
+
+message GetUserRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+
+message GetUserResponse {
+  int64 id = 1;
+  string username = 2;
+  // Note: We can choose to not expose the 'nickname' at the gateway level.
+}
+
+message GetOrderRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+
+message GetOrderResponse {
+  int64 id = 1;
+  double amount = 2;
+  string status = 3;
+  // Note: We can choose to not expose the 'user_id' at the gateway level.
+}
+
+
+// -------------------------------------------------
+//  2. Transparent Proxy Gateway Pattern
+// -------------------------------------------------
+// ProxyGatewayAPI directly reuses the API contracts of downstream services.
+// This is simpler and faster to implement but creates tight coupling between
+// the gateway and internal modules.
+service ProxyGatewayAPI {
+  // GetOrder directly forwards the request and response using the order module's types.
+  rpc GetOrder(api.v1.mods.order.GetOrderRequest) returns (api.v1.mods.order.GetOrderResponse) {
+    option (google.api.http) = {get: "/api/v1/proxy/order/{id}"};
+  }
+
+  // GetUser directly forwards the request and response using the user module's types.
+  rpc GetUser(api.v1.mods.user.GetUserRequest) returns (api.v1.mods.user.GetUserResponse) {
+    option (google.api.http) = {get: "/api/v1/proxy/user/{id}"};
+  }
+}

@@ -11,37 +11,22 @@ info:
         email: waitforadding@gmail.com
     license:
         name: MIT
-        url: https://github.com/basic-layout/multiple/multiple_sample/blob/main/LICENSE
+        url: https://github.com/basic-layout/blob/main/LICENSE
     version: v1.0.0
 servers:
     - url: http://localhost:8000
     - url: https://localhost:8000
 paths:
-    /api/v1/gateway/hello/{id}:
+    /api/v1/edge/order/{id}:
         get:
             tags:
-                - GatewayAPI
-            description: Forwards to helloworld.HelloGreeterAPI.SayHello
-            operationId: GatewayAPI_SayHello
+                - EdgeGatewayAPI
+            description: GetOrder retrieves an order via the gateway's own API model.
+            operationId: EdgeGatewayAPI_GetOrder
             parameters:
                 - name: id
                   in: path
                   required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-                - name: data.id
-                  in: query
-                  description: |-
-                    The original proto had an entgo option here, which is likely not needed for this example.
-                     option (ent.schema).gen = true;
-                  schema:
-                    type: string
-                - name: data.name
-                  in: query
                   schema:
                     type: string
             responses:
@@ -50,38 +35,23 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.SayHelloResponse'
+                                $ref: '#/components/schemas/api.v1.mods.gateway.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/gateway/second/{id}:
+    /api/v1/edge/user/{id}:
         get:
             tags:
-                - GatewayAPI
-            description: Forwards to secondworld.SecondGreeterAPI.SayHello
-            operationId: GatewayAPI_SaySecond
+                - EdgeGatewayAPI
+            description: GetUser retrieves a user via the gateway's own API model.
+            operationId: EdgeGatewayAPI_GetUser
             parameters:
                 - name: id
                   in: path
                   required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-                - name: data.id
-                  in: query
-                  description: |-
-                    The original proto had an entgo option here, which is likely not needed for this example.
-                     option (ent.schema).gen = true;
-                  schema:
-                    type: string
-                - name: data.name
-                  in: query
                   schema:
                     type: string
             responses:
@@ -90,44 +60,37 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.SayHelloResponse'
+                                $ref: '#/components/schemas/api.v1.mods.gateway.GetUserResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/helloworld/greeter:
+    /api/v1/order:
         get:
             tags:
-                - HelloGreeterAPI
-            description: ListGreeter lists Greeters
-            operationId: HelloGreeterAPI_ListGreeter
+                - OrderAPI
+            description: ListOrder lists Orders
+            operationId: OrderAPI_ListOrder
             parameters:
                 - name: current
                   in: query
-                  description: Current page
                   schema:
                     type: integer
                     format: int32
                 - name: page_size
                   in: query
-                  description: The number of lines per page
                   schema:
                     type: integer
                     format: int32
-                - name: no_paging
-                  in: query
-                  description: Whether not paging
-                  schema:
-                    type: boolean
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.ListGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.ListOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -136,14 +99,14 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         post:
             tags:
-                - HelloGreeterAPI
-            description: CreateGreeter creates a new Greeter
-            operationId: HelloGreeterAPI_CreateGreeter
+                - OrderAPI
+            description: CreateOrder creates a new Order
+            operationId: OrderAPI_CreateOrder
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
+                            $ref: '#/components/schemas/api.v1.mods.order.CreateOrderRequest'
                 required: true
             responses:
                 "200":
@@ -151,19 +114,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.CreateGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.CreateOrderResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/helloworld/greeter/{id}:
+    /api/v1/order/{id}:
         get:
             tags:
-                - HelloGreeterAPI
-            description: GetGreeter gets a Greeter
-            operationId: HelloGreeterAPI_GetGreeter
+                - OrderAPI
+            description: GetOrder gets an Order
+            operationId: OrderAPI_GetOrder
             parameters:
                 - name: id
                   in: path
@@ -176,7 +139,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.GetGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -185,9 +148,9 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         put:
             tags:
-                - HelloGreeterAPI
-            description: UpdateGreeter updates a Greeter
-            operationId: HelloGreeterAPI_UpdateGreeter
+                - OrderAPI
+            description: UpdateOrder updates an Order
+            operationId: OrderAPI_UpdateOrder
             parameters:
                 - name: id
                   in: path
@@ -198,7 +161,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
+                            $ref: '#/components/schemas/api.v1.mods.order.Order'
                 required: true
             responses:
                 "200":
@@ -206,7 +169,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.UpdateGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.UpdateOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -215,9 +178,9 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
-                - HelloGreeterAPI
-            description: DeleteGreeter deletes a Greeter
-            operationId: HelloGreeterAPI_DeleteGreeter
+                - OrderAPI
+            description: DeleteOrder deletes an Order
+            operationId: OrderAPI_DeleteOrder
             parameters:
                 - name: id
                   in: path
@@ -230,38 +193,23 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.DeleteGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.DeleteOrderResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/helloworld/greeter/{id}/hello:
+    /api/v1/proxy/order/{id}:
         get:
             tags:
-                - HelloGreeterAPI
-            description: SayHello is a get method
-            operationId: HelloGreeterAPI_SayHello
+                - ProxyGatewayAPI
+            description: GetOrder directly forwards the request and response using the order module's types.
+            operationId: ProxyGatewayAPI_GetOrder
             parameters:
                 - name: id
                   in: path
                   required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-                - name: data.id
-                  in: query
-                  description: |-
-                    The original proto had an entgo option here, which is likely not needed for this example.
-                     option (ent.schema).gen = true;
-                  schema:
-                    type: string
-                - name: data.name
-                  in: query
                   schema:
                     type: string
             responses:
@@ -270,78 +218,62 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.SayHelloResponse'
+                                $ref: '#/components/schemas/api.v1.mods.order.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-        post:
-            tags:
-                - HelloGreeterAPI
-            description: PostHello is a post method
-            operationId: HelloGreeterAPI_PostHello
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.v1.services.helloworld.PostHelloResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/secondworld/greeter:
+    /api/v1/proxy/user/{id}:
         get:
             tags:
-                - SecondGreeterAPI
-            description: ListGreeter lists Greeters
-            operationId: SecondGreeterAPI_ListGreeter
+                - ProxyGatewayAPI
+            description: GetUser directly forwards the request and response using the user module's types.
+            operationId: ProxyGatewayAPI_GetUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.mods.user.GetUserResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/google.rpc.Status'
+    /api/v1/user:
+        get:
+            tags:
+                - UserAPI
+            description: ListUser lists Users
+            operationId: UserAPI_ListUser
             parameters:
                 - name: current
                   in: query
-                  description: Current page
                   schema:
                     type: integer
                     format: int32
                 - name: page_size
                   in: query
-                  description: The number of lines per page
                   schema:
                     type: integer
                     format: int32
-                - name: no_paging
-                  in: query
-                  description: Whether not paging
-                  schema:
-                    type: boolean
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.ListGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.user.ListUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -350,14 +282,14 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         post:
             tags:
-                - SecondGreeterAPI
-            description: CreateGreeter creates a new Greeter
-            operationId: SecondGreeterAPI_CreateGreeter
+                - UserAPI
+            description: CreateUser creates a new User
+            operationId: UserAPI_CreateUser
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
+                            $ref: '#/components/schemas/api.v1.mods.user.CreateUserRequest'
                 required: true
             responses:
                 "200":
@@ -365,19 +297,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.CreateGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.user.CreateUserResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/secondworld/greeter/{id}:
+    /api/v1/user/{id}:
         get:
             tags:
-                - SecondGreeterAPI
-            description: GetGreeter gets a Greeter
-            operationId: SecondGreeterAPI_GetGreeter
+                - UserAPI
+            description: GetUser gets a User
+            operationId: UserAPI_GetUser
             parameters:
                 - name: id
                   in: path
@@ -390,7 +322,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.GetGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.user.GetUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -399,9 +331,9 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         put:
             tags:
-                - SecondGreeterAPI
-            description: UpdateGreeter updates a Greeter
-            operationId: SecondGreeterAPI_UpdateGreeter
+                - UserAPI
+            description: UpdateUser updates a User
+            operationId: UserAPI_UpdateUser
             parameters:
                 - name: id
                   in: path
@@ -412,7 +344,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
+                            $ref: '#/components/schemas/api.v1.mods.user.User'
                 required: true
             responses:
                 "200":
@@ -420,7 +352,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.UpdateGreeterResponse'
+                                $ref: '#/components/schemas/api.v1.mods.user.UpdateUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -429,9 +361,9 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
-                - SecondGreeterAPI
-            description: DeleteGreeter deletes a Greeter
-            operationId: SecondGreeterAPI_DeleteGreeter
+                - UserAPI
+            description: DeleteUser deletes a User
+            operationId: UserAPI_DeleteUser
             parameters:
                 - name: id
                   in: path
@@ -444,81 +376,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.DeleteGreeterResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/google.rpc.Status'
-    /api/v1/secondworld/greeter/{id}/hello:
-        get:
-            tags:
-                - SecondGreeterAPI
-            description: SayHello is a get method
-            operationId: SecondGreeterAPI_SayHello
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-                - name: data.id
-                  in: query
-                  description: |-
-                    The original proto had an entgo option here, which is likely not needed for this example.
-                     option (ent.schema).gen = true;
-                  schema:
-                    type: string
-                - name: data.name
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.SayHelloResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/google.rpc.Status'
-        post:
-            tags:
-                - SecondGreeterAPI
-            description: PostHello is a post method
-            operationId: SecondGreeterAPI_PostHello
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.v1.services.secondworld.PostHelloResponse'
+                                $ref: '#/components/schemas/api.v1.mods.user.DeleteUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -527,124 +385,123 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
 components:
     schemas:
-        api.v1.services.helloworld.CreateGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.helloworld.DeleteGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.helloworld.GetGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.helloworld.GreeterData:
+        api.v1.mods.gateway.GetOrderResponse:
             type: object
             properties:
                 id:
                     type: string
-                    description: |-
-                        The original proto had an entgo option here, which is likely not needed for this example.
-                         option (ent.schema).gen = true;
-                name:
+                amount:
+                    type: number
+                    format: double
+                status:
                     type: string
-        api.v1.services.helloworld.ListGreeterResponse:
+        api.v1.mods.gateway.GetUserResponse:
+            type: object
+            properties:
+                id:
+                    type: string
+                username:
+                    type: string
+        api.v1.mods.order.CreateOrderRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+                amount:
+                    type: number
+                    format: double
+        api.v1.mods.order.CreateOrderResponse:
+            type: object
+            properties:
+                order:
+                    $ref: '#/components/schemas/api.v1.mods.order.Order'
+        api.v1.mods.order.DeleteOrderResponse:
             type: object
             properties:
                 success:
                     type: boolean
+        api.v1.mods.order.GetOrderResponse:
+            type: object
+            properties:
+                order:
+                    $ref: '#/components/schemas/api.v1.mods.order.Order'
+        api.v1.mods.order.ListOrderResponse:
+            type: object
+            properties:
                 total:
                     type: integer
                     format: int32
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-                error:
-                    type: integer
-                    description: |-
-                        Updated to use the new error reason enum from the runtime framework.
-                         Note: This is a breaking API change from the original Error message.
-                    format: enum
-                extra:
-                    $ref: '#/components/schemas/google.protobuf.Any'
-        api.v1.services.helloworld.PostHelloResponse:
-            type: object
-            properties:
-                data:
-                    $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-            description: The response message containing the greetings
-        api.v1.services.helloworld.SayHelloResponse:
-            type: object
-            properties:
-                data:
-                    $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-            description: The response message containing the greetings
-        api.v1.services.helloworld.UpdateGreeterResponse:
-            type: object
-            properties:
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.v1.services.helloworld.GreeterData'
-        api.v1.services.secondworld.CreateGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.secondworld.DeleteGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.secondworld.GetGreeterResponse:
-            type: object
-            properties: {}
-        api.v1.services.secondworld.GreeterData:
+                        $ref: '#/components/schemas/api.v1.mods.order.Order'
+        api.v1.mods.order.Order:
             type: object
             properties:
                 id:
                     type: string
-                    description: |-
-                        The original proto had an entgo option here, which is likely not needed for this example.
-                         option (ent.schema).gen = true;
-                name:
+                user_id:
                     type: string
-        api.v1.services.secondworld.ListGreeterResponse:
+                amount:
+                    type: number
+                    format: double
+                status:
+                    type: string
+            description: Order represents an order entity.
+        api.v1.mods.order.UpdateOrderResponse:
+            type: object
+            properties:
+                order:
+                    $ref: '#/components/schemas/api.v1.mods.order.Order'
+        api.v1.mods.user.CreateUserRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                nickname:
+                    type: string
+        api.v1.mods.user.CreateUserResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/api.v1.mods.user.User'
+        api.v1.mods.user.DeleteUserResponse:
             type: object
             properties:
                 success:
                     type: boolean
+        api.v1.mods.user.GetUserResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/api.v1.mods.user.User'
+        api.v1.mods.user.ListUserResponse:
+            type: object
+            properties:
                 total:
                     type: integer
                     format: int32
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
-                error:
-                    type: integer
-                    description: Updated to use the new error reason enum from the runtime framework.
-                    format: enum
-                extra:
-                    $ref: '#/components/schemas/google.protobuf.Any'
-        api.v1.services.secondworld.PostHelloResponse:
+                        $ref: '#/components/schemas/api.v1.mods.user.User'
+        api.v1.mods.user.UpdateUserResponse:
             type: object
             properties:
-                data:
-                    $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
-            description: The response message containing the greetings
-        api.v1.services.secondworld.SayHelloResponse:
+                user:
+                    $ref: '#/components/schemas/api.v1.mods.user.User'
+        api.v1.mods.user.User:
             type: object
             properties:
-                data:
-                    $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
-            description: The response message containing the greetings
-        api.v1.services.secondworld.UpdateGreeterResponse:
-            type: object
-            properties:
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.v1.services.secondworld.GreeterData'
+                id:
+                    type: string
+                username:
+                    type: string
+                nickname:
+                    type: string
+            description: User represents a user entity.
         google.protobuf.Any:
             type: object
             properties:
@@ -675,9 +532,23 @@ components:
             name: Authorization
             in: header
 tags:
-    - name: GatewayAPI
-      description: GatewayAPI acts as a facade for helloworld and secondworld services.
-    - name: HelloGreeterAPI
-      description: The greeting service definition.
-    - name: SecondGreeterAPI
-      description: The greeting service definition.
+    - name: EdgeGatewayAPI
+      description: |-
+        -------------------------------------------------
+          1. Edge Gateway Pattern
+         -------------------------------------------------
+         EdgeGatewayAPI defines its own API contract, independent of downstream services.
+         This provides a stable, curated, and secure boundary for external clients.
+         It requires a data transformation (DTO) layer in the gateway's service implementation.
+    - name: OrderAPI
+      description: The order service definition.
+    - name: ProxyGatewayAPI
+      description: |-
+        -------------------------------------------------
+          2. Transparent Proxy Gateway Pattern
+         -------------------------------------------------
+         ProxyGatewayAPI directly reuses the API contracts of downstream services.
+         This is simpler and faster to implement but creates tight coupling between
+         the gateway and internal modules.
+    - name: UserAPI
+      description: The user service definition.

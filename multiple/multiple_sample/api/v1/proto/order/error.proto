@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package api.v1.mods.order;
+
+import "buf/validate/validate.proto";
+import "errors/errors.proto";
+import "google/api/annotations.proto";
+
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/order;order";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.mods.order";
+
+enum ORDER_ERROR_REASON {
+  option (errors.default_code) = 500;
+  ORDER_ERROR_REASON_UNSPECIFIED = 0;
+  ORDER_NOT_FOUND = 1;
+}

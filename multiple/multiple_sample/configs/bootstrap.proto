@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package configs;
+
+import "configs/service.proto";
+import "runtime/discovery/v1/discovery.proto";
+
+option go_package = "basic-layout/multiple/multiple_sample/configs;configs";
+
+// Bootstrap is the main configuration structure for an application.
+message Bootstrap {
+  // Service configuration, including servers, clients, and middlewares.
+  configs.ServiceConfig service = 1;
+
+  // Discovery configuration for service registration and discovery.
+  runtime.discovery.v1.Discovery discovery = 2;
+}

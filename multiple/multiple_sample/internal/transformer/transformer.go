@@ -4,7 +4,7 @@ package transformer
 import (
 	"fmt"
 
-	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/configs"
 	datav1 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
 	discoveryv1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
@@ -21,6 +21,10 @@ type Config struct {
 	app       *appv1.App
 	config    interfaces.Config
 	bootstrap configs.Bootstrap
+}
+
+func (c *Config) Bootstrap() *configs.Bootstrap {
+	return &c.bootstrap
 }
 
 func (c *Config) DecodeData() (*datav1.Data, error) {

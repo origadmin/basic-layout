@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package api.v1.mods.order;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/order;order";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.mods.order";
+
+// The order service definition.
+service OrderAPI {
+  // CreateOrder creates a new Order
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/order"
+      body: "*"
+    };
+  }
+  // UpdateOrder updates an Order
+  rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/order/{id}"
+      body: "order"
+    };
+  }
+  // DeleteOrder deletes an Order
+  rpc DeleteOrder(DeleteOrderRequest) returns (DeleteOrderResponse) {
+    option (google.api.http) = {delete: "/api/v1/order/{id}"};
+  }
+  // GetOrder gets an Order
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {
+    option (google.api.http) = {get: "/api/v1/order/{id}"};
+  }
+  // ListOrder lists Orders
+  rpc ListOrder(ListOrderRequest) returns (ListOrderResponse) {
+    option (google.api.http) = {get: "/api/v1/order"};
+  }
+}
+
+// Order represents an order entity.
+message Order {
+  int64 id = 1;
+  int64 user_id = 2;
+  double amount = 3;
+  string status = 4;
+}
+
+message CreateOrderRequest {
+  int64 user_id = 1 [(buf.validate.field).int64.gt = 0];
+  double amount = 2 [(buf.validate.field).double.gt = 0];
+}
+message CreateOrderResponse {
+  Order order = 1;
+}
+
+message UpdateOrderRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+  Order order = 2;
+}
+message UpdateOrderResponse {
+  Order order = 1;
+}
+
+message DeleteOrderRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message DeleteOrderResponse {
+  bool success = 1;
+}
+
+message GetOrderRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+message GetOrderResponse {
+  Order order = 1;
+}
+
+message ListOrderRequest {
+  optional int32 current = 1;
+  optional int32 page_size = 2;
+}
+message ListOrderResponse {
+  int32 total = 2;
+  repeated Order data = 3;
+}
