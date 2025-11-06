@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package runtime.config.v1;
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/config/v1;configv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/config/v1;configv1";
 
 import "google/protobuf/duration.proto";
 import "runtime/security/transport/v1/tls.proto";

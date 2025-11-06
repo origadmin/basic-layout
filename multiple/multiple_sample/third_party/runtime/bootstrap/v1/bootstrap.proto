@@ -5,7 +5,7 @@ package runtime.bootstrap.v1;
 import "gnostic/openapi/v3/annotations.proto";
 import "runtime/source/v1/source.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/bootstrap/v1;v1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/bootstrap/v1;v1";
 
 // Bootstrap defines the structure of the bootstrap configuration file.
 message Bootstrap {

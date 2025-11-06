@@ -124,8 +124,8 @@ const file_simple_v1_simple_proto_rawDesc = "" +
 	"\x10SayHelloResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2y\n" +
 	"\rSimpleService\x12h\n" +
-	"\bSayHello\x12\x1e.api.v1.simple.SayHelloRequest\x1a\x1f.api.v1.simple.SayHelloResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/simple/helloB\xb7\x01\n" +
-	"\x11com.api.v1.simpleB\vSimpleProtoP\x01Z?basic-layout/simple/simple_app/api/v1/gen/go/simple/v1;simplev1\xa2\x02\x03AVS\xaa\x02\rApi.V1.Simple\xca\x02\rApi\\V1\\Simple\xe2\x02\x19Api\\V1\\Simple\\GPBMetadata\xea\x02\x0fApi::V1::Simpleb\x06proto3"
+	"\bSayHello\x12\x1e.api.v1.simple.SayHelloRequest\x1a\x1f.api.v1.simple.SayHelloResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/simple/helloB\xb4\x01\n" +
+	"\x11com.api.v1.simpleB\vSimpleProtoP\x01Z<basic-layout/simple/simple_app/api/v1/gen/go/simple;simplev1\xa2\x02\x03AVS\xaa\x02\rApi.V1.Simple\xca\x02\rApi\\V1\\Simple\xe2\x02\x19Api\\V1\\Simple\\GPBMetadata\xea\x02\x0fApi::V1::Simpleb\x06proto3"
 
 var (
 	file_simple_v1_simple_proto_rawDescOnce sync.Once

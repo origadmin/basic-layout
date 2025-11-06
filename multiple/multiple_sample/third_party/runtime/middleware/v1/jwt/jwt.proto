@@ -7,7 +7,7 @@ import "runtime/security/authn/v1/jwt.proto";
 import "validate/validate.proto";
 
 option cc_enable_arenas = true;
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1/jwt;jwtv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/middleware/v1/jwt;jwtv1";
 option java_multiple_files = true;
 option java_outer_classname = "JWTProto";
 option java_package = "com.github.origadmin.api.runtime.middleware.v1.jwt";

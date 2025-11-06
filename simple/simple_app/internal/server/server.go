@@ -19,7 +19,7 @@ import (
 
 	simplev1 "basic-layout/simple/simple_app/api/gen/go/simple/v1"
 	"basic-layout/simple/simple_app/internal/service"
-	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 )
 
 // ProviderSet is server providers.

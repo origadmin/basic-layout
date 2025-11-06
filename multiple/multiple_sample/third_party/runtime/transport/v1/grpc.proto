@@ -6,7 +6,7 @@ import "google/protobuf/duration.proto";
 import "runtime/transport/v1/selector.proto";
 import "runtime/security/transport/v1/tls.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1;transportv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/transport/v1;transportv1";
 
 // GrpcServerConfig defines the core configuration for a Kratos gRPC server.
 message GrpcServerConfig {

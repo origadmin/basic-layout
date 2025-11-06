@@ -11,7 +11,7 @@ import (
 	kratosconsul "github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/hashicorp/consul/api"
 
-	sourcev1 "github.com/origadmin/runtime/api/gen/go/runtime/source/v1"
+	sourcev1 "github.com/origadmin/runtime/api/gen/go/config/source/v1"
 	"github.com/origadmin/runtime/config"
 	"github.com/origadmin/runtime/interfaces/options"
 	"github.com/origadmin/toolkits/errors"

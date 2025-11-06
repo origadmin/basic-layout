@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package runtime.transport.websocket.v1;
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/transport/websocket/v1;websocketv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/transport/websocket/v1;websocketv1";
 option java_multiple_files = true;
 option java_outer_classname = "WebsocketProto";
 option java_package = "com.github.origadmin.api.runtime.websocket.v1";

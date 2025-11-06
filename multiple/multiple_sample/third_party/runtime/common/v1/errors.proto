@@ -5,7 +5,7 @@ package runtime.common.v1;
 import "errors/errors.proto";
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/common/v1;commonv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/common/v1;commonv1";
 
 // ErrorCategory defines the category of an error.
 // This helps in grouping related errors together for monitoring and client handling.

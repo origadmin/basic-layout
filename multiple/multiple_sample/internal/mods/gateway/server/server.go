@@ -14,7 +14,7 @@ import (
 	"basic-layout/multiple/multiple_sample/internal/configs"
 	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
 
-	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1" // Added import
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1" // Added import
 )
 
 // ProviderSet is server providers.

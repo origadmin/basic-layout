@@ -15,7 +15,7 @@ import (
 	"basic-layout/multiple/multiple_sample/internal/transformer"
 
 	"github.com/origadmin/runtime"
-	appv1 "github.com/origadmin/runtime/api/gen/go/runtime/app/v1"
+	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	"github.com/origadmin/runtime/bootstrap"
 	_ "github.com/origadmin/runtime/config/envsource"
 	_ "github.com/origadmin/runtime/config/file"

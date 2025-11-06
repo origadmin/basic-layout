@@ -16,7 +16,7 @@ import "runtime/broker/sqs/v1/sqs.proto";
 import "runtime/broker/stomp/v1/stomp.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/broker/v1;brokerv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/broker/v1;brokerv1";
 option java_multiple_files = true;
 option java_outer_classname = "BrokerV1Proto";
 option java_package = "com.github.origadmin.api.runtime.broker.v1";

@@ -6,7 +6,7 @@ import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/file/v1;filev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/file/v1;filev1";
 
 // FileInfo describes a file or directory.
 message FileInfo {

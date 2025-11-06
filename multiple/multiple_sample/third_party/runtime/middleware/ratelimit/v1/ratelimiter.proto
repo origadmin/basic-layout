@@ -7,7 +7,7 @@ import "validate/validate.proto";
 
 option cc_enable_arenas = true;
 // 修正 go_package 声明以匹配新的目录结构
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/middleware/ratelimit/v1;ratelimitv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/middleware/ratelimit/v1;ratelimitv1";
 option java_multiple_files = true;
 option java_outer_classname = "RateLimitProto";
 option java_package = "com.github.origadmin.api.runtime.middleware.ratelimit.v1";

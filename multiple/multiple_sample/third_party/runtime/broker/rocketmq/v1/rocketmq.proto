@@ -4,7 +4,7 @@ package runtime.broker.rocketmq.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/broker/rocketmq/v1;rocketmqv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/broker/rocketmq/v1;rocketmqv1";
 option java_multiple_files = true;
 option java_outer_classname = "RocketMQV1Proto";
 option java_package = "com.github.origadmin.api.runtime.broker.rocketmq.v1";

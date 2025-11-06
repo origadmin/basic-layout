@@ -4,7 +4,7 @@ package runtime.data.database.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/database/v1;databasev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/database/v1;databasev1";
 
 // Migration defines database migration settings.
 // This message was extracted from mysql.proto for better modularity.

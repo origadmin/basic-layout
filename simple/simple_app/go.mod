@@ -7,13 +7,13 @@ require (
 	github.com/bufbuild/buf v1.59.0
 	github.com/bytedance/gopkg v0.1.3
 	github.com/envoyproxy/protoc-gen-validate v1.2.1
-	github.com/go-kratos/kratos/cmd/kratos/v2 v2.0.0-20251015020953-cdff24709025
-	github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2 v2.0.0-20251015020953-cdff24709025
+	github.com/go-kratos/kratos/cmd/kratos/v2 v2.0.0-20251106012513-9262193e351a
+	github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2 v2.0.0-20251106012513-9262193e351a
 	github.com/go-kratos/kratos/v2 v2.9.1
 	github.com/golangci/golangci-lint v1.64.8
 	github.com/google/gnostic v0.7.1
 	github.com/google/wire v0.7.0
-	github.com/origadmin/runtime v0.2.11
+	github.com/origadmin/runtime v0.2.12
 	github.com/sqlite3ent/sqlite3 v1.39.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20251103181224-f26f9409b101
 	google.golang.org/grpc v1.76.0
@@ -112,6 +112,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.3 // indirect
 	github.com/go-critic/go-critic v0.12.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
+	github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2 v2.0.0-20251106012513-9262193e351a // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
@@ -127,7 +128,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/go-xmlfmt/xmlfmt v1.1.3 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/goexts/generic v0.10.0 // indirect
+	github.com/goexts/generic v0.11.0 // indirect
 	github.com/gofrs/flock v0.13.0 // indirect
 	github.com/golang-cz/devslog v0.0.15 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect

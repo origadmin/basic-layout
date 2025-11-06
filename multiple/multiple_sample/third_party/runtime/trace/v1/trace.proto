@@ -4,7 +4,7 @@ package runtime.trace.v1;
 
 import "google/protobuf/duration.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/trace/v1;tracev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/trace/v1;tracev1";
 
 // Trace defines the basic configuration for distributed tracing.
 // This provides a minimal set of options, allowing for future expansion.

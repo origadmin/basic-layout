@@ -9,7 +9,7 @@ import "runtime/data/cache/v1/memory.proto";    // Import MemoryConfig
 import "runtime/data/cache/v1/redis.proto";     // Import RedisConfig
 import "google/protobuf/struct.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/cache/v1;cachev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/cache/v1;cachev1";
 
 // CacheConfig defines the configuration for various caching mechanisms.
 // This message was extracted from storage.proto and renamed for consistency.

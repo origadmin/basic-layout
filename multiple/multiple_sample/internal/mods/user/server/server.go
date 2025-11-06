@@ -13,8 +13,8 @@ import (
 	userv1 "basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
 	"basic-layout/multiple/multiple_sample/configs"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/service"
-	grpcv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/grpc/v1"
-	httpv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/http/v1"
+	grpcv1 "github.com/origadmin/runtime/api/gen/go/config/transport/grpc/v1"
+	httpv1 "github.com/origadmin/runtime/api/gen/go/config/transport/http/v1"
 )
 
 // ProviderSet is server providers.

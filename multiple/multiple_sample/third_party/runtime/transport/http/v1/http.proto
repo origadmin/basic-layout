@@ -7,7 +7,7 @@ import "runtime/middleware/cors/v1/cors.proto";
 import "runtime/security/transport/v1/tls.proto";
 import "runtime/selector/v1/selector.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/transport/http/v1;httpv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/transport/http/v1;httpv1";
 
 // Server defines the core configuration for a Kratos HTTP server.
 message Server {

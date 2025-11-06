@@ -5,7 +5,7 @@ package runtime.data.cache.v1;
 import "gnostic/openapi/v3/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/cache/v1;cachev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/cache/v1;cachev1";
 
 // MemcachedConfig defines the configuration for a Memcached client.
 // This message was extracted from storage.proto and renamed for consistency.

@@ -5,7 +5,7 @@ package runtime.data.file.v1;
 import "gnostic/openapi/v3/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/file/v1;filev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/file/v1;filev1";
 
 // OssConfig defines the configuration for cloud object storage.
 // This message was extracted from storage.proto and renamed for consistency.

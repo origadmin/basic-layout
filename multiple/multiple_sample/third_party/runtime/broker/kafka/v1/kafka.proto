@@ -4,7 +4,7 @@ package runtime.broker.kafka.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/broker/kafka/v1;kafkav1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/broker/kafka/v1;kafkav1";
 option java_multiple_files = true;
 option java_outer_classname = "KafkaV1Proto";
 option java_package = "com.github.origadmin.api.runtime.broker.kafka.v1";

@@ -17,8 +17,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
-	"github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
-	"github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
+	"github.com/origadmin/runtime/api/gen/go/config/data/v1"
+	"github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 )
 
 import (

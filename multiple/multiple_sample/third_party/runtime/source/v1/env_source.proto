@@ -3,7 +3,7 @@ syntax = "proto3";
 package runtime.source.v1;
 
 option cc_enable_arenas = true;
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/source/v1;sourcev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/source/v1;sourcev1";
 option java_multiple_files = true;
 option java_outer_classname = "EnvSourceProto";
 option java_package = "com.github.origadmin.api.runtime.source.v1";

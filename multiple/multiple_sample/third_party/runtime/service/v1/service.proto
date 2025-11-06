@@ -5,7 +5,7 @@ package runtime.service.v1;
 import "runtime/transport/v1/transport.proto";
 import "runtime/middleware/v1/middleware.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/service/v1;servicev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/service/v1;servicev1";
 
 // Service defines a complete microservice unit.
 // It encapsulates the service's identity, its server endpoints, its client dependencies,

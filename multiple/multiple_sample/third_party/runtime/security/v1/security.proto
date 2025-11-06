@@ -6,7 +6,7 @@ import "runtime/security/authn/v1/authn.proto";
 import "runtime/security/authz/v1/authz.proto";
 import "runtime/security/transport/v1/tls.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/security/v1;securityv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/security/v1;securityv1";
 
 // Security defines the top-level configuration for all security-related components.
 message Security {

@@ -4,7 +4,7 @@ package runtime.broker.nsq.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/broker/nsq/v1;nsqv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/broker/nsq/v1;nsqv1";
 option java_multiple_files = true;
 option java_outer_classname = "NsqV1Proto";
 option java_package = "com.github.origadmin.api.runtime.broker.nsq.v1";

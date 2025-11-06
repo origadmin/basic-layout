@@ -21,8 +21,8 @@ import (
 	"basic-layout/simple/simple_app/internal/server"
 	"basic-layout/simple/simple_app/internal/service"
 	"github.com/origadmin/runtime"
-	datav1 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
-	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
+	datav1 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 )
 
 // providerSet for components provided by the runtime.

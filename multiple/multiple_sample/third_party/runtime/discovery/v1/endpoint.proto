@@ -7,7 +7,7 @@ import "runtime/discovery/v1/discovery.proto";
 import "google/protobuf/duration.proto";
 import "runtime/middleware/v1/middleware.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1;discoveryv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/discovery/v1;discoveryv1";
 
 //
 // DEPRECATED: This file is deprecated and will be removed in a future version.

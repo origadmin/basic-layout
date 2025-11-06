@@ -7,7 +7,7 @@
 package configs
 
 import (
-	v1 "github.com/origadmin/runtime/api/gen/go/runtime/discovery/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/config/discovery/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

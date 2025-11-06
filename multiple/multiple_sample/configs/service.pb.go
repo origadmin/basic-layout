@@ -7,9 +7,9 @@
 package configs
 
 import (
-	v12 "github.com/origadmin/runtime/api/gen/go/runtime/data/v1"
-	v11 "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1"
-	v1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
+	v12 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
+	v11 "github.com/origadmin/runtime/api/gen/go/config/middleware/v1"
+	v1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

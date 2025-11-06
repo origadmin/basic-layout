@@ -4,7 +4,7 @@ package runtime.broker.pulsar.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/broker/pulsar/v1;pulsarv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/broker/pulsar/v1;pulsarv1";
 option java_multiple_files = true;
 option java_outer_classname = "PulsarV1Proto";
 option java_package = "com.github.origadmin.api.runtime.broker.pulsar.v1";

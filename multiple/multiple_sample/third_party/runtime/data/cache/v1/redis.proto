@@ -5,7 +5,7 @@ package runtime.data.cache.v1;
 import "gnostic/openapi/v3/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/cache/v1;cachev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/cache/v1;cachev1";
 
 // RedisConfig defines the configuration for a Redis client used as a data store (e.g., cache, key-value store).
 message RedisConfig {

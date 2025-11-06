@@ -4,7 +4,7 @@ package runtime.selector.v1;
 
 import "google/protobuf/struct.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/selector/v1;selectorv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/selector/v1;selectorv1";
 
 // SelectorConfig defines the configuration for a client-side selector (e.g., load balancer).
 message SelectorConfig {

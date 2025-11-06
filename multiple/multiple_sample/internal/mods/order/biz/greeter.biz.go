@@ -13,7 +13,7 @@ import (
 	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
 	"basic-layout/multiple/multiple_sample/internal/mods/order/dto"
 
-	commonv1 "github.com/origadmin/runtime/api/gen/go/runtime/common/v1"
+	commonv1 "github.com/origadmin/runtime/api/gen/go/config/common/v1"
 	"github.com/origadmin/runtime/errors"
 )
 

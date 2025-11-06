@@ -3,7 +3,7 @@ syntax = "proto3";
 package runtime.middleware.v1.metrics;
 
 option cc_enable_arenas = true;
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/middleware/v1/metrics;metricsv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/middleware/v1/metrics;metricsv1";
 option java_multiple_files = true;
 option java_outer_classname = "CircuitBreakerProto";
 option java_package = "com.github.origadmin.api.runtime.middleware.v1.metrics";

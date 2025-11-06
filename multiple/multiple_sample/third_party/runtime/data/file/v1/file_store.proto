@@ -8,7 +8,7 @@ import "runtime/data/file/v1/oss.proto"; // Import OssConfig
 import "validate/validate.proto";
 import "google/protobuf/struct.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/data/file/v1;filev1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/file/v1;filev1";
 
 // FileStoreConfig groups all "file/object storage" type backends into one category.
 // It uses the 'driver' field to determine which specific implementation to use.

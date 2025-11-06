@@ -101,7 +101,7 @@ endif
 	@echo "Running go mod tidy to ensure tool dependencies are in go.mod..."
 	@go mod tidy
 
-deps: ## 📦 Update and export third-party protobuf dependencies
+deps: clean-deps ## 📦 Update and export third-party protobuf dependencies
 	@echo "Updating buf dependencies..."
 	@buf dep update
 	@echo "Exporting protobuf dependencies to $(THIRD_PARTY_PATH)..."
@@ -111,6 +111,11 @@ deps: ## 📦 Update and export third-party protobuf dependencies
 	@buf export buf.build/gnostic/gnostic -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/kratos/apis -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
+
+
+clean-deps: ## 🧹 Clean up third-party protobuf dependencies
+	@echo "Cleaning up third-party protobuf dependencies..."
+	@$(RM_RF) $(THIRD_PARTY_PATH)
 
 generate: ## 🧬 Generate all code from Protobuf and run go generate (includes wire, openapi)
 	@echo "Generating API Protobuf code using buf..."

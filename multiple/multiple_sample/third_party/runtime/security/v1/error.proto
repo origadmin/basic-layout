@@ -4,7 +4,7 @@ package runtime.security.v1;
 
 import "errors/errors.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/security/v1;securityv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/security/v1;securityv1";
 
 // SecurityErrorReason defines the application's specific security error codes.
 // These codes supplement the common error codes and provide more specific details

@@ -8,7 +8,7 @@ import "runtime/transport/grpc/v1/grpc.proto";
 import "runtime/transport/http/v1/http.proto";
 import "runtime/transport/websocket/v1/websocket.proto";
 
-option go_package = "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1;transportv1";
+option go_package = "github.com/origadmin/runtime/api/gen/go/config/transport/v1;transportv1";
 
 // =================================================================
 //  Server Definitions
