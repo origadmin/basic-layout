@@ -18,15 +18,21 @@ ifeq ($(GOHOSTOS), windows)
     .SHELLFLAGS    := -NoProfile -Command
     # Git commands for Windows (PowerShell)
     CMD_SEP        := ;
+    GOWORKOFF      := $$env:GOWORK='off';
+    RM_RF          := Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    RM_F           := Remove-Item -Force -ErrorAction SilentlyContinue
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
     BUILD_DATE     := $(shell Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK')
-    GIT_TREE_STATE := $(shell if ((git status --porcelain)) { 'dirty' } else { 'clean' })
+    GIT_TREE_STATE := $(shell powershell -Command "if ((git status --porcelain)) { 'dirty' } else { 'clean' }")
 else
     SHELL          := /bin/bash
     # Git commands for Linux/macOS (Bash)
     CMD_SEP        := &&
+    GOWORKOFF      := GOWORK=off
+    RM_RF          := rm -rf
+    RM_F           := rm -f
     GIT_COMMIT     := $(shell git rev-parse --short HEAD)
     GIT_BRANCH     := $(shell git rev-parse --abbrev-ref HEAD)
     GIT_VERSION    := $(shell git describe --tags --always)
@@ -92,14 +98,10 @@ generate: ## 🧬 Generate all code from Protobuf and run go generate (includes 
 	@buf generate
 	@echo "Generating Internal Configs Protobuf code..."
 	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
-	@echo "Generating Wire code for dependency injection..."
-	@cd cmd/user $(CMD_SEP) wire
-	@cd cmd/order $(CMD_SEP) wire
-	@cd cmd/gateway $(CMD_SEP) wire
-	@echo "Running go generate for other code generation tasks..."
-	@go generate ./...
+	@echo "Running go generate for all packages (includes wire, etc.)..."
+	@$(GOWORKOFF) go generate ./...
 	@echo "Running go mod tidy after code generation..."
-	@go mod tidy
+	@$(GOWORKOFF) go mod tidy
 
 build: ## 🔨 Build all services (user, order, gateway)
 	@echo "Building user service..."
@@ -123,11 +125,11 @@ lint: ## 🔍 Run golangci-lint (install if not present)
 
 clean: ## 🧹 Clean up generated files and build artifacts
 	@echo "Cleaning up generated files and build artifacts..."
-	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./api/v1/gen
-	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./internal/mods/*/gen
-	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./dist
-	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./third_party
-	@Remove-Item -Force -ErrorAction SilentlyContinue ./go.sum # Clean go.sum to force re-download if needed
+	@$(RM_RF) ./api/v1/gen
+	@$(RM_RF) ./internal/mods/*/gen
+	@$(RM_RF) ./dist
+	@$(RM_RF) ./third_party
+	@$(RM_F) ./go.sum # Clean go.sum to force re-download if needed
 
 release: ## 🚀 Run GoReleaser to create releases
 	@echo "Running GoReleaser..."

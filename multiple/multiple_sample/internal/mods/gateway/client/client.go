@@ -10,13 +10,11 @@ import (
 
 	"github.com/google/wire"
 
-	"github.com/origadmin/runtime/service/transport/grpc" // Renamed for clarity
-
-	"basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
 	"basic-layout/multiple/multiple_sample/api/v1/gen/go/order"
-	"basic-layout/multiple/multiple_sample/internal/configs"
-
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
+	"basic-layout/multiple/multiple_sample/configs"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
+	"github.com/origadmin/runtime/service/transport/grpc"
 )
 
 // ProviderSet is client providers.
@@ -25,8 +23,8 @@ var ProviderSet = wire.NewSet(NewUserClient, NewOrderClient)
 // NewUserClient creates a new UserAPI client.
 func NewUserClient(ctx context.Context, c *configs.Bootstrap) (user.UserAPIClient, error) {
 	var clientConfig *transportv1.Client
-	if c.Server != nil && c.Server.Service != nil {
-		for _, cli := range c.Server.GetService().Clients {
+	if c.GetClients().GetConfigs() != nil {
+		for _, cli := range c.GetClients().GetConfigs() {
 			if cli.Name == "client.user" {
 				clientConfig = cli
 				break
@@ -53,8 +51,8 @@ func NewUserClient(ctx context.Context, c *configs.Bootstrap) (user.UserAPIClien
 // NewOrderClient creates a new OrderAPI client.
 func NewOrderClient(ctx context.Context, c *configs.Bootstrap) (order.OrderAPIClient, error) {
 	var clientConfig *transportv1.Client
-	if c.Server != nil && c.Server.Service != nil {
-		for _, cli := range c.Server.Service.Clients {
+	if c.GetClients().GetConfigs() != nil {
+		for _, cli := range c.GetClients().GetConfigs() {
 			if cli.Name == "client.order" {
 				clientConfig = cli
 				break

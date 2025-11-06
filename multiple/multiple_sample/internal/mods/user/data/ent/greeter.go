@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"fmt"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
+	"fmt"
 	"strings"
 
 	"entgo.io/ent"

@@ -1,46 +1,68 @@
 package data
 
 import (
-	"basic-layout/multiple/multiple_sample/configs"
-	"basic-layout/multiple/multiple_sample/internal/mods/order/data/ent"
 	"context"
 
+	entsql "entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent"
 	"github.com/origadmin/runtime"
-	runtime_data_database "github.com/origadmin/runtime/data/database/v1"
+	"github.com/origadmin/runtime/data/storage"
+	"github.com/origadmin/runtime/interfaces"
+	ifacestorage "github.com/origadmin/runtime/interfaces/storage"
 )
 
-// ProviderSet is order module's data providers.
+// ProviderSet is data providers.
 var ProviderSet = wire.NewSet(NewData, NewOrderRepo)
 
-// Data .
+// Data encapsulates ent client and cache.
 type Data struct {
-	db *ent.Client
+	entClient *ent.Client
+	cache     ifacestorage.Cache
+	provider  ifacestorage.Provider
+	config    interfaces.StructuredConfig
 }
 
-// NewData .
-func NewData(rt *runtime.Runtime, conf *configs.Bootstrap, logger log.Logger) (*Data, func(), error) {
-	helper := log.NewHelper(log.With(logger, "module", "data/order"))
+// NewData creates a new Data instance.
+func NewData(rt *runtime.Runtime) (*Data, func(), error) {
+	logHelper := log.NewHelper(rt.Logger())
 
-	// Get database config for this module
-	dbConf, err := conf.GetData().GetDatabases().GetConfig("order_db")
+	provider, err := storage.New(rt.StructuredConfig())
 	if err != nil {
 		return nil, nil, err
 	}
 
-	// Create database client
-	db, err := runtime_data_database.NewDatabase(rt, dbConf)
+	database, err := provider.DefaultDatabase()
 	if err != nil {
 		return nil, nil, err
 	}
-	client := ent.NewClient(ent.Driver(db))
 
+	activeDB := entsql.OpenDB(database.Dialect(), database.DB())
+	entClient := ent.NewClient(ent.Driver(activeDB))
+	// Run the auto migration tool.
+	if err := entClient.Schema.Create(context.Background()); err != nil {
+		logHelper.Fatalf("failed creating schema resources: %v", err)
+	}
+
+	cache, err := provider.DefaultCache()
+	if err != nil {
+		return nil, nil, err
+	}
 	cleanup := func() {
-		helper.Info("closing the order module data resources")
-		if err := client.Close(); err != nil {
-			helper.Errorf("failed to close order db client: %v", err)
+		logHelper.Info("closing the data resources")
+		if entClient != nil {
+			if err := entClient.Close(); err != nil {
+				logHelper.Errorf("failed to close ent client: %v", err)
+			}
 		}
 	}
-	return &Data{db: client}, cleanup, nil
+
+	return &Data{
+		config:    rt.StructuredConfig(),
+		provider:  provider,
+		entClient: entClient,
+		cache:     cache,
+	}, cleanup, nil
 }

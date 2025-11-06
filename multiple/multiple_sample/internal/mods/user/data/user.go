@@ -1,29 +1,32 @@
-/*
- * Copyright (c) 2024 OrigAdmin. All rights reserved.
- */
-
 package data
 
 import (
+	"context"
+
 	entsql "entgo.io/ent/dialect/sql"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 
-	"basic-layout/multiple/multiple_sample/configs"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent"
+	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/data/storage"
+	"github.com/origadmin/runtime/interfaces"
+	ifacestorage "github.com/origadmin/runtime/interfaces/storage"
+	"github.com/origadmin/runtime/log"
 )
 
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(NewData, NewUserRepo)
 
-// Data .
+// Data encapsulates ent client and cache.
 type Data struct {
-	// TODO wrapped database client
+	entClient *ent.Client
+	cache     ifacestorage.Cache
+	provider  ifacestorage.Provider
+	config    interfaces.StructuredConfig
 }
 
-// NewData .
-func NewData(bootstrap *configs.Bootstrap, logger log.Logger) (*Data, func(), error) {
+// NewData creates a new Data instance.
+func NewData(rt *runtime.Runtime) (*Data, func(), error) {
 	logHelper := log.NewHelper(rt.Logger())
 
 	provider, err := storage.New(rt.StructuredConfig())
@@ -62,9 +65,4 @@ func NewData(bootstrap *configs.Bootstrap, logger log.Logger) (*Data, func(), er
 		entClient: entClient,
 		cache:     cache,
 	}, cleanup, nil
-
-	cleanup := func() {
-		log.NewHelper(logger).Info("closing the data resources")
-	}
-	return &Database{}, cleanup, nil
 }

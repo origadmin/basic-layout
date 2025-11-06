@@ -9,13 +9,11 @@ import (
 	"log"
 	"path/filepath"
 
-	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 
 	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
 	"basic-layout/multiple/multiple_sample/internal/transformer"
 
-	"basic-layout/multiple/multiple_sample/configs"
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	"github.com/origadmin/runtime/bootstrap"
@@ -78,16 +76,7 @@ func main() {
 	defer rt.Cleanup()
 
 	// wireApp now takes the runtime instance and builds the kratos app.
-	var bc *configs.Bootstrap
-	if v, ok := rt.Config().(*transformer.Config); ok {
-		bc = v.Bootstrap()
-	} else {
-		log.Fatalf("failed to scan bootstrap config: %v", err)
-		return
-	}
-
-	logger := kratoslog.With(rt.Logger(), "service.id", appInfo.Id, "service.name", appInfo.Name, "service.version", appInfo.Version)
-	app, cleanupApp, err := wireApp(rt, bc, logger)
+	app, cleanupApp, err := wireApp(rt)
 	if err != nil {
 		log.Fatalf("failed to wire app: %v", err)
 	}

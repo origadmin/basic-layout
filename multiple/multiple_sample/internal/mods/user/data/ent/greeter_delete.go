@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"context"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/predicate"
+	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

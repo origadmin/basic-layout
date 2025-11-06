@@ -3,9 +3,9 @@
 package hook
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent"
 	"context"
 	"fmt"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent"
 )
 
 // The GreeterFunc type is an adapter to allow the use of ordinary

@@ -2,16 +2,50 @@ syntax = "proto3";
 
 package configs;
 
-import "configs/service.proto";
-import "runtime/discovery/v1/discovery.proto";
+import "config/app/v1/app.proto";
+import "config/broker/v1/broker.proto";
+import "config/data/v1/data.proto";
+import "config/discovery/v1/discovery.proto";
+import "config/logger/v1/logger.proto";
+import "config/middleware/v1/middleware.proto";
+import "config/security/v1/security.proto";
+import "config/trace/v1/trace.proto";
+import "config/transport/v1/transport.proto";
 
 option go_package = "basic-layout/multiple/multiple_sample/configs;configs";
 
-// Bootstrap is the main configuration structure for an application.
+// Bootstrap is the root configuration example for the entire application.
+// The new structure aggregates all configuration items into logical groups, making it clearer and easier to understand.
 message Bootstrap {
-  // Service configuration, including servers, clients, and middlewares.
-  configs.ServiceConfig service = 1;
+  // App contains application-level metadata (e.g., name, version, environment).
+  config.app.v1.App app = 1;
 
-  // Discovery configuration for service registration and discovery.
-  runtime.discovery.v1.Discovery discovery = 2;
+  // Servers holds configurations for all network servers (HTTP, gRPC, WebSocket).
+  // This now uses the Servers collection from the transport module.
+  config.transport.v1.Servers servers = 2;
+
+  // Data holds configurations for all data sources (databases, caches).
+  config.data.v1.Data data = 3;
+
+  // Logger configures the application's logging behavior.
+  config.logger.v1.Logger logger = 4;
+
+  // Trace configures the distributed tracing system.
+  config.trace.v1.Trace trace = 5;
+
+  // Discovery configures the service discovery client.
+  config.discovery.v1.Discoveries discoveries = 6;
+
+  // Broker configures the message brokers.
+  config.broker.v1.Brokers brokers = 7;
+
+  // Middlewares defines the middleware chain.
+  config.middleware.v1.Middlewares middlewares = 8;
+
+  // Security defines authentication and authorization policies.
+  config.security.v1.Security security = 9;
+
+  // Clients holds configurations for all network clients (HTTP, gRPC).
+  // This now uses the Clients collection from the transport module.
+  config.transport.v1.Clients clients = 10;
 }

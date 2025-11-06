@@ -14,7 +14,7 @@ require (
 	github.com/google/gnostic v0.7.1
 	github.com/google/wire v0.7.0
 	github.com/origadmin/runtime v0.2.12
-	github.com/sqlite3ent/sqlite3 v1.39.0
+	github.com/sqlite3ent/sqlite3 v1.40.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20251103181224-f26f9409b101
 	google.golang.org/grpc v1.76.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1

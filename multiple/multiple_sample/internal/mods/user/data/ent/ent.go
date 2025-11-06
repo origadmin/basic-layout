@@ -3,10 +3,10 @@
 package ent
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
 	"context"
 	"errors"
 	"fmt"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
 	"reflect"
 	"sync"
 

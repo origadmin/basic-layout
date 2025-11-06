@@ -3,11 +3,11 @@
 package ent
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/predicate"
 	"sync"
 
 	"entgo.io/ent"

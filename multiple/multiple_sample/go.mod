@@ -8,10 +8,10 @@ require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.10-20250912141014-52f32327d4b0.1
 	entgo.io/ent v0.14.1
 	github.com/go-kratos/kratos/v2 v2.9.1
-	github.com/goexts/generic v0.10.0 // indirect
+	github.com/goexts/generic v0.11.0 // indirect
 	github.com/google/wire v0.7.0
 	github.com/hashicorp/consul/api v1.30.0
-	github.com/origadmin/runtime v0.2.11
+	github.com/origadmin/runtime v0.2.12
 	github.com/origadmin/slog-kratos v1.0.5 // indirect
 	github.com/origadmin/toolkits/errors v1.1.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20251020155222-88f65dc88635
@@ -73,8 +73,9 @@ require (
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-chi/chi/v5 v5.2.3 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
-	github.com/go-kratos/kratos/cmd/kratos/v2 v2.0.0-20251015020953-cdff24709025 // indirect
-	github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2 v2.0.0-20251015020953-cdff24709025 // indirect
+	github.com/go-kratos/kratos/cmd/kratos/v2 v2.0.0-20251106012513-9262193e351a // indirect
+	github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2 v2.0.0-20251106012513-9262193e351a // indirect
+	github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2 v2.0.0-20251106012513-9262193e351a // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect

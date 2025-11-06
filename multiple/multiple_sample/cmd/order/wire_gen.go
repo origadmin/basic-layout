@@ -7,7 +7,7 @@
 package main
 
 import (
-	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/configs"
 	"basic-layout/multiple/multiple_sample/internal/mods/order/biz"
 	"basic-layout/multiple/multiple_sample/internal/mods/order/data"
 	"basic-layout/multiple/multiple_sample/internal/mods/order/server"
@@ -15,10 +15,10 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/api/gen/go/config/data/v1"
+	"github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 )
 
 import (
@@ -35,25 +35,21 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
+	servers := provideServerConfig(bootstrap)
+	dataData, cleanup, err := data.NewData(rt)
+	if err != nil {
+		return nil, nil, err
+	}
 	logger := provideLogger(rt)
-	database, cleanup, err := data.NewDB(bootstrap, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	greeterRepo := data.NewGreeterDal(database, logger)
-	secondGreeterAPIClient := biz.NewGreeterClient(greeterRepo, logger)
-	greeterService := service.NewGreeterService(secondGreeterAPIClient)
-	httpServer, err := server.NewHTTPServer(bootstrap, greeterService, logger)
+	orderRepo := data.NewOrderRepo(dataData, logger)
+	orderUsecase := biz.NewOrderUsecase(orderRepo, logger)
+	orderService := service.NewOrderService(orderUsecase, logger)
+	v, err := server.NewServers(servers, orderService, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	grpcServer, err := server.NewGRPCServer(bootstrap, greeterService, logger)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	app := NewKratosApp(rt, httpServer, grpcServer)
+	app := NewKratosApp(rt, v)
 	return app, func() {
 		cleanup()
 	}, nil
@@ -65,6 +61,8 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
+	provideServerConfig,
+	provideDataConfig,
 )
 
 // provideLogger extracts the logger from the runtime instance.
@@ -81,8 +79,17 @@ func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
 	return &bc, nil
 }
 
+// provideServerConfig extracts the server config from the bootstrap config.
+func provideServerConfig(bc *configs.Bootstrap) *transportv1.Servers {
+	return bc.GetServers()
+}
+
+// provideDataConfig extracts the data config from the bootstrap config.
+func provideDataConfig(bc *configs.Bootstrap) *datav1.Data {
+	return bc.GetData()
+}
+
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
-	servers := []transport.Server{hs, gs}
+func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }

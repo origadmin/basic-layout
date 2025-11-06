@@ -15,7 +15,9 @@ var ProviderSet = wire.NewSet(NewUserUsecase)
 type UserRepo interface {
 	Create(context.Context, *User) (*User, error)
 	Get(context.Context, int64) (*User, error)
-	// Define other methods like Update, Delete, List etc.
+	Update(context.Context, *User) (*User, error)
+	Delete(context.Context, int64) error
+	List(ctx context.Context, current, pageSize int32) ([]*User, int32, error)
 }
 
 // User is a User model (Domain Object).
@@ -49,4 +51,22 @@ func (uc *UserUsecase) Create(ctx context.Context, u *User) (*User, error) {
 func (uc *UserUsecase) Get(ctx context.Context, id int64) (*User, error) {
 	uc.log.WithContext(ctx).Infof("GetUser: %v", id)
 	return uc.repo.Get(ctx, id)
+}
+
+// Update updates an existing User.
+func (uc *UserUsecase) Update(ctx context.Context, u *User) (*User, error) {
+	uc.log.WithContext(ctx).Infof("UpdateUser: %v", u.ID)
+	return uc.repo.Update(ctx, u)
+}
+
+// Delete deletes a User by their ID.
+func (uc *UserUsecase) Delete(ctx context.Context, id int64) error {
+	uc.log.WithContext(ctx).Infof("DeleteUser: %v", id)
+	return uc.repo.Delete(ctx, id)
+}
+
+// List lists all Users with pagination.
+func (uc *UserUsecase) List(ctx context.Context, current, pageSize int32) ([]*User, int32, error) {
+	uc.log.WithContext(ctx).Info("ListUsers")
+	return uc.repo.List(ctx, current, pageSize)
 }

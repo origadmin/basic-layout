@@ -3,11 +3,11 @@
 package ent
 
 import (
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
+	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/predicate"
 	"context"
 	"fmt"
 	"math"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/greeter"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data/ent/predicate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -485,14 +485,14 @@ func (gq *GreeterQuery) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelec
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//	  Name string `json:"name,omitempty"`
 //	}
 //
 //	client.Greeter.Query().
-//		Omit(
-//		greeter.FieldName,
-//		).
-//		Scan(ctx, &v)
+//	  Omit(
+//	  greeter.FieldName,
+//	  ).
+//	  Scan(ctx, &v)
 func (gq *GreeterQuery) Omit(fields ...string) *GreeterSelect {
 	omits := make(map[string]struct{}, len(fields))
 	for i := range fields {

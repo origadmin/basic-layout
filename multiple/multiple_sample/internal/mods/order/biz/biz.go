@@ -19,7 +19,9 @@ var ProviderSet = wire.NewSet(NewOrderUsecase)
 type OrderRepo interface {
 	Create(context.Context, *Order) (*Order, error)
 	Get(context.Context, int64) (*Order, error)
-	// Define other methods like Update, Delete, List etc.
+	Update(context.Context, *Order) (*Order, error)
+	Delete(context.Context, int64) error
+	List(ctx context.Context, current, pageSize int32) ([]*Order, int32, error)
 }
 
 // Order is an Order model (Domain Object).
@@ -54,4 +56,22 @@ func (uc *OrderUsecase) Create(ctx context.Context, o *Order) (*Order, error) {
 func (uc *OrderUsecase) Get(ctx context.Context, id int64) (*Order, error) {
 	uc.log.WithContext(ctx).Infof("GetOrder: %v", id)
 	return uc.repo.Get(ctx, id)
+}
+
+// Update updates an existing Order.
+func (uc *OrderUsecase) Update(ctx context.Context, o *Order) (*Order, error) {
+	uc.log.WithContext(ctx).Infof("UpdateOrder: %v", o.ID)
+	return uc.repo.Update(ctx, o)
+}
+
+// Delete deletes an Order by its ID.
+func (uc *OrderUsecase) Delete(ctx context.Context, id int64) error {
+	uc.log.WithContext(ctx).Infof("DeleteOrder: %v", id)
+	return uc.repo.Delete(ctx, id)
+}
+
+// List lists all Orders with pagination.
+func (uc *OrderUsecase) List(ctx context.Context, current, pageSize int32) ([]*Order, int32, error) {
+	uc.log.WithContext(ctx).Info("ListOrders")
+	return uc.repo.List(ctx, current, pageSize)
 }

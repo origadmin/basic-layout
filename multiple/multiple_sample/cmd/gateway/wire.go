@@ -5,6 +5,8 @@
  * Copyright (c) 2024 OrigAdmin. All rights reserved.
  */
 
+// The build tag makes sure the stub is not built in the final build.
+//go:generate go run -mod=mod github.com/google/wire/cmd/wire gen
 package main
 
 import (
@@ -13,14 +15,13 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	kratoslog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 
-	"basic-layout/multiple/multiple_sample/internal/configs"
+	"basic-layout/multiple/multiple_sample/configs"
 	"basic-layout/multiple/multiple_sample/internal/mods/gateway/client"
 	"basic-layout/multiple/multiple_sample/internal/mods/gateway/server"
 	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/interfaces"
@@ -42,7 +43,8 @@ var runtimeProviderSet = wire.NewSet(
 	provideLogger,
 	provideConfig,
 	provideRuntimeConfig,
-	provideContext, // Added
+	provideServerConfig,
+	provideContext,
 )
 
 // provideLogger extracts the logger from the runtime instance.
@@ -59,9 +61,13 @@ func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
 	return &bc, nil
 }
 
+// provideServerConfig extracts the server config from the bootstrap config.
+func provideServerConfig(bc *configs.Bootstrap) *transportv1.Servers {
+	return bc.GetServers()
+}
+
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, hs *http.Server, gs *grpc.Server) *kratos.App {
-	servers := []transport.Server{hs, gs}
+func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }
 
