@@ -17,7 +17,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/simple.v1.SayHelloRequest'
+                            $ref: '#/components/schemas/api.v1.simple.SayHelloRequest'
                 required: true
             responses:
                 "200":
@@ -25,7 +25,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/simple.v1.SayHelloResponse'
+                                $ref: '#/components/schemas/api.v1.simple.SayHelloResponse'
                 default:
                     description: Default error response
                     content:
@@ -34,6 +34,20 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
 components:
     schemas:
+        api.v1.simple.SayHelloRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: name is the name to greet.
+            description: SayHelloRequest is the request message for the SayHello method.
+        api.v1.simple.SayHelloResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: message is the greeting message.
+            description: SayHelloResponse is the response message for the SayHello method.
         google.protobuf.Any:
             type: object
             properties:
@@ -58,19 +72,5 @@ components:
                         $ref: '#/components/schemas/google.protobuf.Any'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        simple.v1.SayHelloRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                    description: name is the name to greet.
-            description: SayHelloRequest is the request message for the SayHello method.
-        simple.v1.SayHelloResponse:
-            type: object
-            properties:
-                message:
-                    type: string
-                    description: message is the greeting message.
-            description: SayHelloResponse is the response message for the SayHello method.
 tags:
     - name: SimpleService

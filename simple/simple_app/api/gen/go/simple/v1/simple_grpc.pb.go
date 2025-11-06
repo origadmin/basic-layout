@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SimpleService_SayHello_FullMethodName = "/simple.v1.SimpleService/SayHello"
+	SimpleService_SayHello_FullMethodName = "/api.v1.simple.SimpleService/SayHello"
 )
 
 // SimpleServiceClient is the client API for SimpleService service.
@@ -114,7 +114,7 @@ func _SimpleService_SayHello_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SimpleService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "simple.v1.SimpleService",
+	ServiceName: "api.v1.simple.SimpleService",
 	HandlerType: (*SimpleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -19,7 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSimpleServiceSayHello = "/simple.v1.SimpleService/SayHello"
+const OperationSimpleServiceSayHello = "/api.v1.simple.SimpleService/SayHello"
 
 type SimpleServiceHTTPServer interface {
 	// SayHello SayHello sends a greeting.

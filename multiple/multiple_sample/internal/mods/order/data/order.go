@@ -8,7 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 	"github.com/origadmin/runtime"
-	"github.com/origadmin/runtime/data"
+	runtime_data_database "github.com/origadmin/runtime/data/database/v1"
 )
 
 // ProviderSet is order module's data providers.
@@ -30,7 +30,7 @@ func NewData(rt *runtime.Runtime, conf *configs.Bootstrap, logger log.Logger) (*
 	}
 
 	// Create database client
-	db, err := data.NewDatabase(rt, dbConf)
+	db, err := runtime_data_database.NewDatabase(rt, dbConf)
 	if err != nil {
 		return nil, nil, err
 	}

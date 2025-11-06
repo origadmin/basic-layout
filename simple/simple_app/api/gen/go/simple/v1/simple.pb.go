@@ -118,15 +118,14 @@ var File_simple_v1_simple_proto protoreflect.FileDescriptor
 
 const file_simple_v1_simple_proto_rawDesc = "" +
 	"\n" +
-	"\x16simple/v1/simple.proto\x12\tsimple.v1\x1a\x1cgoogle/api/annotations.proto\"%\n" +
+	"\x16simple/v1/simple.proto\x12\rapi.v1.simple\x1a\x1cgoogle/api/annotations.proto\"%\n" +
 	"\x0fSayHelloRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
 	"\x10SayHelloResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2q\n" +
-	"\rSimpleService\x12`\n" +
-	"\bSayHello\x12\x1a.simple.v1.SayHelloRequest\x1a\x1b.simple.v1.SayHelloResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/simple/helloB\x9e\x01\n" +
-	"\rcom.simple.v1B\vSimpleProtoP\x01Z;basic-layout/simple/simple_app/api/proto/simple/v1;simplev1\xa2\x02\x03SXX\xaa\x02\tSimple.V1\xca\x02\tSimple\\V1\xe2\x02\x15Simple\\V1\\GPBMetadata\xea\x02\n" +
-	"Simple::V1b\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2y\n" +
+	"\rSimpleService\x12h\n" +
+	"\bSayHello\x12\x1e.api.v1.simple.SayHelloRequest\x1a\x1f.api.v1.simple.SayHelloResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/simple/helloB\xb7\x01\n" +
+	"\x11com.api.v1.simpleB\vSimpleProtoP\x01Z?basic-layout/simple/simple_app/api/v1/gen/go/simple/v1;simplev1\xa2\x02\x03AVS\xaa\x02\rApi.V1.Simple\xca\x02\rApi\\V1\\Simple\xe2\x02\x19Api\\V1\\Simple\\GPBMetadata\xea\x02\x0fApi::V1::Simpleb\x06proto3"
 
 var (
 	file_simple_v1_simple_proto_rawDescOnce sync.Once
@@ -142,12 +141,12 @@ func file_simple_v1_simple_proto_rawDescGZIP() []byte {
 
 var file_simple_v1_simple_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_simple_v1_simple_proto_goTypes = []any{
-	(*SayHelloRequest)(nil),  // 0: simple.v1.SayHelloRequest
-	(*SayHelloResponse)(nil), // 1: simple.v1.SayHelloResponse
+	(*SayHelloRequest)(nil),  // 0: api.v1.simple.SayHelloRequest
+	(*SayHelloResponse)(nil), // 1: api.v1.simple.SayHelloResponse
 }
 var file_simple_v1_simple_proto_depIdxs = []int32{
-	0, // 0: simple.v1.SimpleService.SayHello:input_type -> simple.v1.SayHelloRequest
-	1, // 1: simple.v1.SimpleService.SayHello:output_type -> simple.v1.SayHelloResponse
+	0, // 0: api.v1.simple.SimpleService.SayHello:input_type -> api.v1.simple.SayHelloRequest
+	1, // 1: api.v1.simple.SimpleService.SayHello:output_type -> api.v1.simple.SayHelloResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

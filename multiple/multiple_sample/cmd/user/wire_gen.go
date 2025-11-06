@@ -36,7 +36,7 @@ func wireApp(rt *runtime.Runtime, conf *configs.Bootstrap, logger kratoslog.Logg
 		return nil, nil, err
 	}
 	logger := provideLogger(rt)
-	database, cleanup, err := data.NewDB(bootstrap, logger)
+	database, cleanup, err := data.NewData(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}

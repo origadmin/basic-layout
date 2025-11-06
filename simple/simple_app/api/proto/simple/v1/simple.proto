@@ -1,15 +1,17 @@
 syntax = "proto3";
 
-package simple.v1;
+package api.v1.simple;
 
 import "google/api/annotations.proto";
 
-option go_package = "basic-layout/simple/simple_app/api/proto/simple/v1;simplev1";
+option go_package = "basic-layout/simple/simple_app/api/v1/gen/go/simple;simplev1";
+option java_multiple_files = true;
+option java_package = "origadmin.api.v1.simple";
 
 // SimpleService defines the gRPC service for simple operations.
 service SimpleService {
   // SayHello sends a greeting.
-  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {
+  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {
     option (google.api.http) = {
       post: "/v1/simple/hello"
       body: "*"
