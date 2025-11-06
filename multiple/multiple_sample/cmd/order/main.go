@@ -23,7 +23,7 @@ import (
 
 var (
 	// Name is the name of the compiled software.
-	Name = "origadmin.service.v1.secondworld"
+	Name = "origadmin.service.v1.order"
 	// Version is the version of the compiled software.
 	Version = "v1.0.0"
 
@@ -43,7 +43,7 @@ func main() {
 	log.Printf("Loading configuration from: %s\n", flagconf)
 
 	if !filepath.IsAbs(flagconf) {
-		flagconf = filepath.Join("resources/configs/secondworld/", flagconf)
+		flagconf = filepath.Join("resources/configs/order/", flagconf)
 	}
 	// Create AppInfo using the struct from the runtime package
 	appInfo := &appv1.App{

@@ -4,7 +4,54 @@
 
 package biz
 
-import "github.com/google/wire"
+import (
+	"context"
 
-// ProviderSet is biz providers.
-var ProviderSet = wire.NewSet(NewGreeterBiz, NewGreeterClient)
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/google/wire"
+)
+
+// ProviderSet is order module's biz providers.
+var ProviderSet = wire.NewSet(NewOrderUsecase)
+
+// OrderRepo defines the data access interface for the Order entity.
+// It is implemented by the data layer.
+type OrderRepo interface {
+	Create(context.Context, *Order) (*Order, error)
+	Get(context.Context, int64) (*Order, error)
+	// Define other methods like Update, Delete, List etc.
+}
+
+// Order is an Order model (Domain Object).
+// It represents the order entity in the business domain.
+type Order struct {
+	ID     int64
+	UserID int64
+	Amount float64
+	Status string
+}
+
+// OrderUsecase is an Order usecase.
+// It contains the business logic for order-related operations.
+type OrderUsecase struct {
+	repo OrderRepo
+	log  *log.Helper
+}
+
+// NewOrderUsecase creates a new OrderUsecase.
+func NewOrderUsecase(repo OrderRepo, logger log.Logger) *OrderUsecase {
+	return &OrderUsecase{repo: repo, log: log.NewHelper(log.With(logger, "module", "usecase/order"))}
+}
+
+// Create creates a new Order.
+func (uc *OrderUsecase) Create(ctx context.Context, o *Order) (*Order, error) {
+	uc.log.WithContext(ctx).Infof("CreateOrder: %v", o.ID)
+	// Here you can add business logic, e.g., check if order exists.
+	return uc.repo.Create(ctx, o)
+}
+
+// Get retrieves an Order by its ID.
+func (uc *OrderUsecase) Get(ctx context.Context, id int64) (*Order, error) {
+	uc.log.WithContext(ctx).Infof("GetOrder: %v", id)
+	return uc.repo.Get(ctx, id)
+}

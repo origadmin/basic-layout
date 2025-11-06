@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 
+	"github.com/google/wire"
+
 	userv1 "basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
 	"basic-layout/multiple/multiple_sample/internal/mods/user/biz"
 
@@ -54,3 +56,8 @@ func (s *UserService) GetUser(ctx context.Context, req *userv1.GetUserRequest) (
 		User: toUserDTO(foundUser),
 	}, nil
 }
+
+// ProviderSet is service providers.
+var ProviderSet = wire.NewSet(
+	NewUserService, // Provides *UserService
+)

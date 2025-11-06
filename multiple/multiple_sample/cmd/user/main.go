@@ -25,7 +25,7 @@ import (
 
 var (
 	// Name is the name of the compiled software.
-	Name = "origadmin.service.v1.helloworld"
+	Name = "origadmin.service.v1.user"
 	// Version is the version of the compiled software.
 	Version = "v1.0.0"
 
@@ -60,7 +60,7 @@ func main() {
 	// If workdir is set, use the working directory as the config path.
 
 	if filepath.IsAbs(flagconf) {
-		flagconf = filepath.Join("resources/configs/helloworld/", flagconf)
+		flagconf = filepath.Join("resources/configs/user/", flagconf)
 	}
 	//	directory = filepath.Dir(flagconf)
 	//	flagconf = filepath.Base(flagconf)

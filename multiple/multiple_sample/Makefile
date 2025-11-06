@@ -123,11 +123,11 @@ lint: ## 🔍 Run golangci-lint (install if not present)
 
 clean: ## 🧹 Clean up generated files and build artifacts
 	@echo "Cleaning up generated files and build artifacts..."
-	@rm -rf ./api/v1/gen
-	@rm -rf ./internal/mods/*/gen
-	@rm -rf ./dist
-	@rm -rf ./third_party
-	@rm -f ./go.sum # Clean go.sum to force re-download if needed
+	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./api/v1/gen
+	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./internal/mods/*/gen
+	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./dist
+	@Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ./third_party
+	@Remove-Item -Force -ErrorAction SilentlyContinue ./go.sum # Clean go.sum to force re-download if needed
 
 release: ## 🚀 Run GoReleaser to create releases
 	@echo "Running GoReleaser..."

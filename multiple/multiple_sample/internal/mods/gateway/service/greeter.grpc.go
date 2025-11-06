@@ -10,8 +10,8 @@ import (
 	"github.com/google/wire"
 
 	"basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway"
-	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld"
-	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/order"
 )
 
 // ProviderSet is service providers.
@@ -21,25 +21,25 @@ var ProviderSet = wire.NewSet(NewGatewayService)
 type GatewayService struct {
 	gateway.UnimplementedGatewayAPIServer
 
-	helloClient  helloworld.HelloGreeterAPIClient
-	secondClient secondworld.SecondGreeterAPIClient
+	userClient  user.UserAPIClient
+	orderClient order.OrderAPIClient
 }
 
 // NewGatewayService creates a new gateway service.
-func NewGatewayService(hc helloworld.HelloGreeterAPIClient, sc secondworld.SecondGreeterAPIClient) *GatewayService {
+func NewGatewayService(uc user.UserAPIClient, oc order.OrderAPIClient) *GatewayService {
 	return &GatewayService{
-		helloClient:  hc,
-		secondClient: sc,
+		userClient:  uc,
+		orderClient: oc,
 	}
 }
 
-// SayHello forwards the request to the helloworld service.
-func (s *GatewayService) SayHello(ctx context.Context, in *helloworld.SayHelloRequest) (*helloworld.SayHelloResponse, error) {
-	return s.helloClient.SayHello(ctx, in)
+// SayUser forwards the request to the user service.
+func (s *GatewayService) SayUser(ctx context.Context, in *user.SayUserRequest) (*user.SayUserResponse, error) {
+	return s.userClient.SayUser(ctx, in)
 }
 
-// SaySecond forwards the request to the secondworld service.
-func (s *GatewayService) SaySecond(ctx context.Context, in *secondworld.SayHelloRequest) (*secondworld.SayHelloResponse, error) {
-	// Note: The request for secondworld is also SayHelloRequest, as per the proto definition.
-	return s.secondClient.SayHello(ctx, in)
+// SayOrder forwards the request to the order service.
+func (s *GatewayService) SayOrder(ctx context.Context, in *order.SayOrderRequest) (*order.SayOrderResponse, error) {
+	// Note: The request for order is also SayOrderRequest, as per the proto definition.
+	return s.orderClient.SayOrder(ctx, in)
 }

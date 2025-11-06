@@ -53,3 +53,9 @@ func (s *OrderService) GetOrder(ctx context.Context, req *order.GetOrderRequest)
 }
 
 // ... other methods like UpdateOrder, DeleteOrder, ListOrder can be implemented here
+
+// ProviderSet is order module's service providers.
+var ProviderSet = wire.NewSet(NewOrderService,
+	wire.Bind(new(order.OrderAPIServer), (*OrderService)(nil)),
+)
+

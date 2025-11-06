@@ -12,22 +12,22 @@ import (
 
 	"github.com/origadmin/runtime/service/transport/grpc" // Renamed for clarity
 
-	"basic-layout/multiple/multiple_sample/api/v1/gen/go/helloworld"
-	"basic-layout/multiple/multiple_sample/api/v1/gen/go/secondworld"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
+	"basic-layout/multiple/multiple_sample/api/v1/gen/go/order"
 	"basic-layout/multiple/multiple_sample/internal/configs"
 
 	transportv1 "github.com/origadmin/runtime/api/gen/go/runtime/transport/v1"
 )
 
 // ProviderSet is client providers.
-var ProviderSet = wire.NewSet(NewHelloworldClient, NewSecondworldClient)
+var ProviderSet = wire.NewSet(NewUserClient, NewOrderClient)
 
-// NewHelloworldClient creates a new HelloGreeterAPI client.
-func NewHelloworldClient(ctx context.Context, c *configs.Bootstrap) (helloworld.HelloGreeterAPIClient, error) {
+// NewUserClient creates a new UserAPI client.
+func NewUserClient(ctx context.Context, c *configs.Bootstrap) (user.UserAPIClient, error) {
 	var clientConfig *transportv1.Client
 	if c.Server != nil && c.Server.Service != nil {
 		for _, cli := range c.Server.GetService().Clients {
-			if cli.Name == "client.helloworld" {
+			if cli.Name == "client.user" {
 				clientConfig = cli
 				break
 			}
@@ -35,27 +35,27 @@ func NewHelloworldClient(ctx context.Context, c *configs.Bootstrap) (helloworld.
 	}
 
 	if clientConfig == nil {
-		return nil, errors.New("client config not found: client.helloworld")
+		return nil, errors.New("client config not found: client.user")
 	}
 
 	grpcConfig := clientConfig.GetGrpc()
 	if grpcConfig == nil {
-		return nil, errors.New("grpc client config not found: client.helloworld")
+		return nil, errors.New("grpc client config not found: client.user")
 	}
 
 	conn, err := grpc.NewClient(ctx, grpcConfig, &grpc.ClientOptions{}) // Changed nil to &grpc.ClientOptions{}
 	if err != nil {
 		return nil, err
 	}
-	return helloworld.NewHelloGreeterAPIClient(conn), nil
+	return user.NewUserAPIClient(conn), nil
 }
 
-// NewSecondworldClient creates a new SecondGreeterAPI client.
-func NewSecondworldClient(ctx context.Context, c *configs.Bootstrap) (secondworld.SecondGreeterAPIClient, error) {
+// NewOrderClient creates a new OrderAPI client.
+func NewOrderClient(ctx context.Context, c *configs.Bootstrap) (order.OrderAPIClient, error) {
 	var clientConfig *transportv1.Client
 	if c.Server != nil && c.Server.Service != nil {
 		for _, cli := range c.Server.Service.Clients {
-			if cli.Name == "client.secondworld" {
+			if cli.Name == "client.order" {
 				clientConfig = cli
 				break
 			}
@@ -63,17 +63,17 @@ func NewSecondworldClient(ctx context.Context, c *configs.Bootstrap) (secondworl
 	}
 
 	if clientConfig == nil {
-		return nil, errors.New("client config not found: client.secondworld")
+		return nil, errors.New("client config not found: client.order")
 	}
 
 	grpcConfig := clientConfig.GetGrpc()
 	if grpcConfig == nil {
-		return nil, errors.New("grpc client config not found: client.secondworld")
+		return nil, errors.New("grpc client config not found: client.order")
 	}
 
 	conn, err := grpc.NewClient(ctx, grpcConfig, &grpc.ClientOptions{}) // Changed nil to &grpc.ClientOptions{}
 	if err != nil {
 		return nil, err
 	}
-	return secondworld.NewSecondGreeterAPIClient(conn), nil
+	return order.NewOrderAPIClient(conn), nil
 }
