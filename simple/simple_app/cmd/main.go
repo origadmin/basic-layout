@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "resources/configs/bootstrap.yaml", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "bootstrap.yaml", "config path, eg: -conf config.yaml")
 }
 
 func main() {

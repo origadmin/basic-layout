@@ -161,9 +161,9 @@ release: ## 🚀 Run GoReleaser to create releases
 	@echo "Running GoReleaser..."
 	@goreleaser release --clean
 
-run: ## ▶️ Run the application
-	@echo "Running $(APP_NAME) application..."
-	@go run ./cmd/ -conf ./configs/bootstrap.yaml
+run: ## ▶️ Run the application for development
+	@echo "Running $(APP_NAME) application with development configuration..."
+	@go run ./cmd/ -conf ./resources/configs/bootstrap.yaml
 
 # ============================================================================ #
 #                                     HELP

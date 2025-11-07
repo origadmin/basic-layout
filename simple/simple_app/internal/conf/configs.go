@@ -1,11 +1,11 @@
-// Package configs implements the functions, types, and interfaces for the module.
+// Package confpb implements the functions, types, and interfaces for the module.
 package conf
 
 import (
 	"cmp"
 	"fmt"
 
-	"basic-layout/simple/simple_app/configs"
+	confpb "basic-layout/simple/simple_app/internal/conf/pb"
 	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	cachev1 "github.com/origadmin/runtime/api/gen/go/config/data/cache/v1"
 	databasev1 "github.com/origadmin/runtime/api/gen/go/config/data/database/v1"
@@ -21,7 +21,7 @@ import (
 )
 
 type Config struct {
-	bootstrap        configs.Bootstrap
+	bootstrap        confpb.Bootstrap
 	defaultDiscovery string
 }
 
@@ -75,13 +75,13 @@ func (c *Config) Transform(config interfaces.Config, _ interfaces.StructuredConf
 
 	discoveries := c.bootstrap.GetDiscoveries()
 	if discoveries != nil {
-		configs := discoveries.GetConfigs()
+		confpb := discoveries.GetConfigs()
 		// If there's only one discovery config, it should be the default, regardless of the key.
 		switch {
-		case len(configs) == 1:
-			c.defaultDiscovery = configs[0].GetName()
-		case len(configs) > 1:
-			for _, discovery := range configs {
+		case len(confpb) == 1:
+			c.defaultDiscovery = confpb[0].GetName()
+		case len(confpb) > 1:
+			for _, discovery := range confpb {
 				if discovery.GetName() == defaultKey {
 					c.defaultDiscovery = defaultKey
 					break
