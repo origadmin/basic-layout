@@ -41,175 +41,251 @@ simple_app
 
 ### Key Architectural Concepts
 
-* **Dependency Rule**: Dependencies flow inwards. `service` depends on `biz`, and `data` depends on `biz`. The core
-  business logic in `biz` has no external dependencies.
-* **Interface Segregation**: Interfaces (e.g., `SimpleRepo`) are defined in the `biz` layer, representing the contracts
-  that the business logic needs.
-* **Dependency Injection**: We use `google/wire` for dependency injection. The dependency graph is defined in
-  `cmd/wire.go` and the generated code is in `cmd/wire_gen.go`.
+*   **Dependency Rule**: Dependencies flow inwards. `service` depends on `biz`, and `data` depends on `biz`. The core
+    business logic in `biz` has no external dependencies.
+*   **Interface Segregation**: Interfaces (e.g., `SimpleRepo`) are defined in the `biz` layer, representing the contracts
+    that the business logic needs.
+*   **Dependency Injection**: We use `google/wire` for dependency injection. The dependency graph is defined in
+    `cmd/wire.go` and the generated code is in `cmd/wire_gen.go`.
 
 ### Architectural Philosophy & Best Practices
 
 This section provides deeper insights into some of the design choices and suggests best practices for extending this
 layout.
 
-* **On Naming the Business Logic Layer (`biz`)**
+*   **On Naming the Business Logic Layer (`biz`)**
 
-  While this example uses `biz` (for "business"), you might encounter other names for the core logic layer in different
-  projects. The choice often reflects a specific architectural philosophy:
-    * **`biz`**: A common and straightforward name, clearly indicating it contains business logic. It's a great
-      general-purpose choice.
-    * **`domain`**: This name is often used in projects following **Domain-Driven Design (DDD)**. It implies a richer
-      model, including Entities, Value Objects, Aggregates, and Domain Events. Use this when your business logic is
-      complex and you want to model the domain explicitly.
-    * **`usecase`**: This name comes from **Clean Architecture** and emphasizes the application's specific user-facing
-      actions or "use cases" (e.g., `CreateUserUseCase`). It makes the application's capabilities very explicit.
+    While this example uses `biz` (for "business"), you might encounter other names for the core logic layer in different
+    projects. The choice often reflects a specific architectural philosophy:
+    *   **`biz`**: A common and straightforward name, clearly indicating it contains business logic. It's a great
+        general-purpose choice.
+    *   **`domain`**: This name is often used in projects following **Domain-Driven Design (DDD)**. It implies a richer
+        model, including Entities, Value Objects, Aggregates, and Domain Events. Use this when your business logic is
+        complex and you want to model the domain explicitly.
+    *   **`usecase`**: This name comes from **Clean Architecture** and emphasizes the application's specific user-facing
+        actions or "use cases" (e.g., `CreateUserUseCase`). It makes the application's capabilities very explicit.
 
-* **On Naming the Data Access Layer (`data`)**
+*   **On Naming the Data Access Layer (`data`)**
 
-  Similar to the business layer, the data access layer also has several common naming conventions, although we recommend
-  `data` for consistency within this framework.
-    * **`data`**: The default choice in these examples. It's a general and widely understood term for the layer that
-      handles data persistence and retrieval.
-    * **`dal`** (Data Access Layer): A more traditional and explicit acronym that clearly states the layer's purpose.
-    * **`repository`**: A great choice when strictly following Domain-Driven Design (DDD). This name emphasizes that the
-      layer's primary role is to provide concrete implementations of the repository interfaces defined in the `biz`/
-      `domain` layer.
-    * **`persistence`**: This name strongly focuses on the storage aspect, making it a good fit when the layer's
-      responsibility is strictly limited to database interactions.
+    Similar to the business layer, the data access layer also has several common naming conventions, although we recommend
+    `data` for consistency within this framework.
+    *   **`data`**: The default choice in these examples. It's a general and widely understood term for the layer that
+        handles data persistence and retrieval.
+    *   **`dal`** (Data Access Layer): A more traditional and explicit acronym that clearly states the layer's purpose.
+    *   **`repository`**: A great choice when strictly following Domain-Driven Design (DDD). This name emphasizes that the
+        layer's primary role is to provide concrete implementations of the repository interfaces defined in the `biz`/
+        `domain` layer.
+    *   **`persistence`**: This name strongly focuses on the storage aspect, making it a good fit when the layer's
+        responsibility is strictly limited to database interactions.
 
-  Ultimately, the name is less important than its role: to implement the data-handling interfaces required by the
-  business layer and to isolate the core logic from the details of data storage.
+    Ultimately, the name is less important than its role: to implement the data-handling interfaces required by the
+    business layer and to isolate the core logic from the details of data storage.
 
-* **Separating Data Models (DO vs. PO)**
+*   **Separating Data Models (DO vs. PO)**
 
-  In this simple example, the `biz` layer's model (`biz.Simple`) and the `data` layer's model (e.g., an `ent.Simple`
-  struct) might look identical. For simplicity, one might be tempted to use the data layer's model directly in the
-  business layer. However, for more complex applications, it's a crucial best practice to keep them separate.
+    In this simple example, the `biz` layer's model (`biz.Simple`) and the `data` layer's model (e.g., an `ent.Simple`
+    struct) might look identical. For simplicity, one might be tempted to use the data layer's model directly in the
+    business layer. However, for more complex applications, it's a crucial best practice to keep them separate.
 
-    * **Persistence Object (PO)**: This is the model in the `data` layer (e.g., `ent.Simple`). Its structure mirrors the
-      database table and may contain database-specific tags or fields (`id`, `created_at`, ORM tags). Its sole purpose
-      is data persistence.
-    * **Domain Object (DO)**: This is the model in the `biz` layer (e.g., `biz.Simple`). It represents a concept in your
-      business domain and should be "pure," containing only fields and methods relevant to the business logic.
+    *   **Persistence Object (PO)**: This is the model in the `data` layer (e.g., `ent.Simple`). Its structure mirrors the
+        database table and may contain database-specific tags or fields (`id`, `created_at`, ORM tags). Its sole purpose
+        is data persistence.
+    *   **Domain Object (DO)**: This is the model in the `biz` layer (e.g., `biz.Simple`). It represents a concept in your
+        business domain and should be "pure," containing only fields and methods relevant to the business logic.
 
-  **Why separate them?**
-    1. **Decoupling**: The `biz` layer remains completely independent of the database schema. You can change your
-       database tables without affecting your core business logic.
-    2. **Clarity**: Each model has a single, clear responsibility.
-    3. **Flexibility**: A single business operation in the `biz` layer might need to compose data from multiple database
-       tables. Having a distinct DO makes this aggregation clean and straightforward.
+    **Why separate them?**
+    1.  **Decoupling**: The `biz` layer remains completely independent of the database schema. You can change your
+        database tables without affecting your core business logic.
+    2.  **Clarity**: Each model has a single, clear responsibility.
+    3.  **Flexibility**: A single business operation in the `biz` layer might need to compose data from multiple database
+        tables. Having a distinct DO makes this aggregation clean and straightforward.
 
-  To implement this, you would create conversion functions within the `data` layer to map between POs and DOs.
+    To implement this, you would create conversion functions within the `data` layer to map between POs and DOs.
 
-* **DTO (Data Transfer Object)**
+*   **DTO (Data Transfer Object)**
 
-  The term DTO is best used to describe the objects used for transferring data across process or network boundaries. In
-  this architecture, the Protobuf-generated request/response structs (e.g., `simplev1.SayHelloRequest`) in the `service`
-  layer are perfect examples of DTOs. The `service` layer's responsibility includes converting these DTOs into the `biz`
-  layer's DOs.
+    The term DTO is best used to describe the objects used for transferring data across process or network boundaries. In
+    this architecture, the Protobuf-generated request/response structs (e.g., `simplev1.SayHelloRequest`) in the `service`
+    layer are perfect examples of DTOs. The `service` layer's responsibility includes converting these DTOs into the `biz`
+    layer's DOs.
 
-  While **DTO** is the industry-standard term, you might occasionally see them referred to as **API Models**, **Payloads
-  **, or **Request/Response Models**. The key is not the name, but its role: a data structure dedicated to API
-  communication, separate from the internal business logic models.
+    While **DTO** is the industry-standard term, you might occasionally see them referred to as **API Models**, **Payloads
+    **, or **Request/Response Models**. The key is not the name, but its role: a data structure dedicated to API
+    communication, separate from the internal business logic models.
 
-* **On Gateway Design Patterns**
+*   **On Gateway Design Patterns**
 
-  The API Gateway is the front door to your system. Its design has a major impact on scalability and maintainability.
-  Here are three common patterns, each with its own trade-offs:
+    The API Gateway is the front door to your system. Its design has a major impact on scalability and maintainability.
+    Here are three common patterns, each with its own trade-offs:
 
-    1. **Edge Gateway Pattern**:
-        * **Concept**: The gateway defines its own, independent API contract (`.proto` file). It acts as a "boundary"
-          that protects internal services from external changes.
-        * **Implementation**: The gateway's `service` layer is responsible for converting the gateway's DTOs to the
-          internal modules' DTOs before forwarding the request.
-        * **Pros**: **Maximum Decoupling**. Provides a stable API for external clients. Allows for API aggregation
-          and裁剪. Internal services can evolve freely without breaking external clients.
-        * **Cons**: Higher implementation overhead due to the need for manual data transformation code.
+    1.  **Edge Gateway Pattern**:
+        *   **Concept**: The gateway defines its own, independent API contract (`.proto` file). It acts as a "boundary"
+            that protects internal services from external changes.
+        *   **Implementation**: The gateway's `service` layer is responsible for converting the gateway's DTOs to the
+            internal modules' DTOs before forwarding the request.
+        *   **Pros**: **Maximum Decoupling**. Provides a stable API for external clients. Allows for API aggregation
+            and裁剪. Internal services can evolve freely without breaking external clients.
+        *   **Cons**: Higher implementation overhead due to the need for manual data transformation code.
 
-    2. **Transparent Proxy Pattern**:
-        * **Concept**: The gateway's `.proto` file directly imports and reuses the API contracts from internal modules.
-        * **Implementation**: The gateway's `service` layer can directly forward requests with minimal or no data
-          transformation.
-        * **Pros**: **Simple and Fast to Implement**. Low code overhead.
-        * **Cons**: **Tight Coupling**. Changes in internal module APIs immediately break the gateway's public API.
-          Hinders independent evolution and versioning.
+    2.  **Transparent Proxy Pattern**:
+        *   **Concept**: The gateway's `.proto` file directly imports and reuses the API contracts from internal modules.
+        *   **Implementation**: The gateway's `service` layer can directly forward requests with minimal or no data
+            transformation.
+        *   **Pros**: **Simple and Fast to Implement**. Low code overhead.
+        *   **Cons**: **Tight Coupling**. Changes in internal module APIs immediately break the gateway's public API.
+            Hinders independent evolution and versioning.
 
-    3. **gRPC-Gateway (Reverse Proxy) Pattern**:
-        * **Concept**: This pattern eliminates the need for a manually written gateway `service` or even a
-          `gateway.proto` file for routing. It uses the `grpc-gateway` protoc plugin to auto-generate a reverse proxy.
-        * **Implementation**: HTTP routing rules are defined directly within the downstream services' `.proto` files (
-          e.g., `user.proto`, `order.proto`) using `google.api.http` annotations. The gateway application becomes a thin
-          host that simply runs the generated proxy server and points it to the downstream gRPC services.
-        * **Pros**: **Single Source of Truth**. The API contract (gRPC and REST) is defined in one place. The gateway is
-          truly "unaware" of business logic, making it extremely low-maintenance.
-        * **Cons**: Less flexibility for complex API aggregation or transformation logic at the gateway layer itself.
-          All logic is pushed to the downstream services.
+    3.  **gRPC-Gateway (Reverse Proxy) Pattern**:
+        *   **Concept**: This pattern eliminates the need for a manually written gateway `service` or even a
+            `gateway.proto` file for routing. It uses the `grpc-gateway` protoc plugin to auto-generate a reverse proxy.
+        *   **Implementation**: HTTP routing rules are defined directly within the downstream services' `.proto` files (
+            e.g., `user.proto`, `order.proto`) using `google.api.http` annotations. The gateway application becomes a thin
+            host that simply runs the generated proxy server and points it to the downstream gRPC services.
+        *   **Pros**: **Single Source of Truth**. The API contract (gRPC and REST) is defined in one place. The gateway is
+            truly "unaware" of business logic, making it extremely low-maintenance.
+        *   **Cons**: Less flexibility for complex API aggregation or transformation logic at the gateway layer itself.
+            All logic is pushed to the downstream services.
 
-  **Recommendation**:
-    * Start with the **gRPC-Gateway Pattern** for most use cases due to its simplicity and low maintenance.
-    * Evolve to the **Edge Gateway Pattern** when you need to provide a stable, aggregated, or secured public API that
-      differs significantly from your internal service APIs.
-    * Use the **Transparent Proxy Pattern** sparingly, perhaps for internal-only gateways where coupling is less of a
-      concern.
+    **Recommendation**:
+    *   Start with the **gRPC-Gateway Pattern** for most use cases due to its simplicity and low maintenance.
+    *   Evolve to the **Edge Gateway Pattern** when you need to provide a stable, aggregated, or secured public API that
+        differs significantly from your internal service APIs.
+    *   Use the **Transparent Proxy Pattern** sparingly, perhaps for internal-only gateways where coupling is less of a
+        concern.
 
-* **On the Role of `service` and `server` Layers**
+*   **On the Role of `service` and `server` Layers**
 
-  These two layers handle the application's external-facing concerns, completing the separation of business logic from
-  transport details.
+    These two layers handle the application's external-facing concerns, completing the separation of business logic from
+    transport details.
 
-    * **Service Layer (`service`)**: This is the **API Implementation Layer**. It acts as the crucial bridge between the
-      network and your business logic.
-        * **Role**: To implement the service interfaces defined in your `.proto` files.
-        * **Responsibilities**: It receives request DTOs (e.g., `user.CreateUserRequest`), converts them into the `biz`
-          layer's DOs, calls the appropriate business use case, and then converts the resulting DOs back into response
-          DTOs.
-        * **Core Principle**: This layer should be kept "thin". Its primary job is translation and delegation, not
-          implementing business rules.
+    *   **Service Layer (`service`)**: This is the **API Implementation Layer**. It acts as the crucial bridge between the
+        network and your business logic.
+        *   **Role**: To implement the service interfaces defined in your `.proto` files.
+        *   **Responsibilities**: It receives request DTOs (e.g., `user.CreateUserRequest`), converts them into the `biz`
+            layer's DOs, calls the appropriate business use case, and then converts the resulting DOs back into response
+            DTOs.
+        *   **Core Principle**: This layer should be kept "thin". Its primary job is translation and delegation, not
+            implementing business rules.
 
-    * **Server Layer (`server`)**: This is the **Transport Layer**, where the actual network servers (gRPC, HTTP) are
-      configured and run.
-        * **Role**: To manage the lifecycle of transport servers.
-        * **Responsibilities**: It initializes servers, attaches middleware chains (like recovery or logging), and, most
-          importantly, **registers** the `service` layer implementations onto the server instances (e.g.,
-          `user.RegisterUserAPIServer(grpcSrv, userService)`).
-        * **Core Principle**: This layer is concerned with the "how" of communication (protocols, ports, timeouts), not
-          the "what" (the business operations).
+    *   **Server Layer (`server`)**: This is the **Transport Layer**, where the actual network servers (gRPC, HTTP) are
+        configured and run.
+        *   **Role**: To manage the lifecycle of transport servers.
+        *   **Responsibilities**: It initializes servers, attaches middleware chains (like recovery or logging), and, most
+            importantly, **registers** the `service` layer implementations onto the server instances (e.g.,
+            `user.RegisterUserAPIServer(grpcSrv, userService)`).
+        *   **Core Principle**: This layer is concerned with the "how" of communication (protocols, ports, timeouts), not
+            the "what" (the business operations).
 
-* **Scaling for Complexity: Additional Layers**
+*   **Scaling for Complexity: Additional Layers**
 
-  The current `biz`/`data`/`service` layout is an excellent foundation. As a project's complexity grows, you can
-  introduce more layers to maintain clarity and separation of concerns.
+    The current `biz`/`data`/`service` layout is an excellent foundation. As a project's complexity grows, you can
+    introduce more layers to maintain clarity and separation of concerns.
 
-    * **Application Layer (`application`)**: In very complex systems, you might introduce an `application` layer between
-      `service` and `biz`.
-        * **Role**: It acts as an orchestrator for complex use cases. A single `application` service call might
-          coordinate multiple `biz`/`domain` objects, manage database transactions, handle authorization, and dispatch
-          events.
-        * **Benefit**: It keeps the `service` layer thin (only handling DTO conversion and transport concerns) and the
-          `biz`/`domain` layer pure (only containing core business rules), while centralizing complex workflow logic.
+    *   **Application Layer (`application`)**: In very complex systems, you might introduce an `application` layer between
+        `service` and `biz`.
+        *   **Role**: It acts as an orchestrator for complex use cases. A single `application` service call might
+            coordinate multiple `biz`/`domain` objects, manage database transactions, handle authorization, and dispatch
+            events.
+        *   **Benefit**: It keeps the `service` layer thin (only handling DTO conversion and transport concerns) and the
+            `biz`/`domain` layer pure (only containing core business rules), while centralizing complex workflow logic.
 
-    * **Infrastructure Layer (`infrastructure`)**: The current `data` layer is a form of infrastructure. In a larger
-      project, you can make this more explicit by creating a dedicated `infrastructure` layer.
-        * **Role**: This layer contains all the concrete implementations for interacting with the outside world (
-          databases, message queues, caches, third-party APIs, etc.). It implements the interfaces defined by the `biz`/
-          `domain` layer.
-        * **Benefit**: It groups all external dependencies and their "glue code" in one place, making it clear what
-          external systems the application depends on.
+    *   **Infrastructure Layer (`infrastructure`)**: The current `data` layer is a form of infrastructure. In a larger
+        project, you can make this more explicit by creating a dedicated `infrastructure` layer.
+        *   **Role**: This layer contains all the concrete implementations for interacting with the outside world (
+            databases, message queues, caches, third-party APIs, etc.). It implements the interfaces defined by the `biz`/
+            `domain` layer.
+        *   **Benefit**: It groups all external dependencies and their "glue code" in one place, making it clear what
+            external systems the application depends on.
 
-  A more complex project structure might look like this:
+    A more complex project structure might look like this:
 
-  ```
-  internal/
-  ├── application/    # Orchestrates use cases, handles transactions.
-  ├── domain/         # The core business logic (formerly `biz`).
-  ├── infrastructure/ # Implementations for external systems.
-  │   ├── persistence/  # Database implementations (formerly `data`).
-  │   ├── messaging/    # Message queue clients (e.g., Kafka, RabbitMQ).
-  │   └── cache/        # Cache implementations (e.g., Redis).
-  ├── service/        # API service implementations (thin layer).
-  └── ...
-  ```
+    ```
+    internal/
+    ├── application/    # Orchestrates use cases, handles transactions.
+    ├── domain/         # The core business logic (formerly `biz`).
+    ├── infrastructure/ # Implementations for external systems.
+    │   ├── persistence/  # Database implementations (formerly `data`).
+    │   ├── messaging/    # Message queue clients (e.g., Kafka, RabbitMQ).
+    │   └── cache/        # Cache implementations (e.g., Redis).
+    ├── service/        # API service implementations (thin layer).
+    └── ...
+    ```
+
+*   **Where to Place Custom Implementations, Tools, or Helpers**
+
+    When adding your own custom code, it's important to place it in a location that aligns with Go's best practices and the project's architectural principles, especially regarding encapsulation.
+
+    1.  **Module-Specific Helpers (`internal/mods/<module_name>/helpers/`)**:
+        *   **Purpose**: For helper functions or tools that are specific to a particular service module (e.g., `user`, `order`, `gateway`) and are not part of its core business logic (`biz`) or data access (`data`).
+        *   **Example**: Data validation utilities, specific data transformation functions, or small, reusable components used only within that module.
+        *   **Rationale**: Keeps module-specific utilities organized and prevents them from polluting the global namespace or being accidentally imported by other modules.
+
+    2.  **Project-Level Helpers (`internal/helpers/`)**:
+        *   **Purpose**: For helper functions or tools that are used across multiple service modules within the `multiple_sample` project.
+        *   **Example**: Custom error handling, common logging utilities, or shared data formatting functions.
+        *   **Rationale**: Centralizes reusable helper code that is internal to the entire project, ensuring it's not exposed externally.
+
+    3.  **Standalone Tools (`tools/`)**:
+        *   **Purpose**: For standalone development tools, code generators, or scripts that are used for project-related tasks but are not part of the application's runtime code.
+        *   **Example**: Custom code generation scripts, database migration tools, or build automation scripts.
+        *   **Rationale**: Separates development-time utilities from the application's core source code, making it clear they are not meant to be compiled into the final binary.
+
+    4.  **Directly within `biz/` or `data/`**:
+        *   **Purpose**: If the custom code is tightly coupled with the business logic or data access layer of a specific module.
+        *   **Example**: A custom validation rule for a domain model would go in `internal/mods/<module_name>/biz/`. A specific database query builder would go in `internal/mods/<module_name>/data/`.
+        *   **Rationale**: Maintains high cohesion and keeps related code together. Ensure that `biz` remains pure and free of external dependencies.
+
+    **Why use `internal/`?**
+    The `internal` directory enforces encapsulation in Go. Any package within an `internal` directory can only be imported by code within the `internal` directory's direct parent or its ancestors. This prevents external projects from accidentally depending on your internal implementation details, promoting clear API boundaries and reducing future refactoring risks.
+
+*   **On Naming Protobuf Configuration Directories**
+
+    The naming of directories containing Protobuf definitions for configurations can sometimes be ambiguous, especially when actual configuration value files (like YAML) exist elsewhere. Here's a breakdown of options and recommendations:
+
+    **Current Situation (e.g., `configs/` in `simple_app`):**
+    *   **Location**: Top-level directory (e.g., `simple_app/configs/`).
+    *   **Content**: Protobuf `.proto` files defining configuration structures, and their generated Go code (`.pb.go`, `.pb.validate.go`).
+    *   **Problem**: The name `configs/` is broad and can be confused with directories holding actual configuration *values* (e.g., `resources/configs/*.yaml`).
+
+    **Alternative Naming Conventions for Protobuf Configuration Definitions:**
+
+    1.  **`configpb/` or `config_pb/`**
+        *   **Pros**: Clearly indicates that the directory contains Protobuf definitions (`pb`) related to configurations. This is a common and highly recommended pattern in the Go community for Protobuf-generated code.
+        *   **Cons**: None significant.
+
+    2.  **`schema/config/` or `config/schema/`**
+        *   **Pros**: Emphasizes that these files define the *schema* or *structure* of configurations.
+        *   **Cons**: Slightly longer path, and `pb` suffix is more idiomatic for Protobuf.
+
+    3.  **`proto/config/`**
+        *   **Pros**: Explicitly states it contains `.proto` files for configurations.
+        *   **Cons**: Less common than `configpb/` for generated Go code.
+
+    **Placement: Root Directory vs. `internal/`**
+
+    *   **Placing in Root (e.g., `configpb/`)**
+        *   **Pros**: Shorter import paths.
+        *   **Cons**:
+            *   **Breaks `internal` encapsulation**: If these configuration definitions are *only* for internal use within your module, placing them in the root makes them publicly importable by any other Go module. This exposes internal implementation details.
+            *   **Increases coupling**: External projects might inadvertently depend on your internal configuration structures, making future refactoring difficult.
+
+    *   **Placing in `internal/` (e.g., `internal/configpb/`)**
+        *   **Pros**:
+            *   **Enforces encapsulation**: Leverages Go's `internal` rule to ensure these Protobuf definitions and their generated Go code are private to your module. This is crucial for maintaining clear module boundaries.
+            *   **Clear intent**: Explicitly communicates that these are internal configuration schemas.
+            *   **Safe for refactoring**: You can modify these internal configuration structures with confidence, knowing that external modules cannot directly depend on them.
+            *   **Go Best Practice**: Aligns with the widely accepted Go project layout principles for internal code.
+        *   **Cons**: Slightly longer import paths (a minor trade-off for strong encapsulation).
+
+    **Recommendation:**
+
+    For Protobuf definitions that describe **internal configurations** and are **not intended to be part of your module's public API**, the **strongly recommended** approach is to place them under `internal/` with a clear name.
+
+    *   **Recommended Structure**: `internal/configpb/`
+        *   This directory would contain your `.proto` files (e.g., `bootstrap.proto`) and the Go code generated from them (e.g., `bootstrap.pb.go`).
+        *   The corresponding Go package name would typically be `configpb`.
+
+    This approach provides the best balance of clarity, encapsulation, and adherence to Go best practices.
 
 ### How to Run
 
@@ -239,15 +315,15 @@ dependencies.
 
 ### ✨ Features
 
-* **Kratos v2**: Built upon the latest Kratos framework.
-* **Standard Go Modules**: Manages all dependencies through `go.mod`.
-* **Multi-Module Monorepo**: Contains three independent services (`user`, `order`, `gateway`) within a single repository
-  structure.
-* **Microservice Ready**: Provides a clear path for splitting the monorepo into multiple independent microservice
-  repositories.
-* **API Gateway**: The `gateway` service acts as a unified entry point, routing requests to `user` and `order` services.
-* **Code Generation & Publishing**: Integrated with `buf` and `GoReleaser`.
-* **Makefile**: Provides convenient `make` commands for development workflows.
+*   **Kratos v2**: Built upon the latest Kratos framework.
+*   **Standard Go Modules**: Manages all dependencies through `go.mod`.
+*   **Multi-Module Monorepo**: Contains three independent services (`user`, `order`, `gateway`) within a single repository
+    structure.
+*   **Microservice Ready**: Provides a clear path for splitting the monorepo into multiple independent microservice
+    repositories.
+*   **API Gateway**: The `gateway` service acts as a unified entry point, routing requests to `user` and `order` services.
+*   **Code Generation & Publishing**: Integrated with `buf` and `GoReleaser`.
+*   **Makefile**: Provides convenient `make` commands for development workflows.
 
 ### 📂 Project Structure
 

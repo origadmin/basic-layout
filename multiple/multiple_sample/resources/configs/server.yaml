@@ -1,0 +1,18 @@
+servers:
+  configs:
+    - grpc:
+        addr: 0.0.0.0:9090
+        middlewares:
+          - recovery
+          - logging
+        network: tcp
+      name: grpc_server
+      protocol: grpc
+    - http:
+        addr: 0.0.0.0:8080
+        middlewares:
+          - recovery
+          - logging
+        network: tcp
+      name: http_server
+      protocol: http

@@ -1,0 +1,23 @@
+sources:
+  - type: "file"
+    file:
+      path: "app.yaml"
+  - type: "file"
+    file:
+      path: "databases.yaml"
+  - type: "file"
+    file:
+      path: "server.yaml"
+  - type: "file"
+    file:
+      path: "logger.yaml"
+  - type: "file"
+    file:
+      path: "middlewares.yaml"
+discovery:
+  consul:
+    address: "127.0.0.1:8500"
+    scheme: "http"
+    health_check_interval: "10s"
+    health_check_timeout: "5s"
+    deregister_critical_service_after: "1m"
