@@ -126,9 +126,8 @@ lint: ## 🔍 Run golangci-lint (install if not present)
 clean: ## 🧹 Clean up generated files and build artifacts
 	@echo "Cleaning up generated files and build artifacts..."
 	@$(RM_RF) ./api/v1/gen
-	@$(RM_RF) ./internal/mods/*/gen
-	@$(RM_RF) ./internal/conf/pb/*.pb.go
-	@$(RM_RF) ./internal/conf/pb/*.pb.validate.go
+	@$(RM_RF) ./internal/features/*/conf/pb/*.go
+	@$(RM_RF) ./internal/conf/pb/*.go
 	@$(RM_RF) ./dist
 	@$(RM_RF) ./third_party
 	@$(RM_F) ./go.sum # Clean go.sum to force re-download if needed

@@ -8,10 +8,10 @@ package main
 
 import (
 	"basic-layout/multiple/multiple_sample/internal/conf/pb"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/biz"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/data"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/server"
-	"basic-layout/multiple/multiple_sample/internal/mods/user/service"
+	"basic-layout/multiple/multiple_sample/internal/features/user/biz"
+	"basic-layout/multiple/multiple_sample/internal/features/user/data"
+	"basic-layout/multiple/multiple_sample/internal/features/user/server"
+	"basic-layout/multiple/multiple_sample/internal/features/user/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"

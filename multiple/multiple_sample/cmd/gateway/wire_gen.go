@@ -8,9 +8,9 @@ package main
 
 import (
 	"basic-layout/multiple/multiple_sample/internal/conf/pb"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/client"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/server"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
+	"basic-layout/multiple/multiple_sample/internal/features/gateway/client"
+	"basic-layout/multiple/multiple_sample/internal/features/gateway/server"
+	"basic-layout/multiple/multiple_sample/internal/features/gateway/service"
 	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"

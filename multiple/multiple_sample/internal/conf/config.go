@@ -35,31 +35,11 @@ func (c *Config) DecodeDefaultDiscovery() (string, error) {
 }
 
 func (c *Config) DecodeServers() (*transportv1.Servers, error) {
-	return &transportv1.Servers{
-		Configs: c.bootstrap.GetService().GetServers(),
-	}, nil
+	return c.bootstrap.GetServers(), nil
 }
 
 func (c *Config) DecodeClients() (*transportv1.Clients, error) {
-	return &transportv1.Clients{
-		Configs: c.bootstrap.GetService().GetClients(),
-	}, nil
-}
-
-func (c *Config) Load() error {
-	return c.config.Load()
-}
-
-func (c *Config) Decode(key string, value any) error {
-	return c.config.Decode(key, value)
-}
-
-func (c *Config) Raw() any {
-	return c.config.Raw()
-}
-
-func (c *Config) Close() error {
-	return c.config.Close()
+	return c.bootstrap.GetClients(), nil
 }
 
 func (c *Config) DecodeApp() (*appv1.App, error) {
@@ -74,15 +54,11 @@ func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
 }
 
 func (c *Config) DecodeDiscoveries() (*discoveryv1.Discoveries, error) {
-	return &discoveryv1.Discoveries{
-		Configs: []*discoveryv1.Discovery{c.bootstrap.GetDiscovery()},
-	}, nil
+	return c.bootstrap.GetDiscoveries(), nil
 }
 
 func (c *Config) DecodeMiddlewares() (*middlewarev1.Middlewares, error) {
-	middlewares := &middlewarev1.Middlewares{}
-	middlewares.Configs = c.bootstrap.GetService().GetMiddlewares()
-	return middlewares, nil
+	return c.bootstrap.GetMiddlewares(), nil
 }
 
 func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredConfig) (interfaces.StructuredConfig, error) {
@@ -91,45 +67,8 @@ func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredCon
 
 	// Try to decode the entire config first
 	if err := config.Decode("", &c.bootstrap); err != nil {
-		logger.Errorf("Failed to decode bootstrap config: %v", err)
-		// Try to decode just the server part
-		var serverCfg confpb.ServiceConfig
-		if err := config.Decode("server", &serverCfg); err != nil {
-			logger.Errorf("Failed to decode server config: %v", err)
-			return nil, fmt.Errorf("failed to decode configuration: %v", err)
-		}
-		c.bootstrap.Service = &serverCfg
+		return nil, fmt.Errorf("failed to decode bootstrap config: %w", err)
 	}
-
-	// If we still don't have a server config, create an empty one
-	if c.bootstrap.Service == nil {
-		logger.Warn("No server configuration found, using defaults")
-		c.bootstrap.Service = &confpb.ServiceConfig{
-			Servers: []*transportv1.Server{
-				{
-					Name: c.app.GetName(),
-				},
-			}, // Version field doesn't exist in servicev1.Service
-		}
-	}
-
-	// Ensure service name is set
-	if c.bootstrap.Service.Servers == nil {
-		c.bootstrap.Service.Servers = []*transportv1.Server{
-			{
-				Name: c.app.GetName(),
-			},
-		}
-	}
-
-	// Use app name if service name is not set
-	if c.bootstrap.Service.Servers[0].Name == "" && c.app != nil {
-		c.bootstrap.Service.Servers[0].Name = c.app.GetName()
-	}
-
-	logger.Infof("Service name: %s",
-		c.bootstrap.Service.Servers[0].Name,
-	)
 
 	// Log the final configuration for debugging
 	logger.Debugf("Final bootstrap config: %+v", &c.bootstrap)

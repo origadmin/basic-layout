@@ -18,9 +18,9 @@ import (
 	"github.com/google/wire"
 
 	confpb "basic-layout/multiple/multiple_sample/internal/conf/pb"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/client"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/server"
-	"basic-layout/multiple/multiple_sample/internal/mods/gateway/service"
+	"basic-layout/multiple/multiple_sample/internal/gateway/client"
+	"basic-layout/multiple/multiple_sample/internal/gateway/server"
+	"basic-layout/multiple/multiple_sample/internal/gateway/service"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 
 	"github.com/origadmin/runtime"

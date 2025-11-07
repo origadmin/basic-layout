@@ -7,8 +7,8 @@
 package main
 
 import (
-	"basic-layout/simple/simple_app/configs"
 	"basic-layout/simple/simple_app/internal/biz"
+	"basic-layout/simple/simple_app/internal/conf/pb"
 	"basic-layout/simple/simple_app/internal/data"
 	"basic-layout/simple/simple_app/internal/server"
 	"basic-layout/simple/simple_app/internal/service"
@@ -64,8 +64,8 @@ func provideLogger(rt *runtime.Runtime) log.Logger {
 }
 
 // provideConfig extracts and decodes the bootstrap config from the runtime instance.
-func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
-	var bc configs.Bootstrap
+func provideConfig(rt *runtime.Runtime) (*confpb.Bootstrap, error) {
+	var bc confpb.Bootstrap
 	if err := rt.Config().Decode("", &bc); err != nil {
 		return nil, err
 	}
@@ -73,12 +73,12 @@ func provideConfig(rt *runtime.Runtime) (*configs.Bootstrap, error) {
 }
 
 // provideServerConfig extracts the server config from the bootstrap config.
-func provideServerConfig(bc *configs.Bootstrap) *transportv1.Servers {
+func provideServerConfig(bc *confpb.Bootstrap) *transportv1.Servers {
 	return bc.GetServers()
 }
 
 // provideDataConfig extracts the data config from the bootstrap config.
-func provideDataConfig(bc *configs.Bootstrap) *datav1.Data {
+func provideDataConfig(bc *confpb.Bootstrap) *datav1.Data {
 	return bc.GetData()
 }
 
