@@ -73,11 +73,12 @@ Let's demonstrate by splitting the `multiple_sample` monorepo into two separate 
 1.  **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` to a new directory named `user-service`.
 2.  **Prune the Project (Crucial: Prune Carefully)**: Delete all files and directories not related to the `user` service. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
     *   **Keep** `cmd/user/`
-    *   **Keep** `internal/mods/user/`
+    *   **Keep** `internal/features/user/`
     *   **Keep** `api/v1/proto/user/` (if `user.proto` is in this path)
     *   **Keep** `resources/configs/user/`
     *   **Delete** `cmd/gateway/` and `cmd/order/`.
-    *   **Delete** `internal/mods/gateway/` and `internal/mods/order/`.
+    *   **Delete** `internal/features/order/`.
+    *   **Delete** `internal/gateway/`.
     *   **Delete** `api/v1/proto/gateway/` and `api/v1/proto/order/` (if these proto files are no longer needed).
     *   **Delete** `resources/configs/gateway/` and `resources/configs/order/`.
     *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `user` service.
@@ -96,11 +97,11 @@ Let's demonstrate by splitting the `multiple_sample` monorepo into two separate 
 1.  **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` again to a new directory named `gateway-service`.
 2.  **Prune the Project (Crucial: Prune Carefully)**: This time, delete business logic modules unrelated to the gateway. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
     *   **Keep** `cmd/gateway/`
-    *   **Keep** `internal/mods/gateway/`
+    *   **Keep** `internal/gateway/`
     *   **Keep** `api/v1/proto/gateway/` (if `gateway.proto` is in this path)
     *   **Keep** `resources/configs/gateway/`
     *   **Delete** `cmd/user/` and `cmd/order/`.
-    *   **Delete** `internal/mods/user/` and `internal/mods/order/`.
+    *   **Delete** `internal/features/user/` and `internal/features/order/`.
     *   **Delete** `api/v1/proto/user/` and `api/v1/proto/order/` (if these proto files are no longer needed).
     *   **Delete** `resources/configs/user/` and `resources/configs/order/`.
     *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `gateway` service.
