@@ -9,9 +9,9 @@ import (
 	"log"
 	"reflect"
 
-	"basic-layout/simple/simple_app/internal/data/entity/ent/migrate"
+	"basic-layout/simple/simple_app/internal/data/ent/migrate"
 
-	"basic-layout/simple/simple_app/internal/data/entity/ent/permission"
+	"basic-layout/simple/simple_app/internal/data/ent/permission"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"

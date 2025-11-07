@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"basic-layout/simple/simple_app/internal/data/entity/ent"
+	"basic-layout/simple/simple_app/internal/data/ent"
 	// required by schema hooks.
-	_ "basic-layout/simple/simple_app/internal/data/entity/ent/runtime"
+	_ "basic-layout/simple/simple_app/internal/data/ent/runtime"
 
-	"basic-layout/simple/simple_app/internal/data/entity/ent/migrate"
+	"basic-layout/simple/simple_app/internal/data/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

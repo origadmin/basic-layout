@@ -3,7 +3,7 @@
 package ent
 
 import (
-	"basic-layout/simple/simple_app/internal/data/entity/ent/permission"
+	"basic-layout/simple/simple_app/internal/data/ent/permission"
 	"fmt"
 )
 

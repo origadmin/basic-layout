@@ -3,7 +3,7 @@
 package hook
 
 import (
-	"basic-layout/simple/simple_app/internal/data/entity/ent"
+	"basic-layout/simple/simple_app/internal/data/ent"
 	"context"
 	"fmt"
 )

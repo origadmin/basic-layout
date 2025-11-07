@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"basic-layout/simple/simple_app/internal/data/entity/ent/permission"
-	"basic-layout/simple/simple_app/internal/data/entity/ent/schema"
+	"basic-layout/simple/simple_app/internal/data/ent/permission"
+	"basic-layout/simple/simple_app/internal/data/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

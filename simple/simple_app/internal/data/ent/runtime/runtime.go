@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in basic-layout/simple/simple_app/internal/data/entity/ent/runtime.go
+// The schema-stitching logic is generated in basic-layout/simple/simple_app/internal/data/ent/runtime.go
 
 const (
 	Version = "v0.14.5"                                         // Version of ent codegen.

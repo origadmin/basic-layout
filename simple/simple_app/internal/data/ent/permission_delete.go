@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"basic-layout/simple/simple_app/internal/data/entity/ent/permission"
-	"basic-layout/simple/simple_app/internal/data/entity/ent/predicate"
+	"basic-layout/simple/simple_app/internal/data/ent/permission"
+	"basic-layout/simple/simple_app/internal/data/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"

@@ -3,7 +3,7 @@
 package permission
 
 import (
-	"basic-layout/simple/simple_app/internal/data/entity/ent/predicate"
+	"basic-layout/simple/simple_app/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 )
