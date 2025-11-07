@@ -14,7 +14,7 @@ import (
 	"github.com/google/wire"
 
 	gatewayAPI "basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway"
-	"basic-layout/multiple/multiple_sample/internal/features/gateway/service"
+	"basic-layout/multiple/multiple_sample/internal/gateway/service"
 	grpcv1 "github.com/origadmin/runtime/api/gen/go/config/transport/grpc/v1"
 	httpv1 "github.com/origadmin/runtime/api/gen/go/config/transport/http/v1"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1" // Added import
