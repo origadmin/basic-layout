@@ -36,7 +36,8 @@ simple_app
 │   ├── configs/    # Application configuration files (e.g., bootstrap.yaml, conf.yaml) for each service.
 │   └── api-docs/   # Generated OpenAPI documentation.
 ├── Makefile        # Provides common development commands (build, generate, run, etc.).
-└── go.mod          # Go module definition.
+├── go.mod          # Go module definition.
+└── go.sum          # Go module checksums.
 ```
 
 ### Key Architectural Concepts
@@ -420,6 +421,21 @@ Use this path if you want to start a new project that will be maintained within 
 4. **Update Import Paths**: Perform a global search-and-replace across your project to replace the old module prefix
    `basic-layout/multiple/multiple_sample` with the new one you chose in Step 2.
 
+   **Important Note**: This not only includes Go file `import` paths but may also include references to the module path within configuration files such as `.goreleaser.yaml`, `buf.yaml`, and `resources/configs/*.yaml`. Please ensure a comprehensive replacement.
+
+   *   **Windows (PowerShell) Example**:
+       ```powershell
+       Get-ChildItem -Path . -Recurse -Include *.go,*.yaml,*.yml,*.mod,*.toml | ForEach-Object {
+           (Get-Content $_.FullName) | ForEach-Object {
+               $_ -replace "basic-layout/multiple/multiple_sample", "github.com/your-org/my-awesome-project"
+           } | Set-Content $_.FullName
+       }
+       ```
+   *   **Linux/macOS (Bash) Example**:
+       ```bash
+       grep -rl "basic-layout/multiple/multiple_sample" . | xargs sed -i '' 's|basic-layout/multiple/multiple_sample|github.com/your-org/my-awesome-project|g'
+       ```
+
 5. **Start Developing**: You can now customize the project by modifying or removing the example services (`user`,
    `order`, `gateway`).
 
@@ -431,11 +447,19 @@ Let's demonstrate by splitting `multiple_sample` into two separate projects: `us
 ##### Step 1: Create the `user-service`
 
 1. **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` to a new directory named `user-service`.
-2. **Prune the Project**: Delete all files and directories not related to the `user` service.
-    * Delete `cmd/gateway/` and `cmd/order/`.
-    * Delete `internal/mods/gateway/` and `internal/mods/order/`.
-    * Delete `api/v1/proto/gateway/` and `api/v1/proto/order/`.
-    * Delete `resources/configs/gateway/` and `resources/configs/order/`.
+2. **Prune the Project (Crucial: Prune Carefully)**: Delete all files and directories not related to the `user` service. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
+    *   **Keep** `cmd/user/`
+    *   **Keep** `internal/mods/user/`
+    *   **Keep** `api/v1/proto/user/` (if `user.proto` is in this path)
+    *   **Keep** `resources/configs/user/`
+    *   **Delete** `cmd/gateway/` and `cmd/order/`.
+    *   **Delete** `internal/mods/gateway/` and `internal/mods/order/`.
+    *   **Delete** `api/v1/proto/gateway/` and `api/v1/proto/order/` (if these proto files are no longer needed).
+    *   **Delete** `resources/configs/gateway/` and `resources/configs/order/`.
+    *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `user` service.
+    *   **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `user` service.
+    *   **Check and delete** `Makefile` commands unrelated to the `user` service.
+    *   **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are crucial for ensuring a lean project.
 3. **Configure the Module**:
     * `cd user-service`
     * `go mod edit -module github.com/your-org/user-service`
@@ -446,12 +470,19 @@ Let's demonstrate by splitting `multiple_sample` into two separate projects: `us
 ##### Step 2: Create the `gateway-service`
 
 1. **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` again to a new directory named `gateway-service`.
-2. **Prune the Project**: This time, delete the business logic modules not related to the gateway.
-    * Delete `cmd/user/` and `cmd/order/`.
-    * Delete `internal/mods/user/` and `internal/mods/order/`.
-    * Keep `api/v1/proto/gateway/`, but you may need to adjust its imports if the proto files for `user` and `order` are
-      now in separate repositories.
-    * Delete `resources/configs/user/` and `resources/configs/order/`.
+2. **Prune the Project (Crucial: Prune Carefully)**: This time, delete business logic modules unrelated to the gateway. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
+    *   **Keep** `cmd/gateway/`
+    *   **Keep** `internal/mods/gateway/`
+    *   **Keep** `api/v1/proto/gateway/` (if `gateway.proto` is in this path)
+    *   **Keep** `resources/configs/gateway/`
+    *   **Delete** `cmd/user/` and `cmd/order/`.
+    *   **Delete** `internal/mods/user/` and `internal/mods/order/`.
+    *   **Delete** `api/v1/proto/user/` and `api/v1/proto/order/` (if these proto files are no longer needed).
+    *   **Delete** `resources/configs/user/` and `resources/configs/order/`.
+    *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `gateway` service.
+    *   **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `gateway` service.
+    *   **Check and delete** `Makefile` commands unrelated to the `gateway` service.
+    *   **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are crucial for ensuring a lean project.
 3. **Configure the Module**:
     * `cd gateway-service`
     * `go mod edit -module github.com/your-org/gateway-service`
@@ -532,6 +563,33 @@ make generate
 You can run each service in a separate terminal. Ensure a service discovery agent (like Consul) is running if you use
 `discovery://` endpoints.
 
+**Local Service Discovery Agent Setup (Optional, Recommended for Multi-Service Testing):**
+
+If you use `discovery://` endpoints, a service discovery agent is required. Below is a simple example of starting Consul using Docker Compose:
+
+1.  Create a `docker-compose.yaml` file (e.g., in the project root directory):
+    ```yaml
+    version: '3.8'
+    services:
+      consul:
+        image: consul:1.10.0 # You can use the latest stable version
+        container_name: consul
+        ports:
+          - "8500:8500" # UI Port
+          - "8600:8600/udp" # DNS Port
+        command: "agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui -node=consul-server-1"
+        healthcheck:
+          test: ["CMD", "consul", "members"]
+          interval: 10s
+          timeout: 5s
+          retries: 3
+    ```
+2.  Run in the directory containing `docker-compose.yaml`:
+    ```bash
+    docker-compose up -d
+    ```
+    This will start a local Consul service discovery agent.
+
 ```sh
 # Terminal 1: Start the user service
 go run ./cmd/user/ -conf ./resources/configs/user/bootstrap.yaml
@@ -548,11 +606,23 @@ go run ./cmd/gateway/ -conf ./resources/configs/gateway/bootstrap.yaml
 Send requests to the `user` and `order` services through the `gateway`.
 
 ```sh
-# Example: Get a user through the gateway
-curl http://localhost:8000/api/v1/gateway/user/123
+# Example: Get a user through the gateway (Transparent Proxy Pattern)
+curl http://localhost:8000/api/v1/proxy/user/123
 
-# Example: Get an order through the gateway
-curl http://localhost:8000/api/v1/gateway/order/456
+# Example: Get an order through the gateway (Transparent Proxy Pattern)
+curl http://localhost:8000/api/v1/proxy/order/456
+
+# Example: Get a user through the gateway (Edge Gateway Pattern)
+curl http://localhost:8000/api/v1/edge/user/123
+
+# Example: Get an order through the gateway (Edge Gateway Pattern)
+curl http://localhost:8000/api/v1/edge/order/456
+
+# Example: Directly call the user service (if exposed)
+curl http://localhost:9001/api/v1/user/123
+
+# Example: Directly call the order service (if exposed)
+curl http://localhost:9002/api/v1/order/456
 ```
 
 *(Note: The actual API paths might differ based on your protobuf definitions and Kratos HTTP rule configurations. Adjust
