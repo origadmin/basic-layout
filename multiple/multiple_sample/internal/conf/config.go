@@ -1,17 +1,16 @@
-// Package transformer implements the functions, types, and interfaces for the module.
-package transformer
+// Package conf implements the functions, types, and interfaces for the module.
+package conf
 
 import (
 	"fmt"
 
-	"basic-layout/multiple/multiple_sample/configs"
+	confpb "basic-layout/multiple/multiple_sample/internal/conf/pb"
+	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	datav1 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
 	discoveryv1 "github.com/origadmin/runtime/api/gen/go/config/discovery/v1"
-	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
-
-	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	loggerv1 "github.com/origadmin/runtime/api/gen/go/config/logger/v1"
 	middlewarev1 "github.com/origadmin/runtime/api/gen/go/config/middleware/v1"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 	"github.com/origadmin/runtime/bootstrap"
 	"github.com/origadmin/runtime/interfaces"
 	"github.com/origadmin/runtime/log"
@@ -20,10 +19,10 @@ import (
 type Config struct {
 	app       *appv1.App
 	config    interfaces.Config
-	bootstrap configs.Bootstrap
+	bootstrap confpb.Bootstrap
 }
 
-func (c *Config) Bootstrap() *configs.Bootstrap {
+func (c *Config) Bootstrap() *confpb.Bootstrap {
 	return &c.bootstrap
 }
 
@@ -94,7 +93,7 @@ func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredCon
 	if err := config.Decode("", &c.bootstrap); err != nil {
 		logger.Errorf("Failed to decode bootstrap config: %v", err)
 		// Try to decode just the server part
-		var serverCfg configs.ServiceConfig
+		var serverCfg confpb.ServiceConfig
 		if err := config.Decode("server", &serverCfg); err != nil {
 			logger.Errorf("Failed to decode server config: %v", err)
 			return nil, fmt.Errorf("failed to decode configuration: %v", err)
@@ -105,7 +104,7 @@ func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredCon
 	// If we still don't have a server config, create an empty one
 	if c.bootstrap.Service == nil {
 		logger.Warn("No server configuration found, using defaults")
-		c.bootstrap.Service = &configs.ServiceConfig{
+		c.bootstrap.Service = &confpb.ServiceConfig{
 			Servers: []*transportv1.Server{
 				{
 					Name: c.app.GetName(),

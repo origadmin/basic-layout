@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        v5.28.3
-// source: configs/service.proto
+// source: internal/conf/pb/service.proto
 
-package configs
+package confpb
 
 import (
 	v12 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
@@ -25,7 +25,7 @@ const (
 )
 
 // ServiceConfig is the configuration structure for the service.
-// It uses the runtime service definitions for server and client configurations.
+// It uses the config service definitions for server and client configurations.
 type ServiceConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// servers is a list of server endpoints that this service will expose.
@@ -45,7 +45,7 @@ type ServiceConfig struct {
 
 func (x *ServiceConfig) Reset() {
 	*x = ServiceConfig{}
-	mi := &file_configs_service_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -57,7 +57,7 @@ func (x *ServiceConfig) String() string {
 func (*ServiceConfig) ProtoMessage() {}
 
 func (x *ServiceConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_configs_service_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -70,7 +70,7 @@ func (x *ServiceConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServiceConfig.ProtoReflect.Descriptor instead.
 func (*ServiceConfig) Descriptor() ([]byte, []int) {
-	return file_configs_service_proto_rawDescGZIP(), []int{0}
+	return file_internal_conf_pb_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ServiceConfig) GetServers() []*v1.Server {
@@ -101,42 +101,42 @@ func (x *ServiceConfig) GetData() *v12.Data {
 	return nil
 }
 
-var File_configs_service_proto protoreflect.FileDescriptor
+var File_internal_conf_pb_service_proto protoreflect.FileDescriptor
 
-const file_configs_service_proto_rawDesc = "" +
+const file_internal_conf_pb_service_proto_rawDesc = "" +
 	"\n" +
-	"\x15configs/service.proto\x12\aconfigs\x1a\x1aruntime/data/v1/data.proto\x1a&runtime/middleware/v1/middleware.proto\x1a$runtime/transport/v1/transport.proto\"\xef\x01\n" +
-	"\rServiceConfig\x126\n" +
-	"\aservers\x18\x02 \x03(\v2\x1c.runtime.transport.v1.ServerR\aservers\x126\n" +
-	"\aclients\x18\x03 \x03(\v2\x1c.runtime.transport.v1.ClientR\aclients\x12C\n" +
-	"\vmiddlewares\x18\x04 \x03(\v2!.runtime.middleware.v1.MiddlewareR\vmiddlewares\x12)\n" +
-	"\x04data\x18\x05 \x01(\v2\x15.runtime.data.v1.DataR\x04dataB7Z5basic-layout/multiple/multiple_sample/configs;configsb\x06proto3"
+	"\x1einternal/conf/pb/service.proto\x12\aconfigs\x1a\x19config/data/v1/data.proto\x1a%config/middleware/v1/middleware.proto\x1a#config/transport/v1/transport.proto\"\xeb\x01\n" +
+	"\rServiceConfig\x125\n" +
+	"\aservers\x18\x02 \x03(\v2\x1b.config.transport.v1.ServerR\aservers\x125\n" +
+	"\aclients\x18\x03 \x03(\v2\x1b.config.transport.v1.ClientR\aclients\x12B\n" +
+	"\vmiddlewares\x18\x04 \x03(\v2 .config.middleware.v1.MiddlewareR\vmiddlewares\x12(\n" +
+	"\x04data\x18\x05 \x01(\v2\x14.config.data.v1.DataR\x04dataB?Z=basic-layout/multiple/multiple_sample/internal/conf/pb;confpbb\x06proto3"
 
 var (
-	file_configs_service_proto_rawDescOnce sync.Once
-	file_configs_service_proto_rawDescData []byte
+	file_internal_conf_pb_service_proto_rawDescOnce sync.Once
+	file_internal_conf_pb_service_proto_rawDescData []byte
 )
 
-func file_configs_service_proto_rawDescGZIP() []byte {
-	file_configs_service_proto_rawDescOnce.Do(func() {
-		file_configs_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_configs_service_proto_rawDesc), len(file_configs_service_proto_rawDesc)))
+func file_internal_conf_pb_service_proto_rawDescGZIP() []byte {
+	file_internal_conf_pb_service_proto_rawDescOnce.Do(func() {
+		file_internal_conf_pb_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_conf_pb_service_proto_rawDesc), len(file_internal_conf_pb_service_proto_rawDesc)))
 	})
-	return file_configs_service_proto_rawDescData
+	return file_internal_conf_pb_service_proto_rawDescData
 }
 
-var file_configs_service_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_configs_service_proto_goTypes = []any{
+var file_internal_conf_pb_service_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_internal_conf_pb_service_proto_goTypes = []any{
 	(*ServiceConfig)(nil),  // 0: configs.ServiceConfig
-	(*v1.Server)(nil),      // 1: runtime.transport.v1.Server
-	(*v1.Client)(nil),      // 2: runtime.transport.v1.Client
-	(*v11.Middleware)(nil), // 3: runtime.middleware.v1.Middleware
-	(*v12.Data)(nil),       // 4: runtime.data.v1.Data
+	(*v1.Server)(nil),      // 1: config.transport.v1.Server
+	(*v1.Client)(nil),      // 2: config.transport.v1.Client
+	(*v11.Middleware)(nil), // 3: config.middleware.v1.Middleware
+	(*v12.Data)(nil),       // 4: config.data.v1.Data
 }
-var file_configs_service_proto_depIdxs = []int32{
-	1, // 0: configs.ServiceConfig.servers:type_name -> runtime.transport.v1.Server
-	2, // 1: configs.ServiceConfig.clients:type_name -> runtime.transport.v1.Client
-	3, // 2: configs.ServiceConfig.middlewares:type_name -> runtime.middleware.v1.Middleware
-	4, // 3: configs.ServiceConfig.data:type_name -> runtime.data.v1.Data
+var file_internal_conf_pb_service_proto_depIdxs = []int32{
+	1, // 0: configs.ServiceConfig.servers:type_name -> config.transport.v1.Server
+	2, // 1: configs.ServiceConfig.clients:type_name -> config.transport.v1.Client
+	3, // 2: configs.ServiceConfig.middlewares:type_name -> config.middleware.v1.Middleware
+	4, // 3: configs.ServiceConfig.data:type_name -> config.data.v1.Data
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
@@ -144,26 +144,26 @@ var file_configs_service_proto_depIdxs = []int32{
 	0, // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_configs_service_proto_init() }
-func file_configs_service_proto_init() {
-	if File_configs_service_proto != nil {
+func init() { file_internal_conf_pb_service_proto_init() }
+func file_internal_conf_pb_service_proto_init() {
+	if File_internal_conf_pb_service_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_configs_service_proto_rawDesc), len(file_configs_service_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_conf_pb_service_proto_rawDesc), len(file_internal_conf_pb_service_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_configs_service_proto_goTypes,
-		DependencyIndexes: file_configs_service_proto_depIdxs,
-		MessageInfos:      file_configs_service_proto_msgTypes,
+		GoTypes:           file_internal_conf_pb_service_proto_goTypes,
+		DependencyIndexes: file_internal_conf_pb_service_proto_depIdxs,
+		MessageInfos:      file_internal_conf_pb_service_proto_msgTypes,
 	}.Build()
-	File_configs_service_proto = out.File
-	file_configs_service_proto_goTypes = nil
-	file_configs_service_proto_depIdxs = nil
+	File_internal_conf_pb_service_proto = out.File
+	file_internal_conf_pb_service_proto_goTypes = nil
+	file_internal_conf_pb_service_proto_depIdxs = nil
 }

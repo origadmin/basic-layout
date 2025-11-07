@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        v5.28.3
-// source: configs/setting.proto
+// source: internal/conf/pb/setting.proto
 
-package configs
+package confpb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -31,7 +31,7 @@ type Setting struct {
 
 func (x *Setting) Reset() {
 	*x = Setting{}
-	mi := &file_configs_setting_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_setting_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +43,7 @@ func (x *Setting) String() string {
 func (*Setting) ProtoMessage() {}
 
 func (x *Setting) ProtoReflect() protoreflect.Message {
-	mi := &file_configs_setting_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_setting_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +56,7 @@ func (x *Setting) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Setting.ProtoReflect.Descriptor instead.
 func (*Setting) Descriptor() ([]byte, []int) {
-	return file_configs_setting_proto_rawDescGZIP(), []int{0}
+	return file_internal_conf_pb_setting_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Setting) GetTodo() *anypb.Any {
@@ -66,32 +66,32 @@ func (x *Setting) GetTodo() *anypb.Any {
 	return nil
 }
 
-var File_configs_setting_proto protoreflect.FileDescriptor
+var File_internal_conf_pb_setting_proto protoreflect.FileDescriptor
 
-const file_configs_setting_proto_rawDesc = "" +
+const file_internal_conf_pb_setting_proto_rawDesc = "" +
 	"\n" +
-	"\x15configs/setting.proto\x12\aconfigs\x1a\x19google/protobuf/any.proto\"3\n" +
+	"\x1einternal/conf/pb/setting.proto\x12\aconfigs\x1a\x19google/protobuf/any.proto\"3\n" +
 	"\aSetting\x12(\n" +
-	"\x04todo\x18\x01 \x01(\v2\x14.google.protobuf.AnyR\x04todoB7Z5basic-layout/multiple/multiple_sample/configs;configsb\x06proto3"
+	"\x04todo\x18\x01 \x01(\v2\x14.google.protobuf.AnyR\x04todoB?Z=basic-layout/multiple/multiple_sample/internal/conf/pb;confpbb\x06proto3"
 
 var (
-	file_configs_setting_proto_rawDescOnce sync.Once
-	file_configs_setting_proto_rawDescData []byte
+	file_internal_conf_pb_setting_proto_rawDescOnce sync.Once
+	file_internal_conf_pb_setting_proto_rawDescData []byte
 )
 
-func file_configs_setting_proto_rawDescGZIP() []byte {
-	file_configs_setting_proto_rawDescOnce.Do(func() {
-		file_configs_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_configs_setting_proto_rawDesc), len(file_configs_setting_proto_rawDesc)))
+func file_internal_conf_pb_setting_proto_rawDescGZIP() []byte {
+	file_internal_conf_pb_setting_proto_rawDescOnce.Do(func() {
+		file_internal_conf_pb_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_conf_pb_setting_proto_rawDesc), len(file_internal_conf_pb_setting_proto_rawDesc)))
 	})
-	return file_configs_setting_proto_rawDescData
+	return file_internal_conf_pb_setting_proto_rawDescData
 }
 
-var file_configs_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_configs_setting_proto_goTypes = []any{
+var file_internal_conf_pb_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_internal_conf_pb_setting_proto_goTypes = []any{
 	(*Setting)(nil),   // 0: configs.Setting
 	(*anypb.Any)(nil), // 1: google.protobuf.Any
 }
-var file_configs_setting_proto_depIdxs = []int32{
+var file_internal_conf_pb_setting_proto_depIdxs = []int32{
 	1, // 0: configs.Setting.todo:type_name -> google.protobuf.Any
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
@@ -100,26 +100,26 @@ var file_configs_setting_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_configs_setting_proto_init() }
-func file_configs_setting_proto_init() {
-	if File_configs_setting_proto != nil {
+func init() { file_internal_conf_pb_setting_proto_init() }
+func file_internal_conf_pb_setting_proto_init() {
+	if File_internal_conf_pb_setting_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_configs_setting_proto_rawDesc), len(file_configs_setting_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_conf_pb_setting_proto_rawDesc), len(file_internal_conf_pb_setting_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_configs_setting_proto_goTypes,
-		DependencyIndexes: file_configs_setting_proto_depIdxs,
-		MessageInfos:      file_configs_setting_proto_msgTypes,
+		GoTypes:           file_internal_conf_pb_setting_proto_goTypes,
+		DependencyIndexes: file_internal_conf_pb_setting_proto_depIdxs,
+		MessageInfos:      file_internal_conf_pb_setting_proto_msgTypes,
 	}.Build()
-	File_configs_setting_proto = out.File
-	file_configs_setting_proto_goTypes = nil
-	file_configs_setting_proto_depIdxs = nil
+	File_internal_conf_pb_setting_proto = out.File
+	file_internal_conf_pb_setting_proto_goTypes = nil
+	file_internal_conf_pb_setting_proto_depIdxs = nil
 }

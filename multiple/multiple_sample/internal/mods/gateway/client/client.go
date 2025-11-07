@@ -12,7 +12,7 @@ import (
 
 	"basic-layout/multiple/multiple_sample/api/v1/gen/go/order"
 	"basic-layout/multiple/multiple_sample/api/v1/gen/go/user"
-	"basic-layout/multiple/multiple_sample/configs"
+	confpb "basic-layout/multiple/multiple_sample/internal/conf/pb"
 	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 	"github.com/origadmin/runtime/service/transport/grpc"
 )
@@ -21,7 +21,7 @@ import (
 var ProviderSet = wire.NewSet(NewUserClient, NewOrderClient)
 
 // NewUserClient creates a new UserAPI client.
-func NewUserClient(ctx context.Context, c *configs.Bootstrap) (user.UserAPIClient, error) {
+func NewUserClient(ctx context.Context, c *confpb.Bootstrap) (user.UserAPIClient, error) {
 	var clientConfig *transportv1.Client
 	if c.GetClients().GetConfigs() != nil {
 		for _, cli := range c.GetClients().GetConfigs() {
@@ -49,7 +49,7 @@ func NewUserClient(ctx context.Context, c *configs.Bootstrap) (user.UserAPIClien
 }
 
 // NewOrderClient creates a new OrderAPI client.
-func NewOrderClient(ctx context.Context, c *configs.Bootstrap) (order.OrderAPIClient, error) {
+func NewOrderClient(ctx context.Context, c *confpb.Bootstrap) (order.OrderAPIClient, error) {
 	var clientConfig *transportv1.Client
 	if c.GetClients().GetConfigs() != nil {
 		for _, cli := range c.GetClients().GetConfigs() {

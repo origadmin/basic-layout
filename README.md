@@ -1,7 +1,9 @@
 # Basic Layout Examples
 
 This directory contains example projects demonstrating different application layouts using the OrigAdmin framework.
-These examples serve as practical guides and starting points for building your own applications.
+These examples serve as practical guides and starting points for building your own applications, showcasing two common
+architectural patterns: a standard single-module microservice and a multi-module monorepo, along with guidance on
+evolving from one to the other.
 
 ## Projects
 
@@ -25,10 +27,10 @@ cohesion and low coupling.
 simple_app
 ├── api/            # Protobuf definitions for the application's API.
 ├── cmd/            # Main application entry point, responsible for initialization and startup.
-├── configs/        # Protobuf definitions for internal configurations (e.g., bootstrap.proto) and their generated Go code.
 ├── internal/       # All private application code. Go prevents other projects from importing this.
 │   ├── biz/        # Business Logic Layer: Defines business models and use cases (interfaces and structs).
 │   ├── conf/       # Configuration structures and loading logic for internal use.
+│   │   └── pb/     # Protobuf definitions for internal configurations (e.g., bootstrap.proto) and their generated Go code.
 │   ├── data/       # Data Access Layer: Implements the interfaces defined in `biz`. Handles all interactions with databases, caches, etc.
 │   ├── server/     # Server Layer: Initializes and configures transport servers (e.g., HTTP, gRPC).
 │   └── service/    # Service Layer: Implements the API services defined in Protobuf. Acts as a bridge between the transport layer and the business logic layer.
@@ -264,52 +266,55 @@ layout.
   These are Protobuf definitions (`.proto` files) that define the schema for configurations used *internally* within
   your module and are not intended to be part of your module's public API.
 
-  **Current Situation (e.g., `configs/` in `simple_app`):**
-    * **Location**: Top-level directory (e.g., `simple_app/configs/`).
-    * **Content**: Protobuf `.proto` files defining configuration structures, and their generated Go code (`.pb.go`,
-      `.pb.validate.go`).
-    * **Problem**: The name `configs/` is broad and can be confused with directories holding actual configuration
-      *values* (e.g., `resources/configs/*.yaml`). Additionally, placing internal definitions at the top level breaks
-      Go's `internal` encapsulation rule.
-
   **Recommended Placement and Naming for Internal Configurations:**
 
-  To ensure proper encapsulation and clarity, internal configuration Protobuf definitions and their generated Go code
-  should always be placed under the `internal/` directory.
+  To ensure proper encapsulation, clarity, and adherence to Go best practices, internal configuration Protobuf definitions
+  and their generated Go code should always be placed under the `internal/` directory. The specific subdirectory depends
+  on whether a dedicated conversion layer is needed.
 
-    * **Strongly Recommended Structure**: `internal/configpb/`
-        * **Purpose**: This is the preferred location for internal `.proto` files (e.g., `bootstrap.proto`) and their
-          generated Go code (e.g., `bootstrap.pb.go`). The `pb` suffix clearly indicates Protobuf content, and
-          `internal/` enforces encapsulation.
-        * **Go Package Name**: Typically `configpb`.
-        * **Benefits**: Enforces encapsulation, maintains clear module boundaries, and aligns with Go best practices.
+    *   **Scenario 1: Default/Direct Usage (No explicit conversion layer needed)**
+        This is the primary recommendation when the Protobuf-generated configuration types can be used directly by
+        `internal/conf` or other internal packages without significant adaptation.
 
-    * **Alternative Acceptable Structures** (choose based on preference and project consistency):
-        * `internal/confpb/`: Similar to `configpb/`, offering a slightly different naming preference.
-        * `internal/conf/pb/`: If `internal/conf` is primarily for Go language configuration structures and loading
-          logic, placing Protobuf definitions in a `pb` subdirectory can be logical. However, ensure this doesn't lead
-          to complex `internal/conf` structures or circular dependencies.
+        *   **Strongly Recommended Structure**: `internal/confpb/`
+            *   **Purpose**: This is the preferred location for internal `.proto` files (e.g., `bootstrap.proto`) and their
+              generated Go code (e.g., `bootstrap.pb.go`). The `pb` suffix clearly indicates Protobuf content, and
+              `internal/` enforces encapsulation.
+            *   **Go Package Name**: Typically `confpb`.
+            *   **Role of `internal/conf/`**: In this scenario, `internal/conf/` (package `conf`) would import directly
+              from `internal/confpb/` and use the `confpb` types for loading and handling configuration.
+            *   **Benefits**: Simple, direct, and maintains clear separation of concerns.
 
-    * **Note on `internal/conf/`**: This directory should primarily contain Go language-specific configuration
-      structures and loading logic (e.g., reading from YAML, parsing environment variables). It would *import* the
-      generated Go code from `internal/configpb/` (or similar) to work with the defined configuration schemas.
+    *   **Scenario 2: With Conversion Layer (Explicit adaptation to runtime interfaces needed)**
+        This scenario applies when `internal/conf` (or a similar package) needs to perform significant transformations
+        or adaptations from the raw Protobuf types to application-specific runtime interfaces.
 
-  **2. Public API Configuration Protobuf Definitions**
+        *   **Recommended Structure**: `internal/conf/pb/`
+            *   **Purpose**: This subdirectory is the preferred location for internal `.proto` files and their generated
+              Go code when `internal/conf` acts as a dedicated conversion layer. Nesting `pb` under `internal/conf/`
+              consolidates all configuration-related artifacts for this specific conversion process.
+            *   **Go Package Name**: Typically `confpb` (e.g., `option go_package = "your_module_path/internal/conf/pb;confpb";`).
+            *   **Role of `internal/conf/`**: In this scenario, `internal/conf/` (package `conf`) would import from
+              `internal/conf/pb/` and perform the necessary transformations or adaptations from the `conf_pb` types to
+              application-specific runtime interfaces. This aligns perfectly with the "Protobuf + Conversion" pattern.
+            *   **Benefits**: Consolidates configuration logic for conversion, enforces encapsulation, and avoids redundant
+              top-level `config` directories.
 
-  These are Protobuf definitions that define configuration schemas intended to be part of your module's *public API*,
-  meaning other services or clients might directly depend on them. These are typically managed by tools like `buf`.
+    *   **Less Recommended Naming Conventions**
+        *   `schema/config/` or `proto/config/`: These are generally less recommended due to deeper directory nesting and
+          potential naming conflicts with other project modules or tools that might use `schema` or `proto` for different
+          purposes.
+        
+**2. Public API Configuration Protobuf Definitions**
+
+These are Protobuf definitions that define configuration schemas intended to be part of your module's *public API*,
+meaning other services or clients might directly depend on them. These are typically managed by tools like `buf`.
 
     * **Recommended Placement**: Within your project's designated public API Protobuf root, e.g.,
       `<YOUR_API_PROTO_ROOT>/config/` or `<YOUR_API_PROTO_ROOT>/configpb/`.
         * The exact path `<YOUR_API_PROTO_ROOT>` (e.g., `api/v1/proto`) is project-specific and should be consistently
           applied across all public API Protobuf definitions.
         * **Benefits**: Allows for unified management and publishing of public API schemas.
-
-  **3. Less Recommended Naming Conventions**
-
-    * `schema/config/` or `proto/config/`: These are generally less recommended due to deeper directory nesting and
-      potential naming conflicts with other project modules or tools that might use `schema` or `proto` for different
-      purposes.
 
 ### How to Run
 
@@ -357,10 +362,20 @@ dependencies.
 ├── cmd/                # Service entrypoints (main.go for user, order, gateway)
 ├── dist/               # Compiled service binaries and release artifacts (generated by 'make build' or 'goreleaser').
 ├── internal/           # Internal business logic, organized by module
-│   └── mods/
-│       ├── user/       # User service implementation
-│       ├── order/      # Order service implementation
-│       └── gateway/    # API Gateway implementation
+│   ├── helpers/        # Project-level helper functions or tools.
+│   │   └── configsource/
+│   ├── mods/
+│   │   ├── gateway/    # API Gateway implementation
+│   │   │   ├── conf/   # Gateway-specific configuration structures and loading logic.
+│   │   │   │   └── pb/ # Protobuf definitions for gateway-specific internal configurations.
+│   │   ├── order/      # Order service implementation
+│   │   │   ├── conf/   # Order-specific configuration structures and loading logic.
+│   │   │   │   └── pb/ # Protobuf definitions for order-specific internal configurations.
+│   │   └── user/       # User service implementation
+│   │       ├── conf/   # User-specific configuration structures and loading logic.
+│   │       │   └── pb/ # Protobuf definitions for user-specific internal configurations.
+│   └── transformer/    # Example of a project-level internal component.
+│       └── transformer.go
 ├── resources/          # Contains various assets and non-code resources used by the application.
 │   ├── configs/        # Application configuration files (e.g., bootstrap.yaml, conf.yaml) for each service.
 │   │   ├── user/       # Specific configs for user service
@@ -421,20 +436,22 @@ Use this path if you want to start a new project that will be maintained within 
 4. **Update Import Paths**: Perform a global search-and-replace across your project to replace the old module prefix
    `basic-layout/multiple/multiple_sample` with the new one you chose in Step 2.
 
-   **Important Note**: This not only includes Go file `import` paths but may also include references to the module path within configuration files such as `.goreleaser.yaml`, `buf.yaml`, and `resources/configs/*.yaml`. Please ensure a comprehensive replacement.
+   **Important Note**: This not only includes Go file `import` paths but may also include references to the module path
+   within configuration files such as `.goreleaser.yaml`, `buf.yaml`, and `resources/configs/*.yaml`. Please ensure a
+   comprehensive replacement.
 
-   *   **Windows (PowerShell) Example**:
-       ```powershell
-       Get-ChildItem -Path . -Recurse -Include *.go,*.yaml,*.yml,*.mod,*.toml | ForEach-Object {
-           (Get-Content $_.FullName) | ForEach-Object {
-               $_ -replace "basic-layout/multiple/multiple_sample", "github.com/your-org/my-awesome-project"
-           } | Set-Content $_.FullName
-       }
-       ```
-   *   **Linux/macOS (Bash) Example**:
-       ```bash
-       grep -rl "basic-layout/multiple/multiple_sample" . | xargs sed -i '' 's|basic-layout/multiple/multiple_sample|github.com/your-org/my-awesome-project|g'
-       ```
+    * **Windows (PowerShell) Example**:
+      ```powershell
+      Get-ChildItem -Path . -Recurse -Include *.go,*.yaml,*.yml,*.mod,*.toml | ForEach-Object {
+          (Get-Content $_.FullName) | ForEach-Object {
+              $_ -replace "basic-layout/multiple/multiple_sample", "github.com/your-org/my-awesome-project"
+          } | Set-Content $_.FullName
+      }
+      ```
+    * **Linux/macOS (Bash) Example**:
+      ```bash
+      grep -rl "basic-layout/multiple/multiple_sample" . | xargs sed -i '' 's|basic-layout/multiple/multiple_sample|github.com/your-org/my-awesome-project|g'
+      ```
 
 5. **Start Developing**: You can now customize the project by modifying or removing the example services (`user`,
    `order`, `gateway`).
@@ -447,19 +464,22 @@ Let's demonstrate by splitting `multiple_sample` into two separate projects: `us
 ##### Step 1: Create the `user-service`
 
 1. **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` to a new directory named `user-service`.
-2. **Prune the Project (Crucial: Prune Carefully)**: Delete all files and directories not related to the `user` service. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
-    *   **Keep** `cmd/user/`
-    *   **Keep** `internal/mods/user/`
-    *   **Keep** `api/v1/proto/user/` (if `user.proto` is in this path)
-    *   **Keep** `resources/configs/user/`
-    *   **Delete** `cmd/gateway/` and `cmd/order/`.
-    *   **Delete** `internal/mods/gateway/` and `internal/mods/order/`.
-    *   **Delete** `api/v1/proto/gateway/` and `api/v1/proto/order/` (if these proto files are no longer needed).
-    *   **Delete** `resources/configs/gateway/` and `resources/configs/order/`.
-    *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `user` service.
-    *   **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `user` service.
-    *   **Check and delete** `Makefile` commands unrelated to the `user` service.
-    *   **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are crucial for ensuring a lean project.
+2. **Prune the Project (Crucial: Prune Carefully)**: Delete all files and directories not related to the `user` service.
+   To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
+    * **Keep** `cmd/user/`
+    * **Keep** `internal/mods/user/`
+    * **Keep** `api/v1/proto/user/` (if `user.proto` is in this path)
+    * **Keep** `resources/configs/user/`
+    * **Delete** `cmd/gateway/` and `cmd/order/`.
+    * **Delete** `internal/mods/gateway/` and `internal/mods/order/`.
+    * **Delete** `api/v1/proto/gateway/` and `api/v1/proto/order/` (if these proto files are no longer needed).
+    * **Delete** `resources/configs/gateway/` and `resources/configs/order/`.
+    * **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `user` service.
+    * **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `user`
+      service.
+    * **Check and delete** `Makefile` commands unrelated to the `user` service.
+    * **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are
+      crucial for ensuring a lean project.
 3. **Configure the Module**:
     * `cd user-service`
     * `go mod edit -module github.com/your-org/user-service`
@@ -470,19 +490,22 @@ Let's demonstrate by splitting `multiple_sample` into two separate projects: `us
 ##### Step 2: Create the `gateway-service`
 
 1. **Copy & Rename**: Copy `basic-layout/multiple/multiple_sample` again to a new directory named `gateway-service`.
-2. **Prune the Project (Crucial: Prune Carefully)**: This time, delete business logic modules unrelated to the gateway. To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
-    *   **Keep** `cmd/gateway/`
-    *   **Keep** `internal/mods/gateway/`
-    *   **Keep** `api/v1/proto/gateway/` (if `gateway.proto` is in this path)
-    *   **Keep** `resources/configs/gateway/`
-    *   **Delete** `cmd/user/` and `cmd/order/`.
-    *   **Delete** `internal/mods/user/` and `internal/mods/order/`.
-    *   **Delete** `api/v1/proto/user/` and `api/v1/proto/order/` (if these proto files are no longer needed).
-    *   **Delete** `resources/configs/user/` and `resources/configs/order/`.
-    *   **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `gateway` service.
-    *   **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `gateway` service.
-    *   **Check and delete** `Makefile` commands unrelated to the `gateway` service.
-    *   **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are crucial for ensuring a lean project.
+2. **Prune the Project (Crucial: Prune Carefully)**: This time, delete business logic modules unrelated to the gateway.
+   To ensure correctness, it is recommended to adopt a 'keep what's needed, delete the rest' strategy:
+    * **Keep** `cmd/gateway/`
+    * **Keep** `internal/mods/gateway/`
+    * **Keep** `api/v1/proto/gateway/` (if `gateway.proto` is in this path)
+    * **Keep** `resources/configs/gateway/`
+    * **Delete** `cmd/user/` and `cmd/order/`.
+    * **Delete** `internal/mods/user/` and `internal/mods/order/`.
+    * **Delete** `api/v1/proto/user/` and `api/v1/proto/order/` (if these proto files are no longer needed).
+    * **Delete** `resources/configs/user/` and `resources/configs/order/`.
+    * **Check and delete** `.goreleaser.yaml` build configurations unrelated to the `gateway` service.
+    * **Check and delete** `buf.gen.yaml` and `buf.yaml` generation or module definitions unrelated to the `gateway`
+      service.
+    * **Check and delete** `Makefile` commands unrelated to the `gateway` service.
+    * **Tip**: For larger projects, scripting this process can be considered, but manual inspection and deletion are
+      crucial for ensuring a lean project.
 3. **Configure the Module**:
     * `cd gateway-service`
     * `go mod edit -module github.com/your-org/gateway-service`
@@ -565,30 +588,31 @@ You can run each service in a separate terminal. Ensure a service discovery agen
 
 **Local Service Discovery Agent Setup (Optional, Recommended for Multi-Service Testing):**
 
-If you use `discovery://` endpoints, a service discovery agent is required. Below is a simple example of starting Consul using Docker Compose:
+If you use `discovery://` endpoints, a service discovery agent is required. Below is a simple example of starting Consul
+using Docker Compose:
 
-1.  Create a `docker-compose.yaml` file (e.g., in the project root directory):
-    ```yaml
-    version: '3.8'
-    services:
-      consul:
-        image: consul:1.10.0 # You can use the latest stable version
-        container_name: consul
-        ports:
-          - "8500:8500" # UI Port
-          - "8600:8600/udp" # DNS Port
-        command: "agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui -node=consul-server-1"
-        healthcheck:
-          test: ["CMD", "consul", "members"]
-          interval: 10s
-          timeout: 5s
-          retries: 3
-    ```
-2.  Run in the directory containing `docker-compose.yaml`:
-    ```bash
-    docker-compose up -d
-    ```
-    This will start a local Consul service discovery agent.
+1. Create a `docker-compose.yaml` file (e.g., in the project root directory):
+   ```yaml
+   version: '3.8'
+   services:
+     consul:
+       image: consul:1.10.0 # You can use the latest stable version
+       container_name: consul
+       ports:
+         - "8500:8500" # UI Port
+         - "8600:8600/udp" # DNS Port
+       command: "agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui -node=consul-server-1"
+       healthcheck:
+         test: ["CMD", "consul", "members"]
+         interval: 10s
+         timeout: 5s
+         retries: 3
+   ```
+2. Run in the directory containing `docker-compose.yaml`:
+   ```bash
+   docker-compose up -d
+   ```
+   This will start a local Consul service discovery agent.
 
 ```sh
 # Terminal 1: Start the user service

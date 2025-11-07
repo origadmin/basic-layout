@@ -1,7 +1,11 @@
 syntax = "proto3";
 
+// Package name remains unchanged
 package configs;
 
+// ----------------------------------------------------------------
+// Import standard configuration modules (Building Blocks) provided by the framework
+// ----------------------------------------------------------------
 import "config/app/v1/app.proto";
 import "config/broker/v1/broker.proto";
 import "config/data/v1/data.proto";
@@ -12,7 +16,8 @@ import "config/security/v1/security.proto";
 import "config/trace/v1/trace.proto";
 import "config/transport/v1/transport.proto";
 
-option go_package = "basic-layout/multiple/multiple_sample/configs;configs";
+// Go package option remains unchanged
+option go_package = "basic-layout/simple/simple_app/internal/conf/pb;confpb";
 
 // Bootstrap is the root configuration example for the entire application.
 // The new structure aggregates all configuration items into logical groups, making it clearer and easier to understand.
@@ -49,3 +54,9 @@ message Bootstrap {
   // This now uses the Clients collection from the transport module.
   config.transport.v1.Clients clients = 10;
 }
+
+// The nested Servers message is no longer needed as we use repeated config.transport.v1.Server directly.
+// message Servers {
+//   config.server.v1.Server http = 1;
+//   config.server.v1.Server grpc = 2;
+// }

@@ -97,7 +97,7 @@ generate: ## 🧬 Generate all code from Protobuf and run go generate (includes 
 	@echo "Generating API Protobuf code using buf..."
 	@buf generate
 	@echo "Generating Internal Configs Protobuf code..."
-	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. configs/*.proto
+	@protoc -I. -I./third_party --go_out=paths=source_relative:. --validate_out=paths=source_relative,lang=go:. internal/conf/pb/*.proto
 	@echo "Running go generate for all packages (includes wire, etc.)..."
 	@$(GOWORKOFF) go generate ./...
 	@echo "Running go mod tidy after code generation..."
@@ -127,6 +127,8 @@ clean: ## 🧹 Clean up generated files and build artifacts
 	@echo "Cleaning up generated files and build artifacts..."
 	@$(RM_RF) ./api/v1/gen
 	@$(RM_RF) ./internal/mods/*/gen
+	@$(RM_RF) ./internal/conf/pb/*.pb.go
+	@$(RM_RF) ./internal/conf/pb/*.pb.validate.go
 	@$(RM_RF) ./dist
 	@$(RM_RF) ./third_party
 	@$(RM_F) ./go.sum # Clean go.sum to force re-download if needed

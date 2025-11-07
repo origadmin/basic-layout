@@ -11,14 +11,11 @@ import (
 
 	"github.com/google/uuid"
 
-	_ "basic-layout/multiple/multiple_sample/helpers/configsource/oneof"
-	"basic-layout/multiple/multiple_sample/internal/transformer"
-
+	"basic-layout/multiple/multiple_sample/internal/conf"
+	_ "basic-layout/multiple/multiple_sample/internal/helpers/configsource/oneof"
 	"github.com/origadmin/runtime"
 	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	"github.com/origadmin/runtime/bootstrap"
-	_ "github.com/origadmin/runtime/config/envsource"
-	_ "github.com/origadmin/runtime/config/file"
 )
 
 var (
@@ -55,7 +52,7 @@ func main() {
 	// NewFromBootstrap handles config loading, logging, and container setup.
 	rt, err := runtime.NewFromBootstrap(
 		flagconf,
-		bootstrap.WithConfigTransformer(transformer.New(appInfo)),
+		bootstrap.WithConfigTransformer(conf.New(appInfo)),
 	)
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)

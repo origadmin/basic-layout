@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        v5.28.3
-// source: configs/bootstrap.proto
+// source: internal/conf/pb/bootstrap.proto
 
-package configs
+package confpb
 
 import (
 	v1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
@@ -62,7 +62,7 @@ type Bootstrap struct {
 
 func (x *Bootstrap) Reset() {
 	*x = Bootstrap{}
-	mi := &file_configs_bootstrap_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_bootstrap_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -74,7 +74,7 @@ func (x *Bootstrap) String() string {
 func (*Bootstrap) ProtoMessage() {}
 
 func (x *Bootstrap) ProtoReflect() protoreflect.Message {
-	mi := &file_configs_bootstrap_proto_msgTypes[0]
+	mi := &file_internal_conf_pb_bootstrap_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -87,7 +87,7 @@ func (x *Bootstrap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bootstrap.ProtoReflect.Descriptor instead.
 func (*Bootstrap) Descriptor() ([]byte, []int) {
-	return file_configs_bootstrap_proto_rawDescGZIP(), []int{0}
+	return file_internal_conf_pb_bootstrap_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Bootstrap) GetApp() *v1.App {
@@ -160,11 +160,11 @@ func (x *Bootstrap) GetClients() *v11.Clients {
 	return nil
 }
 
-var File_configs_bootstrap_proto protoreflect.FileDescriptor
+var File_internal_conf_pb_bootstrap_proto protoreflect.FileDescriptor
 
-const file_configs_bootstrap_proto_rawDesc = "" +
+const file_internal_conf_pb_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	"\x17configs/bootstrap.proto\x12\aconfigs\x1a\x17config/app/v1/app.proto\x1a\x1dconfig/broker/v1/broker.proto\x1a\x19config/data/v1/data.proto\x1a#config/discovery/v1/discovery.proto\x1a\x1dconfig/logger/v1/logger.proto\x1a%config/middleware/v1/middleware.proto\x1a!config/security/v1/security.proto\x1a\x1bconfig/trace/v1/trace.proto\x1a#config/transport/v1/transport.proto\"\xa3\x04\n" +
+	" internal/conf/pb/bootstrap.proto\x12\aconfigs\x1a\x17config/app/v1/app.proto\x1a\x1dconfig/broker/v1/broker.proto\x1a\x19config/data/v1/data.proto\x1a#config/discovery/v1/discovery.proto\x1a\x1dconfig/logger/v1/logger.proto\x1a%config/middleware/v1/middleware.proto\x1a!config/security/v1/security.proto\x1a\x1bconfig/trace/v1/trace.proto\x1a#config/transport/v1/transport.proto\"\xa3\x04\n" +
 	"\tBootstrap\x12$\n" +
 	"\x03app\x18\x01 \x01(\v2\x12.config.app.v1.AppR\x03app\x126\n" +
 	"\aservers\x18\x02 \x01(\v2\x1c.config.transport.v1.ServersR\aservers\x12(\n" +
@@ -176,22 +176,22 @@ const file_configs_bootstrap_proto_rawDesc = "" +
 	"\vmiddlewares\x18\b \x01(\v2!.config.middleware.v1.MiddlewaresR\vmiddlewares\x128\n" +
 	"\bsecurity\x18\t \x01(\v2\x1c.config.security.v1.SecurityR\bsecurity\x126\n" +
 	"\aclients\x18\n" +
-	" \x01(\v2\x1c.config.transport.v1.ClientsR\aclientsB7Z5basic-layout/multiple/multiple_sample/configs;configsb\x06proto3"
+	" \x01(\v2\x1c.config.transport.v1.ClientsR\aclientsB?Z=basic-layout/multiple/multiple_sample/internal/conf/pb;confpbb\x06proto3"
 
 var (
-	file_configs_bootstrap_proto_rawDescOnce sync.Once
-	file_configs_bootstrap_proto_rawDescData []byte
+	file_internal_conf_pb_bootstrap_proto_rawDescOnce sync.Once
+	file_internal_conf_pb_bootstrap_proto_rawDescData []byte
 )
 
-func file_configs_bootstrap_proto_rawDescGZIP() []byte {
-	file_configs_bootstrap_proto_rawDescOnce.Do(func() {
-		file_configs_bootstrap_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_configs_bootstrap_proto_rawDesc), len(file_configs_bootstrap_proto_rawDesc)))
+func file_internal_conf_pb_bootstrap_proto_rawDescGZIP() []byte {
+	file_internal_conf_pb_bootstrap_proto_rawDescOnce.Do(func() {
+		file_internal_conf_pb_bootstrap_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_internal_conf_pb_bootstrap_proto_rawDesc), len(file_internal_conf_pb_bootstrap_proto_rawDesc)))
 	})
-	return file_configs_bootstrap_proto_rawDescData
+	return file_internal_conf_pb_bootstrap_proto_rawDescData
 }
 
-var file_configs_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_configs_bootstrap_proto_goTypes = []any{
+var file_internal_conf_pb_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_internal_conf_pb_bootstrap_proto_goTypes = []any{
 	(*Bootstrap)(nil),       // 0: configs.Bootstrap
 	(*v1.App)(nil),          // 1: config.app.v1.App
 	(*v11.Servers)(nil),     // 2: config.transport.v1.Servers
@@ -204,7 +204,7 @@ var file_configs_bootstrap_proto_goTypes = []any{
 	(*v18.Security)(nil),    // 9: config.security.v1.Security
 	(*v11.Clients)(nil),     // 10: config.transport.v1.Clients
 }
-var file_configs_bootstrap_proto_depIdxs = []int32{
+var file_internal_conf_pb_bootstrap_proto_depIdxs = []int32{
 	1,  // 0: configs.Bootstrap.app:type_name -> config.app.v1.App
 	2,  // 1: configs.Bootstrap.servers:type_name -> config.transport.v1.Servers
 	3,  // 2: configs.Bootstrap.data:type_name -> config.data.v1.Data
@@ -222,26 +222,26 @@ var file_configs_bootstrap_proto_depIdxs = []int32{
 	0,  // [0:10] is the sub-list for field type_name
 }
 
-func init() { file_configs_bootstrap_proto_init() }
-func file_configs_bootstrap_proto_init() {
-	if File_configs_bootstrap_proto != nil {
+func init() { file_internal_conf_pb_bootstrap_proto_init() }
+func file_internal_conf_pb_bootstrap_proto_init() {
+	if File_internal_conf_pb_bootstrap_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_configs_bootstrap_proto_rawDesc), len(file_configs_bootstrap_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_conf_pb_bootstrap_proto_rawDesc), len(file_internal_conf_pb_bootstrap_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_configs_bootstrap_proto_goTypes,
-		DependencyIndexes: file_configs_bootstrap_proto_depIdxs,
-		MessageInfos:      file_configs_bootstrap_proto_msgTypes,
+		GoTypes:           file_internal_conf_pb_bootstrap_proto_goTypes,
+		DependencyIndexes: file_internal_conf_pb_bootstrap_proto_depIdxs,
+		MessageInfos:      file_internal_conf_pb_bootstrap_proto_msgTypes,
 	}.Build()
-	File_configs_bootstrap_proto = out.File
-	file_configs_bootstrap_proto_goTypes = nil
-	file_configs_bootstrap_proto_depIdxs = nil
+	File_internal_conf_pb_bootstrap_proto = out.File
+	file_internal_conf_pb_bootstrap_proto_goTypes = nil
+	file_internal_conf_pb_bootstrap_proto_depIdxs = nil
 }
