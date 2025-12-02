@@ -28,7 +28,7 @@ import (
 // Injectors from wire.go:
 
 // wireApp injects providers to initialize the application.
-func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
+func wireApp(rt *runtime.App) (*kratos.App, func(), error) {
 	bootstrap, err := provideConfig(rt)
 	if err != nil {
 		return nil, nil, err
@@ -56,12 +56,12 @@ func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
 // wire.go:
 
 // provideLogger extracts the logger from the runtime instance.
-func provideLogger(rt *runtime.Runtime) log.Logger {
+func provideLogger(rt *runtime.App) log.Logger {
 	return rt.Logger()
 }
 
 // provideConfig extracts and decodes the bootstrap config from the runtime instance.
-func provideConfig(rt *runtime.Runtime) (*confpb.Bootstrap, error) {
+func provideConfig(rt *runtime.App) (*confpb.Bootstrap, error) {
 	var bc confpb.Bootstrap
 	if err := rt.Config().Decode("", &bc); err != nil {
 		return nil, err
@@ -88,6 +88,6 @@ var runtimeProviderSet = wire.NewSet(
 )
 
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
+func NewKratosApp(rt *runtime.App, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }

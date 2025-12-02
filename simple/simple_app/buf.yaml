@@ -23,4 +23,5 @@ deps:
   - buf.build/googleapis/googleapis
   - buf.build/bufbuild/protovalidate
   - buf.build/origadmin/runtime
+  - buf.build/origadmin/contrib
   - buf.build/gnostic/gnostic

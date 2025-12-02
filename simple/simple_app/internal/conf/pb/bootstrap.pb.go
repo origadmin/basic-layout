@@ -9,13 +9,13 @@
 package confpb
 
 import (
+	v18 "github.com/origadmin/contrib/api/gen/go/security/v1"
 	v1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	v16 "github.com/origadmin/runtime/api/gen/go/config/broker/v1"
 	v12 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
 	v15 "github.com/origadmin/runtime/api/gen/go/config/discovery/v1"
 	v13 "github.com/origadmin/runtime/api/gen/go/config/logger/v1"
 	v17 "github.com/origadmin/runtime/api/gen/go/config/middleware/v1"
-	v18 "github.com/origadmin/runtime/api/gen/go/config/security/v1"
 	v14 "github.com/origadmin/runtime/api/gen/go/config/trace/v1"
 	v11 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -166,19 +166,19 @@ var File_internal_conf_pb_bootstrap_proto protoreflect.FileDescriptor
 
 const file_internal_conf_pb_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	" internal/conf/pb/bootstrap.proto\x12\aconfigs\x1a\x17config/app/v1/app.proto\x1a\x1dconfig/broker/v1/broker.proto\x1a\x19config/data/v1/data.proto\x1a#config/discovery/v1/discovery.proto\x1a\x1dconfig/logger/v1/logger.proto\x1a%config/middleware/v1/middleware.proto\x1a!config/security/v1/security.proto\x1a\x1bconfig/trace/v1/trace.proto\x1a#config/transport/v1/transport.proto\"\xa3\x04\n" +
-	"\tBootstrap\x12$\n" +
-	"\x03app\x18\x01 \x01(\v2\x12.config.app.v1.AppR\x03app\x126\n" +
-	"\aservers\x18\x02 \x01(\v2\x1c.config.transport.v1.ServersR\aservers\x12(\n" +
-	"\x04data\x18\x03 \x01(\v2\x14.config.data.v1.DataR\x04data\x120\n" +
-	"\x06logger\x18\x04 \x01(\v2\x18.config.logger.v1.LoggerR\x06logger\x12,\n" +
-	"\x05trace\x18\x05 \x01(\v2\x16.config.trace.v1.TraceR\x05trace\x12B\n" +
-	"\vdiscoveries\x18\x06 \x01(\v2 .config.discovery.v1.DiscoveriesR\vdiscoveries\x123\n" +
-	"\abrokers\x18\a \x01(\v2\x19.config.broker.v1.BrokersR\abrokers\x12C\n" +
-	"\vmiddlewares\x18\b \x01(\v2!.config.middleware.v1.MiddlewaresR\vmiddlewares\x128\n" +
-	"\bsecurity\x18\t \x01(\v2\x1c.config.security.v1.SecurityR\bsecurity\x126\n" +
+	" internal/conf/pb/bootstrap.proto\x12\aconfigs\x1a\x17config/app/v1/app.proto\x1a\x1dconfig/broker/v1/broker.proto\x1a\x19config/data/v1/data.proto\x1a#config/discovery/v1/discovery.proto\x1a\x1dconfig/logger/v1/logger.proto\x1a%config/middleware/v1/middleware.proto\x1a\x1asecurity/v1/security.proto\x1a\x1bconfig/trace/v1/trace.proto\x1a#config/transport/v1/transport.proto\"\x94\x05\n" +
+	"\tBootstrap\x120\n" +
+	"\x03app\x18\x01 \x01(\v2\x1e.runtime.api.config.app.v1.AppR\x03app\x12B\n" +
+	"\aservers\x18\x02 \x01(\v2(.runtime.api.config.transport.v1.ServersR\aservers\x124\n" +
+	"\x04data\x18\x03 \x01(\v2 .runtime.api.config.data.v1.DataR\x04data\x12<\n" +
+	"\x06logger\x18\x04 \x01(\v2$.runtime.api.config.logger.v1.LoggerR\x06logger\x128\n" +
+	"\x05trace\x18\x05 \x01(\v2\".runtime.api.config.trace.v1.TraceR\x05trace\x12N\n" +
+	"\vdiscoveries\x18\x06 \x01(\v2,.runtime.api.config.discovery.v1.DiscoveriesR\vdiscoveries\x12?\n" +
+	"\abrokers\x18\a \x01(\v2%.runtime.api.config.broker.v1.BrokersR\abrokers\x12O\n" +
+	"\vmiddlewares\x18\b \x01(\v2-.runtime.api.config.middleware.v1.MiddlewaresR\vmiddlewares\x12=\n" +
+	"\bsecurity\x18\t \x01(\v2!.contrib.api.security.v1.SecurityR\bsecurity\x12B\n" +
 	"\aclients\x18\n" +
-	" \x01(\v2\x1c.config.transport.v1.ClientsR\aclientsB8Z6basic-layout/simple/simple_app/internal/conf/pb;confpbb\x06proto3"
+	" \x01(\v2(.runtime.api.config.transport.v1.ClientsR\aclientsB8Z6basic-layout/simple/simple_app/internal/conf/pb;confpbb\x06proto3"
 
 var (
 	file_internal_conf_pb_bootstrap_proto_rawDescOnce sync.Once
@@ -195,28 +195,28 @@ func file_internal_conf_pb_bootstrap_proto_rawDescGZIP() []byte {
 var file_internal_conf_pb_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_internal_conf_pb_bootstrap_proto_goTypes = []any{
 	(*Bootstrap)(nil),       // 0: configs.Bootstrap
-	(*v1.App)(nil),          // 1: config.app.v1.App
-	(*v11.Servers)(nil),     // 2: config.transport.v1.Servers
-	(*v12.Data)(nil),        // 3: config.data.v1.Data
-	(*v13.Logger)(nil),      // 4: config.logger.v1.Logger
-	(*v14.Trace)(nil),       // 5: config.trace.v1.Trace
-	(*v15.Discoveries)(nil), // 6: config.discovery.v1.Discoveries
-	(*v16.Brokers)(nil),     // 7: config.broker.v1.Brokers
-	(*v17.Middlewares)(nil), // 8: config.middleware.v1.Middlewares
-	(*v18.Security)(nil),    // 9: config.security.v1.Security
-	(*v11.Clients)(nil),     // 10: config.transport.v1.Clients
+	(*v1.App)(nil),          // 1: runtime.api.config.app.v1.App
+	(*v11.Servers)(nil),     // 2: runtime.api.config.transport.v1.Servers
+	(*v12.Data)(nil),        // 3: runtime.api.config.data.v1.Data
+	(*v13.Logger)(nil),      // 4: runtime.api.config.logger.v1.Logger
+	(*v14.Trace)(nil),       // 5: runtime.api.config.trace.v1.Trace
+	(*v15.Discoveries)(nil), // 6: runtime.api.config.discovery.v1.Discoveries
+	(*v16.Brokers)(nil),     // 7: runtime.api.config.broker.v1.Brokers
+	(*v17.Middlewares)(nil), // 8: runtime.api.config.middleware.v1.Middlewares
+	(*v18.Security)(nil),    // 9: contrib.api.security.v1.Security
+	(*v11.Clients)(nil),     // 10: runtime.api.config.transport.v1.Clients
 }
 var file_internal_conf_pb_bootstrap_proto_depIdxs = []int32{
-	1,  // 0: configs.Bootstrap.app:type_name -> config.app.v1.App
-	2,  // 1: configs.Bootstrap.servers:type_name -> config.transport.v1.Servers
-	3,  // 2: configs.Bootstrap.data:type_name -> config.data.v1.Data
-	4,  // 3: configs.Bootstrap.logger:type_name -> config.logger.v1.Logger
-	5,  // 4: configs.Bootstrap.trace:type_name -> config.trace.v1.Trace
-	6,  // 5: configs.Bootstrap.discoveries:type_name -> config.discovery.v1.Discoveries
-	7,  // 6: configs.Bootstrap.brokers:type_name -> config.broker.v1.Brokers
-	8,  // 7: configs.Bootstrap.middlewares:type_name -> config.middleware.v1.Middlewares
-	9,  // 8: configs.Bootstrap.security:type_name -> config.security.v1.Security
-	10, // 9: configs.Bootstrap.clients:type_name -> config.transport.v1.Clients
+	1,  // 0: configs.Bootstrap.app:type_name -> runtime.api.config.app.v1.App
+	2,  // 1: configs.Bootstrap.servers:type_name -> runtime.api.config.transport.v1.Servers
+	3,  // 2: configs.Bootstrap.data:type_name -> runtime.api.config.data.v1.Data
+	4,  // 3: configs.Bootstrap.logger:type_name -> runtime.api.config.logger.v1.Logger
+	5,  // 4: configs.Bootstrap.trace:type_name -> runtime.api.config.trace.v1.Trace
+	6,  // 5: configs.Bootstrap.discoveries:type_name -> runtime.api.config.discovery.v1.Discoveries
+	7,  // 6: configs.Bootstrap.brokers:type_name -> runtime.api.config.broker.v1.Brokers
+	8,  // 7: configs.Bootstrap.middlewares:type_name -> runtime.api.config.middleware.v1.Middlewares
+	9,  // 8: configs.Bootstrap.security:type_name -> contrib.api.security.v1.Security
+	10, // 9: configs.Bootstrap.clients:type_name -> runtime.api.config.transport.v1.Clients
 	10, // [10:10] is the sub-list for method output_type
 	10, // [10:10] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name

@@ -40,7 +40,7 @@ func main() {
 	log.Printf("Loading configuration from: %s\n", flagconf)
 
 	if !filepath.IsAbs(flagconf) {
-		flagconf = filepath.Join("resources/configs/order/", flagconf)
+		flagconf = filepath.Join("resources/configs/", flagconf)
 	}
 	// Create AppInfo using the struct from the runtime package
 	appInfo := &appv1.App{
@@ -50,15 +50,19 @@ func main() {
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, err := runtime.NewFromBootstrap(
+	rt := runtime.New(Name, Version)
+	err := rt.Load(
 		flagconf,
 		//runtime.WithAppInfo(appInfo),
 		bootstrap.WithConfigTransformer(conf.New(appInfo)),
 	)
 	if err != nil {
+		return
+	}
+	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}
-	defer rt.Cleanup()
+	defer rt.Config().Close()
 
 	// wireApp now takes the runtime instance and builds the kratos app.
 	app, cleanupApp, err := wireApp(rt)

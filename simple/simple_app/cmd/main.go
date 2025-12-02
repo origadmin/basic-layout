@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "github.com/sqlite3ent/sqlite3"
 
@@ -13,6 +14,8 @@ import (
 )
 
 var (
+	Name    = "simple_app"
+	Version = "1.0.0"
 	// flagconf is the config flag.
 	flagconf string
 )
@@ -31,12 +34,18 @@ func main() {
 	}
 	log.Printf("current working directory: %s", wd)
 
+	if !filepath.IsAbs(flagconf) {
+		flagconf = filepath.Join("resources/configs/", flagconf)
+	}
+
 	// Create a new runtime application from the bootstrap configuration.
-	rt, err := runtime.NewFromBootstrap(flagconf, bootstrap.WithConfigTransformer(&conf.Config{}))
+	// Bootstrap-specific options are now wrapped in runtime.WithBootstrapOptions.
+	rt := runtime.New(Name, Version)
+	err = rt.Load(flagconf, bootstrap.WithConfigTransformer(&conf.Config{}))
 	if err != nil {
 		log.Fatalf("failed to create runtime from bootstrap: %v", err)
 	}
-
+	defer rt.Config().Close()
 	app, cleanup, err := wireApp(rt)
 	if err != nil {
 		panic(err)

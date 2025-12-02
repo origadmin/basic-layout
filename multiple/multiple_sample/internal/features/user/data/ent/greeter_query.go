@@ -30,40 +30,40 @@ type GreeterQuery struct {
 }
 
 // Where adds a new predicate for the GreeterQuery builder.
-func (gq *GreeterQuery) Where(ps ...predicate.Greeter) *GreeterQuery {
-	gq.predicates = append(gq.predicates, ps...)
-	return gq
+func (_q *GreeterQuery) Where(ps ...predicate.Greeter) *GreeterQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (gq *GreeterQuery) Limit(limit int) *GreeterQuery {
-	gq.ctx.Limit = &limit
-	return gq
+func (_q *GreeterQuery) Limit(limit int) *GreeterQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (gq *GreeterQuery) Offset(offset int) *GreeterQuery {
-	gq.ctx.Offset = &offset
-	return gq
+func (_q *GreeterQuery) Offset(offset int) *GreeterQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (gq *GreeterQuery) Unique(unique bool) *GreeterQuery {
-	gq.ctx.Unique = &unique
-	return gq
+func (_q *GreeterQuery) Unique(unique bool) *GreeterQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (gq *GreeterQuery) Order(o ...greeter.OrderOption) *GreeterQuery {
-	gq.order = append(gq.order, o...)
-	return gq
+func (_q *GreeterQuery) Order(o ...greeter.OrderOption) *GreeterQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first Greeter entity from the query.
 // Returns a *NotFoundError when no Greeter was found.
-func (gq *GreeterQuery) First(ctx context.Context) (*Greeter, error) {
-	nodes, err := gq.Limit(1).All(setContextOp(ctx, gq.ctx, ent.OpQueryFirst))
+func (_q *GreeterQuery) First(ctx context.Context) (*Greeter, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -74,8 +74,8 @@ func (gq *GreeterQuery) First(ctx context.Context) (*Greeter, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (gq *GreeterQuery) FirstX(ctx context.Context) *Greeter {
-	node, err := gq.First(ctx)
+func (_q *GreeterQuery) FirstX(ctx context.Context) *Greeter {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -84,9 +84,9 @@ func (gq *GreeterQuery) FirstX(ctx context.Context) *Greeter {
 
 // FirstID returns the first Greeter ID from the query.
 // Returns a *NotFoundError when no Greeter ID was found.
-func (gq *GreeterQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *GreeterQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = gq.Limit(1).IDs(setContextOp(ctx, gq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -97,8 +97,8 @@ func (gq *GreeterQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (gq *GreeterQuery) FirstIDX(ctx context.Context) int {
-	id, err := gq.FirstID(ctx)
+func (_q *GreeterQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -108,8 +108,8 @@ func (gq *GreeterQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single Greeter entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Greeter entity is found.
 // Returns a *NotFoundError when no Greeter entities are found.
-func (gq *GreeterQuery) Only(ctx context.Context) (*Greeter, error) {
-	nodes, err := gq.Limit(2).All(setContextOp(ctx, gq.ctx, ent.OpQueryOnly))
+func (_q *GreeterQuery) Only(ctx context.Context) (*Greeter, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -124,8 +124,8 @@ func (gq *GreeterQuery) Only(ctx context.Context) (*Greeter, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (gq *GreeterQuery) OnlyX(ctx context.Context) *Greeter {
-	node, err := gq.Only(ctx)
+func (_q *GreeterQuery) OnlyX(ctx context.Context) *Greeter {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -135,9 +135,9 @@ func (gq *GreeterQuery) OnlyX(ctx context.Context) *Greeter {
 // OnlyID is like Only, but returns the only Greeter ID in the query.
 // Returns a *NotSingularError when more than one Greeter ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (gq *GreeterQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *GreeterQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = gq.Limit(2).IDs(setContextOp(ctx, gq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -152,8 +152,8 @@ func (gq *GreeterQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (gq *GreeterQuery) OnlyIDX(ctx context.Context) int {
-	id, err := gq.OnlyID(ctx)
+func (_q *GreeterQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -161,18 +161,18 @@ func (gq *GreeterQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of Greeters.
-func (gq *GreeterQuery) All(ctx context.Context) ([]*Greeter, error) {
-	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryAll)
-	if err := gq.prepareQuery(ctx); err != nil {
+func (_q *GreeterQuery) All(ctx context.Context) ([]*Greeter, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Greeter, *GreeterQuery]()
-	return withInterceptors[[]*Greeter](ctx, gq, qr, gq.inters)
+	return withInterceptors[[]*Greeter](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (gq *GreeterQuery) AllX(ctx context.Context) []*Greeter {
-	nodes, err := gq.All(ctx)
+func (_q *GreeterQuery) AllX(ctx context.Context) []*Greeter {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -180,20 +180,20 @@ func (gq *GreeterQuery) AllX(ctx context.Context) []*Greeter {
 }
 
 // IDs executes the query and returns a list of Greeter IDs.
-func (gq *GreeterQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if gq.ctx.Unique == nil && gq.path != nil {
-		gq.Unique(true)
+func (_q *GreeterQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryIDs)
-	if err = gq.Select(greeter.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(greeter.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (gq *GreeterQuery) IDsX(ctx context.Context) []int {
-	ids, err := gq.IDs(ctx)
+func (_q *GreeterQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -201,17 +201,17 @@ func (gq *GreeterQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (gq *GreeterQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryCount)
-	if err := gq.prepareQuery(ctx); err != nil {
+func (_q *GreeterQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, gq, querierCount[*GreeterQuery](), gq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*GreeterQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (gq *GreeterQuery) CountX(ctx context.Context) int {
-	count, err := gq.Count(ctx)
+func (_q *GreeterQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -219,9 +219,9 @@ func (gq *GreeterQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (gq *GreeterQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, gq.ctx, ent.OpQueryExist)
-	switch _, err := gq.FirstID(ctx); {
+func (_q *GreeterQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -232,8 +232,8 @@ func (gq *GreeterQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (gq *GreeterQuery) ExistX(ctx context.Context) bool {
-	exist, err := gq.Exist(ctx)
+func (_q *GreeterQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -242,20 +242,20 @@ func (gq *GreeterQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the GreeterQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (gq *GreeterQuery) Clone() *GreeterQuery {
-	if gq == nil {
+func (_q *GreeterQuery) Clone() *GreeterQuery {
+	if _q == nil {
 		return nil
 	}
 	return &GreeterQuery{
-		config:     gq.config,
-		ctx:        gq.ctx.Clone(),
-		order:      append([]greeter.OrderOption{}, gq.order...),
-		inters:     append([]Interceptor{}, gq.inters...),
-		predicates: append([]predicate.Greeter{}, gq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]greeter.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.Greeter{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       gq.sql.Clone(),
-		path:      gq.path,
-		modifiers: append([]func(*sql.Selector){}, gq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -273,10 +273,10 @@ func (gq *GreeterQuery) Clone() *GreeterQuery {
 //		GroupBy(greeter.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (gq *GreeterQuery) GroupBy(field string, fields ...string) *GreeterGroupBy {
-	gq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &GreeterGroupBy{build: gq}
-	grbuild.flds = &gq.ctx.Fields
+func (_q *GreeterQuery) GroupBy(field string, fields ...string) *GreeterGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &GreeterGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = greeter.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -294,65 +294,65 @@ func (gq *GreeterQuery) GroupBy(field string, fields ...string) *GreeterGroupBy 
 //	client.Greeter.Query().
 //		Select(greeter.FieldName).
 //		Scan(ctx, &v)
-func (gq *GreeterQuery) Select(fields ...string) *GreeterSelect {
-	gq.ctx.Fields = append(gq.ctx.Fields, fields...)
-	sbuild := &GreeterSelect{GreeterQuery: gq}
+func (_q *GreeterQuery) Select(fields ...string) *GreeterSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &GreeterSelect{GreeterQuery: _q}
 	sbuild.label = greeter.Label
-	sbuild.flds, sbuild.scan = &gq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a GreeterSelect configured with the given aggregations.
-func (gq *GreeterQuery) Aggregate(fns ...AggregateFunc) *GreeterSelect {
-	return gq.Select().Aggregate(fns...)
+func (_q *GreeterQuery) Aggregate(fns ...AggregateFunc) *GreeterSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (gq *GreeterQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range gq.inters {
+func (_q *GreeterQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, gq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range gq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !greeter.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if gq.path != nil {
-		prev, err := gq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		gq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (gq *GreeterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Greeter, error) {
+func (_q *GreeterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Greeter, error) {
 	var (
 		nodes = []*Greeter{}
-		_spec = gq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Greeter).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Greeter{config: gq.config}
+		node := &Greeter{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	if len(gq.modifiers) > 0 {
-		_spec.Modifiers = gq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, gq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -361,27 +361,27 @@ func (gq *GreeterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Gree
 	return nodes, nil
 }
 
-func (gq *GreeterQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := gq.querySpec()
-	if len(gq.modifiers) > 0 {
-		_spec.Modifiers = gq.modifiers
+func (_q *GreeterQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = gq.ctx.Fields
-	if len(gq.ctx.Fields) > 0 {
-		_spec.Unique = gq.ctx.Unique != nil && *gq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, gq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (gq *GreeterQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *GreeterQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(greeter.Table, greeter.Columns, sqlgraph.NewFieldSpec(greeter.FieldID, field.TypeInt))
-	_spec.From = gq.sql
-	if unique := gq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if gq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := gq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, greeter.FieldID)
 		for i := range fields {
@@ -390,20 +390,20 @@ func (gq *GreeterQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := gq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := gq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := gq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := gq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -413,36 +413,36 @@ func (gq *GreeterQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (gq *GreeterQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(gq.driver.Dialect())
+func (_q *GreeterQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(greeter.Table)
-	columns := gq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = greeter.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if gq.sql != nil {
-		selector = gq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if gq.ctx.Unique != nil && *gq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range gq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range gq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range gq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := gq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := gq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,33 +451,33 @@ func (gq *GreeterQuery) sqlQuery(ctx context.Context) *sql.Selector {
 // ForUpdate locks the selected rows against concurrent updates, and prevent them from being
 // updated, deleted or "selected ... for update" by other sessions, until the transaction is
 // either committed or rolled-back.
-func (gq *GreeterQuery) ForUpdate(opts ...sql.LockOption) *GreeterQuery {
-	if gq.driver.Dialect() == dialect.Postgres {
-		gq.Unique(false)
+func (_q *GreeterQuery) ForUpdate(opts ...sql.LockOption) *GreeterQuery {
+	if _q.driver.Dialect() == dialect.Postgres {
+		_q.Unique(false)
 	}
-	gq.modifiers = append(gq.modifiers, func(s *sql.Selector) {
+	_q.modifiers = append(_q.modifiers, func(s *sql.Selector) {
 		s.ForUpdate(opts...)
 	})
-	return gq
+	return _q
 }
 
 // ForShare behaves similarly to ForUpdate, except that it acquires a shared mode lock
 // on any rows that are read. Other sessions can read the rows, but cannot modify them
 // until your transaction commits.
-func (gq *GreeterQuery) ForShare(opts ...sql.LockOption) *GreeterQuery {
-	if gq.driver.Dialect() == dialect.Postgres {
-		gq.Unique(false)
+func (_q *GreeterQuery) ForShare(opts ...sql.LockOption) *GreeterQuery {
+	if _q.driver.Dialect() == dialect.Postgres {
+		_q.Unique(false)
 	}
-	gq.modifiers = append(gq.modifiers, func(s *sql.Selector) {
+	_q.modifiers = append(_q.modifiers, func(s *sql.Selector) {
 		s.ForShare(opts...)
 	})
-	return gq
+	return _q
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gq *GreeterQuery) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelect {
-	gq.modifiers = append(gq.modifiers, modifiers...)
-	return gq.Select()
+func (_q *GreeterQuery) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // Omit allows the unselect one or more fields/columns for the given query,
@@ -517,41 +517,41 @@ type GreeterGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ggb *GreeterGroupBy) Aggregate(fns ...AggregateFunc) *GreeterGroupBy {
-	ggb.fns = append(ggb.fns, fns...)
-	return ggb
+func (_g *GreeterGroupBy) Aggregate(fns ...AggregateFunc) *GreeterGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ggb *GreeterGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ggb.build.ctx, ent.OpQueryGroupBy)
-	if err := ggb.build.prepareQuery(ctx); err != nil {
+func (_g *GreeterGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GreeterQuery, *GreeterGroupBy](ctx, ggb.build, ggb, ggb.build.inters, v)
+	return scanWithInterceptors[*GreeterQuery, *GreeterGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ggb *GreeterGroupBy) sqlScan(ctx context.Context, root *GreeterQuery, v any) error {
+func (_g *GreeterGroupBy) sqlScan(ctx context.Context, root *GreeterQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ggb.fns))
-	for _, fn := range ggb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ggb.flds)+len(ggb.fns))
-		for _, f := range *ggb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ggb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ggb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -565,27 +565,27 @@ type GreeterSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (gs *GreeterSelect) Aggregate(fns ...AggregateFunc) *GreeterSelect {
-	gs.fns = append(gs.fns, fns...)
-	return gs
+func (_s *GreeterSelect) Aggregate(fns ...AggregateFunc) *GreeterSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gs *GreeterSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gs.ctx, ent.OpQuerySelect)
-	if err := gs.prepareQuery(ctx); err != nil {
+func (_s *GreeterSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GreeterQuery, *GreeterSelect](ctx, gs.GreeterQuery, gs, gs.inters, v)
+	return scanWithInterceptors[*GreeterQuery, *GreeterSelect](ctx, _s.GreeterQuery, _s, _s.inters, v)
 }
 
-func (gs *GreeterSelect) sqlScan(ctx context.Context, root *GreeterQuery, v any) error {
+func (_s *GreeterSelect) sqlScan(ctx context.Context, root *GreeterQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(gs.fns))
-	for _, fn := range gs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*gs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -593,7 +593,7 @@ func (gs *GreeterSelect) sqlScan(ctx context.Context, root *GreeterQuery, v any)
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -601,7 +601,7 @@ func (gs *GreeterSelect) sqlScan(ctx context.Context, root *GreeterQuery, v any)
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gs *GreeterSelect) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelect {
-	gs.modifiers = append(gs.modifiers, modifiers...)
-	return gs
+func (_s *GreeterSelect) Modify(modifiers ...func(s *sql.Selector)) *GreeterSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

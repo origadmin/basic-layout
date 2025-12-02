@@ -50,14 +50,15 @@ func main() {
 	}
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, err := runtime.NewFromBootstrap(
+	rt := runtime.New(Name, Version)
+	err := rt.Load(
 		flagconf,
 		bootstrap.WithConfigTransformer(conf.New(appInfo)),
 	)
 	if err != nil {
-		log.Fatalf("failed to create runtime: %v", err)
+		return
 	}
-	defer rt.Cleanup()
+	defer rt.Config().Close()
 
 	// wireApp now takes the runtime instance and builds the kratos app.
 	app, cleanupApp, err := wireApp(rt)

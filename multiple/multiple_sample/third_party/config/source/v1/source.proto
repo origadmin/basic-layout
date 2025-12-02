@@ -1,9 +1,7 @@
 syntax = "proto3";
 
-package config.source.v1;
+package runtime.api.config.source.v1;
 
-import "google/protobuf/struct.proto";
-import "config/security/transport/v1/tls.proto";
 import "config/source/v1/apollo_source.proto";
 import "config/source/v1/consul_source.proto";
 import "config/source/v1/env_source.proto";
@@ -12,13 +10,9 @@ import "config/source/v1/file_source.proto";
 import "config/source/v1/kubernetes_source.proto";
 import "config/source/v1/nacos_source.proto";
 import "config/source/v1/polaris_source.proto";
-import "validate/validate.proto";
+import "google/protobuf/struct.proto";
 
 option go_package = "github.com/origadmin/runtime/api/gen/go/config/source/v1;sourcev1";
-
-
-
-
 
 message Sources {
   // name specifies the configuration set name

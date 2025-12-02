@@ -21,12 +21,12 @@ var ProviderSet = wire.NewSet(NewData, NewOrderRepo)
 type Data struct {
 	entClient *ent.Client
 	cache     ifacestorage.Cache
-	provider  ifacestorage.Provider
+	provider  storage.Provider
 	config    interfaces.StructuredConfig
 }
 
 // NewData creates a new Data instance.
-func NewData(rt *runtime.Runtime) (*Data, func(), error) {
+func NewData(rt *runtime.App) (*Data, func(), error) {
 	logHelper := log.NewHelper(rt.Logger())
 
 	provider, err := storage.New(rt.StructuredConfig())

@@ -8,12 +8,12 @@ import (
 	"github.com/google/wire"
 
 	"basic-layout/simple/simple_app/internal/biz"
-	"basic-layout/simple/simple_app/internal/data/entity/ent"
+	"basic-layout/simple/simple_app/internal/data/ent"
 	"github.com/origadmin/runtime"
 	"github.com/origadmin/runtime/interfaces"
 
-	"github.com/origadmin/runtime/data/storage"
-	ifacestorage "github.com/origadmin/runtime/interfaces/storage"
+	ifacestorage "github.com/origadmin/runtime/data/storage"
+	"github.com/origadmin/runtime/interfaces/storage"
 	"github.com/origadmin/runtime/log"
 )
 
@@ -23,7 +23,7 @@ var ProviderSet = wire.NewSet(NewData, NewSimpleRepo)
 // Data encapsulates ent client and cache.
 type Data struct {
 	entClient *ent.Client
-	cache     ifacestorage.Cache
+	cache     storage.Cache
 	provider  ifacestorage.Provider
 	config    interfaces.StructuredConfig
 }
@@ -31,10 +31,10 @@ type Data struct {
 var ErrNoDatabaseConfig = errors.New("no database config found")
 
 // NewData creates a new Data instance.
-func NewData(rt *runtime.Runtime) (*Data, func(), error) {
+func NewData(rt *runtime.App) (*Data, func(), error) {
 	logHelper := log.NewHelper(rt.Logger())
 
-	provider, err := storage.New(rt.StructuredConfig())
+	provider, err := ifacestorage.New(rt.StructuredConfig())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -78,7 +78,7 @@ func (d *Data) GetEntClient() *ent.Client {
 }
 
 // GetCache returns the cache.
-func (d *Data) GetCache() ifacestorage.Cache {
+func (d *Data) GetCache() storage.Cache {
 	return d.cache
 }
 
@@ -88,7 +88,7 @@ type simpleRepo struct {
 }
 
 // NewSimpleRepo creates a new implementation of biz.SimpleRepo.
-func NewSimpleRepo(rt *runtime.Runtime, data *Data) biz.SimpleRepo {
+func NewSimpleRepo(rt *runtime.App, data *Data) biz.SimpleRepo {
 	return &simpleRepo{
 		data: data,
 		log:  log.NewHelper(rt.Logger()),

@@ -111,7 +111,7 @@ deps: clean-deps ## 📦 Update and export third-party protobuf dependencies
 	@buf export buf.build/gnostic/gnostic -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/kratos/apis -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
-
+	@buf export buf.build/origadmin/contrib -o $(THIRD_PARTY_PATH)
 
 clean-deps: ## 🧹 Clean up third-party protobuf dependencies
 	@echo "Cleaning up third-party protobuf dependencies..."

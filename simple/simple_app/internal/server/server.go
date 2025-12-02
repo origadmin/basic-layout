@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	stdhttp "net/http"
-	"sort"
 
 	"github.com/bytedance/gopkg/util/logger"
 	"github.com/go-kratos/kratos/v2/log"
@@ -13,7 +12,9 @@ import (
 	"github.com/google/wire"
 
 	"github.com/origadmin/runtime"
+	"github.com/origadmin/runtime/container"
 	runtimeservice "github.com/origadmin/runtime/service"
+	runtimetransport "github.com/origadmin/runtime/service/transport"
 	"github.com/origadmin/runtime/service/transport/grpc"
 	"github.com/origadmin/runtime/service/transport/http"
 
@@ -32,9 +33,9 @@ type serviceInstance struct {
 
 func (s serviceInstance) Register(ctx context.Context, srv any) error {
 	switch v := srv.(type) {
-	case *runtimeservice.GRPCServer:
+	case *runtimetransport.GRPCServer:
 		simplev1.RegisterSimpleServiceServer(v, s.SimpleService)
-	case *runtimeservice.HTTPServer:
+	case *runtimetransport.HTTPServer:
 		simplev1.RegisterSimpleServiceHTTPServer(v, s.SimpleService)
 		err := v.WalkHandle(func(method, path string, handler stdhttp.HandlerFunc) {
 			logger.Infof("HTTP %s %s", method, path)
@@ -46,7 +47,15 @@ func (s serviceInstance) Register(ctx context.Context, srv any) error {
 	return nil
 }
 
-func NewServer(rt *runtime.Runtime, simple *service.SimpleService) ([]transport.Server, error) {
+func NewServer(rt *runtime.App, simple *service.SimpleService) ([]transport.Server, error) {
+	provider, err := rt.Container().Middleware()
+	if err != nil {
+		return nil, err
+	}
+	middlewares, err := provider.ServerMiddlewares()
+	if err != nil {
+		return nil, err
+	}
 	serverConfigs, err := rt.StructuredConfig().DecodeServers()
 	if err != nil {
 		return nil, err
@@ -55,8 +64,10 @@ func NewServer(rt *runtime.Runtime, simple *service.SimpleService) ([]transport.
 	var servers []transport.Server
 	for _, config := range configs {
 		srv, err := runtimeservice.NewServer(config,
-			runtimeservice.WithContainer(rt.Container()),
-			runtimeservice.WithRegistrar(&serviceInstance{
+			container.WithContainer(rt.Container()),
+			grpc.WithServerMiddlewares(middlewares),
+			http.WithServerMiddlewares(middlewares),
+			runtimeservice.WithServerRegistrar(&serviceInstance{
 				logger:        log.NewHelper(rt.Logger()),
 				SimpleService: simple,
 			}))
@@ -70,10 +81,10 @@ func NewServer(rt *runtime.Runtime, simple *service.SimpleService) ([]transport.
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.SimpleService, logger log.Logger) (*runtimeservice.HTTPServer, error) {
+func NewHTTPServer(c *transportv1.Servers, rt *runtime.App, simple *service.SimpleService, logger log.Logger) (*runtimetransport.HTTPServer, error) {
 	middlewares := getMiddlewares(rt)
-	var opts = []runtimeservice.HTTPServerOption{
-		runtimeservice.MiddlewareHTTP(middlewares...),
+	var opts = []runtimetransport.HTTPServerOption{
+		runtimetransport.MiddlewareHTTP(middlewares...),
 	}
 	var config *transportv1.Server
 	for _, server := range c.GetConfigs() {
@@ -87,9 +98,11 @@ func NewHTTPServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.
 	}
 
 	srv, err := http.NewServer(config.GetHttp(), &http.ServerOptions{
-		ServiceOptions:    nil,
-		HttpServerOptions: opts,
+		ServerOptions:     opts,
 		CorsOptions:       nil,
+		Registrar:         nil,
+		ServerMiddlewares: nil,
+		Context:           nil,
 	})
 	if err != nil {
 		return nil, err
@@ -104,10 +117,10 @@ func NewHTTPServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.
 }
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.SimpleService, logger log.Logger) (*runtimeservice.GRPCServer, error) {
+func NewGRPCServer(c *transportv1.Servers, rt *runtime.App, simple *service.SimpleService, logger log.Logger) (*runtimetransport.GRPCServer, error) {
 	middlewares := getMiddlewares(rt)
-	var opts = []runtimeservice.GRPCServerOption{
-		runtimeservice.MiddlewareGRPC(middlewares...),
+	var opts = []runtimetransport.GRPCServerOption{
+		runtimetransport.MiddlewareGRPC(middlewares...),
 	}
 	var config *transportv1.Server
 	for _, server := range c.GetConfigs() {
@@ -121,8 +134,10 @@ func NewGRPCServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.
 	}
 
 	srv, err := grpc.NewServer(config.GetGrpc(), &grpc.ServerOptions{
-		ServiceOptions:    nil,
-		GrpcServerOptions: opts,
+		ServerOptions:     opts,
+		Context:           nil,
+		Registrar:         nil,
+		ServerMiddlewares: nil,
 	})
 	if err != nil {
 		return nil, err
@@ -132,21 +147,22 @@ func NewGRPCServer(c *transportv1.Servers, rt *runtime.Runtime, simple *service.
 	return srv, nil
 }
 
-func getMiddlewares(rt *runtime.Runtime) []middleware.Middleware {
+func getMiddlewares(rt *runtime.App) []middleware.Middleware {
 	container := rt.Container()
-	middlewaresMap := container.ServerMiddlewares()
-
-	// Extract keys and sort them
-	keys := make([]string, 0, len(middlewaresMap))
-	for k := range middlewaresMap {
-		keys = append(keys, k)
+	middlewaresMap, err := container.Middleware()
+	if err != nil {
+		logger.Fatalf("failed to get middlewares: %v", err)
 	}
-	sort.Strings(keys)
+	middlewaresNames := middlewaresMap.Names()
+	serverMiddlewares, err := middlewaresMap.ServerMiddlewares()
+	if err != nil {
+		return nil
+	}
 
 	// Build middleware slice in order
-	middlewares := make([]middleware.Middleware, 0, len(keys))
-	for _, k := range keys {
-		middlewares = append(middlewares, middlewaresMap[k])
+	middlewares := make([]middleware.Middleware, 0, len(middlewaresNames))
+	for _, k := range middlewaresNames {
+		middlewares = append(middlewares, serverMiddlewares[k])
 	}
 	return middlewares
 }

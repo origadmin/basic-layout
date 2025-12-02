@@ -18,7 +18,7 @@ import (
 )
 
 func init() {
-	config.Register("consul", NewSource)
+	config.RegisterSourceFactory("consul", config.SourceFunc(NewSource))
 }
 
 func NewSource(sourceConfig *sourcev1.SourceConfig, opts ...options.Option) (config.KSource, error) {

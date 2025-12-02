@@ -1,15 +1,10 @@
 syntax = "proto3";
 
-package config.middleware.validator.v1;
+package runtime.api.config.middleware.validator.v1;
 
 import "validate/validate.proto";
 
 option go_package = "github.com/origadmin/runtime/api/gen/go/config/middleware/validator/v1;validatorv1";
-
-
-
-
-
 
 message Validator {
   int32 version = 1 [

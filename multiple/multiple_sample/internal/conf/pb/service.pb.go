@@ -105,12 +105,12 @@ var File_internal_conf_pb_service_proto protoreflect.FileDescriptor
 
 const file_internal_conf_pb_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1einternal/conf/pb/service.proto\x12\aconfigs\x1a\x19config/data/v1/data.proto\x1a%config/middleware/v1/middleware.proto\x1a#config/transport/v1/transport.proto\"\xeb\x01\n" +
-	"\rServiceConfig\x125\n" +
-	"\aservers\x18\x02 \x03(\v2\x1b.config.transport.v1.ServerR\aservers\x125\n" +
-	"\aclients\x18\x03 \x03(\v2\x1b.config.transport.v1.ClientR\aclients\x12B\n" +
-	"\vmiddlewares\x18\x04 \x03(\v2 .config.middleware.v1.MiddlewareR\vmiddlewares\x12(\n" +
-	"\x04data\x18\x05 \x01(\v2\x14.config.data.v1.DataR\x04dataB?Z=basic-layout/multiple/multiple_sample/internal/conf/pb;confpbb\x06proto3"
+	"\x1einternal/conf/pb/service.proto\x12\aconfigs\x1a\x19config/data/v1/data.proto\x1a%config/middleware/v1/middleware.proto\x1a#config/transport/v1/transport.proto\"\x9b\x02\n" +
+	"\rServiceConfig\x12A\n" +
+	"\aservers\x18\x02 \x03(\v2'.runtime.api.config.transport.v1.ServerR\aservers\x12A\n" +
+	"\aclients\x18\x03 \x03(\v2'.runtime.api.config.transport.v1.ClientR\aclients\x12N\n" +
+	"\vmiddlewares\x18\x04 \x03(\v2,.runtime.api.config.middleware.v1.MiddlewareR\vmiddlewares\x124\n" +
+	"\x04data\x18\x05 \x01(\v2 .runtime.api.config.data.v1.DataR\x04dataB?Z=basic-layout/multiple/multiple_sample/internal/conf/pb;confpbb\x06proto3"
 
 var (
 	file_internal_conf_pb_service_proto_rawDescOnce sync.Once
@@ -127,16 +127,16 @@ func file_internal_conf_pb_service_proto_rawDescGZIP() []byte {
 var file_internal_conf_pb_service_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_internal_conf_pb_service_proto_goTypes = []any{
 	(*ServiceConfig)(nil),  // 0: configs.ServiceConfig
-	(*v1.Server)(nil),      // 1: config.transport.v1.Server
-	(*v1.Client)(nil),      // 2: config.transport.v1.Client
-	(*v11.Middleware)(nil), // 3: config.middleware.v1.Middleware
-	(*v12.Data)(nil),       // 4: config.data.v1.Data
+	(*v1.Server)(nil),      // 1: runtime.api.config.transport.v1.Server
+	(*v1.Client)(nil),      // 2: runtime.api.config.transport.v1.Client
+	(*v11.Middleware)(nil), // 3: runtime.api.config.middleware.v1.Middleware
+	(*v12.Data)(nil),       // 4: runtime.api.config.data.v1.Data
 }
 var file_internal_conf_pb_service_proto_depIdxs = []int32{
-	1, // 0: configs.ServiceConfig.servers:type_name -> config.transport.v1.Server
-	2, // 1: configs.ServiceConfig.clients:type_name -> config.transport.v1.Client
-	3, // 2: configs.ServiceConfig.middlewares:type_name -> config.middleware.v1.Middleware
-	4, // 3: configs.ServiceConfig.data:type_name -> config.data.v1.Data
+	1, // 0: configs.ServiceConfig.servers:type_name -> runtime.api.config.transport.v1.Server
+	2, // 1: configs.ServiceConfig.clients:type_name -> runtime.api.config.transport.v1.Client
+	3, // 2: configs.ServiceConfig.middlewares:type_name -> runtime.api.config.middleware.v1.Middleware
+	4, // 3: configs.ServiceConfig.data:type_name -> runtime.api.config.data.v1.Data
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name

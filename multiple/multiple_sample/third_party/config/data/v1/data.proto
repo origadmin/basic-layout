@@ -1,27 +1,22 @@
 syntax = "proto3";
 
-package config.data.v1;
+package runtime.api.config.data.v1;
 
-import "gnostic/openapi/v3/annotations.proto";
-import "google/protobuf/struct.proto";
 import "config/data/cache/v1/cache.proto";
 import "config/data/database/v1/database.proto";
 import "config/data/database/v1/document.proto";
-import "config/data/file/v1/filestore.proto";
-import "validate/validate.proto";
+import "config/data/oss/v1/objectstore.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/protobuf/struct.proto";
 
 option go_package = "github.com/origadmin/runtime/api/gen/go/config/data/v1;datav1";
-
-
-
-
 
 // Data is the top-level configuration for all data-related components.
 message Data {
   // FileStore configurations.
-  optional Filestores filestores = 1 [
-    json_name = "filestores",
-    (gnostic.openapi.v3.property) = {description: "FileStore configurations"}
+  optional ObjectStores objectstores = 1 [
+    json_name = "objectstores",
+    (gnostic.openapi.v3.property) = {description: "ObjectStore configurations"}
   ];
 
   // Cache configurations.
@@ -50,7 +45,7 @@ message Data {
 }
 
 // FileStores is a collection of named FileStore configurations.
-message Filestores {
+message ObjectStores {
   // Default filestore name.
   optional string default = 1 [
     json_name = "default",
@@ -62,7 +57,7 @@ message Filestores {
     (gnostic.openapi.v3.property) = {description: "Active filestore name, overrides default"}
   ];
   // List of named FileStore configurations.
-  repeated config.data.file.v1.FilestoreConfig configs = 3 [
+  repeated config.data.oss.v1.ObjectStoreConfig configs = 3 [
     json_name = "configs",
     (gnostic.openapi.v3.property) = {description: "List of named FileStore configurations"}
   ];

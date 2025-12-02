@@ -25,6 +25,23 @@ type Config struct {
 	defaultDiscovery string
 }
 
+func (c *Config) DecodeCaches() (*datav1.Caches, error) {
+	return c.bootstrap.GetData().GetCaches(), nil
+}
+
+func (c *Config) DecodeDatabases() (*datav1.Databases, error) {
+	return c.bootstrap.GetData().GetDatabases(), nil
+}
+
+func (c *Config) DecodeObjectStores() (*datav1.ObjectStores, error) {
+	return c.bootstrap.GetData().GetObjectStores(), nil
+}
+
+func (c *Config) DecodedConfig() any {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *Config) DecodeApp() (*appv1.App, error) {
 	return c.bootstrap.GetApp(), nil
 }

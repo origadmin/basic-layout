@@ -92,6 +92,7 @@ deps: ## 📦 Update and export third-party protobuf dependencies
 	@buf export buf.build/gnostic/gnostic -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/kratos/apis -o $(THIRD_PARTY_PATH)
 	@buf export buf.build/origadmin/runtime -o $(THIRD_PARTY_PATH)
+	@buf export buf.build/origadmin/contrib -o $(THIRD_PARTY_PATH)
 
 generate: ## 🧬 Generate all code from Protobuf and run go generate (includes wire, openapi)
 	@echo "Generating API Protobuf code using buf..."

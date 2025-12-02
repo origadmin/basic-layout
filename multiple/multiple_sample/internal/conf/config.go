@@ -4,6 +4,8 @@ package conf
 import (
 	"fmt"
 
+	"github.com/goexts/generic/cmp"
+
 	confpb "basic-layout/multiple/multiple_sample/internal/conf/pb"
 	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
 	datav1 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
@@ -22,16 +24,32 @@ type Config struct {
 	bootstrap confpb.Bootstrap
 }
 
+func (c *Config) DecodeData() (*datav1.Data, error) {
+	return c.bootstrap.GetData(), nil
+}
+
+func (c *Config) DecodeCaches() (*datav1.Caches, error) {
+	return c.bootstrap.GetData().GetCaches(), nil
+}
+
+func (c *Config) DecodeDatabases() (*datav1.Databases, error) {
+	return c.bootstrap.GetData().GetDatabases(), nil
+}
+
+func (c *Config) DecodeObjectStores() (*datav1.ObjectStores, error) {
+	return c.bootstrap.GetData().GetObjectStores(), nil
+}
+
+func (c *Config) DecodedConfig() any {
+	return &c.bootstrap
+}
+
 func (c *Config) Bootstrap() *confpb.Bootstrap {
 	return &c.bootstrap
 }
 
-func (c *Config) DecodeData() (*datav1.Data, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
 func (c *Config) DecodeDefaultDiscovery() (string, error) {
-	return "", fmt.Errorf("not implemented")
+	return cmp.Or(c.bootstrap.GetDiscoveries().GetActive(), c.bootstrap.GetDiscoveries().GetDefault(), "default"), nil
 }
 
 func (c *Config) DecodeServers() (*transportv1.Servers, error) {
@@ -47,10 +65,7 @@ func (c *Config) DecodeApp() (*appv1.App, error) {
 }
 
 func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
-	return &loggerv1.Logger{
-		Default: true,
-		Level:   "debug",
-	}, nil
+	return c.bootstrap.GetLogger(), nil
 }
 
 func (c *Config) DecodeDiscoveries() (*discoveryv1.Discoveries, error) {

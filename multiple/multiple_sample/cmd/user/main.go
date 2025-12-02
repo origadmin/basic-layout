@@ -63,16 +63,13 @@ func main() {
 	//}
 	//log.Printf("Using config directory: %s\n", directory)
 	// NewFromBootstrap handles config loading, logging, and container setup.
-	rt, err := runtime.NewFromBootstrap(
-		flagconf, // Use just the filename since we changed the working directory
-		bootstrap.WithConfigTransformer(conf.New(appInfo)),
-		//bootstrap.WithWorkDirectory(directory),
-	)
+	rt := runtime.New(Name, Version)
+	err := rt.Load(flagconf, bootstrap.WithConfigTransformer(conf.New(
+		appInfo))) // Use just the filename since we changed the working directory
 	if err != nil {
 		log.Fatalf("failed to create runtime: %v", err)
 	}
-	defer rt.Cleanup()
-
+	defer rt.Config().Close()
 	// wireApp now takes the runtime instance and builds the kratos app.
 	app, cleanupApp, err := wireApp(rt)
 	if err != nil {

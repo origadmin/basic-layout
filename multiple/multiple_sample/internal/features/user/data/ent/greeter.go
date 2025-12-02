@@ -39,7 +39,7 @@ func (*Greeter) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Greeter fields.
-func (gr *Greeter) assignValues(columns []string, values []any) error {
+func (_m *Greeter) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -50,15 +50,15 @@ func (gr *Greeter) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			gr.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case greeter.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				gr.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			gr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -66,35 +66,35 @@ func (gr *Greeter) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Greeter.
 // This includes values selected through modifiers, order, etc.
-func (gr *Greeter) Value(name string) (ent.Value, error) {
-	return gr.selectValues.Get(name)
+func (_m *Greeter) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Greeter.
 // Note that you need to call Greeter.Unwrap() before calling this method if this Greeter
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gr *Greeter) Update() *GreeterUpdateOne {
-	return NewGreeterClient(gr.config).UpdateOne(gr)
+func (_m *Greeter) Update() *GreeterUpdateOne {
+	return NewGreeterClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Greeter entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gr *Greeter) Unwrap() *Greeter {
-	_tx, ok := gr.config.driver.(*txDriver)
+func (_m *Greeter) Unwrap() *Greeter {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Greeter is not a transactional entity")
 	}
-	gr.config.driver = _tx.drv
-	return gr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gr *Greeter) String() string {
+func (_m *Greeter) String() string {
 	var builder strings.Builder
 	builder.WriteString("Greeter(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
-	builder.WriteString(gr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

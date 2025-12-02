@@ -252,8 +252,8 @@ func (c *GreeterClient) Update() *GreeterUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *GreeterClient) UpdateOne(gr *Greeter) *GreeterUpdateOne {
-	mutation := newGreeterMutation(c.config, OpUpdateOne, withGreeter(gr))
+func (c *GreeterClient) UpdateOne(_m *Greeter) *GreeterUpdateOne {
+	mutation := newGreeterMutation(c.config, OpUpdateOne, withGreeter(_m))
 	return &GreeterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -270,8 +270,8 @@ func (c *GreeterClient) Delete() *GreeterDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *GreeterClient) DeleteOne(gr *Greeter) *GreeterDeleteOne {
-	return c.DeleteOneID(gr.ID)
+func (c *GreeterClient) DeleteOne(_m *Greeter) *GreeterDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

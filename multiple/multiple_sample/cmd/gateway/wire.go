@@ -28,7 +28,7 @@ import (
 )
 
 // provideRuntimeConfig extracts the runtime.Config interface from the runtime instance.
-func provideRuntimeConfig(rt *runtime.Runtime) interfaces.Config {
+func provideRuntimeConfig(rt *runtime.App) interfaces.Config {
 	// rt.Config() returns interfaces.Config, which should implement runtimeConfig.Config
 	return rt.Config()
 }
@@ -48,12 +48,12 @@ var runtimeProviderSet = wire.NewSet(
 )
 
 // provideLogger extracts the logger from the runtime instance.
-func provideLogger(rt *runtime.Runtime) kratoslog.Logger {
+func provideLogger(rt *runtime.App) kratoslog.Logger {
 	return rt.Logger()
 }
 
 // provideConfig extracts and decodes the bootstrap config from the runtime instance.
-func provideConfig(rt *runtime.Runtime) (*confpb.Bootstrap, error) {
+func provideConfig(rt *runtime.App) (*confpb.Bootstrap, error) {
 	var bc confpb.Bootstrap
 	if err := rt.Config().Decode("", &bc); err != nil { // Changed Scan to Decode
 		return nil, err
@@ -67,12 +67,12 @@ func provideServerConfig(bc *confpb.Bootstrap) *transportv1.Servers {
 }
 
 // NewKratosApp creates the final kratos.App from the runtime and transport servers.
-func NewKratosApp(rt *runtime.Runtime, servers []transport.Server) *kratos.App {
+func NewKratosApp(rt *runtime.App, servers []transport.Server) *kratos.App {
 	return rt.NewApp(servers)
 }
 
 // wireApp initializes the application using wire.
-func wireApp(rt *runtime.Runtime) (*kratos.App, func(), error) {
+func wireApp(rt *runtime.App) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		runtimeProviderSet,
 		server.ProviderSet,

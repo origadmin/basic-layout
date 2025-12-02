@@ -1,15 +1,11 @@
 syntax = "proto3";
 
-package config.config.v1;
+package runtime.api.config.config.v1;
 
+import "config/transport/tls/v1/tls.proto";
 import "gnostic/openapi/v3/annotations.proto";
-import "config/security/transport/v1/tls.proto";
 
 option go_package = "github.com/origadmin/runtime/api/gen/go/config/config/v1;configv1";
-
-
-
-
 
 message Gateway {
   string name = 1 [
@@ -33,7 +29,7 @@ message Gateway {
     json_name = "middlewares",
     (gnostic.openapi.v3.property) = {description: "List of global middlewares applied to the gateway."}
   ];
-  map<string, security.transport.v1.TLSConfig> tls_store = 6 [
+  map<string, runtime.api.config.transport.tls.v1.TLSConfig> tls_store = 6 [
     json_name = "tls_store",
     (gnostic.openapi.v3.property) = {description: "TLS configurations stored by name."}
   ];

@@ -14,16 +14,16 @@ option go_package = "basic-layout/multiple/multiple_sample/internal/conf/pb;conf
 message ServiceConfig {
   // servers is a list of server endpoints that this service will expose.
   // A service can listen on multiple protocols simultaneously, e.g., both gRPC and HTTP.
-  repeated config.transport.v1.Server servers = 2;
+  repeated runtime.api.config.transport.v1.Server servers = 2;
 
   // clients is a list of client configurations for services that this service depends on.
   // This list will be converted into a map in the application's bootstrap logic,
   // using the 'name' field from each Client message as the key.
-  repeated config.transport.v1.Client clients = 3;
+  repeated runtime.api.config.transport.v1.Client clients = 3;
 
   // middlewares is a list of middleware configurations to be applied to the service.
-  repeated config.middleware.v1.Middleware middlewares = 4;
+  repeated runtime.api.config.middleware.v1.Middleware middlewares = 4;
 
   // Data configuration for the service.
-  config.data.v1.Data data = 5;
+  runtime.api.config.data.v1.Data data = 5;
 }
