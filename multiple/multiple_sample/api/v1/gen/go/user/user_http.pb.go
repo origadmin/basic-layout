@@ -19,11 +19,11 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserAPICreateUser = "/api.v1.mods.user.UserAPI/CreateUser"
-const OperationUserAPIDeleteUser = "/api.v1.mods.user.UserAPI/DeleteUser"
-const OperationUserAPIGetUser = "/api.v1.mods.user.UserAPI/GetUser"
-const OperationUserAPIListUser = "/api.v1.mods.user.UserAPI/ListUser"
-const OperationUserAPIUpdateUser = "/api.v1.mods.user.UserAPI/UpdateUser"
+const OperationUserAPICreateUser = "/api.v1.user.UserAPI/CreateUser"
+const OperationUserAPIDeleteUser = "/api.v1.user.UserAPI/DeleteUser"
+const OperationUserAPIGetUser = "/api.v1.user.UserAPI/GetUser"
+const OperationUserAPIListUser = "/api.v1.user.UserAPI/ListUser"
+const OperationUserAPIUpdateUser = "/api.v1.user.UserAPI/UpdateUser"
 
 type UserAPIHTTPServer interface {
 	// CreateUser CreateUser creates a new User

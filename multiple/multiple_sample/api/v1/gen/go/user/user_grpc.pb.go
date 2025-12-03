@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserAPI_CreateUser_FullMethodName = "/api.v1.mods.user.UserAPI/CreateUser"
-	UserAPI_UpdateUser_FullMethodName = "/api.v1.mods.user.UserAPI/UpdateUser"
-	UserAPI_DeleteUser_FullMethodName = "/api.v1.mods.user.UserAPI/DeleteUser"
-	UserAPI_GetUser_FullMethodName    = "/api.v1.mods.user.UserAPI/GetUser"
-	UserAPI_ListUser_FullMethodName   = "/api.v1.mods.user.UserAPI/ListUser"
+	UserAPI_CreateUser_FullMethodName = "/api.v1.user.UserAPI/CreateUser"
+	UserAPI_UpdateUser_FullMethodName = "/api.v1.user.UserAPI/UpdateUser"
+	UserAPI_DeleteUser_FullMethodName = "/api.v1.user.UserAPI/DeleteUser"
+	UserAPI_GetUser_FullMethodName    = "/api.v1.user.UserAPI/GetUser"
+	UserAPI_ListUser_FullMethodName   = "/api.v1.user.UserAPI/ListUser"
 )
 
 // UserAPIClient is the client API for UserAPI service.
@@ -258,7 +258,7 @@ func _UserAPI_ListUser_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.mods.user.UserAPI",
+	ServiceName: "api.v1.user.UserAPI",
 	HandlerType: (*UserAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

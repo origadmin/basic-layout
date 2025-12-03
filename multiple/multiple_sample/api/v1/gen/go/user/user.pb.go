@@ -568,7 +568,7 @@ var File_user_user_proto protoreflect.FileDescriptor
 
 const file_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x0fuser/user.proto\x12\x10api.v1.mods.user\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"N\n" +
+	"\x0fuser/user.proto\x12\vapi.v1.user\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\"N\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
@@ -576,42 +576,42 @@ const file_user_user_proto_rawDesc = "" +
 	"\x11CreateUserRequest\x12#\n" +
 	"\busername\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x03R\busername\x12#\n" +
 	"\bpassword\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x06R\bpassword\x12\x1a\n" +
-	"\bnickname\x18\x03 \x01(\tR\bnickname\"@\n" +
-	"\x12CreateUserResponse\x12*\n" +
-	"\x04user\x18\x01 \x01(\v2\x16.api.v1.mods.user.UserR\x04user\"X\n" +
+	"\bnickname\x18\x03 \x01(\tR\bnickname\";\n" +
+	"\x12CreateUserResponse\x12%\n" +
+	"\x04user\x18\x01 \x01(\v2\x11.api.v1.user.UserR\x04user\"S\n" +
 	"\x11UpdateUserRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\x12*\n" +
-	"\x04user\x18\x02 \x01(\v2\x16.api.v1.mods.user.UserR\x04user\"@\n" +
-	"\x12UpdateUserResponse\x12*\n" +
-	"\x04user\x18\x01 \x01(\v2\x16.api.v1.mods.user.UserR\x04user\",\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\x12%\n" +
+	"\x04user\x18\x02 \x01(\v2\x11.api.v1.user.UserR\x04user\";\n" +
+	"\x12UpdateUserResponse\x12%\n" +
+	"\x04user\x18\x01 \x01(\v2\x11.api.v1.user.UserR\x04user\",\n" +
 	"\x11DeleteUserRequest\x12\x17\n" +
 	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\".\n" +
 	"\x12DeleteUserResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\")\n" +
 	"\x0eGetUserRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\"=\n" +
-	"\x0fGetUserResponse\x12*\n" +
-	"\x04user\x18\x01 \x01(\v2\x16.api.v1.mods.user.UserR\x04user\"l\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\"8\n" +
+	"\x0fGetUserResponse\x12%\n" +
+	"\x04user\x18\x01 \x01(\v2\x11.api.v1.user.UserR\x04user\"l\n" +
 	"\x0fListUserRequest\x12\x1d\n" +
 	"\acurrent\x18\x01 \x01(\x05H\x00R\acurrent\x88\x01\x01\x12 \n" +
 	"\tpage_size\x18\x02 \x01(\x05H\x01R\bpageSize\x88\x01\x01B\n" +
 	"\n" +
 	"\b_currentB\f\n" +
 	"\n" +
-	"_page_size\"T\n" +
+	"_page_size\"O\n" +
 	"\x10ListUserResponse\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\x12*\n" +
-	"\x04data\x18\x03 \x03(\v2\x16.api.v1.mods.user.UserR\x04data2\xbd\x04\n" +
-	"\aUserAPI\x12p\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\x12%\n" +
+	"\x04data\x18\x03 \x03(\v2\x11.api.v1.user.UserR\x04data2\x8b\x04\n" +
+	"\aUserAPI\x12f\n" +
 	"\n" +
-	"CreateUser\x12#.api.v1.mods.user.CreateUserRequest\x1a$.api.v1.mods.user.CreateUserResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/api/v1/user\x12x\n" +
+	"CreateUser\x12\x1e.api.v1.user.CreateUserRequest\x1a\x1f.api.v1.user.CreateUserResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/api/v1/user\x12n\n" +
 	"\n" +
-	"UpdateUser\x12#.api.v1.mods.user.UpdateUserRequest\x1a$.api.v1.mods.user.UpdateUserResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x04user\x1a\x11/api/v1/user/{id}\x12r\n" +
+	"UpdateUser\x12\x1e.api.v1.user.UpdateUserRequest\x1a\x1f.api.v1.user.UpdateUserResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x04user\x1a\x11/api/v1/user/{id}\x12h\n" +
 	"\n" +
-	"DeleteUser\x12#.api.v1.mods.user.DeleteUserRequest\x1a$.api.v1.mods.user.DeleteUserResponse\"\x19\x82\xd3\xe4\x93\x02\x13*\x11/api/v1/user/{id}\x12i\n" +
-	"\aGetUser\x12 .api.v1.mods.user.GetUserRequest\x1a!.api.v1.mods.user.GetUserResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/user/{id}\x12g\n" +
-	"\bListUser\x12!.api.v1.mods.user.ListUserRequest\x1a\".api.v1.mods.user.ListUserResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/api/v1/userB\xc4\x01\n" +
-	"\x14com.api.v1.mods.userB\tUserProtoP\x01Z=basic-layout/multiple/multiple_sample/api/v1/gen/go/user;user\xa2\x02\x04AVMU\xaa\x02\x10Api.V1.Mods.User\xca\x02\x10Api\\V1\\Mods\\User\xe2\x02\x1cApi\\V1\\Mods\\User\\GPBMetadata\xea\x02\x13Api::V1::Mods::Userb\x06proto3"
+	"DeleteUser\x12\x1e.api.v1.user.DeleteUserRequest\x1a\x1f.api.v1.user.DeleteUserResponse\"\x19\x82\xd3\xe4\x93\x02\x13*\x11/api/v1/user/{id}\x12_\n" +
+	"\aGetUser\x12\x1b.api.v1.user.GetUserRequest\x1a\x1c.api.v1.user.GetUserResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/user/{id}\x12]\n" +
+	"\bListUser\x12\x1c.api.v1.user.ListUserRequest\x1a\x1d.api.v1.user.ListUserResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/api/v1/userB\xa9\x01\n" +
+	"\x0fcom.api.v1.userB\tUserProtoP\x01Z=basic-layout/multiple/multiple_sample/api/v1/gen/go/user;user\xa2\x02\x03AVU\xaa\x02\vApi.V1.User\xca\x02\vApi\\V1\\User\xe2\x02\x17Api\\V1\\User\\GPBMetadata\xea\x02\rApi::V1::Userb\x06proto3"
 
 var (
 	file_user_user_proto_rawDescOnce sync.Once
@@ -627,34 +627,34 @@ func file_user_user_proto_rawDescGZIP() []byte {
 
 var file_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_user_user_proto_goTypes = []any{
-	(*User)(nil),               // 0: api.v1.mods.user.User
-	(*CreateUserRequest)(nil),  // 1: api.v1.mods.user.CreateUserRequest
-	(*CreateUserResponse)(nil), // 2: api.v1.mods.user.CreateUserResponse
-	(*UpdateUserRequest)(nil),  // 3: api.v1.mods.user.UpdateUserRequest
-	(*UpdateUserResponse)(nil), // 4: api.v1.mods.user.UpdateUserResponse
-	(*DeleteUserRequest)(nil),  // 5: api.v1.mods.user.DeleteUserRequest
-	(*DeleteUserResponse)(nil), // 6: api.v1.mods.user.DeleteUserResponse
-	(*GetUserRequest)(nil),     // 7: api.v1.mods.user.GetUserRequest
-	(*GetUserResponse)(nil),    // 8: api.v1.mods.user.GetUserResponse
-	(*ListUserRequest)(nil),    // 9: api.v1.mods.user.ListUserRequest
-	(*ListUserResponse)(nil),   // 10: api.v1.mods.user.ListUserResponse
+	(*User)(nil),               // 0: api.v1.user.User
+	(*CreateUserRequest)(nil),  // 1: api.v1.user.CreateUserRequest
+	(*CreateUserResponse)(nil), // 2: api.v1.user.CreateUserResponse
+	(*UpdateUserRequest)(nil),  // 3: api.v1.user.UpdateUserRequest
+	(*UpdateUserResponse)(nil), // 4: api.v1.user.UpdateUserResponse
+	(*DeleteUserRequest)(nil),  // 5: api.v1.user.DeleteUserRequest
+	(*DeleteUserResponse)(nil), // 6: api.v1.user.DeleteUserResponse
+	(*GetUserRequest)(nil),     // 7: api.v1.user.GetUserRequest
+	(*GetUserResponse)(nil),    // 8: api.v1.user.GetUserResponse
+	(*ListUserRequest)(nil),    // 9: api.v1.user.ListUserRequest
+	(*ListUserResponse)(nil),   // 10: api.v1.user.ListUserResponse
 }
 var file_user_user_proto_depIdxs = []int32{
-	0,  // 0: api.v1.mods.user.CreateUserResponse.user:type_name -> api.v1.mods.user.User
-	0,  // 1: api.v1.mods.user.UpdateUserRequest.user:type_name -> api.v1.mods.user.User
-	0,  // 2: api.v1.mods.user.UpdateUserResponse.user:type_name -> api.v1.mods.user.User
-	0,  // 3: api.v1.mods.user.GetUserResponse.user:type_name -> api.v1.mods.user.User
-	0,  // 4: api.v1.mods.user.ListUserResponse.data:type_name -> api.v1.mods.user.User
-	1,  // 5: api.v1.mods.user.UserAPI.CreateUser:input_type -> api.v1.mods.user.CreateUserRequest
-	3,  // 6: api.v1.mods.user.UserAPI.UpdateUser:input_type -> api.v1.mods.user.UpdateUserRequest
-	5,  // 7: api.v1.mods.user.UserAPI.DeleteUser:input_type -> api.v1.mods.user.DeleteUserRequest
-	7,  // 8: api.v1.mods.user.UserAPI.GetUser:input_type -> api.v1.mods.user.GetUserRequest
-	9,  // 9: api.v1.mods.user.UserAPI.ListUser:input_type -> api.v1.mods.user.ListUserRequest
-	2,  // 10: api.v1.mods.user.UserAPI.CreateUser:output_type -> api.v1.mods.user.CreateUserResponse
-	4,  // 11: api.v1.mods.user.UserAPI.UpdateUser:output_type -> api.v1.mods.user.UpdateUserResponse
-	6,  // 12: api.v1.mods.user.UserAPI.DeleteUser:output_type -> api.v1.mods.user.DeleteUserResponse
-	8,  // 13: api.v1.mods.user.UserAPI.GetUser:output_type -> api.v1.mods.user.GetUserResponse
-	10, // 14: api.v1.mods.user.UserAPI.ListUser:output_type -> api.v1.mods.user.ListUserResponse
+	0,  // 0: api.v1.user.CreateUserResponse.user:type_name -> api.v1.user.User
+	0,  // 1: api.v1.user.UpdateUserRequest.user:type_name -> api.v1.user.User
+	0,  // 2: api.v1.user.UpdateUserResponse.user:type_name -> api.v1.user.User
+	0,  // 3: api.v1.user.GetUserResponse.user:type_name -> api.v1.user.User
+	0,  // 4: api.v1.user.ListUserResponse.data:type_name -> api.v1.user.User
+	1,  // 5: api.v1.user.UserAPI.CreateUser:input_type -> api.v1.user.CreateUserRequest
+	3,  // 6: api.v1.user.UserAPI.UpdateUser:input_type -> api.v1.user.UpdateUserRequest
+	5,  // 7: api.v1.user.UserAPI.DeleteUser:input_type -> api.v1.user.DeleteUserRequest
+	7,  // 8: api.v1.user.UserAPI.GetUser:input_type -> api.v1.user.GetUserRequest
+	9,  // 9: api.v1.user.UserAPI.ListUser:input_type -> api.v1.user.ListUserRequest
+	2,  // 10: api.v1.user.UserAPI.CreateUser:output_type -> api.v1.user.CreateUserResponse
+	4,  // 11: api.v1.user.UserAPI.UpdateUser:output_type -> api.v1.user.UpdateUserResponse
+	6,  // 12: api.v1.user.UserAPI.DeleteUser:output_type -> api.v1.user.DeleteUserResponse
+	8,  // 13: api.v1.user.UserAPI.GetUser:output_type -> api.v1.user.GetUserResponse
+	10, // 14: api.v1.user.UserAPI.ListUser:output_type -> api.v1.user.ListUserResponse
 	10, // [10:15] is the sub-list for method output_type
 	5,  // [5:10] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name

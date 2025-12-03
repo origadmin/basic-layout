@@ -229,7 +229,7 @@ var File_gateway_gateway_proto protoreflect.FileDescriptor
 
 const file_gateway_gateway_proto_rawDesc = "" +
 	"\n" +
-	"\x15gateway/gateway.proto\x12\x13api.v1.mods.gateway\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x11order/order.proto\x1a\x0fuser/user.proto\")\n" +
+	"\x15gateway/gateway.proto\x12\x0eapi.v1.gateway\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x11order/order.proto\x1a\x0fuser/user.proto\")\n" +
 	"\x0eGetUserRequest\x12\x17\n" +
 	"\x02id\x18\x01 \x01(\x03B\a\xbaH\x04\"\x02 \x00R\x02id\"=\n" +
 	"\x0fGetUserResponse\x12\x0e\n" +
@@ -240,14 +240,14 @@ const file_gateway_gateway_proto_rawDesc = "" +
 	"\x10GetOrderResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
 	"\x06amount\x18\x02 \x01(\x01R\x06amount\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status2\x80\x02\n" +
-	"\x0eEdgeGatewayAPI\x12x\n" +
-	"\bGetOrder\x12$.api.v1.mods.gateway.GetOrderRequest\x1a%.api.v1.mods.gateway.GetOrderResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/edge/order/{id}\x12t\n" +
-	"\aGetUser\x12#.api.v1.mods.gateway.GetUserRequest\x1a$.api.v1.mods.gateway.GetUserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/edge/user/{id}2\xf9\x01\n" +
-	"\x0fProxyGatewayAPI\x12u\n" +
-	"\bGetOrder\x12\".api.v1.mods.order.GetOrderRequest\x1a#.api.v1.mods.order.GetOrderResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/proxy/order/{id}\x12o\n" +
-	"\aGetUser\x12 .api.v1.mods.user.GetUserRequest\x1a!.api.v1.mods.user.GetUserResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/proxy/user/{id}B\xdc\x01\n" +
-	"\x17com.api.v1.mods.gatewayB\fGatewayProtoP\x01ZCbasic-layout/multiple/multiple_sample/api/v1/gen/go/gateway;gateway\xa2\x02\x04AVMG\xaa\x02\x13Api.V1.Mods.Gateway\xca\x02\x13Api\\V1\\Mods\\Gateway\xe2\x02\x1fApi\\V1\\Mods\\Gateway\\GPBMetadata\xea\x02\x16Api::V1::Mods::Gatewayb\x06proto3"
+	"\x06status\x18\x03 \x01(\tR\x06status2\xec\x01\n" +
+	"\x0eEdgeGatewayAPI\x12n\n" +
+	"\bGetOrder\x12\x1f.api.v1.gateway.GetOrderRequest\x1a .api.v1.gateway.GetOrderResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/edge/order/{id}\x12j\n" +
+	"\aGetUser\x12\x1e.api.v1.gateway.GetUserRequest\x1a\x1f.api.v1.gateway.GetUserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/edge/user/{id}2\xe5\x01\n" +
+	"\x0fProxyGatewayAPI\x12k\n" +
+	"\bGetOrder\x12\x1d.api.v1.order.GetOrderRequest\x1a\x1e.api.v1.order.GetOrderResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/proxy/order/{id}\x12e\n" +
+	"\aGetUser\x12\x1b.api.v1.user.GetUserRequest\x1a\x1c.api.v1.user.GetUserResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/proxy/user/{id}B\xc1\x01\n" +
+	"\x12com.api.v1.gatewayB\fGatewayProtoP\x01ZCbasic-layout/multiple/multiple_sample/api/v1/gen/go/gateway;gateway\xa2\x02\x03AVG\xaa\x02\x0eApi.V1.Gateway\xca\x02\x0eApi\\V1\\Gateway\xe2\x02\x1aApi\\V1\\Gateway\\GPBMetadata\xea\x02\x10Api::V1::Gatewayb\x06proto3"
 
 var (
 	file_gateway_gateway_proto_rawDescOnce sync.Once
@@ -263,24 +263,24 @@ func file_gateway_gateway_proto_rawDescGZIP() []byte {
 
 var file_gateway_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_gateway_gateway_proto_goTypes = []any{
-	(*GetUserRequest)(nil),         // 0: api.v1.mods.gateway.GetUserRequest
-	(*GetUserResponse)(nil),        // 1: api.v1.mods.gateway.GetUserResponse
-	(*GetOrderRequest)(nil),        // 2: api.v1.mods.gateway.GetOrderRequest
-	(*GetOrderResponse)(nil),       // 3: api.v1.mods.gateway.GetOrderResponse
-	(*order.GetOrderRequest)(nil),  // 4: api.v1.mods.order.GetOrderRequest
-	(*user.GetUserRequest)(nil),    // 5: api.v1.mods.user.GetUserRequest
-	(*order.GetOrderResponse)(nil), // 6: api.v1.mods.order.GetOrderResponse
-	(*user.GetUserResponse)(nil),   // 7: api.v1.mods.user.GetUserResponse
+	(*GetUserRequest)(nil),         // 0: api.v1.gateway.GetUserRequest
+	(*GetUserResponse)(nil),        // 1: api.v1.gateway.GetUserResponse
+	(*GetOrderRequest)(nil),        // 2: api.v1.gateway.GetOrderRequest
+	(*GetOrderResponse)(nil),       // 3: api.v1.gateway.GetOrderResponse
+	(*order.GetOrderRequest)(nil),  // 4: api.v1.order.GetOrderRequest
+	(*user.GetUserRequest)(nil),    // 5: api.v1.user.GetUserRequest
+	(*order.GetOrderResponse)(nil), // 6: api.v1.order.GetOrderResponse
+	(*user.GetUserResponse)(nil),   // 7: api.v1.user.GetUserResponse
 }
 var file_gateway_gateway_proto_depIdxs = []int32{
-	2, // 0: api.v1.mods.gateway.EdgeGatewayAPI.GetOrder:input_type -> api.v1.mods.gateway.GetOrderRequest
-	0, // 1: api.v1.mods.gateway.EdgeGatewayAPI.GetUser:input_type -> api.v1.mods.gateway.GetUserRequest
-	4, // 2: api.v1.mods.gateway.ProxyGatewayAPI.GetOrder:input_type -> api.v1.mods.order.GetOrderRequest
-	5, // 3: api.v1.mods.gateway.ProxyGatewayAPI.GetUser:input_type -> api.v1.mods.user.GetUserRequest
-	3, // 4: api.v1.mods.gateway.EdgeGatewayAPI.GetOrder:output_type -> api.v1.mods.gateway.GetOrderResponse
-	1, // 5: api.v1.mods.gateway.EdgeGatewayAPI.GetUser:output_type -> api.v1.mods.gateway.GetUserResponse
-	6, // 6: api.v1.mods.gateway.ProxyGatewayAPI.GetOrder:output_type -> api.v1.mods.order.GetOrderResponse
-	7, // 7: api.v1.mods.gateway.ProxyGatewayAPI.GetUser:output_type -> api.v1.mods.user.GetUserResponse
+	2, // 0: api.v1.gateway.EdgeGatewayAPI.GetOrder:input_type -> api.v1.gateway.GetOrderRequest
+	0, // 1: api.v1.gateway.EdgeGatewayAPI.GetUser:input_type -> api.v1.gateway.GetUserRequest
+	4, // 2: api.v1.gateway.ProxyGatewayAPI.GetOrder:input_type -> api.v1.order.GetOrderRequest
+	5, // 3: api.v1.gateway.ProxyGatewayAPI.GetUser:input_type -> api.v1.user.GetUserRequest
+	3, // 4: api.v1.gateway.EdgeGatewayAPI.GetOrder:output_type -> api.v1.gateway.GetOrderResponse
+	1, // 5: api.v1.gateway.EdgeGatewayAPI.GetUser:output_type -> api.v1.gateway.GetUserResponse
+	6, // 6: api.v1.gateway.ProxyGatewayAPI.GetOrder:output_type -> api.v1.order.GetOrderResponse
+	7, // 7: api.v1.gateway.ProxyGatewayAPI.GetUser:output_type -> api.v1.user.GetUserResponse
 	4, // [4:8] is the sub-list for method output_type
 	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

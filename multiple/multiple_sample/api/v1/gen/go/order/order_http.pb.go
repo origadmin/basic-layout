@@ -19,11 +19,11 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationOrderAPICreateOrder = "/api.v1.mods.order.OrderAPI/CreateOrder"
-const OperationOrderAPIDeleteOrder = "/api.v1.mods.order.OrderAPI/DeleteOrder"
-const OperationOrderAPIGetOrder = "/api.v1.mods.order.OrderAPI/GetOrder"
-const OperationOrderAPIListOrder = "/api.v1.mods.order.OrderAPI/ListOrder"
-const OperationOrderAPIUpdateOrder = "/api.v1.mods.order.OrderAPI/UpdateOrder"
+const OperationOrderAPICreateOrder = "/api.v1.order.OrderAPI/CreateOrder"
+const OperationOrderAPIDeleteOrder = "/api.v1.order.OrderAPI/DeleteOrder"
+const OperationOrderAPIGetOrder = "/api.v1.order.OrderAPI/GetOrder"
+const OperationOrderAPIListOrder = "/api.v1.order.OrderAPI/ListOrder"
+const OperationOrderAPIUpdateOrder = "/api.v1.order.OrderAPI/UpdateOrder"
 
 type OrderAPIHTTPServer interface {
 	// CreateOrder CreateOrder creates a new Order

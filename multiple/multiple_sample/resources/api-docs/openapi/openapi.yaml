@@ -35,7 +35,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.gateway.GetOrderResponse'
+                                $ref: '#/components/schemas/api.v1.gateway.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -60,7 +60,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.gateway.GetUserResponse'
+                                $ref: '#/components/schemas/api.v1.gateway.GetUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -90,7 +90,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.ListOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.ListOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -106,7 +106,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.mods.order.CreateOrderRequest'
+                            $ref: '#/components/schemas/api.v1.order.CreateOrderRequest'
                 required: true
             responses:
                 "200":
@@ -114,7 +114,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.CreateOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.CreateOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -139,7 +139,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.GetOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -161,7 +161,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.mods.order.Order'
+                            $ref: '#/components/schemas/api.v1.order.Order'
                 required: true
             responses:
                 "200":
@@ -169,7 +169,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.UpdateOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.UpdateOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -193,7 +193,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.DeleteOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.DeleteOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -218,7 +218,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.order.GetOrderResponse'
+                                $ref: '#/components/schemas/api.v1.order.GetOrderResponse'
                 default:
                     description: Default error response
                     content:
@@ -243,7 +243,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.GetUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.GetUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -273,7 +273,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.ListUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.ListUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -289,7 +289,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.mods.user.CreateUserRequest'
+                            $ref: '#/components/schemas/api.v1.user.CreateUserRequest'
                 required: true
             responses:
                 "200":
@@ -297,7 +297,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.CreateUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.CreateUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -322,7 +322,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.GetUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.GetUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -344,7 +344,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.v1.mods.user.User'
+                            $ref: '#/components/schemas/api.v1.user.User'
                 required: true
             responses:
                 "200":
@@ -352,7 +352,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.UpdateUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.UpdateUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -376,7 +376,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.v1.mods.user.DeleteUserResponse'
+                                $ref: '#/components/schemas/api.v1.user.DeleteUserResponse'
                 default:
                     description: Default error response
                     content:
@@ -385,7 +385,7 @@ paths:
                                 $ref: '#/components/schemas/google.rpc.Status'
 components:
     schemas:
-        api.v1.mods.gateway.GetOrderResponse:
+        api.v1.gateway.GetOrderResponse:
             type: object
             properties:
                 id:
@@ -395,14 +395,14 @@ components:
                     format: double
                 status:
                     type: string
-        api.v1.mods.gateway.GetUserResponse:
+        api.v1.gateway.GetUserResponse:
             type: object
             properties:
                 id:
                     type: string
                 username:
                     type: string
-        api.v1.mods.order.CreateOrderRequest:
+        api.v1.order.CreateOrderRequest:
             type: object
             properties:
                 user_id:
@@ -410,22 +410,22 @@ components:
                 amount:
                     type: number
                     format: double
-        api.v1.mods.order.CreateOrderResponse:
+        api.v1.order.CreateOrderResponse:
             type: object
             properties:
                 order:
-                    $ref: '#/components/schemas/api.v1.mods.order.Order'
-        api.v1.mods.order.DeleteOrderResponse:
+                    $ref: '#/components/schemas/api.v1.order.Order'
+        api.v1.order.DeleteOrderResponse:
             type: object
             properties:
                 success:
                     type: boolean
-        api.v1.mods.order.GetOrderResponse:
+        api.v1.order.GetOrderResponse:
             type: object
             properties:
                 order:
-                    $ref: '#/components/schemas/api.v1.mods.order.Order'
-        api.v1.mods.order.ListOrderResponse:
+                    $ref: '#/components/schemas/api.v1.order.Order'
+        api.v1.order.ListOrderResponse:
             type: object
             properties:
                 total:
@@ -434,8 +434,8 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.v1.mods.order.Order'
-        api.v1.mods.order.Order:
+                        $ref: '#/components/schemas/api.v1.order.Order'
+        api.v1.order.Order:
             type: object
             properties:
                 id:
@@ -448,12 +448,12 @@ components:
                 status:
                     type: string
             description: Order represents an order entity.
-        api.v1.mods.order.UpdateOrderResponse:
+        api.v1.order.UpdateOrderResponse:
             type: object
             properties:
                 order:
-                    $ref: '#/components/schemas/api.v1.mods.order.Order'
-        api.v1.mods.user.CreateUserRequest:
+                    $ref: '#/components/schemas/api.v1.order.Order'
+        api.v1.user.CreateUserRequest:
             type: object
             properties:
                 username:
@@ -462,22 +462,22 @@ components:
                     type: string
                 nickname:
                     type: string
-        api.v1.mods.user.CreateUserResponse:
+        api.v1.user.CreateUserResponse:
             type: object
             properties:
                 user:
-                    $ref: '#/components/schemas/api.v1.mods.user.User'
-        api.v1.mods.user.DeleteUserResponse:
+                    $ref: '#/components/schemas/api.v1.user.User'
+        api.v1.user.DeleteUserResponse:
             type: object
             properties:
                 success:
                     type: boolean
-        api.v1.mods.user.GetUserResponse:
+        api.v1.user.GetUserResponse:
             type: object
             properties:
                 user:
-                    $ref: '#/components/schemas/api.v1.mods.user.User'
-        api.v1.mods.user.ListUserResponse:
+                    $ref: '#/components/schemas/api.v1.user.User'
+        api.v1.user.ListUserResponse:
             type: object
             properties:
                 total:
@@ -486,13 +486,13 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.v1.mods.user.User'
-        api.v1.mods.user.UpdateUserResponse:
+                        $ref: '#/components/schemas/api.v1.user.User'
+        api.v1.user.UpdateUserResponse:
             type: object
             properties:
                 user:
-                    $ref: '#/components/schemas/api.v1.mods.user.User'
-        api.v1.mods.user.User:
+                    $ref: '#/components/schemas/api.v1.user.User'
+        api.v1.user.User:
             type: object
             properties:
                 id:

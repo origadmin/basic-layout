@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	OrderAPI_CreateOrder_FullMethodName = "/api.v1.mods.order.OrderAPI/CreateOrder"
-	OrderAPI_UpdateOrder_FullMethodName = "/api.v1.mods.order.OrderAPI/UpdateOrder"
-	OrderAPI_DeleteOrder_FullMethodName = "/api.v1.mods.order.OrderAPI/DeleteOrder"
-	OrderAPI_GetOrder_FullMethodName    = "/api.v1.mods.order.OrderAPI/GetOrder"
-	OrderAPI_ListOrder_FullMethodName   = "/api.v1.mods.order.OrderAPI/ListOrder"
+	OrderAPI_CreateOrder_FullMethodName = "/api.v1.order.OrderAPI/CreateOrder"
+	OrderAPI_UpdateOrder_FullMethodName = "/api.v1.order.OrderAPI/UpdateOrder"
+	OrderAPI_DeleteOrder_FullMethodName = "/api.v1.order.OrderAPI/DeleteOrder"
+	OrderAPI_GetOrder_FullMethodName    = "/api.v1.order.OrderAPI/GetOrder"
+	OrderAPI_ListOrder_FullMethodName   = "/api.v1.order.OrderAPI/ListOrder"
 )
 
 // OrderAPIClient is the client API for OrderAPI service.
@@ -258,7 +258,7 @@ func _OrderAPI_ListOrder_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var OrderAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.mods.order.OrderAPI",
+	ServiceName: "api.v1.order.OrderAPI",
 	HandlerType: (*OrderAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

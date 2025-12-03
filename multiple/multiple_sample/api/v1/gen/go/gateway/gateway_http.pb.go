@@ -21,8 +21,8 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationEdgeGatewayAPIGetOrder = "/api.v1.mods.gateway.EdgeGatewayAPI/GetOrder"
-const OperationEdgeGatewayAPIGetUser = "/api.v1.mods.gateway.EdgeGatewayAPI/GetUser"
+const OperationEdgeGatewayAPIGetOrder = "/api.v1.gateway.EdgeGatewayAPI/GetOrder"
+const OperationEdgeGatewayAPIGetUser = "/api.v1.gateway.EdgeGatewayAPI/GetUser"
 
 type EdgeGatewayAPIHTTPServer interface {
 	// GetOrder GetOrder retrieves an order via the gateway's own API model.
@@ -124,8 +124,8 @@ func (c *EdgeGatewayAPIHTTPClientImpl) GetUser(ctx context.Context, in *GetUserR
 	return &out, nil
 }
 
-const OperationProxyGatewayAPIGetOrder = "/api.v1.mods.gateway.ProxyGatewayAPI/GetOrder"
-const OperationProxyGatewayAPIGetUser = "/api.v1.mods.gateway.ProxyGatewayAPI/GetUser"
+const OperationProxyGatewayAPIGetOrder = "/api.v1.gateway.ProxyGatewayAPI/GetOrder"
+const OperationProxyGatewayAPIGetUser = "/api.v1.gateway.ProxyGatewayAPI/GetUser"
 
 type ProxyGatewayAPIHTTPServer interface {
 	// GetOrder GetOrder directly forwards the request and response using the order module's types.

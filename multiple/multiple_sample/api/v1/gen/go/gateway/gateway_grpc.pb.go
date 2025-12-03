@@ -21,8 +21,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EdgeGatewayAPI_GetOrder_FullMethodName = "/api.v1.mods.gateway.EdgeGatewayAPI/GetOrder"
-	EdgeGatewayAPI_GetUser_FullMethodName  = "/api.v1.mods.gateway.EdgeGatewayAPI/GetUser"
+	EdgeGatewayAPI_GetOrder_FullMethodName = "/api.v1.gateway.EdgeGatewayAPI/GetOrder"
+	EdgeGatewayAPI_GetUser_FullMethodName  = "/api.v1.gateway.EdgeGatewayAPI/GetUser"
 )
 
 // EdgeGatewayAPIClient is the client API for EdgeGatewayAPI service.
@@ -164,7 +164,7 @@ func _EdgeGatewayAPI_GetUser_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var EdgeGatewayAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.mods.gateway.EdgeGatewayAPI",
+	ServiceName: "api.v1.gateway.EdgeGatewayAPI",
 	HandlerType: (*EdgeGatewayAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -181,8 +181,8 @@ var EdgeGatewayAPI_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ProxyGatewayAPI_GetOrder_FullMethodName = "/api.v1.mods.gateway.ProxyGatewayAPI/GetOrder"
-	ProxyGatewayAPI_GetUser_FullMethodName  = "/api.v1.mods.gateway.ProxyGatewayAPI/GetUser"
+	ProxyGatewayAPI_GetOrder_FullMethodName = "/api.v1.gateway.ProxyGatewayAPI/GetOrder"
+	ProxyGatewayAPI_GetUser_FullMethodName  = "/api.v1.gateway.ProxyGatewayAPI/GetUser"
 )
 
 // ProxyGatewayAPIClient is the client API for ProxyGatewayAPI service.
@@ -324,7 +324,7 @@ func _ProxyGatewayAPI_GetUser_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ProxyGatewayAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.mods.gateway.ProxyGatewayAPI",
+	ServiceName: "api.v1.gateway.ProxyGatewayAPI",
 	HandlerType: (*ProxyGatewayAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

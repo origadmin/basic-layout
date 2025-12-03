@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.v1.mods.gateway;
+package api.v1.gateway;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
@@ -9,7 +9,7 @@ import "user/user.proto";
 
 option go_package = "basic-layout/multiple/multiple_sample/api/v1/gen/go/gateway;gateway";
 option java_multiple_files = true;
-option java_package = "origadmin.api.v1.mods.gateway";
+option java_package = "origadmin.api.v1.gateway";
 
 // -------------------------------------------------
 //  1. Edge Gateway Pattern
@@ -61,12 +61,12 @@ message GetOrderResponse {
 // the gateway and internal modules.
 service ProxyGatewayAPI {
   // GetOrder directly forwards the request and response using the order module's types.
-  rpc GetOrder(api.v1.mods.order.GetOrderRequest) returns (api.v1.mods.order.GetOrderResponse) {
+  rpc GetOrder(api.v1.order.GetOrderRequest) returns (api.v1.order.GetOrderResponse) {
     option (google.api.http) = {get: "/api/v1/proxy/order/{id}"};
   }
 
   // GetUser directly forwards the request and response using the user module's types.
-  rpc GetUser(api.v1.mods.user.GetUserRequest) returns (api.v1.mods.user.GetUserResponse) {
+  rpc GetUser(api.v1.user.GetUserRequest) returns (api.v1.user.GetUserResponse) {
     option (google.api.http) = {get: "/api/v1/proxy/user/{id}"};
   }
 }
