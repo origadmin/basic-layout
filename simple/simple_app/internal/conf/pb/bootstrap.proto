@@ -6,7 +6,6 @@ package configs;
 // ----------------------------------------------------------------
 // Import standard configuration modules (Building Blocks) provided by the framework
 // ----------------------------------------------------------------
-import "config/app/v1/app.proto";
 import "config/broker/v1/broker.proto";
 import "config/data/v1/data.proto";
 import "config/discovery/v1/discovery.proto";
@@ -23,7 +22,7 @@ option go_package = "basic-layout/simple/simple_app/internal/conf/pb;confpb";
 // The new structure aggregates all configuration items into logical groups, making it clearer and easier to understand.
 message Bootstrap {
   // App contains application-level metadata (e.g., name, version, environment).
-  runtime.api.config.app.v1.App app = 1;
+  //  runtime.api.config.app.v1.App app = 1;
 
   // Servers holds configurations for all network servers (HTTP, gRPC, WebSocket).
   // This now uses the Servers collection from the transport module.

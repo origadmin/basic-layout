@@ -1,6 +1,6 @@
 //go:build tools
 
-package tools
+package basic_layout
 
 import (
 	_ "github.com/bufbuild/buf/cmd/buf"

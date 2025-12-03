@@ -19,7 +19,6 @@ import (
 )
 
 type Config struct {
-	app       *appv1.App
 	config    interfaces.Config
 	bootstrap confpb.Bootstrap
 }
@@ -60,10 +59,6 @@ func (c *Config) DecodeClients() (*transportv1.Clients, error) {
 	return c.bootstrap.GetClients(), nil
 }
 
-func (c *Config) DecodeApp() (*appv1.App, error) {
-	return c.app, nil
-}
-
 func (c *Config) DecodeLogger() (*loggerv1.Logger, error) {
 	return c.bootstrap.GetLogger(), nil
 }
@@ -91,23 +86,18 @@ func (c *Config) Transform(config interfaces.Config, sc interfaces.StructuredCon
 	return c, nil
 }
 
-func New(app *appv1.App) *Config {
-	if app == nil {
-		app = &appv1.App{}
-	}
-	return &Config{
-		app: app,
-	}
+func New() *Config {
+	return &Config{}
 }
 
 func TransformAfter(cfg *appv1.App) bootstrap.ConfigTransformFunc {
 	return func(config interfaces.Config, sc interfaces.StructuredConfig) (interfaces.StructuredConfig, error) {
-		return New(cfg).Transform(config, sc)
+		return New().Transform(config, sc)
 	}
 }
 
 func Transform(config interfaces.Config, sc interfaces.StructuredConfig) (interfaces.StructuredConfig, error) {
-	return New(nil).Transform(config, sc)
+	return New().Transform(config, sc)
 }
 
 var _ bootstrap.ConfigTransformer = (*Config)(nil)

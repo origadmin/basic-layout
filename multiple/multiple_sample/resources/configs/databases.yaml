@@ -1,2 +1,11 @@
-databases:
-  # Add database configurations here
+data:
+  caches:
+    configs:
+      - driver: memory
+        name: default
+        source: memory
+  databases:
+    configs:
+      - dialect: sqlite3
+        name: default
+        source: file:./test.db?cache=shared&mode=memory&_fk=1

@@ -1,0 +1,4 @@
+trace:
+  endpoint: localhost:6831
+  name: jaeger
+  service_name: test-app-name

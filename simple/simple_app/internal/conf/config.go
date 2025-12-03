@@ -38,8 +38,7 @@ func (c *Config) DecodeObjectStores() (*datav1.ObjectStores, error) {
 }
 
 func (c *Config) DecodedConfig() any {
-	//TODO implement me
-	panic("implement me")
+	return c.bootstrap
 }
 
 func (c *Config) DecodeApp() (*appv1.App, error) {

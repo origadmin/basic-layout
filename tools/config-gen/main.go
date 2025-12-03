@@ -2,19 +2,48 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 
+	cachev1 "github.com/origadmin/runtime/api/gen/go/config/data/cache/v1"
+	databasev1 "github.com/origadmin/runtime/api/gen/go/config/data/database/v1"
+	datav1 "github.com/origadmin/runtime/api/gen/go/config/data/v1"
+	middlewarev1 "github.com/origadmin/runtime/api/gen/go/config/middleware/v1"
+	tracev1 "github.com/origadmin/runtime/api/gen/go/config/trace/v1"
+	grpcv1 "github.com/origadmin/runtime/api/gen/go/config/transport/grpc/v1"
+	httpv1 "github.com/origadmin/runtime/api/gen/go/config/transport/http/v1"
+	transportv1 "github.com/origadmin/runtime/api/gen/go/config/transport/v1"
+
 	"github.com/spf13/viper"
 	"google.golang.org/protobuf/encoding/protojson"
-
-	"basic-layout/simple/simple_app/configs"
 )
 
+var (
+	target string
+)
+
+func init() {
+	flag.StringVar(&target, "target", "", "The target project to generate configs for (e.g., 'simple' or 'multiple')")
+}
+
 func main() {
-	// Set output directory
-	outputDir := filepath.Join("configs_new") // Output to the configs folder in the project root directory
+	flag.Parse()
+
+	var outputDir string
+	switch target {
+	case "simple":
+		outputDir = filepath.Join("..", "simple", "simple_app", "resources", "configs")
+	case "multiple":
+		outputDir = filepath.Join("..", "multiple", "multiple_sample", "resources", "configs")
+	default:
+		fmt.Println("Error: Please specify a valid target with -target flag. (e.g., -target=simple or -target=multiple)")
+		os.Exit(1)
+	}
+
+	log.Printf("Generating configuration for target: '%s' into directory: '%s'", target, outputDir)
 
 	// Create output directory if it doesn't exist
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
@@ -24,11 +53,11 @@ func main() {
 	// 1. Generate bootstrap.yaml
 	generateBootstrapConfig(outputDir)
 
-	// 2. Generate app.yaml
-	generateAppConfig(outputDir)
-
-	// 3. Generate server.yaml
+	// 2. Generate server.yaml
 	generateServerConfig(outputDir)
+
+	// 3. Generate clients.yaml
+	generateClientsConfig(outputDir)
 
 	// 4. Generate databases.yaml
 	generateDatabasesConfig(outputDir)
@@ -50,7 +79,7 @@ func generateTraceConfig(dir string) {
 	v.SetConfigType("yaml")
 
 	// Get trace configuration from default config
-	trace := configs.DefaultTrace()
+	trace := DefaultTrace()
 
 	// Serialize trace configuration using protojson
 	m := protojson.MarshalOptions{
@@ -88,7 +117,7 @@ func generateMiddlewaresConfig(dir string) {
 	v.SetConfigType("yaml")
 
 	// Get middleware configuration from default config
-	middlewares := configs.DefaultMiddlewares()
+	middlewares := DefaultMiddlewares()
 
 	// Serialize middleware configuration using protojson
 	m := protojson.MarshalOptions{
@@ -131,13 +160,13 @@ func generateBootstrapConfig(outputDir string) {
 		{
 			"type": "file",
 			"file": map[string]string{
-				"path": "app.yaml",
+				"path": "server.yaml",
 			},
 		},
 		{
 			"type": "file",
 			"file": map[string]string{
-				"path": "server.yaml",
+				"path": "clients.yaml", // Added clients.yaml here
 			},
 		},
 		{
@@ -164,6 +193,9 @@ func generateBootstrapConfig(outputDir string) {
 				"path": "trace.yaml",
 			},
 		},
+		{
+			"type": "env", // Added env source
+		},
 	}
 
 	v.Set("sources", sources)
@@ -177,38 +209,13 @@ func generateBootstrapConfig(outputDir string) {
 	}
 }
 
-// generateAppConfig generates app.yaml
-func generateAppConfig(outputDir string) {
-	v := viper.New()
-	v.SetConfigType("yaml")
-
-	// Get application configuration from default config
-	app := configs.DefaultApp()
-
-	// Set application configuration
-	v.Set("app", map[string]interface{}{
-		"id":      app.Id,
-		"name":    app.Name,
-		"version": app.Version,
-		"env":     app.Env,
-	})
-
-	// Write to file
-	outputFile := filepath.Join(outputDir, "app.yaml")
-	if err := v.WriteConfigAs(outputFile); err != nil {
-		log.Printf("Failed to generate app.yaml: %v", err)
-	} else {
-		log.Printf("Generate the profile: %s", outputFile)
-	}
-}
-
 // generateServerConfig generates server.yaml
 func generateServerConfig(outputDir string) {
 	v := viper.New()
 	v.SetConfigType("yaml")
 
 	// Get server configuration from default config
-	servers := configs.DefaultServers()
+	servers := DefaultServers()
 
 	// Convert server configuration
 	var serverConfigs []map[string]interface{}
@@ -253,13 +260,61 @@ func generateServerConfig(outputDir string) {
 	}
 }
 
+// generateClientsConfig generates clients.yaml
+func generateClientsConfig(outputDir string) {
+	v := viper.New()
+	v.SetConfigType("yaml")
+
+	// Get client configuration from default config
+	clients := DefaultClients()
+
+	// Convert client configuration
+	var clientConfigs []map[string]interface{}
+	for _, cli := range clients.Configs {
+		cliCfg := map[string]interface{}{
+			"name":     cli.Name,
+			"protocol": cli.Protocol,
+		}
+
+		switch cli.Protocol {
+		case "http":
+			if cli.Http != nil {
+				cliCfg["http"] = map[string]interface{}{
+					"endpoint":    cli.Http.Endpoint,
+					"middlewares": cli.Http.Middlewares,
+				}
+			}
+		case "grpc":
+			if cli.Grpc != nil {
+				cliCfg["grpc"] = map[string]interface{}{
+					"endpoint":    cli.Grpc.Endpoint,
+					"middlewares": cli.Grpc.Middlewares,
+				}
+			}
+		}
+		clientConfigs = append(clientConfigs, cliCfg)
+	}
+
+	v.Set("clients", map[string]interface{}{
+		"configs": clientConfigs,
+	})
+
+	// Write to file
+	outputFile := filepath.Join(outputDir, "clients.yaml")
+	if err := v.WriteConfigAs(outputFile); err != nil {
+		log.Printf("Failed to generate clients.yaml: %v", err)
+	} else {
+		log.Printf("Generate the profile: %s", outputFile)
+	}
+}
+
 // generateDatabasesConfig generates databases.yaml
 func generateDatabasesConfig(outputDir string) {
 	v := viper.New()
 	v.SetConfigType("yaml")
 
 	// Get data configuration from default config
-	data := configs.DefaultData()
+	data := DefaultData()
 
 	// Convert database configuration
 	var dbConfigs []map[string]interface{}
@@ -325,5 +380,100 @@ func generateLoggerConfig(outputDir string) {
 		log.Printf("Failed to generate logger.yaml: %v", err)
 	} else {
 		log.Printf("Generate the profile: %s", outputFile)
+	}
+}
+
+func DefaultServers() *transportv1.Servers {
+	return &transportv1.Servers{
+		Configs: []*transportv1.Server{
+			{
+				Name:     "grpc_server",
+				Protocol: "grpc",
+				Grpc: &grpcv1.Server{
+					Network:     "tcp",
+					Addr:        "0.0.0.0:${GRPC_PORT:9090}",
+					Middlewares: []string{"recovery", "logger"},
+				},
+			},
+			{
+				Name:     "http_server",
+				Protocol: "http",
+				Http: &httpv1.Server{
+					Network:     "tcp",
+					Addr:        "0.0.0.0:${HTTP_PORT:8080}",
+					Middlewares: []string{"recovery", "logger"},
+				},
+			},
+		},
+	}
+}
+
+func DefaultClients() *transportv1.Clients {
+	return &transportv1.Clients{
+		Configs: []*transportv1.Client{
+			{
+				Name:     "client.user",
+				Protocol: "grpc",
+				Grpc: &grpcv1.Client{
+					Endpoint:    "localhost:${GRPC_USER_PORT:9091}",
+					Middlewares: []string{"recovery", "logger"},
+				},
+			},
+			{
+				Name:     "client.order",
+				Protocol: "grpc",
+				Grpc: &grpcv1.Client{
+					Endpoint:    "localhost:${GRPC_ORDER_PORT:9092}",
+					Middlewares: []string{"recovery", "logger"},
+				},
+			},
+		},
+	}
+}
+
+func DefaultData() *datav1.Data {
+	return &datav1.Data{
+		Databases: &datav1.Databases{
+			Configs: []*databasev1.DatabaseConfig{
+				{
+					Name:    "default",
+					Dialect: "sqlite3",
+					Source:  "file:./test.db?cache=shared&mode=memory&_fk=1",
+				},
+			},
+		},
+		Caches: &datav1.Caches{
+			Configs: []*cachev1.CacheConfig{
+				{
+					Name:   "default",
+					Driver: "memory",
+				},
+			},
+		},
+	}
+}
+
+func DefaultMiddlewares() *middlewarev1.Middlewares {
+	return &middlewarev1.Middlewares{
+		Configs: []*middlewarev1.Middleware{
+			{
+				Name:     "recovery",
+				Type:     "recovery",
+				Recovery: &middlewarev1.Recovery{},
+			},
+			{
+				Name:    "logging",
+				Type:    "logging",
+				Logging: &middlewarev1.Logging{},
+			},
+		},
+	}
+}
+
+func DefaultTrace() *tracev1.Trace {
+	return &tracev1.Trace{
+		Name:        "jaeger",
+		Endpoint:    "localhost:6831",
+		ServiceName: "test-app-name",
 	}
 }

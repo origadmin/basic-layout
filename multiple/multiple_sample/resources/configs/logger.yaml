@@ -1,2 +1,5 @@
 logger:
-  # Add logger configurations here
+  caller: true
+  format: text
+  level: info
+  output: stdout

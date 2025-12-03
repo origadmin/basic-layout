@@ -7,15 +7,13 @@ package main
 import (
 	"flag"
 	"log"
-	"path/filepath"
 
-	"github.com/google/uuid"
-
+	"basic-layout/multiple/multiple_sample/internal/bootstrap"
 	"basic-layout/multiple/multiple_sample/internal/conf"
 	_ "basic-layout/multiple/multiple_sample/internal/helpers/configsource/oneof"
+	"github.com/joho/godotenv"
 	"github.com/origadmin/runtime"
-	appv1 "github.com/origadmin/runtime/api/gen/go/config/app/v1"
-	"github.com/origadmin/runtime/bootstrap"
+	runtimebootstrap "github.com/origadmin/runtime/bootstrap"
 )
 
 var (
@@ -30,35 +28,33 @@ var (
 
 func init() {
 	// The config path should be the directory containing configuration files.
-	flag.StringVar(&flagconf, "conf", "bootstrap.yaml", "config path, eg: -conf bootstrap.yaml")
+	// The default is empty, so we can detect if the user has provided it.
+	flag.StringVar(&flagconf, "conf", "", "config path, eg: -conf bootstrap.yaml")
 }
 
 func main() {
+	// Load .env file for local development from resources directory.
+	// It's safe to ignore the error, as the file may not exist in production.
+	_ = godotenv.Load("resources/.env.gateway")
+
 	flag.Parse()
 
-	// Log the config path for debugging
-	log.Printf("Loading configuration from: %s\n", flagconf)
+	confPath := bootstrap.FindConfPath(flagconf)
+	if confPath == "" {
+		log.Fatalf("Could not find configuration file. Searched -conf flag, executable path, and development path.")
+	}
 
-	if !filepath.IsAbs(flagconf) {
-		flagconf = filepath.Join("resources/configs/gateway/", flagconf)
-	}
-	// Create AppInfo using the struct from the runtime package
-	appInfo := &appv1.App{
-		Id:      uuid.New().String(),
-		Name:    Name,
-		Version: Version,
-	}
+	// Log the config path for debugging
+	log.Printf("Loading configuration from: %s\n", confPath)
 
 	// NewFromBootstrap handles config loading, logging, and container setup.
 	rt := runtime.New(Name, Version)
-	err := rt.Load(
-		flagconf,
-		bootstrap.WithConfigTransformer(conf.New(appInfo)),
-	)
+	err := rt.Load(confPath, runtimebootstrap.WithConfigTransformer(conf.New()))
 	if err != nil {
-		return
+		log.Fatalf("failed to create runtime: %v", err)
 	}
 	defer rt.Config().Close()
+	log.Printf("Starting %s %s (ID: %s)\n", rt.AppInfo().Name(), rt.AppInfo().Version(), rt.AppInfo().ID())
 
 	// wireApp now takes the runtime instance and builds the kratos app.
 	app, cleanupApp, err := wireApp(rt)

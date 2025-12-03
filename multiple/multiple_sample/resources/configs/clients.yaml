@@ -1,0 +1,12 @@
+clients:
+  configs:
+    - name: client.user
+      protocol: grpc
+      grpc:
+        # Endpoint for the user service gRPC client. Port 9091 is set in .env.user.
+        endpoint: "localhost:9091"
+    - name: client.order
+      protocol: grpc
+      grpc:
+        # Endpoint for the order service gRPC client. Port 9092 is set in .env.order.
+        endpoint: "localhost:9092"
