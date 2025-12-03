@@ -14,9 +14,9 @@ require (
 	github.com/go-kratos/kratos/v2 v2.9.1
 	github.com/goexts/generic v0.14.0
 	github.com/google/gnostic v0.7.1
-	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
 	github.com/hashicorp/consul/api v1.33.0
+	github.com/joho/godotenv v1.5.1
 	github.com/origadmin/contrib v1.0.0
 	github.com/origadmin/runtime v0.2.14
 	github.com/origadmin/toolkits/errors v1.1.0
@@ -91,6 +91,7 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-containerregistry v0.20.6 // indirect
 	github.com/google/subcommands v1.2.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect

@@ -23,6 +23,7 @@ import (
 
 import (
 	_ "basic-layout/multiple/multiple_sample/internal/helpers/configsource/oneof"
+	_ "github.com/sqlite3ent/sqlite3"
 )
 
 // Injectors from wire.go:

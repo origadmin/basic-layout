@@ -10,10 +10,11 @@ import (
 
 	_ "github.com/sqlite3ent/sqlite3"
 
+	"github.com/joho/godotenv"
+
 	"basic-layout/multiple/multiple_sample/internal/bootstrap"
 	"basic-layout/multiple/multiple_sample/internal/conf"
 	_ "basic-layout/multiple/multiple_sample/internal/helpers/configsource/oneof"
-	"github.com/joho/godotenv"
 	"github.com/origadmin/runtime"
 	runtimebootstrap "github.com/origadmin/runtime/bootstrap"
 )
